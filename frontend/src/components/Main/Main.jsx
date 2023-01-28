@@ -15,7 +15,7 @@ const Main = () => {
       <img className="main__lines main__lines_left" src={lines} alt="lines" />
       <img className="main__lines main__lines_right" src={lines2} alt="lines" />
       <h1 className="main__title">Генератор мемов</h1>
-      <Link to="/generator-meme-frontend/canvas">
+      <Link to="/generator-meme/canvas">
         <div className="main__text-box">
           <h3 className="main__text-advice">
             Выберите шаблон для создания мема или

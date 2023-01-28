@@ -11,7 +11,7 @@ const EditorMeme = () => {
 
   return (
     <div className="editor-meme">
-      <Link to="/generator-meme-frontend/" className="editor-meme__link">
+      <Link to="/generator-meme/" className="editor-meme__link">
         <img src={back} alt="Назад" />
       </Link>
       <h2 className="editor-meme__title">Редактор мемов</h2>

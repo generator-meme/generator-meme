@@ -60,7 +60,7 @@ const Canvas = () => {
   return (
     <div className="editor" style={{ height: windowSize.winHeight }}>
       <div className="editor__image-box">
-        <Link to="/generator-meme-frontend/">
+        <Link to="/generator-meme/">
           <img className="editor__back" src={back} />
         </Link>
         <h1 className="editor__title">Редактор мемов</h1>

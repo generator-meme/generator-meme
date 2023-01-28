@@ -13,7 +13,7 @@ const App = () => {
     <div className="page">
       <Header />
       <Routes>
-        <Route path="/generator-meme-frontend" element={<MainLayout />}>
+        <Route path="/generator-meme" element={<MainLayout />}>
           <Route index element={<Main />} />
           <Route path="edit" element={<EditorMeme />} />
           <Route path="canvas" element={<Canvas />} />

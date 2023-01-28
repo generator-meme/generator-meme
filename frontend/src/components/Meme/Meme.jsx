@@ -4,7 +4,7 @@ import './Meme.css'
 const Meme = ({ image }) => {
   return (
     <div className="meme" style={{ backgroundImage: `url(${image})` }}>
-      <Link to="/generator-meme-frontend/edit">
+      <Link to="/generator-meme/edit">
         <button className="meme__create-btn">Создать мем</button>
       </Link>
     </div>
