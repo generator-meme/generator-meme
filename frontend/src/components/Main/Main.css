@@ -1,0 +1,92 @@
+.main {
+  padding: 140px 135px;
+  position: relative;
+}
+
+.main__human {
+  position: absolute;
+  left: 0;
+  top: -100px;
+  z-index: 1;
+}
+
+.main__lines {
+  position: absolute;
+  z-index: 1;
+}
+
+.main__lines_left {
+  left: 0;
+  top: 860px;
+}
+
+.main__lines_right {
+  right: 0;
+  top: 1370px;
+}
+
+.main__title {
+  position: relative;
+  margin: 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 80px;
+  line-height: 95px;
+  margin-bottom: 80px;
+  z-index: 2;
+  text-align: center;
+}
+
+.main__text-box {
+  display: flex;
+  z-index: 2;
+}
+
+.main__text-advice {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 42px;
+  line-height: 50px;
+  margin: 0 30px 0 0;
+}
+
+.main__btn-block {
+  position: relative;
+}
+
+.main__btn {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  background: linear-gradient(
+    180deg,
+    #ce8ec0 0%,
+    rgba(194, 139, 228, 0.63) 77.16%
+  );
+  border-radius: 20px;
+  height: 64px;
+  cursor: pointer;
+}
+
+.main__btn_help {
+  transition: all 2s;
+  transition-delay: 1s, 0s;
+  opacity: 0;
+  position: absolute;
+  top: 64px;
+  left: 0;
+}
+
+.main__btn-block:hover .main__btn_help {
+  opacity: 1;
+}
+
+.main__memebox {
+  display: grid;
+  margin-top: 125px;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  z-index: 2;
+}

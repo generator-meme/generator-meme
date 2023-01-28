@@ -1,0 +1,24 @@
+.meme {
+  height: 360px;
+  width: 360px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+}
+.meme:not(:last-child) {
+  margin-right: 40px;
+  margin-bottom: 60px;
+}
+
+.meme__create-btn {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  background-color: #fdffa1;
+  width: 186px;
+  height: 54px;
+  border-radius: 8px;
+  box-shadow: 2px 5px 9px rgba(0, 0, 0, 0.64);
+  margin: 275px auto 0;
+  cursor: pointer;
+}

@@ -1,0 +1,56 @@
+.editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 55px 30px;
+}
+
+.editor__back {
+  margin-left: 20px;
+}
+
+.editor__title {
+  margin-top: 50px;
+  margin: 50px 0 40px;
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 71px;
+}
+
+.editor__image {
+  font-weight: 500;
+  font-size: 70px;
+  line-height: 83px;
+  border-radius: 20px;
+  white-space: pre-wrap;
+  word-break:break-all
+}
+
+.editor__canvas {
+  width: 500px;
+}
+
+.editor__text-box {
+  display: flex;
+  flex-direction: column;
+  max-height: 290px;
+  align-items: center;
+  margin: auto;
+}
+
+.editor__text {
+  max-width: 500px;
+  background: #fef8ff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 47px;
+  padding: 20px 10px;
+}
+.editor__text_top {
+  margin-bottom: 60px;
+}
+.editor__color {
+  margin-bottom: 20px;
+}
