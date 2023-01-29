@@ -21,9 +21,9 @@ class Tag(models.Model):
         return self.slug
 
 
-class Meme(models.Model):
+class Template(models.Model):
     image = models.ImageField(
-        verbose_name='Шаблон мема',
+        verbose_name='Изображение',
         upload_to='meme/images'
     )
     tag = models.ManyToManyField(
@@ -33,5 +33,5 @@ class Meme(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Мем'
-        verbose_name_plural = 'Мемы'
+        verbose_name = 'Шаблон мема'
+        verbose_name_plural = 'Шаблоны мемов'

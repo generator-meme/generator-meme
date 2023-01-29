@@ -1,7 +1,7 @@
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
 
-from memes.models import Meme, Tag
+from memes.models import Tag, Template
 
 
 class TagSerializer(ModelSerializer):
@@ -11,15 +11,15 @@ class TagSerializer(ModelSerializer):
         model = Tag
 
 
-class MemeReadSerializer(ModelSerializer):
+class TemplateReadSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Meme
+        model = Template
         fields = '__all__'
 
 
-class MemeWriteSerializer(ModelSerializer):
+class TemplateWriteSerializer(ModelSerializer):
     '''Сериализатор модели Meme'''
     image = Base64ImageField(
         use_url=True,
@@ -31,5 +31,5 @@ class MemeWriteSerializer(ModelSerializer):
     )
 
     class Meta:
-        model = Meme
+        model = Template
         fields = '__all__'

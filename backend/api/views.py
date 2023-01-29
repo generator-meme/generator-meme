@@ -2,19 +2,21 @@ from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS
 
 from .permissions import AdminOrReadOnly
-from .serializers import MemeReadSerializer, MemeWriteSerializer, TagSerializer
-from memes.models import Meme, Tag
+from .serializers import (
+    TagSerializer, TemplateReadSerializer, TemplateWriteSerializer
+)
+from memes.models import Template, Tag
 
 
-class MemeViewSet(viewsets.ModelViewSet):
+class TemplateViewSet(viewsets.ModelViewSet):
     '''Представление для модели Meme'''
-    queryset = Meme.objects.all()
+    queryset = Template.objects.all()
     permission_classes = [AdminOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
-            return MemeReadSerializer
-        return MemeWriteSerializer
+            return TemplateReadSerializer
+        return TemplateWriteSerializer
 
 
 class TagViewSet(viewsets.ModelViewSet):

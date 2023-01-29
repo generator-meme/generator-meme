@@ -3,7 +3,7 @@ import sys
 
 from django.core.management.base import BaseCommand
 
-from memes.models import Meme
+from memes.models import Template
 
 
 maxInt = sys.maxsize
@@ -29,6 +29,6 @@ class Command(BaseCommand):
         with open(file_path, newline='', encoding='utf-8') as f:
             reader = csv.reader(f)
             for row in reader:
-                status, created = Meme.objects.update_or_create(
+                status, created = Template.objects.update_or_create(
                     image=row[0],
                 )
