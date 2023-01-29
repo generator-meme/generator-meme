@@ -1,18 +1,25 @@
 {
   "files": {
-    "main.css": "/generator-meme/static/css/main.afa118aa.css",
-    "main.js": "/generator-meme/static/js/main.76c9818e.js",
+    "main.css": "/generator-meme/static/css/main.19ead632.css",
+    "main.js": "/generator-meme/static/js/main.26a4eb28.js",
     "static/media/meme-edit.jpg": "/generator-meme/static/media/meme-edit.58940ee7da533f545f2e.jpg",
     "static/media/meme-image.png": "/generator-meme/static/media/meme-image.9926c1dc749c43f61501.png",
     "static/media/human.png": "/generator-meme/static/media/human.814376658f29cb75eb67.png",
+    "static/media/Rubik-Medium.woff": "/generator-meme/static/media/Rubik-Medium.2d7c3aac52dbcf1e9a76.woff",
+    "static/media/Rubik-Regular.woff": "/generator-meme/static/media/Rubik-Regular.9b504b121d513b85cf70.woff",
+    "static/media/Rubik-Light.woff": "/generator-meme/static/media/Rubik-Light.b98975383295673ea225.woff",
+    "static/media/Rubik-Medium.woff2": "/generator-meme/static/media/Rubik-Medium.b87db4c34be5f3bcbae4.woff2",
+    "static/media/Rubik-Regular.woff2": "/generator-meme/static/media/Rubik-Regular.7faeaac164d429f053a1.woff2",
+    "static/media/Rubik-Light.woff2": "/generator-meme/static/media/Rubik-Light.b1f0f1d816758ea3bc4a.woff2",
     "static/media/help.png": "/generator-meme/static/media/help.75d78057d62edebd3fb2.png",
     "index.html": "/generator-meme/index.html",
-    "static/media/back.svg": "/generator-meme/static/media/back.9ad82463a01ff0074f274d36af3585a9.svg",
-    "main.afa118aa.css.map": "/generator-meme/static/css/main.afa118aa.css.map",
-    "main.76c9818e.js.map": "/generator-meme/static/js/main.76c9818e.js.map"
+    "static/media/back.svg": "/generator-meme/static/media/back.24a75da0216eeaab472cf559a4a91dc8.svg",
+    "static/media/arrow-top.svg": "/generator-meme/static/media/arrow-top.4c689f6912312fe3a2e57db63b686c08.svg",
+    "main.19ead632.css.map": "/generator-meme/static/css/main.19ead632.css.map",
+    "main.26a4eb28.js.map": "/generator-meme/static/js/main.26a4eb28.js.map"
   },
   "entrypoints": [
-    "static/css/main.afa118aa.css",
-    "static/js/main.76c9818e.js"
+    "static/css/main.19ead632.css",
+    "static/js/main.26a4eb28.js"
   ]
 }
