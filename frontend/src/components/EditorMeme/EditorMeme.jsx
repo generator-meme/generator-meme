@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom'
 // import meme from '../../images/meme-edit.jpg'
 
 
-const EditorMeme = ({ selectedMeme }) => {
+const EditorMeme = ({ memes }) => {
+  const { id } = useParams();
+  const currentMeme = memes[id];
   const [textTop, setTextTop] = useState(false);
   const [textBottom, setTextBottom] = useState(false);
 
@@ -28,7 +30,7 @@ const EditorMeme = ({ selectedMeme }) => {
         <div className="editor-meme__column_left">
           {textTop && <input className="editor__input editor__input_top" type="text" />}
           {textBottom && <input className="editor__input editor__input_bottom" type="text" />}      
-          <img src={selectedMeme.src} alt="Мем" className="editor-meme__image" />
+          <img src={currentMeme.image} alt="Мем" className="editor-meme__image" />
         </div>
         <div className="editor-meme__column_right">
           <button className="editor-meme__button editor-meme__button_top"

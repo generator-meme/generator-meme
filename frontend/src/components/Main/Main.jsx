@@ -28,8 +28,8 @@ const Main = ({ memes, getTemplate }) => {
         </div>
       </Link>
       <ul className="main__memebox">
-        {memes.map((elem) => {
-          return <Meme image={elem.image} key={elem.id} getTemplate={getTemplate} meme={elem} />
+        {memes.map((elem, index) => {
+          return <Meme image={elem.image} key={elem.id} index={index} />
         })}
       </ul>
       <button className="main__btn main__btn_show-more">Показать больше</button>

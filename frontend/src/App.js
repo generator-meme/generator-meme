@@ -25,23 +25,23 @@ const App = () => {
     });
   }, [])
 
-  function getTemplate(meme) {
-    api.getTemplate(meme.id)
-    .then((mem) => {
-      setSelectedMeme({ src: mem.image });
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }
+  // function getTemplate(meme) {
+  //   api.getTemplate(meme.id)
+  //   .then((mem) => {
+  //     setSelectedMeme({ src: mem.image });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+  // }
 
   return (
     <div className="page">
       <Header />
       <Routes>
         <Route path="/generator-meme" element={<MainLayout />}>
-          <Route index element={<Main memes={memes} getTemplate={getTemplate} />} />
-          <Route path="edit" element={<EditorMeme />} selectedMeme={selectedMeme} />
+          <Route index element={<Main memes={memes} />} />
+          <Route path=":id" element={<EditorMeme memes={memes} />} />
           <Route path="canvas" element={<Canvas />} />
         </Route>
       </Routes>
