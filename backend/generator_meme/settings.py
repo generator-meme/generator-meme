@@ -9,7 +9,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['localhost']
 
 
 INSTALLED_APPS = [
@@ -92,7 +92,11 @@ USE_I18N = True
 
 USE_L10N = True
 
-STATIC_URL = '/static/'
+STATIC_URL = '/backend-static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'backend-static')
+
+MEDIA_URL = '/backend-media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'backend-media')
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [

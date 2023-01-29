@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  frontend: 
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes: 
+      - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:14.4-alpine
+    volumes:
+      - meme_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - static_value:/app/backend-static/
+      - media_value:/app/backend-media/ 
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+
+  nginx:
+    image: nginx:1.19.3
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../frontend/build:/usr/share/nginx/html/
+      - ../docs/:/usr/share/nginx/html/api/docs/
+      - static_value:/var/html/backend-static/
+      - media_value:/var/html/backend-media/
+    depends_on:
+      - backend
+
+volumes:
+  static_value:
+  media_value:
+  meme_data:
