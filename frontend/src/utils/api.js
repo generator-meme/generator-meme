@@ -21,8 +21,8 @@ class Api {
 
   getTemplate(id) {
     return fetch(`/api/memes/${id}`, {
-    method: 'GET',
-    headers: this._options.headers,
+      method: 'GET',
+      headers: this._options.headers,
   })
     .then(this._errorHandler)
   }

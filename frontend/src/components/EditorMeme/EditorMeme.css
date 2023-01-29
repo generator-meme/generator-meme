@@ -4,6 +4,24 @@
 .editor-meme__hero {
   display: flex;
 }
+.editor-meme__nav {
+  display: flex;
+  align-items: center;
+}
+.editor-meme__link {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 36px;
+  color: #1E1D1D;
+  text-decoration: none;
+  margin-right: 5px;
+}
+.editor-meme__span {
+  margin-left: 5px;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 36px;
+}
 .editor-meme__title {
   font-weight: 400;
   font-size: 60px;

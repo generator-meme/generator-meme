@@ -9,7 +9,7 @@ import arrowTop from '../../images/arrow-top.svg'
 import './Main.css'
 import { Link } from 'react-router-dom'
 
-const Main = ({ memes }) => {
+const Main = ({ memes, getTemplate }) => {
   return (
     <div className="main">
       <img className="main__human" src={human} alt="human" />
@@ -29,7 +29,7 @@ const Main = ({ memes }) => {
       </Link>
       <ul className="main__memebox">
         {memes.map((elem) => {
-          return <Meme image={elem.image} key={elem.id} />
+          return <Meme image={elem.image} key={elem.id} getTemplate={getTemplate} meme={elem} />
         })}
       </ul>
       <button className="main__btn main__btn_show-more">Показать больше</button>
