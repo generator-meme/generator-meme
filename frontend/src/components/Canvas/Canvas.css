@@ -48,9 +48,50 @@
   line-height: 47px;
   padding: 20px 10px;
 }
+
 .editor__text_top {
   margin-bottom: 60px;
 }
+
 .editor__color {
   margin-bottom: 20px;
+}
+
+.editor-meme__nav {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-left: 30px;
+}
+
+.editor-meme__link {
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 36px;
+  color: #1E1D1D;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.editor-meme__span {
+  margin-left: 5px;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.editor-meme__generate {
+  width: 500px;
+  height: 124px;
+  font-size: 40px;
+  line-height: 47px;
+  display: block;
+  margin: 60px auto;
+  text-decoration: none;
+  background: linear-gradient(180deg, #C78CD9 0%, rgba(194, 139, 228, 0.63) 100%);
+  border-radius: 20px;
+  color: #1E1D1D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

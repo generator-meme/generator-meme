@@ -18,16 +18,6 @@ class Api {
   })
     .then(this._errorHandler)
   }
-
-  getTemplate(id) {
-    return fetch(`/api/memes/${id}`, {
-      method: 'GET',
-      body: JSON.stringify(),
-      headers: this._options.headers,
-  })
-    .then(this._errorHandler)
-  }
-
 }
 
 const api = new Api({
