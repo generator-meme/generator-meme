@@ -1,6 +1,7 @@
 .main {
-  padding: 140px 135px;
+  padding: 160px 117px;
   position: relative;
+  color: #1E1D1D;
 }
 
 .main__human {
@@ -37,9 +38,15 @@
   text-align: center;
 }
 
+.main__link {
+  text-decoration: none;
+  color: #1E1D1D;
+}
+
 .main__text-box {
   display: flex;
   z-index: 2;
+  align-items: center;
 }
 
 .main__text-advice {
@@ -56,17 +63,25 @@
 
 .main__btn {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-  background: linear-gradient(
-    180deg,
-    #ce8ec0 0%,
-    rgba(194, 139, 228, 0.63) 77.16%
-  );
+  border: none;
+  background: linear-gradient(180deg, #CE8EC0 0%, rgba(194, 139, 228, 0.63) 77.16%);
   border-radius: 20px;
+  width: 273px;
   height: 64px;
   cursor: pointer;
+}
+
+.main__btn_show-more {
+  display: block;
+  width: 551px;
+  height: 114px;
+  font-weight: 500;
+  font-size: 45px;
+  line-height: 53px;
+  margin: 0 auto;
 }
 
 .main__btn_help {
