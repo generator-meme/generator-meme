@@ -1,90 +1,99 @@
 import meme from '../../images/meme-edit.jpg'
+import meme2 from '../../images/meme-image.png'
 import back from '../../images/back.svg'
 import React, { useState, useEffect, useRef } from 'react'
-import './Canvas.css'
 import { Link } from 'react-router-dom'
+import './Canvas.css'
 
 const Canvas = () => {
-  const [image, setImage] = useState(null)
+  const memeImage = new Image()
+  const [image, setImage] = useState(memeImage)
   const canvas = useRef(null)
   const [topText, setTopText] = useState('')
   const [bottomText, setBottomText] = useState('')
   const [color, setColor] = useState(null)
+  const [topFontSize, setTopFontSize] = useState(50)
+  const [bottomFontSize, setBottomFontSize] = useState(50)
+  let fontSize = 50;
+
 
   useEffect(() => {
     const memeImage = new Image()
-    memeImage.src = meme
+    memeImage.src = meme2
     memeImage.onload = () => setImage(memeImage)
   }, [])
 
   const fillStyle = (color) => {
     setColor(color.target.value);
   }
-  useEffect(() => {
-    if (image && canvas) {
-      const ctx = canvas.current.getContext('2d')
-      ctx.fillStyle = 'black'
-      ctx.drawImage(image, 0, 0)
 
-      ctx.font = '70px Comic Sans MS'
-      ctx.fillStyle = color
-      ctx.textAlign = 'center'
-
-      ctx.fillText(topText, 250, 100)
-      ctx.fillText(bottomText, 250, 550)
-    }
-  }, [image, canvas, topText, bottomText, fillStyle])
-
-  const [windowSize, setWindowSize] = useState({
-    winWidth: window.innerWidth,
-    winHeight: window.innerHeight,
-  })
-
-  const detectSize = () => {
-    setWindowSize({
-      winWidth: window.innerWidth,
-      winHeight: window.innerHeight,
-    })
+  function changeFontSize (size, setFontFunction) {
+    setFontFunction(size);
   }
 
   useEffect(() => {
-    window.addEventListener('resize', detectSize)
+    const ctx = canvas.current.getContext('2d')
+    ctx.fillStyle = 'black'
+    ctx.drawImage(image, 0, 0)
 
-    return () => {
-      window.removeEventListener('resize', detectSize)
-    }
-  }, [windowSize])
+    ctx.font = `${bottomFontSize}px Comic Sans MS`
+    ctx.fillStyle = color
+    ctx.textAlign = 'center'
 
-  const vh = '1000px'
+    bottomText.split('\n').reverse().forEach(function (t, i) {
+      ctx.fillText(t, image.width / 2, image.height - i * bottomFontSize - 10, image.width);
+    });
 
+  }, [image, canvas, fillStyle, bottomText, bottomFontSize])
+
+  useEffect(() => {
+    const topFontctx = canvas.current.getContext('2d')
+    topFontctx.font = `${topFontSize}px Comic Sans MS`
+    topFontctx.fillStyle = color
+    topFontctx.textAlign = 'center'
+
+    topText.split('\n').forEach(function (t, i) {
+      topFontctx.fillText(t, image.width / 2,40 + i * topFontSize, image.width);
+    });
+
+  }, [topText, topFontSize, bottomText, bottomFontSize, fillStyle])
+  
   return (
-    <div className="editor" style={{ height: windowSize.winHeight }}>
+    <div className="editor" style={{ height: image.height + 300}}>
       <div className="editor__image-box">
         <Link to="/generator-meme/">
-          <img className="editor__back" src={back} />
+          <img className="editor__back" src={back}/>
         </Link>
         <h1 className="editor__title">Редактор мемов</h1>
         <div className="editor__canvas">
-        <input type="color" onChange={e => fillStyle(e)} className="editor__color" />
           <canvas
             className="editor__image"
             ref={canvas}
-            width={windowSize.winWidth / 2 - 30 * 2}
-            height={windowSize.winWidth / 2 - 30 * 2}
+            width={image.width}
+            height={image.height}
           />
         </div>
       </div>
       <div className="editor__text-box">
-        <input
-          className="editor__text editor__text_top"
+        <div className="editor__text-control-panel">
+          <input type="color" onChange={e => fillStyle(e)} className="editor__color" />
+          <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
+        </div>
+        <textarea
+          className="editor__text"
           type="text"
           value={topText}
           onChange={(e) => setTopText(e.target.value)}
           placeholder="Текст сверху"
+          width={image.width}
         />
         <br />
-        <input
-          className="editor__text editor__text_bottom"
+        <div className="editor__text-control-panel">
+          <input type="color" onChange={e => fillStyle(e)} className="editor__color" />
+          <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
+        </div>
+        <textarea
+          className="editor__text"
           type="text"
           value={bottomText}
           onChange={(e) => setBottomText(e.target.value)}
