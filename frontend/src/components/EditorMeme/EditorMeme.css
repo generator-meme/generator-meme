@@ -74,3 +74,18 @@
 .editor-meme__button_top {
   margin-bottom: 112px;
 }
+.editor-meme__generate {
+  width: 500px;
+  height: 124px;
+  font-size: 40px;
+  line-height: 47px;
+  display: block;
+  margin: 60px auto;
+  text-decoration: none;
+  background: linear-gradient(180deg, #C78CD9 0%, rgba(194, 139, 228, 0.63) 100%);
+  border-radius: 20px;
+  color: #1E1D1D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

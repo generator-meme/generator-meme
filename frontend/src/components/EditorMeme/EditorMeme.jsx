@@ -44,6 +44,9 @@ const EditorMeme = ({ selectedMeme }) => {
           </button>
         </div>
       </section>
+      <Link className="editor-meme__generate" to="">
+        Генерировать МЕМ
+      </Link>
     </div>
   )
 }
