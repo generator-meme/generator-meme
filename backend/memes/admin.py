@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Meme, Tag
+from .models import Template, Tag
 
 
-@admin.register(Meme)
-class MemeAdmin(admin.ModelAdmin):
+@admin.register(Template)
+class TemplateAdmin(admin.ModelAdmin):
     '''Админ-панель модели Meme с фильтрацией по тегам'''
     list_display = ('id', 'image')
     list_filter = ('tag',)
