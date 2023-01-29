@@ -11,10 +11,10 @@ class Api {
   }
 
   getTemplates() {
-    return fetch('/api/memes', {
-    method: 'GET',
-    body: JSON.stringify(),
-    headers: this._options.headers,
+    return fetch('api/memes', {
+      method: 'GET',
+      body: JSON.stringify(),
+      headers: this._options.headers,
   })
     .then(this._errorHandler)
   }

@@ -1,5 +1,5 @@
 import Meme from '../Meme/Meme'
-import meme from '../../images/meme-image.png'
+// import meme from '../../images/meme-image.png'
 // import { memes } from '../../utils/constants'
 import human from '../../images/human.png'
 import lines from '../../images/lines.png'
@@ -9,7 +9,7 @@ import arrowTop from '../../images/arrow-top.svg'
 import './Main.css'
 import { Link } from 'react-router-dom'
 
-const Main = ({  memes }) => {
+const Main = ({ memes }) => {
   return (
     <div className="main">
       <img className="main__human" src={human} alt="human" />
@@ -27,11 +27,11 @@ const Main = ({  memes }) => {
           </div>
         </div>
       </Link>
-      <div className="main__memebox">
-        {memes.map((elem) => (
-          <Meme image={elem.image} key={elem.id} />
-        ))}
-      </div>
+      <ul className="main__memebox">
+        {memes.map((elem) => {
+          return <Meme image={elem.image} key={elem.id} />
+        })}
+      </ul>
       <button className="main__btn main__btn_show-more">Показать больше</button>
     </div>
   )
