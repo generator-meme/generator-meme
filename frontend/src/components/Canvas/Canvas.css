@@ -95,3 +95,16 @@
   align-items: center;
   justify-content: center;
 }
+.icon {
+  width: 25px;
+}
+.icon-size {
+  width: 40px;
+  height: 40px;
+}
+.editor__text-control-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 700px;
+}
