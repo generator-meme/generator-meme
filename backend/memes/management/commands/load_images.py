@@ -36,8 +36,7 @@ class Command(BaseCommand):
                     'Authorization': f'Token {token}'
                 }
                 data = {
-                    "image": list_base64[image_index],
-                    "tag": [1]
+                    "image": list_base64[image_index]
                 }
                 status = requests.post(TEMPLATE_URL, data=data, headers=auth)
                 print(

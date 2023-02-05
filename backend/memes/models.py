@@ -33,7 +33,8 @@ class Template(models.Model):
     tag = models.ManyToManyField(
         Tag,
         verbose_name='теги',
-        related_name='memes'
+        related_name='memes',
+        blank=True
     )
 
     class Meta:
