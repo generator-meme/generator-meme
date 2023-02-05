@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   frontend: 
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: artkeyplex/frontend-generator-meme:latest
     volumes: 
       - ../frontend/:/app/result_build/
     depends_on:
@@ -18,9 +16,7 @@ services:
       - ./.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: artkeyplex/generator-meme:latest
     restart: always
     volumes:
       - static_value:/app/backend-static/
