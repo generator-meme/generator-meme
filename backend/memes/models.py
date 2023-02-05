@@ -1,4 +1,7 @@
 from django.db import models
+from uuid import uuid4
+
+from users.models import User
 
 
 class Tag(models.Model):
@@ -22,9 +25,10 @@ class Tag(models.Model):
 
 
 class Template(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     image = models.ImageField(
         verbose_name='Изображение',
-        upload_to='meme/images'
+        upload_to='meme/template_images'
     )
     tag = models.ManyToManyField(
         Tag,
@@ -35,3 +39,24 @@ class Template(models.Model):
     class Meta:
         verbose_name = 'Шаблон мема'
         verbose_name_plural = 'Шаблоны мемов'
+
+
+class Meme(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    image = models.ImageField(
+        verbose_name='Изображение',
+        upload_to='meme/memes_images'
+    )
+    template = models.ForeignKey(
+        Template,
+        on_delete=models.SET_NULL,
+        related_name='memes',
+        null=True,
+        blank=True
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
