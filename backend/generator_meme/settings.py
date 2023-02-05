@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django_filters',
     'api',
     'memes',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'backend-static')
 
 MEDIA_URL = '/backend-media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'backend-media')
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
