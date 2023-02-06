@@ -1,9 +1,8 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import MemeViewSet, TemplateViewSet, TagViewSet
+from .views import MemeViewSet, TagViewSet, TemplateViewSet
 from users.views import UsersViewSet
-
 
 router = routers.DefaultRouter()
 router.register('users', UsersViewSet, basename='users')
