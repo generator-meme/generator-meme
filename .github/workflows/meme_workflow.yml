@@ -57,10 +57,10 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme
             docker-compose stop
             docker-compose rm backend
             rm .env
