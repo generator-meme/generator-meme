@@ -25,7 +25,6 @@ jobs:
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    needs: tests
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -61,6 +60,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme
             docker-compose stop
             docker-compose rm backend
             rm .env

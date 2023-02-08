@@ -9,7 +9,7 @@ services:
       - backend
 
   postgres:
-    image: postgres:14.4-alpine
+    image: postgres:12
     volumes:
       - meme_data:/var/lib/postgresql/data/
     env_file:
