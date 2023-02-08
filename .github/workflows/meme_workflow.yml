@@ -66,11 +66,11 @@ jobs:
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo POSTGRES_DB=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo POSTGRES_HOST=${{ secrets.DB_HOST }} >> .env
+            echo POSTGRES_PORT=${{ secrets.DB_PORT }} >> .env
             docker-compose up -d --build
             sudo docker-compose exec -T backend python manage.py makemigrations
             sudo docker-compose exec -T backend python manage.py migrate

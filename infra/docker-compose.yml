@@ -9,11 +9,13 @@ services:
       - backend
 
   postgres:
-    image: postgres:12
+    image: postgres:14.4-alpine
     volumes:
       - meme_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
+    ports:
+      - "5433:5433"
 
   backend:
     image: artkeyplex/generator-meme:latest

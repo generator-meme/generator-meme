@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru']
 
 
 INSTALLED_APPS = [
