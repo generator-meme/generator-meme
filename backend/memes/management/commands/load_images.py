@@ -1,10 +1,14 @@
 import requests
+import os
 from django.core.management.base import BaseCommand
+from dotenv import load_dotenv
 
-AUTH_URL = 'http://localhost/api/auth/token/login'
-TEMPLATE_URL = 'http://localhost/api/templates/'
-EMAIL = "admin@gmail.com"
-PASSWORD = "admin"
+DOMAIN = os.getenv('DOMAIN')
+
+AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
+TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
+EMAIL = os.getenv('EMAIL')
+PASSWORD = os.getenv('PASSWORD')
 AUTH_DATA = {
     "email": EMAIL,
     "password": PASSWORD

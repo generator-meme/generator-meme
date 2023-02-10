@@ -63,8 +63,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme
             docker-compose stop
             docker-compose rm backend
-            rm .env
-            touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
