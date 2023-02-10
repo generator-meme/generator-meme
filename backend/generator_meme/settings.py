@@ -9,7 +9,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'host.docker.internal']
 
 
 INSTALLED_APPS = [
@@ -113,10 +113,14 @@ REST_FRAMEWORK = {
     ],
 }
 
-EMAIL_USE_TSL = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "kasevmihail9@gmail.com"
-EMAIL_HOST_PASSWORD = ""
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 465
+
 DJOSER = {
     "HIDE_USER": True,
     'PERMISSIONS': {
@@ -128,9 +132,9 @@ DJOSER = {
         "current_user": "users.serializers.UsersSerializer",
         # 'token_create': 'apps.accounts.serializers.CustomTokenCreateSerializer'
     },
-    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_NAME = "Generator-meme"

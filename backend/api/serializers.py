@@ -91,7 +91,7 @@ class FavoriteSerializer(ModelSerializer):
     id = UUIDField(read_only=True, default=uuid4)
 
     class Meta:
-        fields = ('user', 'recipe')
+        fields = '__all__'
         model = Favorite
 
     def validate(self, data):

@@ -48,9 +48,9 @@ class TemplateViewSet(viewsets.ModelViewSet):
             return TemplateReadSerializer
         return TemplateWriteSerializer
 
-    @action(detail=True)
+    @action(detail=True, methods=['post', 'delete'])
     def favorite(self, request, pk):
-        return additions(request, pk, Favorite, FavoriteSerializer)
+        return additions(self, request, pk, Favorite, FavoriteSerializer)
 
 
 class TagViewSet(viewsets.ModelViewSet):

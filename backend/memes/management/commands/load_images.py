@@ -2,8 +2,8 @@ import requests
 from django.core.management.base import BaseCommand
 
 
-AUTH_URL = 'http://localhost/api/auth/token/login'
-TEMPLATE_URL = 'http://localhost/api/templates/'
+AUTH_URL = 'http://host.docker.internal/api/auth/token/login'
+TEMPLATE_URL = 'http://host.docker.internal/api/templates/'
 EMAIL = "admin@gmail.com"
 PASSWORD = "admin"
 AUTH_DATA = {
