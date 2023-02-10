@@ -1,10 +1,11 @@
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (ModelSerializer,
-                                        PrimaryKeyRelatedField, UUIDField)
+from rest_framework.serializers import (
+    ModelSerializer, PrimaryKeyRelatedField, ValidationError, UUIDField
+)
 from uuid import uuid4
 
-from memes.models import Meme, Tag, Template
+from memes.models import Favorite, Meme, Tag, Template
 from users.serializers import UserSerializer
 
 
@@ -83,4 +84,30 @@ class MemeWriteSerializer(ModelSerializer):
             context={
                 'request': self.context.get('request')
             }
+        ).data
+
+
+class FavoriteSerializer(ModelSerializer):
+    id = UUIDField(read_only=True, default=uuid4)
+
+    class Meta:
+        fields = ('user', 'recipe')
+        model = Favorite
+
+    def validate(self, data):
+        request = self.context['request']
+        if not request or request.user.is_anonymous:
+            return False
+        if Favorite.objects.filter(
+            user=request.user, template=data.get('template')
+        ).exists():
+            raise ValidationError(
+                {'Favorite_exists_error': 'Шаблон уже в избранном.'}
+            )
+        return data
+
+    def to_representation(self, instance):
+        return TemplateReadSerializer(
+            instance.template,
+            context={'request': self.context['request']}
         ).data

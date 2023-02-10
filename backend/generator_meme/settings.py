@@ -112,3 +112,25 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+EMAIL_USE_TSL = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "kasevmihail9@gmail.com"
+EMAIL_HOST_PASSWORD = ""
+DJOSER = {
+    "HIDE_USER": True,
+    'PERMISSIONS': {
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly']
+    },
+    "SERIALIZERS": {
+        "user": "users.serializers.UsersSerializer",
+        "current_user": "users.serializers.UsersSerializer",
+        # 'token_create': 'apps.accounts.serializers.CustomTokenCreateSerializer'
+    },
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_NAME = "Generator-meme"
