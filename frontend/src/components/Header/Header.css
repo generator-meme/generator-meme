@@ -1,5 +1,15 @@
 .header {
+  margin: 0;
+  padding: 22px 30px 18px;
   background-color: #FFFFDA;
-  padding: 25px 30px;
-  text-align: left;
+  min-height: 83px;
+  border-radius: 0px 0px 20px 20px;
+  box-sizing: border-box;
+}
+
+.header__logo {
+  margin: 0;
+  padding: 0;
+  height: 50px;
+  width: 68px;
 }
