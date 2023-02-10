@@ -10,8 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru']
-
+ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru', 'host.docker.internal']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -113,3 +112,29 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 465
+
+DJOSER = {
+    "HIDE_USER": True,
+    'PERMISSIONS': {
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly']
+    },
+    "SERIALIZERS": {
+        "user": "users.serializers.UsersSerializer",
+        "current_user": "users.serializers.UsersSerializer",
+        # 'token_create': 'apps.accounts.serializers.CustomTokenCreateSerializer'
+    },
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SITE_NAME = "Generator-meme"

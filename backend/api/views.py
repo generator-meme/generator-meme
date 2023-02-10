@@ -7,10 +7,11 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS
 
 from .permissions import AdminOrReadOnly
-from .serializers import (MemeReadSerializer, MemeWriteSerializer,
-                          TagSerializer, TemplateReadSerializer,
-                          TemplateWriteSerializer)
-from memes.models import Meme, Tag, Template
+from .serializers import (FavoriteSerializer, MemeReadSerializer,
+                          MemeWriteSerializer, TagSerializer,
+                          TemplateReadSerializer, TemplateWriteSerializer)
+from .services import additions
+from memes.models import Favorite, Meme, Tag, Template
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -46,6 +47,10 @@ class TemplateViewSet(viewsets.ModelViewSet):
         if self.request.method in SAFE_METHODS:
             return TemplateReadSerializer
         return TemplateWriteSerializer
+
+    @action(detail=True, methods=['post', 'delete'])
+    def favorite(self, request, pk):
+        return additions(self, request, pk, Favorite, FavoriteSerializer)
 
 
 class TagViewSet(viewsets.ModelViewSet):

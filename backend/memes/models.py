@@ -62,3 +62,33 @@ class Meme(models.Model):
         blank=True,
         null=True
     )
+
+
+class Favorite(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Пользователь'
+    )
+    template = models.ForeignKey(
+        Template,
+        on_delete=models.CASCADE,
+        related_name='favorite',
+        verbose_name='Избранный рецепт'
+    )
+
+    class Meta:
+        ordering = ('user',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=('user', 'template'),
+                name='favorite_template'
+            )
+        ]
+        verbose_name = 'Избранный шаблон'
+        verbose_name_plural = 'Избранные шаблоны'
+
+    def __str__(self):
+        return f'{self.template} - избранный шаблон для: {self.user}'
