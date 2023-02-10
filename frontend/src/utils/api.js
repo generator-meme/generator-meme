@@ -11,18 +11,17 @@ class Api {
   }
 
   getTemplates() {
-    return fetch('api/memes', {
-      method: 'GET',
+    return fetch("api/templates", {
+      method: "GET",
       body: JSON.stringify(),
       headers: this._options.headers,
-  })
-    .then(this._errorHandler)
+    }).then(this._errorHandler);
   }
 }
 
 const api = new Api({
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
