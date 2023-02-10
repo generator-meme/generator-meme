@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Meme, Template, Tag
+
+from .models import Meme, Tag, Template
 
 
 @admin.register(Meme)

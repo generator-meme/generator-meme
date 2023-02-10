@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import (
@@ -69,11 +71,10 @@ class MemeWriteSerializer(ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         if request.user.is_authenticated:
-            meme = Meme.objects.create(
+            return Meme.objects.create(
                 author=request.user,
                 **validated_data
             )
-            return meme
         return Meme.objects.create(
             **validated_data
         )
