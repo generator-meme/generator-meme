@@ -1,13 +1,13 @@
 .meme {
   height: 360px;
-  width: 360px;
+  width: 100%;
   border-radius: 20px;
   display: flex;
   justify-content: center;
-}
-.meme:not(:last-child) {
-  margin-right: 40px;
-  margin-bottom: 60px;
+  align-items: flex-start;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .meme__create-btn {
@@ -15,11 +15,11 @@
   font-size: 20px;
   line-height: 24px;
   background-color: #fdffa1;
-  width: 186px;
+  width: 184px;
   height: 54px;
   border: none;
   border-radius: 8px;
   box-shadow: 2px 5px 9px rgba(0, 0, 0, 0.64);
-  margin: 275px auto 0;
+  margin: 260px 0 0;
   cursor: pointer;
 }

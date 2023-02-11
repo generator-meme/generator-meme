@@ -20,8 +20,8 @@ const MemesBox = ({ memes }) => {
       <ul className="memesbox__container">
         {memes
           .slice(0, numberOfVisibleMems)
-          .map((elem, index) => {
-            return <Meme image={elem.image} key={elem.id} index={index} />
+          .map((elem) => {
+            return <Meme elem={elem} key={elem.id}/>
         })}
       </ul>
       {memes.length > numberOfVisibleMems && (

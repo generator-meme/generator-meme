@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Header from './components/Header/Header'
-import Main from './components/Main/Main'
-import Footer from './components/Footer/Footer'
-import MainLayout from './components/MainLayout/MainLayout'
-import Canvas from './components/Canvas/Canvas'
-import api from './utils/api'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import Main from "./components/Main/Main";
+import Footer from "./components/Footer/Footer";
+import MainLayout from "./components/MainLayout/MainLayout";
+import Canvas from "./components/Canvas/Canvas";
+import api from "./utils/api";
+import "./App.css";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
 
   useEffect(() => {
     api
-    .getTemplates()
-    .then((res) => {
-      setMemes(res);
-    })
-    .catch((err) => {  
-    });
-  }, [])
+      .getTemplates()
+      .then((res) => {
+        setMemes(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="page">
@@ -32,7 +33,7 @@ const App = () => {
       </Routes>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

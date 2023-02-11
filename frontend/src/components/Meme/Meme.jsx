@@ -1,13 +1,18 @@
-import { Link } from 'react-router-dom'
 import React from 'react';
 import './Meme.css'
+import { useNavigate } from 'react-router-dom';
 
-function Meme({ image, index }) {
+function Meme({ elem }) {
+  const navigate = useNavigate();
+  console.log(elem, elem.id)
+
+  const onClick = () => {
+    navigate(`/generator-meme/${elem.id}`)
+  };
+
   return (
-    <li className="meme" style={{ backgroundImage: `url(${image})` }}>
-      <Link to={`/generator-meme/${index}`}>
-        <button className="meme__create-btn">Создать мем</button>
-      </Link>
+    <li className="meme" style={{ backgroundImage: `url(${elem.image})` }}>
+        <button onClick={onClick} className="meme__create-btn">создать мем</button>
     </li>
   )
 }
