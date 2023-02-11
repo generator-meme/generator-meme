@@ -4,7 +4,6 @@ import lines from "../../images/lines.png"
 import lines2 from "../../images/lines2.png"
 import arrowUp from "../../images/arrow-up.svg"
 import Meme from "../Meme/Meme"
-// import { Link } from "react-router-dom"
 import { HashLink as Link } from "react-router-hash-link";
 
 const MemesBox = ({ memes }) => {
