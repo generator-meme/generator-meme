@@ -51,17 +51,21 @@
 .memesbox__up {
     margin: 0;
     padding: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     row-gap: 6px;
-    position: absolute;
-    bottom: 93px;
-    right: 30px;
     text-decoration: none;
     cursor: pointer;
     z-index: 2;
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+}
+
+.memesbox__up_visible {
+    display: flex;
 }
 
 .memesbox__up-arrow {
