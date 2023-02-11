@@ -10,6 +10,17 @@ const MemesBox = ({ memes }) => {
   const [scrollTop, setScrollTop] = useState(null);
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
   
+  const fullHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.body.clientHeight,
+    document.documentElement.clientHeight
+  );
+
+  console.log(fullHeight);
+
   const addMemes = () => {
     setNumberOfVisibleMems(numberOfVisibleMems + 21);
   };
@@ -43,7 +54,7 @@ const MemesBox = ({ memes }) => {
           <button onClick={addMemes} className="memesbox__btn-show-more btn">показать больше</button>
         )
         }
-        <Link to='/generator-meme#memes-start' className={` ${(scrollTop > 700) ? "memesbox__up_visible" : ""} memesbox__up`}>
+        <Link to='/generator-meme#memes-start' className={` ${(scrollTop > 700) ? "memesbox__up_type_fixed" : ""} memesbox__up ${(scrollTop > (fullHeight - 1000)) ? "memesbox__up_type_absolute" : ""}`}>
           <img className="memesbox__up-arrow" src={arrowUp} alt="Стрелка вверх." />
           <p className="memesbox__up-text" >Наверх</p>
         </Link>

@@ -60,12 +60,18 @@
     cursor: pointer;
     z-index: 2;
     position: fixed;
-    bottom: 236px;
+    bottom: 50px;
     right: 30px;
 }
 
-.memesbox__up_visible {
+.memesbox__up_type_fixed {
     display: flex;
+}
+
+.memesbox__up_type_absolute {
+    position: absolute;
+    bottom: 92px;
+    right: 30px;
 }
 
 .memesbox__up-arrow {
