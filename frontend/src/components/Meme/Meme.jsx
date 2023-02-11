@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Meme({ elem }) {
   const navigate = useNavigate();
-  console.log(elem, elem.id)
 
   const onClick = () => {
     navigate(`/generator-meme/${elem.id}`)
