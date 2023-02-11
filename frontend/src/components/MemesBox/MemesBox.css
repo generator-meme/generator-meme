@@ -60,6 +60,8 @@
     bottom: 93px;
     right: 30px;
     text-decoration: none;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .memesbox__up-arrow {
