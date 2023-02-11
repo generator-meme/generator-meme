@@ -18,3 +18,13 @@ body {
   background-color: #FDFFA1;
   background-size: contain;
 }
+
+.btn {
+  background: linear-gradient(180deg, #CE8EC0 0%, rgba(194, 139, 228, 0.63) 77.16%);
+  border-radius: 20px;
+  cursor: pointer;
+  border: none;
+  font-style: normal;
+  font-weight: 500;
+  font-family: 'Rubik';
+}
