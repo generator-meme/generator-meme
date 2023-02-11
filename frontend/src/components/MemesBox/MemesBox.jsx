@@ -16,7 +16,7 @@ const MemesBox = ({ memes }) => {
   return (
     <>
     {(memes.length > 0) && (
-      <section className="memesbox" aria-label="Box of memes">
+      <section className="memesbox" aria-label="Box of memes" id="memes-start">
         <img className="memesbox__lines memesbox__lines_left" src={lines} alt="Линии." />
         <img className="memesbox__lines memesbox__lines_right" src={lines2} alt="Линии." />
         <ul className="memesbox__container">
@@ -30,7 +30,7 @@ const MemesBox = ({ memes }) => {
           <button onClick={addMemes} className="memesbox__btn-show-more btn">показать больше</button>
         )
         }
-        <Link to='/generator-meme#main' className="memesbox__up">
+        <Link to='/generator-meme#memes-start' className="memesbox__up">
           <img className="memesbox__up-arrow" src={arrowUp} alt="Стрелка вверх." />
           <p className="memesbox__up-text" >Наверх</p>
         </Link>

@@ -15,7 +15,6 @@ const Canvas = ({ memes }) => {
   const currentMeme = memes.find((mem)=> {
     return mem.id.includes(id);
   });
-  console.log(currentMeme);
   const memeImage = new Image()
   const [image, setImage] = useState(memeImage)
   const canvas = useRef(null)

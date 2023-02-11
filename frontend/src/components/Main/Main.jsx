@@ -14,7 +14,7 @@ const Main = ({ memes }) => {
 
   return (
     <main >
-      <section className="main" aria-label="Main part" id="main">
+      <section className="main" aria-label="Main part">
         <img className="main__cat" src={cat} alt="Кот." />
         <h1 className="main__title">Генератор мемов</h1>
         <div className="main__text-box">
