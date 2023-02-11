@@ -12,7 +12,10 @@ import './Canvas.css'
 
 const Canvas = ({ memes }) => {
   const { id } = useParams();
-  const currentMeme = memes[id];
+  const currentMeme = memes.find((mem)=> {
+    return mem.id.includes(id);
+  });
+  console.log(currentMeme);
   const memeImage = new Image()
   const [image, setImage] = useState(memeImage)
   const canvas = useRef(null)
