@@ -11,6 +11,7 @@ import "./App.css";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
+  const [currentMeme, setCurrentMeme] = useState(null);
 
   useEffect(() => {
     api
@@ -28,8 +29,11 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/generator-meme" element={<MainLayout />}>
-          <Route index element={<Main memes={memes} />} />
-          <Route path=":id" element={<Canvas memes={memes} />} />
+          <Route
+            index
+            element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
+          />
+          <Route path=":id" element={<Canvas currentMeme={currentMeme} />} />
           <Route path="saved" element={<SavedMeme />} />
         </Route>
       </Routes>

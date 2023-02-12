@@ -2,10 +2,11 @@ import React from 'react';
 import './Meme.css'
 import { useNavigate } from 'react-router-dom';
 
-function Meme({ elem }) {
+function Meme({ elem, setCurrentMeme }) {
   const navigate = useNavigate();
 
   const onClick = () => {
+    setCurrentMeme(elem);
     navigate(`/generator-meme/${elem.id}`)
   };
 

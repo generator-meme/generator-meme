@@ -10,11 +10,12 @@ import textBold from '../../images/icons/bold.png'
 import textItalic from '../../images/icons/italic.png'
 import './Canvas.css'
 
-const Canvas = ({ memes }) => {
-  const { id } = useParams();
-  const currentMeme = memes.find((mem)=> {
-    return mem.id.includes(id);
-  });
+const Canvas = ({ currentMeme }) => {
+  // const { id } = useParams();
+  // const currentMeme = memes.find((mem)=> {
+  //   return mem.id.includes(id);
+  // });
+  console.log(currentMeme);
   const memeImage = new Image()
   const [image, setImage] = useState(memeImage)
   const canvas = useRef(null)
@@ -33,9 +34,9 @@ const Canvas = ({ memes }) => {
   const [topFontStyle, setTopFontStyle] = useState('normal')
 
   useEffect(() => {
-    const memeImage = new Image()
+    // const memeImage = new Image()
     memeImage.src = currentMeme.image
-  }, [])
+  }, [currentMeme, memeImage])
 
   const fillStyle = (color) => {
     setColor(color.target.value);

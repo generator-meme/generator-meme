@@ -5,7 +5,7 @@ import './Main.css'
 import MemesBox from '../MemesBox/MemesBox.jsx'
 import { useNavigate } from 'react-router-dom'
 
-const Main = ({ memes }) => {
+const Main = ({ memes, setCurrentMeme }) => {
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -27,7 +27,7 @@ const Main = ({ memes }) => {
           </div>
         </div>
       </section>
-      <MemesBox memes={memes} />
+      <MemesBox memes={memes} setCurrentMeme={setCurrentMeme} />
     </main>
   )
 }

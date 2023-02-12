@@ -6,7 +6,7 @@ import arrowUp from "../../images/arrow-up.svg"
 import Meme from "../Meme/Meme"
 import { HashLink as Link } from "react-router-hash-link";
 
-const MemesBox = ({ memes }) => {
+const MemesBox = ({ memes, setCurrentMeme }) => {
   const [scrollTop, setScrollTop] = useState(null);
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
   
@@ -45,7 +45,7 @@ const MemesBox = ({ memes }) => {
           {memes
             .slice(0, numberOfVisibleMems)
             .map((elem) => {
-              return <Meme elem={elem} key={elem.id}/>
+              return <Meme elem={elem} key={elem.id} setCurrentMeme={setCurrentMeme} />
           })}
         </ul>
         {memes.length > numberOfVisibleMems && (
