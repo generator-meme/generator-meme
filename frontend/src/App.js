@@ -5,6 +5,7 @@ import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
 import MainLayout from "./components/MainLayout/MainLayout";
 import Canvas from "./components/Canvas/Canvas";
+import SavedMeme from "./components/SavedMeme/SavedMeme";
 import api from "./utils/api";
 import "./App.css";
 
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/generator-meme" element={<MainLayout />}>
           <Route index element={<Main memes={memes} />} />
           <Route path=":id" element={<Canvas memes={memes} />} />
+          <Route path="saved" element={<SavedMeme />} />
         </Route>
       </Routes>
       <Footer />
