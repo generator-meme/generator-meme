@@ -1,6 +1,6 @@
-from uuid import uuid4
-
 from django.db import models
+from django.db.models import Count, F
+from uuid import uuid4
 
 from users.models import User
 
@@ -25,6 +25,11 @@ class Tag(models.Model):
         return self.slug
 
 
+class TemplateManager(models.Manager):
+    def with_rating(self):
+        return self.annotate(rating=Count(F('memes')))
+
+
 class Template(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     image = models.ImageField(
@@ -37,6 +42,10 @@ class Template(models.Model):
         related_name='memes',
         blank=True
     )
+    created_at = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True)
+    objects = TemplateManager()
 
     class Meta:
         verbose_name = 'Шаблон мема'
@@ -62,6 +71,9 @@ class Meme(models.Model):
         blank=True,
         null=True
     )
+    created_at = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True)
 
 
 class Favorite(models.Model):

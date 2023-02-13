@@ -3,14 +3,16 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS
 
+from .filters import TagSearchFilter
 from .permissions import AdminOrReadOnly
 from .serializers import (FavoriteSerializer, MemeReadSerializer,
                           MemeWriteSerializer, TagSerializer,
                           TemplateReadSerializer, TemplateWriteSerializer)
-from .services import additions
+from .services import create_delete_relation
 from memes.models import Favorite, Meme, Tag, Template
 
 
@@ -40,8 +42,10 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 class TemplateViewSet(viewsets.ModelViewSet):
     '''Представление для модели Meme'''
-    queryset = Template.objects.all()
+    queryset = Template.objects.with_rating().order_by('-rating')
     permission_classes = [AdminOrReadOnly]
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['created_at']
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -50,7 +54,9 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post', 'delete'])
     def favorite(self, request, pk):
-        return additions(self, request, pk, Favorite, FavoriteSerializer)
+        return create_delete_relation(
+            self, request, pk, Favorite, FavoriteSerializer
+        )
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -58,3 +64,5 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [AdminOrReadOnly]
+    filter_backends = (TagSearchFilter,)
+    search_fields = ('^name',)
