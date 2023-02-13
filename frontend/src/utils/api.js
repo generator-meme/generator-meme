@@ -29,6 +29,28 @@ class Api {
       }),
     }).then(this._errorHandler);
   }
+
+  downloadNewMem(memeId) {
+    return fetch(`${this._baseUrl}/memes/${memeId}/download_meme/`, {
+      method: "GET",
+      headers: this._headers,
+    }).then((res) => {
+      return new Promise((resolve, reject) => {
+        if (res.status < 400) {
+          return res.blob().then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "yourMeme";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+        }
+        reject();
+      });
+    });
+  }
 }
 
 const api = new Api({

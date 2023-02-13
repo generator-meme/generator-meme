@@ -26,6 +26,17 @@ const App = () => {
       });
   }
 
+  function handleDownloadNewMeme() {
+    api
+      .downloadNewMem(newMeme.id)
+      .then((res) => {
+        console.log(res, newMeme.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     api
       .getTemplates()
@@ -37,7 +48,7 @@ const App = () => {
       });
   }, []);
 
-  console.log(newMeme);
+  // console.log(newMeme);
 
   return (
     <div className="page">
@@ -59,7 +70,13 @@ const App = () => {
           />
           <Route
             path="saved"
-            element={<SavedMeme currentMeme={currentMeme} newMeme={newMeme} />}
+            element={
+              <SavedMeme
+                currentMeme={currentMeme}
+                newMeme={newMeme}
+                handleDownloadMeme={handleDownloadNewMeme}
+              />
+            }
           />
         </Route>
       </Routes>
