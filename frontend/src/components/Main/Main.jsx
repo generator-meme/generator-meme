@@ -9,7 +9,7 @@ const Main = ({ memes, setCurrentMeme }) => {
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate("/generator-meme/canvas");
+    navigate("/canvas");
   };
 
   return (

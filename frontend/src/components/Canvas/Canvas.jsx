@@ -56,7 +56,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   function createMeme () {
     handleCreateNewMeme(canvas.current.toDataURL(), currentMeme.id)
       .finally(()=> {
-        navigate('/generator-meme/saved')
+        navigate('/saved')
       });
   };
 

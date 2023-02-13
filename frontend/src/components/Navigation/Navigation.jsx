@@ -9,7 +9,7 @@ function Navigation ({ isSavedMeme, id }) {
       <nav>
         <ul className="navigation__container">
           <li className="navigation__element">
-            <NavLink end to="/generator-meme"
+            <NavLink end to="/"
               className={({ isActive }) =>
                 `navigation__link
                 ${isActive ? "navigation__link_active": ""}`
@@ -20,7 +20,7 @@ function Navigation ({ isSavedMeme, id }) {
             <img className="navigation__arrow" src={arrow} alt="Стрелка справо."/>
           </li>
           <li className="navigation__element">
-            <NavLink to={`/generator-meme/${id}`}
+            <NavLink to={`/${id}`}
               className={({ isActive }) =>
                 `navigation__link
                 ${isActive ? "navigation__link_active": ""}`
@@ -32,7 +32,7 @@ function Navigation ({ isSavedMeme, id }) {
           </li>
           {isSavedMeme && (
           <li className="navigation__element">
-            <NavLink to="/generator-meme/saved"
+            <NavLink to="/saved"
               className={({ isActive }) =>
                 `navigation__link
                 ${isActive ? "navigation__link_active": ""}`

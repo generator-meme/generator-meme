@@ -48,37 +48,34 @@ const App = () => {
       });
   }, []);
 
-  // console.log(newMeme);
-
   return (
     <div className="page">
       <Header />
       <Routes>
-        <Route path="/generator-meme" element={<MainLayout />}>
-          <Route
-            index
-            element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
-          />
-          <Route
-            path=":id"
-            element={
-              <Canvas
-                currentMeme={currentMeme}
-                handleCreateNewMeme={handleCreateNewMeme}
-              />
-            }
-          />
-          <Route
-            path="saved"
-            element={
-              <SavedMeme
-                currentMeme={currentMeme}
-                newMeme={newMeme}
-                handleDownloadMeme={handleDownloadNewMeme}
-              />
-            }
-          />
-        </Route>
+        <Route
+          exact
+          path="/"
+          element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
+        />
+        <Route
+          path="/:id"
+          element={
+            <Canvas
+              currentMeme={currentMeme}
+              handleCreateNewMeme={handleCreateNewMeme}
+            />
+          }
+        />
+        <Route
+          path="/saved"
+          element={
+            <SavedMeme
+              currentMeme={currentMeme}
+              newMeme={newMeme}
+              handleDownloadMeme={handleDownloadNewMeme}
+            />
+          }
+        />
       </Routes>
       <Footer />
     </div>

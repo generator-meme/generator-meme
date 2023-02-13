@@ -7,7 +7,7 @@ function Meme({ elem, setCurrentMeme }) {
 
   const onClick = () => {
     setCurrentMeme(elem);
-    navigate(`/generator-meme/${elem.id}`)
+    navigate(`/${elem.id}`)
   };
 
   return (
