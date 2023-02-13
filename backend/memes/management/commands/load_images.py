@@ -5,14 +5,14 @@ from django.core.management.base import BaseCommand
 from dotenv import load_dotenv
 from datetime import datetime
 
-DOMAIN = os.getenv('DOMAIN')
+DOMAIN = os.environ.get('DOMAIN')
 
 load_dotenv()
 
 AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
 TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
-EMAIL = os.getenv('EMAIL')
-PASSWORD = os.getenv('PASSWORD')
+EMAIL = os.environ.get('EMAIL')
+PASSWORD = os.environ.get('PASSWORD')
 
 AUTH_DATA = {
     "email": EMAIL,

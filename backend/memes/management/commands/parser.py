@@ -5,15 +5,15 @@ import requests
 
 
 from django.core.management.base import BaseCommand
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from datetime import datetime
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 
-LOGIN = '+79651801854'#os.getenv('VK_LOGIN')
-PASSWORD = '20042004sS' #os.getenv('VK_PASSWORSD')
-TOKEN='access_token=vk1.a.McqB9VExAhUw-aKePlWdrMurNIdXPc_tOE97RjtTsWeusLZr4VgIFd8AW3Q3j7P42KXuQgXthMVgzpmMsgm5GCSqmcbac0_oW6J0cY7RjM9xJf2XdyWrALRdsGqOjg8wxMcmtwKLsJAJBDKo2akPmlQ7Z-6LjRSskZKKMsfKAyUawcgOD3s74EZDNTOVFBbr&expires_in=86400&user_id=222310569'
+LOGIN = os.environ.get('VK_LOGIN')
+PASSWORD = os.environ.get('VK_PASSWORSD')
+TOKEN = os.environ.get('VK_TOKEN')
 
 PUBLICS = {
     'https://vk.com/public172222275': -172222275,
@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
         for public in PUBLICS:
             response = vk.photos.get(owner_id=PUBLICS[public], album_id="wall",
-                                     count='3', rev=1,
+                                     count='10', rev=1,
                                      offset='10')
             for i in range(len(response['items'])):
                 url_photo = response['items'][i]['sizes'][-1]['url']
