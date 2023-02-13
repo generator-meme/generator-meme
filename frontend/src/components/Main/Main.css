@@ -1,60 +1,48 @@
 .main {
-  padding: 160px 117px;
+  margin: 0;
+  padding: 135px 0 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  row-gap: 115px;
+  align-items: center;
   position: relative;
   color: #1E1D1D;
+  z-index: 2;
 }
 
-.main__human {
+.main__cat {
   position: absolute;
-  left: 0;
-  top: -100px;
+  top: 72px;
+  left: 25px;
   z-index: 1;
-}
-
-.main__lines {
-  position: absolute;
-  z-index: 1;
-}
-
-.main__lines_left {
-  left: 0;
-  top: 860px;
-}
-
-.main__lines_right {
-  right: 0;
-  top: 1370px;
 }
 
 .main__title {
-  position: relative;
   margin: 0;
+  padding: 0;
   font-style: normal;
   font-weight: 400;
   font-size: 80px;
   line-height: 95px;
-  margin-bottom: 80px;
   z-index: 2;
   text-align: center;
 }
 
-.main__link {
-  text-decoration: none;
-  color: #1E1D1D;
-}
-
 .main__text-box {
   display: flex;
-  z-index: 2;
+  justify-content: space-between;
   align-items: center;
+  font-style: normal;
+  column-gap: 5px;
 }
 
 .main__text-advice {
-  font-style: normal;
+  margin: 0;
+  padding: 0;
   font-weight: 500;
   font-size: 42px;
   line-height: 50px;
-  margin: 0 30px 0 0;
 }
 
 .main__btn-block {
@@ -62,26 +50,15 @@
 }
 
 .main__btn {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  line-height: 30px;
   border: none;
-  background: linear-gradient(180deg, #CE8EC0 0%, rgba(194, 139, 228, 0.63) 77.16%);
-  border-radius: 20px;
-  width: 273px;
-  height: 64px;
+  width: 331px;
+  height: 55px;
   cursor: pointer;
-}
-
-.main__btn_show-more {
-  display: block;
-  width: 551px;
-  height: 114px;
-  font-weight: 500;
-  font-size: 45px;
-  line-height: 53px;
-  margin: 0 auto;
+  position: relative;
 }
 
 .main__btn_help {
@@ -93,15 +70,6 @@
   left: 0;
 }
 
-.main__btn-block:hover .main__btn_help {
+.main__btn:hover+.main__btn_help {
   opacity: 1;
-}
-
-.main__memebox {
-  display: grid;
-  margin-top: 125px;
-  justify-content: center;
-  grid-template-columns: repeat(3, 1fr);
-  position: relative;
-  z-index: 2;
 }

@@ -1,0 +1,31 @@
+.saved-meme {
+    padding: 60px 30px 111px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.saved-meme__container {
+    padding: 124px 0 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 96px;
+    box-sizing: border-box;
+}
+
+.saved-meme__image {
+    width: 910px;
+    height: 941px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+}
+
+.saved-meme__btn-save {
+    width: 500px;
+    height: 124px;
+    font-size: 40px;
+    line-height: 47px;
+}
