@@ -4,7 +4,6 @@ from rest_framework import routers
 from .views import MemeViewSet, TemplateViewSet, TagViewSet
 # from users.views import UsersViewSet
 
-
 router = routers.DefaultRouter()
 # router.register('users', UsersViewSet, basename='users')
 router.register('memes', MemeViewSet, basename='memes')

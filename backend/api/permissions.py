@@ -3,7 +3,8 @@ from rest_framework import permissions
 
 class AdminOrReadOnly(permissions.BasePermission):
     '''Разрешает изменение админу, чтение всем'''
-    # прописал пока только суперпользователя, после появления User добавим роль админа
+    # прописал пока только суперпользователя,
+    # после появления User добавим роль админа
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
