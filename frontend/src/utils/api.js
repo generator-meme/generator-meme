@@ -1,6 +1,7 @@
 class Api {
-  constructor(options) {
-    this._options = options;
+  constructor(data) {
+    this._baseUrl = data.baseUrl;
+    this._headers = data.headers;
   }
 
   _errorHandler(res) {
@@ -11,15 +12,27 @@ class Api {
   }
 
   getTemplates() {
-    return fetch("http://localhost/api/templates", {
+    return fetch(`${this._baseUrl}/templates/`, {
       method: "GET",
       body: JSON.stringify(),
-      headers: this._options.headers,
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
+
+  createNewMem(memeUrl, memeId) {
+    return fetch(`${this._baseUrl}/memes/`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        image: memeUrl,
+        template: memeId,
+      }),
     }).then(this._errorHandler);
   }
 }
 
 const api = new Api({
+  baseUrl: "http://localhost/api",
   headers: {
     "Content-Type": "application/json",
   },

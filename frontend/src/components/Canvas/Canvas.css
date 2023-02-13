@@ -1,41 +1,64 @@
-.editor {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 55px 30px;
+.main-editor {
+  padding: 60px 30px 150px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.editor__back {
-  margin-left: 20px;
+.editor {
+  /* position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 55px 30px; */
+  padding: 63px 0 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .editor__title {
-  margin-top: 50px;
-  margin: 50px 0 40px;
+  align-self: flex-start;
+  /* margin-top: 50px;
+  margin: 50px 0 40px; */
+  margin: 0;
+  padding: 0 0 70px;
   font-weight: 400;
   font-size: 60px;
   line-height: 71px;
 }
 
-.editor__image {
+.editor__boxes {
+  padding: 0 0 110px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  column-gap: 60px;
+  align-items: center;
+}
+
+.editor__image-box {
+  /* width: auto;
+  height: auto; */
+  object-fit: cover;
+  object-position: center;
   font-weight: 500;
   font-size: 70px;
   line-height: 83px;
   border-radius: 20px;
   white-space: pre-wrap;
-  word-break:break-all
-}
-
-.editor__canvas {
-  width: 500px;
+  word-break: break-all
 }
 
 .editor__text-box {
   display: flex;
   flex-direction: column;
-  max-height: 290px;
+  /* max-height: 290px; */
   align-items: center;
-  margin: auto;
+  margin: 0;
+  padding: 0;
 }
 
 .editor__text {
@@ -80,31 +103,26 @@
   line-height: 36px;
 }
 
-.editor-meme__generate {
-  width: 500px;
-  height: 124px;
-  font-size: 40px;
-  line-height: 47px;
-  display: block;
-  margin: 60px auto;
-  text-decoration: none;
-  background: linear-gradient(180deg, #C78CD9 0%, rgba(194, 139, 228, 0.63) 100%);
-  border-radius: 20px;
-  color: #1E1D1D;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .icon {
   width: 25px;
 }
+
 .icon-size {
   width: 40px;
   height: 40px;
 }
+
 .editor__text-control-panel {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 700px;
+}
+
+.editor__btn {
+  width: 500px;
+  height: 124px;
+  padding: 0;
+  font-size: 40px;
+  line-height: 47px;
 }

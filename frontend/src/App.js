@@ -12,6 +12,19 @@ import "./App.css";
 const App = () => {
   const [memes, setMemes] = useState([]);
   const [currentMeme, setCurrentMeme] = useState(null);
+  const [newMeme, setNewMeme] = useState(null);
+
+  function handleCreateNewMeme(memeUrl, memeId) {
+    return api
+      .createNewMem(memeUrl, memeId)
+      .then((res) => {
+        console.log(res);
+        setNewMeme(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     api
@@ -24,6 +37,8 @@ const App = () => {
       });
   }, []);
 
+  console.log(newMeme);
+
   return (
     <div className="page">
       <Header />
@@ -33,8 +48,19 @@ const App = () => {
             index
             element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
           />
-          <Route path=":id" element={<Canvas currentMeme={currentMeme} />} />
-          <Route path="saved" element={<SavedMeme />} />
+          <Route
+            path=":id"
+            element={
+              <Canvas
+                currentMeme={currentMeme}
+                handleCreateNewMeme={handleCreateNewMeme}
+              />
+            }
+          />
+          <Route
+            path="saved"
+            element={<SavedMeme currentMeme={currentMeme} newMeme={newMeme} />}
+          />
         </Route>
       </Routes>
       <Footer />

@@ -3,7 +3,7 @@ import "./Navigation.css";
 import { NavLink } from "react-router-dom";
 import arrow from "../../images/arrow-nav.svg";
 
-function Navigation ({ isSavedMeme }) {
+function Navigation ({ isSavedMeme, id }) {
   return (
     <section className="navigation">
       <nav>
@@ -20,7 +20,7 @@ function Navigation ({ isSavedMeme }) {
             <img className="navigation__arrow" src={arrow} alt="Стрелка справо."/>
           </li>
           <li className="navigation__element">
-            <NavLink to="/generator-meme/:id"
+            <NavLink to={`/generator-meme/${id}`}
               className={({ isActive }) =>
                 `navigation__link
                 ${isActive ? "navigation__link_active": ""}`
