@@ -55,14 +55,18 @@
 .editor__text-box {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   /* max-height: 290px; */
-  align-items: center;
+  align-items: flex-end;
   margin: 0;
   padding: 0;
 }
 
 .editor__text {
-  max-width: 500px;
+  width: 500px;
+  height: 87px;
+  box-sizing: border-box;
+  margin: 0;
   background: #fef8ff;
   border: 1px solid #000000;
   border-radius: 20px;
