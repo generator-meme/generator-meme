@@ -80,5 +80,4 @@ jobs:
             docker-compose up -d --build
             sudo docker-compose exec -T backend python manage.py makemigrations
             sudo docker-compose exec -T backend python manage.py migrate
-            sudo docker-compose exec -T backend python manage.py load_images
             sudo docker-compose exec -T backend python manage.py collectstatic --no-input
