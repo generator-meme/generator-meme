@@ -12,7 +12,7 @@ load_dotenv(find_dotenv())
 
 
 LOGIN = os.environ.get('VK_LOGIN')
-PASSWORD = os.environ.get('VK_PASSWORSD')
+PASSWORD = os.environ.get('VK_PASSWORD')
 TOKEN = os.environ.get('VK_TOKEN')
 
 PUBLICS = {
