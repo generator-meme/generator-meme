@@ -1,9 +1,6 @@
-import back from '../../images/back.svg'
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
-import arrowNav from '../../images/arrow-nav.svg'
-// import photo from '../../images/meme-edit.jpg'
 import textLeft from '../../images/icons/align-left.png'
 import textRight from '../../images/icons/align-right.png'
 import textCenter from '../../images/icons/align-center.png'
@@ -21,7 +18,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }, [currentMeme]);
 
   const canvas = useRef()
-  const [color, setColor] = useState(null)
 
   const [topText, setTopText] = useState('')
   const [topFontSize, setTopFontSize] = useState(50)
@@ -29,6 +25,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
+  const [topColor, setTopColor] = useState(null);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(50)
@@ -36,10 +33,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
-
-  const fillStyle = (color) => {
-    setColor(color.target.value);
-  }
+  const [bottomColor, setBottomColor] = useState(null);
 
   function changeFontSize (size, setFontFunction) {
     setFontFunction(size);
@@ -79,7 +73,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
     // нижний текст
     ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`
-    ctx.fillStyle = color
+    ctx.fillStyle = bottomColor
     ctx.textAlign = bottomFontPosition
     // вычисление отступа по оси X в зависимости от расположения текста
     const bottonMarginX = marginX(bottomFontPosition);
@@ -90,7 +84,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
     // верхний текст
     ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
-    ctx.fillStyle = color
+    ctx.fillStyle = topColor
     ctx.textAlign = topFontPosition
     // вычисление отступа по оси X в зависимости от расположения текста
     const topMarginX = marginX(topFontPosition);
@@ -106,7 +100,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomFontWeight,
     bottomFontFamily,
     bottomFontPosition,
-    color,
+    topColor,
+    bottomColor,
     topText,
     topFontSize,
     topFontStyle,
@@ -183,7 +178,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             />
           <div className="editor__text-box">
             <div className="editor__text-control-panel">
-              <input type="color" onChange={e => fillStyle(e)} className="editor__color" />
+              <input type="color" onChange={e => setTopColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(topFontSize, setTopFontSize)} className="icon-size">A+</button>
               <button onClick={e => decreaseSize(topFontSize, setTopFontSize)} className="icon-size">A-</button>
@@ -217,7 +212,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               width={image.width}
             />
             <div className="editor__text-control-panel">
-              <input type="color" onChange={e => fillStyle(e)} className="editor__color" />
+              <input type="color" onChange={e => setBottomColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
               <button onClick={e => decreaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A-</button>
