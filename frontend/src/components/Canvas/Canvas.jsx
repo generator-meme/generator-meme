@@ -85,7 +85,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     const bottonMarginX = marginX(bottomFontPosition);
     // вычисление отступа по оси Y для каждой строчки текста
     bottomText.split('\n').reverse().forEach(function (t, i) {
-      ctx.fillText(t, bottonMarginX, image.height - i * bottomFontSize - 10, image.width);
+      ctx.fillText(t, bottonMarginX, image.height - i * bottomFontSize - 20, image.width);
     });
 
     // верхний текст
