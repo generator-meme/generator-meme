@@ -96,7 +96,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     const topMarginX = marginX(topFontPosition);
     // вычисление отступа по оси Y для каждой строчки текста
     topText.split('\n').forEach(function (t, i) {
-      ctx.fillText(t, topMarginX, 40 + i * topFontSize, image.width);
+      ctx.fillText(t, topMarginX, 45 + i * topFontSize, image.width);
     });
 
   }, [image,
