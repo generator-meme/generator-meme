@@ -1,5 +1,5 @@
 import back from '../../images/back.svg'
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import arrowNav from '../../images/arrow-nav.svg'
@@ -60,32 +60,114 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       });
   };
 
+  // коллбэк-расчет координаты по оси X текста
+  const marginX = useCallback((fontPosition) => {
+    if(fontPosition === "start") {
+      return 30;
+    } else if (fontPosition === "end") {
+      return image.width - 30;
+    } else {
+      return image.width / 2;
+    }
+  }, [image.width]);
+
   useEffect(() => {
+    // создание canvas с картинкой на фоне
     const ctx = canvas.current.getContext('2d')
     ctx.fillStyle = 'black'
     ctx.drawImage(image, 0, 0)
 
+    // нижний текст
     ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`
     ctx.fillStyle = color
     ctx.textAlign = bottomFontPosition
-  
+    // вычисление отступа по оси X в зависимости от расположения текста
+    const bottonMarginX = marginX(bottomFontPosition);
+    // вычисление отступа по оси Y для каждой строчки текста
     bottomText.split('\n').reverse().forEach(function (t, i) {
-      ctx.fillText(t, image.width / 2, image.height - i * bottomFontSize - 10, image.width);
+      ctx.fillText(t, bottonMarginX, image.height - i * bottomFontSize - 10, image.width);
     });
 
-  }, [image, canvas, fillStyle, bottomText, bottomFontSize])
-
-  useEffect(() => {
-    const topFontctx = canvas.current.getContext('2d')
-    topFontctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
-    topFontctx.fillStyle = color
-    topFontctx.textAlign = topFontPosition
-
+    // верхний текст
+    ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
+    ctx.fillStyle = color
+    ctx.textAlign = topFontPosition
+    // вычисление отступа по оси X в зависимости от расположения текста
+    const topMarginX = marginX(topFontPosition);
+    // вычисление отступа по оси Y для каждой строчки текста
     topText.split('\n').forEach(function (t, i) {
-      topFontctx.fillText(t, image.width / 2,40 + i * topFontSize, image.width);
+      ctx.fillText(t, topMarginX, 40 + i * topFontSize, image.width);
     });
 
-  }, [topText, topFontSize, bottomText, bottomFontSize, fillStyle])
+  }, [image,
+    bottomText,
+    bottomFontSize,
+    bottomFontStyle,
+    bottomFontWeight,
+    bottomFontFamily,
+    bottomFontPosition,
+    color,
+    topText,
+    topFontSize,
+    topFontStyle,
+    topFontWeight,
+    topFontFamily,
+    topFontPosition,
+    marginX])
+
+
+  // СТАРЫЙ ВАРИАНТ КОДА, ЧТОБЫ СВЕРЯТЬСЯ 
+  // useEffect(() => {
+  //   const topFontctx = canvas.current.getContext('2d')
+
+  //   topFontctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
+  //   topFontctx.fillStyle = color
+  //   topFontctx.textAlign = topFontPosition
+
+  //   let topMarginX;
+  //   if (topFontPosition === "start") {
+  //     topMarginX = 30;
+  //   } else if (topFontPosition === "end") {
+  //     topMarginX = image.width - 30;
+  //   } else {
+  //     topMarginX = image.width / 2;
+  //   };
+
+  // // деление на строки, для каждой высчитывается начало текста (x, y) + задается ширина экрана
+  //   topText.split('\n').forEach(function (t, i) {
+  //     topFontctx.fillText(t, topMarginX, 40 + i * topFontSize, image.width);
+  //   });
+
+  // }, [image, topText, topFontSize, topFontStyle, topFontWeight, topFontFamily, topFontPosition, color])
+
+  // useEffect(() => {
+  //   const ctx = canvas.current.getContext('2d')
+  //   ctx.fillStyle = 'black'
+  //   ctx.drawImage(image, 0, 0)
+
+  //   ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`
+  //   ctx.fillStyle = color
+  //   ctx.textAlign = bottomFontPosition
+  
+  //   bottomText.split('\n').reverse().forEach(function (t, i) {
+  //     ctx.fillText(t, image.width / 2, image.height - i * bottomFontSize - 10, image.width);
+  //   });
+
+  // }, [image, canvas, fillStyle, bottomText, bottomFontSize])
+
+  // useEffect(() => {
+  //   const topFontctx = canvas.current.getContext('2d')
+  //   topFontctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
+  //   topFontctx.fillStyle = color
+  //   topFontctx.textAlign = topFontPosition
+
+
+  //   topText.split('\n').forEach(function (t, i) {
+  //     topFontctx.fillText(t, image.width / 2,40 + i * topFontSize, image.width);
+  //   });
+
+  // }, [topText, topFontSize, bottomText, bottomFontSize, fillStyle])
+
 
   return (
     <main className='main-editor'>
@@ -139,13 +221,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
               <button onClick={e => decreaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A-</button>
-              <button onClick={e => setBottomFontPosition('end')}>
+              <button onClick={e => setBottomFontPosition('start')}>
                 <img src={textLeft} alt="Текст слева" className="icon" />
               </button>
               <button onClick={e => setBottomFontPosition('center')}>
                 <img src={textCenter} alt="Текст по середине" className="icon" />
               </button>
-              <button onClick={e => setBottomFontPosition('start')}>
+              <button onClick={e => setBottomFontPosition('end')}>
                  <img src={textRight} alt="Текст справа" className="icon" />
                </button>
                <button onClick={e => setBottomFontWeight('bold')}>
