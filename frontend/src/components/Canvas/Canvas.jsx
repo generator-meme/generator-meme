@@ -25,11 +25,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
-  const [topFillTextColor, setTopFillTextColor] = useState(null);
-  const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
+  const [topFillTextColor, setTopFillTextColor] = useState('black');
+  const [topStrokeTextColor, setTopStrokeTextColor] = useState('black');
   const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
   const [topStrokeText, setTopStrokeText] = useState(false);
+  const [topBackColor, setTopBackColor] = useState('transparent');
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(50)
@@ -37,11 +38,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
-  const [bottomFillTextColor, setBottomFillTextColor] = useState(null);
-  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
+  const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
+  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState('black');
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomStrokeText, setBottomStrokeText] = useState(false);
+  const [bottomBackColor, setBottomBackColor] = useState('transparent');
 
   function changeFontSize (size, setFontFunction) {
     setFontFunction(size);
@@ -101,23 +103,52 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.restore()
   }, []);
 
+  // отрисовка заливки фона текста
+  const addTextBackground = useCallback((ctx, text, x, y, fontSize, color) => {
+    // вычисление метрик текста (нас интересует ширина)
+    let metrics = ctx.measureText(text);
+    // вычисление начальной координаты OX
+    switch (ctx.textAlign) {
+      case "center":
+        x -= (metrics.width / 2 + 5);
+        break;
+      case "end":
+        x -= (metrics.width + 5);
+        break;
+      default:
+        x -= 5;
+    }
+    
+    y -= (fontSize - 5);
+    
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 10));
+  }, []);
+
   useEffect(() => {
     // создание canvas с картинкой на фоне
     const ctx = canvas.current.getContext('2d')
-    ctx.fillStyle = 'black'
+    // ctx.fillStyle = 'black' -лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.drawImage(image, 0, 0)
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`;
-    ctx.fillStyle = bottomFillTextColor;
+    // ctx.fillStyle = bottomFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = bottomStrokeTextColor;
     ctx.textAlign = bottomFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
     const bottonMarginX = marginX(bottomFontPosition);
+
     // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomText.split('\n').reverse().forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
       const bottonMarginY = image.height - i * bottomFontSize - 20;
+
+      // добавление заливки (default - transparent), выше, чтобы было за текстом
+      addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor);
+
+      // переключение цвета для текста
+      ctx.fillStyle = bottomFillTextColor;
       // добавление текста построчно (обычный или контурный)
       if (bottomStrokeText) {
         ctx.strokeText(t, bottonMarginX, bottonMarginY, image.width);
@@ -131,12 +162,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       // отрисовка зачеркивания
       if(bottomLineThrough) {
         addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize);
-      }
+      };
+      
     });
 
     // верхний текст основные характеристики
     ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`;
-    ctx.fillStyle = topFillTextColor;
+    // ctx.fillStyle = topFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
@@ -144,7 +176,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
      // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topText.split('\n').forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
-      const topMarginY = 45 + i * topFontSize;
+      const topMarginY = 50 + i * topFontSize;
+
+      // добавление заливки (default - transparent), выше, чтобы было за текстом
+      addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor);
+
+      // переключение цвета для текста
+      ctx.fillStyle = topFillTextColor;
+
       // добавление текста построчно (обычный или контур)
       if (topStrokeText) {
         ctx.strokeText(t, topMarginX, topMarginY, image.width);
@@ -173,6 +212,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomUnderline,
     bottomLineThrough,
     bottomStrokeText,
+    bottomBackColor,
     topText,
     topFontSize,
     topFontStyle,
@@ -184,8 +224,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     topUnderline,
     topLineThrough,
     topStrokeText,
+    topBackColor,
     marginX,
     addLineToText,
+    addTextBackground,
   ])
 
 
