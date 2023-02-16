@@ -230,59 +230,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     addTextBackground,
   ])
 
-
-  // СТАРЫЙ ВАРИАНТ КОДА, ЧТОБЫ СВЕРЯТЬСЯ 
-  // useEffect(() => {
-  //   const topFontctx = canvas.current.getContext('2d')
-
-  //   topFontctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
-  //   topFontctx.fillStyle = color
-  //   topFontctx.textAlign = topFontPosition
-
-  //   let topMarginX;
-  //   if (topFontPosition === "start") {
-  //     topMarginX = 30;
-  //   } else if (topFontPosition === "end") {
-  //     topMarginX = image.width - 30;
-  //   } else {
-  //     topMarginX = image.width / 2;
-  //   };
-
-  // // деление на строки, для каждой высчитывается начало текста (x, y) + задается ширина экрана
-  //   topText.split('\n').forEach(function (t, i) {
-  //     topFontctx.fillText(t, topMarginX, 40 + i * topFontSize, image.width);
-  //   });
-
-  // }, [image, topText, topFontSize, topFontStyle, topFontWeight, topFontFamily, topFontPosition, color])
-
-  // useEffect(() => {
-  //   const ctx = canvas.current.getContext('2d')
-  //   ctx.fillStyle = 'black'
-  //   ctx.drawImage(image, 0, 0)
-
-  //   ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`
-  //   ctx.fillStyle = color
-  //   ctx.textAlign = bottomFontPosition
-  
-  //   bottomText.split('\n').reverse().forEach(function (t, i) {
-  //     ctx.fillText(t, image.width / 2, image.height - i * bottomFontSize - 10, image.width);
-  //   });
-
-  // }, [image, canvas, fillStyle, bottomText, bottomFontSize])
-
-  // useEffect(() => {
-  //   const topFontctx = canvas.current.getContext('2d')
-  //   topFontctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
-  //   topFontctx.fillStyle = color
-  //   topFontctx.textAlign = topFontPosition
-
-
-  //   topText.split('\n').forEach(function (t, i) {
-  //     topFontctx.fillText(t, image.width / 2,40 + i * topFontSize, image.width);
-  //   });
-
-  // }, [topText, topFontSize, bottomText, bottomFontSize, fillStyle])
-
   return (
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
