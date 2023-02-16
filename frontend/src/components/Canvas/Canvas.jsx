@@ -25,9 +25,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
-  const [topColor, setTopColor] = useState(null);
-  const [topUnderline, setTopUnderline] = useState(true);
+  const [topFillTextColor, setTopFillTextColor] = useState(null);
+  const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
+  const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
+  const [topStrokeText, setTopStrokeText] = useState(false);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(50)
@@ -35,9 +37,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
-  const [bottomColor, setBottomColor] = useState(null);
+  const [bottomFillTextColor, setBottomFillTextColor] = useState(null);
+  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
-  const [bottomLineThrough, setBottomLineThrough] = useState(true);
+  const [bottomLineThrough, setBottomLineThrough] = useState(false);
+  const [bottomStrokeText, setBottomStrokeText] = useState(false);
 
   function changeFontSize (size, setFontFunction) {
     setFontFunction(size);
@@ -103,18 +107,23 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.fillStyle = 'black'
     ctx.drawImage(image, 0, 0)
 
-    // нижний текст
-    ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`
-    ctx.fillStyle = bottomColor
-    ctx.textAlign = bottomFontPosition
+    // нижний текст основные характеристики
+    ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`;
+    ctx.fillStyle = bottomFillTextColor;
+    ctx.strokeStyle = bottomStrokeTextColor;
+    ctx.textAlign = bottomFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
     const bottonMarginX = marginX(bottomFontPosition);
     // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomText.split('\n').reverse().forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
       const bottonMarginY = image.height - i * bottomFontSize - 20;
-      // добавление текста построчно
-      ctx.fillText(t, bottonMarginX, bottonMarginY, image.width);
+      // добавление текста построчно (обычный или контурный)
+      if (bottomStrokeText) {
+        ctx.strokeText(t, bottonMarginX, bottonMarginY, image.width);
+      } else {
+        ctx.fillText(t, bottonMarginX, bottonMarginY, image.width);
+      };
       // отрисовка подчеркивания
       if (bottomUnderline) {
         addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize);
@@ -125,18 +134,23 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       }
     });
 
-    // верхний текст
-    ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`
-    ctx.fillStyle = topColor
-    ctx.textAlign = topFontPosition
+    // верхний текст основные характеристики
+    ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`;
+    ctx.fillStyle = topFillTextColor;
+    ctx.strokeStyle = topStrokeTextColor;
+    ctx.textAlign = topFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
     const topMarginX = marginX(topFontPosition);
      // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topText.split('\n').forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
       const topMarginY = 45 + i * topFontSize;
-      // добавление текста построчно
-      ctx.fillText(t, topMarginX, topMarginY, image.width);
+      // добавление текста построчно (обычный или контур)
+      if (topStrokeText) {
+        ctx.strokeText(t, topMarginX, topMarginY, image.width);
+      } else {
+        ctx.fillText(t, topMarginX, topMarginY, image.width);
+      };
       // отрисовка подчеркивания
       if (topUnderline) {
         addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize);
@@ -154,18 +168,22 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomFontWeight,
     bottomFontFamily,
     bottomFontPosition,
+    bottomStrokeTextColor,
+    bottomFillTextColor,
     bottomUnderline,
     bottomLineThrough,
-    topColor,
-    bottomColor,
+    bottomStrokeText,
     topText,
     topFontSize,
     topFontStyle,
     topFontWeight,
     topFontFamily,
     topFontPosition,
+    topFillTextColor,
+    topStrokeTextColor,
     topUnderline,
     topLineThrough,
+    topStrokeText,
     marginX,
     addLineToText,
   ])
@@ -223,7 +241,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   // }, [topText, topFontSize, bottomText, bottomFontSize, fillStyle])
 
-
   return (
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
@@ -238,7 +255,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             />
           <div className="editor__text-box">
             <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setTopColor(e.target.value)} className="editor__color" />
+              <input type="color" onChange={e => setTopFillTextColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(topFontSize, setTopFontSize)} className="icon-size">A+</button>
               <button onClick={e => decreaseSize(topFontSize, setTopFontSize)} className="icon-size">A-</button>
@@ -272,7 +289,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               width={image.width}
             />
             <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setBottomColor(e.target.value)} className="editor__color" />
+              <input type="color" onChange={e => setBottomFillTextColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
               <button onClick={e => decreaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A-</button>
