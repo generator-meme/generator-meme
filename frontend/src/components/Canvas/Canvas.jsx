@@ -26,6 +26,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
   const [topColor, setTopColor] = useState(null);
+  const [topUnderline, setTopUnderline] = useState(true);
+  const [topLineThrough, setTopLineThrough] = useState(false);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(50)
@@ -34,6 +36,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
   const [bottomColor, setBottomColor] = useState(null);
+  const [bottomUnderline, setBottomUnderline] = useState(false);
+  const [bottomLineThrough, setBottomLineThrough] = useState(true);
 
   function changeFontSize (size, setFontFunction) {
     setFontFunction(size);
@@ -65,6 +69,34 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     }
   }, [image.width]);
 
+  // отрисовка подчеркивания или зачеркивания
+  const addLineToText = useCallback((ctx, text, x, y, fontSize) => {
+    // вычисление метрик текста (нас интересует ширина)
+    let metrics = ctx.measureText(text);
+    // вычисление начальной координаты OX
+    switch (ctx.textAlign) {
+      case "center":
+        x -= (metrics.width / 2);
+        break;
+      case "end":
+        x -= metrics.width;
+        break;
+      default:
+        x += 0;
+    }
+    // рисование линии
+    ctx.save()
+    ctx.beginPath()
+    // цвет линии - цвет шрифта
+    ctx.strokeStyle = ctx.fillStyle
+    // вычисление ширины линии в зависимости от размера шрифта
+    ctx.lineWidth = Math.ceil(fontSize * 0.05)
+    ctx.moveTo(x, y)
+    ctx.lineTo(x + metrics.width, y)
+    ctx.stroke()
+    ctx.restore()
+  }, []);
+
   useEffect(() => {
     // создание canvas с картинкой на фоне
     const ctx = canvas.current.getContext('2d')
@@ -77,9 +109,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.textAlign = bottomFontPosition
     // вычисление отступа по оси X в зависимости от расположения текста
     const bottonMarginX = marginX(bottomFontPosition);
-    // вычисление отступа по оси Y для каждой строчки текста
+    // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomText.split('\n').reverse().forEach(function (t, i) {
-      ctx.fillText(t, bottonMarginX, image.height - i * bottomFontSize - 20, image.width);
+      // вычисление отступа по оси Y для каждой строчки текста
+      const bottonMarginY = image.height - i * bottomFontSize - 20;
+      // добавление текста построчно
+      ctx.fillText(t, bottonMarginX, bottonMarginY, image.width);
+      // отрисовка подчеркивания
+      if (bottomUnderline) {
+        addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize);
+      };
+      // отрисовка зачеркивания
+      if(bottomLineThrough) {
+        addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize);
+      }
     });
 
     // верхний текст
@@ -88,9 +131,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.textAlign = topFontPosition
     // вычисление отступа по оси X в зависимости от расположения текста
     const topMarginX = marginX(topFontPosition);
-    // вычисление отступа по оси Y для каждой строчки текста
+     // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topText.split('\n').forEach(function (t, i) {
-      ctx.fillText(t, topMarginX, 45 + i * topFontSize, image.width);
+      // вычисление отступа по оси Y для каждой строчки текста
+      const topMarginY = 45 + i * topFontSize;
+      // добавление текста построчно
+      ctx.fillText(t, topMarginX, topMarginY, image.width);
+      // отрисовка подчеркивания
+      if (topUnderline) {
+        addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize);
+      };
+      // отрисовка зачеркивания
+      if (topLineThrough) {
+        addLineToText(ctx, t, topMarginX, (topMarginY - topFontSize / 4), topFontSize);
+      };
     });
 
   }, [image,
@@ -100,6 +154,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomFontWeight,
     bottomFontFamily,
     bottomFontPosition,
+    bottomUnderline,
+    bottomLineThrough,
     topColor,
     bottomColor,
     topText,
@@ -108,7 +164,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     topFontWeight,
     topFontFamily,
     topFontPosition,
-    marginX])
+    topUnderline,
+    topLineThrough,
+    marginX,
+    addLineToText,
+  ])
 
 
   // СТАРЫЙ ВАРИАНТ КОДА, ЧТОБЫ СВЕРЯТЬСЯ 
