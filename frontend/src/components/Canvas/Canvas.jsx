@@ -7,6 +7,7 @@ import textCenter from '../../images/icons/align-center.png'
 import textBold from '../../images/icons/bold.png'
 import textItalic from '../../images/icons/italic.png'
 import './Canvas.css'
+import { contain } from "../../utils/fit.js";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -128,8 +129,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   useEffect(() => {
     // создание canvas с картинкой на фоне
     const ctx = canvas.current.getContext('2d')
-    // ctx.fillStyle = 'black' -лишняя строка, тк ниже настройка меняется, пока закомментировала
-    ctx.drawImage(image, 0, 0)
+    // масштабирование шаблона в рамки
+    const {
+      offsetX, 
+      offsetY, 
+      width, 
+      height
+    } = contain(538, 558, image.naturalWidth, image.naturalHeight);
+    ctx.drawImage(image, offsetX, offsetY, width, height);
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`;
@@ -239,9 +246,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
           <canvas
               className="editor__image-box"
               ref={canvas}
-              width={image.naturalWidth}
-              height={image.naturalHeight}
-            />
+              width={538}
+              height={558}
+          >
+            {/* <img ref={canvasImage} calssName="editor__image" src={currentMeme.image} alt="Текущий мем." /> */}
+          </canvas>
           <div className="editor__text-box">
             <div className="editor__text-control-panel">
               <input type="color" onChange={e => setTopFillTextColor(e.target.value)} className="editor__color" />

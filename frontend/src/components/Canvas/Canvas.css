@@ -52,6 +52,15 @@
   word-break: break-all
 }
 
+/* .editor__image {
+  margin: 0;
+  padding: 0;
+  width: 538px;
+  height: 558px;
+  object-fit: contain;
+  object-position: center;
+} */
+
 .editor__text-box {
   display: flex;
   flex-direction: column;
