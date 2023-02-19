@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import MainLayout from "./components/MainLayout/MainLayout";
 import Canvas from "./components/Canvas/Canvas";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
+import Panel from "./components/Panel/Panel";
 import api from "./utils/api";
 import "./App.css";
 
@@ -76,6 +77,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/panel" element={<Panel />} />
       </Routes>
       <Footer />
     </div>

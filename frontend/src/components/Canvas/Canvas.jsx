@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
-import textLeft from '../../images/icons/align-left.png'
-import textRight from '../../images/icons/align-right.png'
-import textCenter from '../../images/icons/align-center.png'
-import textBold from '../../images/icons/bold.png'
-import textItalic from '../../images/icons/italic.png'
 import './Canvas.css'
 import { contain } from "../../utils/fit.js";
 
@@ -48,9 +43,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   const [isRendered, setIsRendered] = useState(false);
 
-  function changeFontSize (size, setFontFunction) {
-    setFontFunction(size);
-  }
+  // function changeFontSize (size, setFontFunction) {
+  //   setFontFunction(size);
+  // }
 
   function increaseSize (size, setFontFunction) {
     setFontFunction(size + 1);
