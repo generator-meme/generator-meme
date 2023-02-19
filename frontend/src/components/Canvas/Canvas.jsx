@@ -21,7 +21,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const canvas = useRef()
 
   const [topText, setTopText] = useState('')
-  const [topFontSize, setTopFontSize] = useState(50)
+  const [topFontSize, setTopFontSize] = useState(40)
   const [topFontFamily, setTopFontFamily] = useState('Comic Sans MS')
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState('normal')
@@ -34,7 +34,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topBackColor, setTopBackColor] = useState('transparent');
 
   const [bottomText, setBottomText] = useState('')
-  const [bottomFontSize, setBottomFontSize] = useState(50)
+  const [bottomFontSize, setBottomFontSize] = useState(40)
   const [bottomFontFamily, setBottomFontFamily] = useState('Comic Sans MS')
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
@@ -45,6 +45,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomStrokeText, setBottomStrokeText] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
+
+  const [isRendered, setIsRendered] = useState(false);
 
   function changeFontSize (size, setFontFunction) {
     setFontFunction(size);
@@ -66,15 +68,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   };
 
   // коллбэк-расчет координаты по оси X текста
-  const marginX = useCallback((fontPosition) => {
+  const marginX = useCallback((fontPosition, offsetX) => {
     if(fontPosition === "start") {
-      return 30;
+      return 30 + offsetX;
     } else if (fontPosition === "end") {
-      return image.width - 30;
+      return canvas.current.width - offsetX - 30;
     } else {
-      return image.width / 2;
+      return canvas.current.width / 2;
     }
-  }, [image.width]);
+  }, []);
 
   // отрисовка подчеркивания или зачеркивания
   const addLineToText = useCallback((ctx, text, x, y, fontSize) => {
@@ -123,7 +125,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     y -= (fontSize - 5);
     
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 10));
+    if (metrics.width > 0) {
+    ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 8));
+    };
   }, []);
 
   useEffect(() => {
@@ -135,7 +139,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       offsetY, 
       width, 
       height
-    } = contain(538, 558, image.naturalWidth, image.naturalHeight);
+    } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight);
     ctx.drawImage(image, offsetX, offsetY, width, height);
 
     // нижний текст основные характеристики
@@ -144,12 +148,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.strokeStyle = bottomStrokeTextColor;
     ctx.textAlign = bottomFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
-    const bottonMarginX = marginX(bottomFontPosition);
+    const bottonMarginX = marginX(bottomFontPosition, offsetX);
 
     // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomText.split('\n').reverse().forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
-      const bottonMarginY = image.height - i * bottomFontSize - 20;
+      const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;
 
       // добавление заливки (default - transparent), выше, чтобы было за текстом
       addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor);
@@ -170,7 +174,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       if(bottomLineThrough) {
         addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize);
       };
-      
     });
 
     // верхний текст основные характеристики
@@ -179,11 +182,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
-    const topMarginX = marginX(topFontPosition);
+    const topMarginX = marginX(topFontPosition, offsetX);
      // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topText.split('\n').forEach(function (t, i) {
       // вычисление отступа по оси Y для каждой строчки текста
-      const topMarginY = 50 + i * topFontSize;
+      const topMarginY = offsetY + 50 + i * (topFontSize + 5);
 
       // добавление заливки (default - transparent), выше, чтобы было за текстом
       addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor);
@@ -237,11 +240,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     addTextBackground,
   ])
 
+  // if(!isRendered) {
+  //   return null
+  // };
+
   return (
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        <h1 className="editor__title">Редактор мемов</h1>
+        {/* <h1 className="editor__title">Редактор мемов</h1> */}
         <div className="editor__boxes">
           <canvas
               className="editor__image-box"
