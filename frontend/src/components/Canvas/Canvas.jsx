@@ -240,26 +240,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     addTextBackground,
   ])
 
-  // if(!isRendered) {
-  //   return null
-  // };
-
   return (
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        {/* <h1 className="editor__title">Редактор мемов</h1> */}
-        <div className="editor__boxes">
+        {/* <div className="editor__boxes"> */}
           <canvas
-              className="editor__image-box"
+              className="editor__image"
               ref={canvas}
               width={538}
               height={558}
           >
-            {/* <img ref={canvasImage} calssName="editor__image" src={currentMeme.image} alt="Текущий мем." /> */}
           </canvas>
-          <div className="editor__text-box">
-            <div className="editor__text-control-panel">
+          <div className="editor__box">
+            {/* <div className="editor__text-control-panel">
               <input type="color" onChange={e => setTopFillTextColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(topFontSize, setTopFontSize)} className="icon-size">A+</button>
@@ -284,16 +278,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
                 <option onClick={e => setTopFontFamily('Arial')}>Arial</option>
                 <option onClick={e => setTopFontFamily('Serif')}>Serif</option>
               </select>
-            </div>
-            <textarea
-              className="editor__text"
-              type="text"
-              value={topText}
-              onChange={(e) => setTopText(e.target.value)}
-              placeholder="Текст сверху"
-              width={image.width}
-            />
-            <div className="editor__text-control-panel">
+            </div> */}
+            <form className="editor__text-form">
+              <textarea
+                className="editor__text"
+                type="text"
+                value={topText}
+                onChange={(e) => setTopText(e.target.value)}
+                placeholder="Текст сверху"
+              />
+            {/* <div className="editor__text-control-panel">
               <input type="color" onChange={e => setBottomFillTextColor(e.target.value)} className="editor__color" />
               <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
               <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
@@ -318,17 +312,18 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
                 <option onClick={e => setBottomFontFamily('Arial')}>Arial</option>
                 <option onClick={e => setBottomFontFamily('Serif')}>Serif</option>
               </select>
-            </div>
-            <textarea
-              className="editor__text"
-              type="text"
-              value={bottomText}
-              onChange={(e) => setBottomText(e.target.value)}
-              placeholder="Текст снизу"
-            />
+            </div> */}
+              <textarea
+                className="editor__text"
+                type="text"
+                value={bottomText}
+                onChange={(e) => setBottomText(e.target.value)}
+                placeholder="Текст снизу"
+              />
+            </form>
+            <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
           </div>
-        </div>
-        <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
+        {/* </div> */}
       </section>
     </main>
   )

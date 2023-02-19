@@ -1,5 +1,5 @@
 .saved-meme {
-    padding: 60px 30px 111px;
+    padding: 43px 30px 130px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -8,24 +8,24 @@
     padding: 124px 0 0;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: space-between;
     align-items: center;
-    row-gap: 96px;
+    column-gap: 107px;
     box-sizing: border-box;
 }
 
 .saved-meme__image {
-    width: 910px;
-    height: 941px;
+    width: 550px;
+    height: 568px;
     object-fit: cover;
     object-position: center;
     border-radius: 20px;
 }
 
 .saved-meme__btn-save {
-    width: 500px;
-    height: 124px;
+    width: 551px;
+    height: 114px;
     font-size: 40px;
     line-height: 47px;
 }
