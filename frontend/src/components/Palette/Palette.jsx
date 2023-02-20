@@ -1,9 +1,15 @@
 import React from 'react';
 import './Palette.css';
-function Palette({selectedColor}) {
-    const onClick = (e) => {
-    selectedColor(e);
+
+function Palette({ selectedColor, closePalette }) {
+  
+  const onClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    selectedColor(e.target.value);
+    closePalette();
   };
+
   return (
       <nav className="color-palette">
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_000000" value="#000000" onClick= {e => onClick(e)}/>

@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
-import textLeft from '../../images/icons/align-left.png'
-import textRight from '../../images/icons/align-right.png'
-import textCenter from '../../images/icons/align-center.png'
-import textBold from '../../images/icons/bold.png'
-import textItalic from '../../images/icons/italic.png'
 import './Canvas.css'
 import { contain } from "../../utils/fit.js";
+import Panel from '../Panel/Panel';
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -27,11 +23,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
   const [topFillTextColor, setTopFillTextColor] = useState('black');
-  const [topStrokeTextColor, setTopStrokeTextColor] = useState('black');
+  const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
   const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
-  const [topStrokeText, setTopStrokeText] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
+
+  const topStrokeText = useMemo(() => {
+    if (topStrokeTextColor) {
+      return true;
+    };
+     return false;
+  }, [topStrokeTextColor]);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
@@ -40,17 +42,24 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
   const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
-  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState('black');
+  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
-  const [bottomStrokeText, setBottomStrokeText] = useState(false);
+  // const [bottomStrokeText, setBottomStrokeText] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
 
-  const [isRendered, setIsRendered] = useState(false);
+  const bottomStrokeText = useMemo(() => {
+    if (bottomStrokeTextColor) {
+      return true;
+    };
+     return false;
+  }, [bottomStrokeTextColor]);
 
-  function changeFontSize (size, setFontFunction) {
-    setFontFunction(size);
-  }
+  // const [isRendered, setIsRendered] = useState(false);
+
+  // function changeFontSize (size, setFontFunction) {
+  //   setFontFunction(size);
+  // }
 
   function increaseSize (size, setFontFunction) {
     setFontFunction(size + 1);
@@ -244,86 +253,72 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        {/* <div className="editor__boxes"> */}
-          <canvas
-              className="editor__image"
-              ref={canvas}
-              width={538}
-              height={558}
-          >
-          </canvas>
-          <div className="editor__box">
-            {/* <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setTopFillTextColor(e.target.value)} className="editor__color" />
-              <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
-              <button onClick={e => increaseSize(topFontSize, setTopFontSize)} className="icon-size">A+</button>
-              <button onClick={e => decreaseSize(topFontSize, setTopFontSize)} className="icon-size">A-</button>
-              <button onClick={e => setTopFontPosition('start')}>
-                <img src={textLeft} alt="Текст слева" className="icon" />
-              </button>
-              <button onClick={e => setTopFontPosition('center')}>
-                <img src={textCenter} alt="Текст по середине" className="icon" />
-              </button>
-              <button onClick={e => setTopFontPosition('end')}>
-                <img src={textRight} alt="Текст справа" className="icon" />
-              </button>
-              <button onClick={e => setTopFontWeight('bold')}>
-                <img src={textBold} alt="Жирный текст" className="icon" />
-              </button>
-              <button onClick={e => setTopFontStyle('italic')}>
-                <img src={textItalic} alt="Курсивный текст" className="icon" />
-              </button>
-              <select>
-                <option onClick={e => setTopFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-                <option onClick={e => setTopFontFamily('Arial')}>Arial</option>
-                <option onClick={e => setTopFontFamily('Serif')}>Serif</option>
-              </select>
-            </div> */}
-            <form className="editor__text-form">
-              <textarea
-                className="editor__text"
-                type="text"
-                value={topText}
-                onChange={(e) => setTopText(e.target.value)}
-                placeholder="Текст сверху"
-              />
-            {/* <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setBottomFillTextColor(e.target.value)} className="editor__color" />
-              <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
-              <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
-              <button onClick={e => decreaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A-</button>
-              <button onClick={e => setBottomFontPosition('start')}>
-                <img src={textLeft} alt="Текст слева" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontPosition('center')}>
-                <img src={textCenter} alt="Текст по середине" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontPosition('end')}>
-                 <img src={textRight} alt="Текст справа" className="icon" />
-               </button>
-               <button onClick={e => setBottomFontWeight('bold')}>
-                 <img src={textBold} alt="Жирный текст" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontStyle('italic')}>
-                <img src={textItalic} alt="Курсивный текст" className="icon" />
-              </button>
-              <select>
-                <option onClick={e => setBottomFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-                <option onClick={e => setBottomFontFamily('Arial')}>Arial</option>
-                <option onClick={e => setBottomFontFamily('Serif')}>Serif</option>
-              </select>
-            </div> */}
-              <textarea
-                className="editor__text"
-                type="text"
-                value={bottomText}
-                onChange={(e) => setBottomText(e.target.value)}
-                placeholder="Текст снизу"
-              />
-            </form>
-            <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
-          </div>
-        {/* </div> */}
+        <div className="editor__panel_type_top">
+          <Panel
+            fontSize={topFontSize}
+            setFontSize={setTopFontSize}
+            setFontBold={setTopFontWeight}
+            setFontItalic={setTopFontStyle}
+            setFontUnderline={setTopUnderline}
+            setFontLineThrough={setTopLineThrough}
+            boldChecked={topFontWeight}
+            italicChecked={topFontStyle}
+            underlineChecked={topUnderline}
+            lineThroughChecked={topLineThrough}
+            textPosition={topFontPosition}
+            setFontPosition={setTopFontPosition}
+            setFontFamily={setTopFontFamily}
+            setTextColor={setTopFillTextColor}
+            setStrokeTextColor={setTopStrokeTextColor}
+            setBackColor={setTopBackColor}
+          />
+        </div>
+        <div className="editor__panel_type_bottom">
+          <Panel
+            fontSize={bottomFontSize}
+            setFontSize={setBottomFontSize}
+            setFontBold={setBottomFontWeight}
+            setFontItalic={setBottomFontStyle}
+            setFontUnderline={setBottomUnderline}
+            setFontLineThrough={setBottomLineThrough}
+            boldChecked={bottomFontWeight}
+            italicChecked={bottomFontStyle}
+            underlineChecked={bottomUnderline}
+            lineThroughChecked={bottomLineThrough}
+            textPosition={bottomFontPosition}
+            setFontPosition={setBottomFontPosition}
+            setFontFamily={setBottomFontFamily}
+            setTextColor={setBottomFillTextColor}
+            setStrokeTextColor={setbottomStrokeTextColor}
+            setBackColor={setBottomBackColor}
+          />
+        </div>
+        <canvas
+            className="editor__image"
+            ref={canvas}
+            width={538}
+            height={558}
+        >
+        </canvas>
+        <div className="editor__box">
+          <form className="editor__text-form">
+            <textarea
+              className="editor__text"
+              type="text"
+              value={topText}
+              onChange={(e) => setTopText(e.target.value)}
+              placeholder="Текст сверху"
+            />
+            <textarea
+              className="editor__text"
+              type="text"
+              value={bottomText}
+              onChange={(e) => setBottomText(e.target.value)}
+              placeholder="Текст снизу"
+            />
+          </form>
+          <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
+        </div>
       </section>
     </main>
   )

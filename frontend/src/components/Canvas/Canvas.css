@@ -12,6 +12,23 @@
   /* flex-direction: column; */
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
+}
+
+.editor__panel_type_top {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 54px;
+  left: 70px;
+}
+
+.editor__panel_type_bottom {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 100px;
+  left: 70px;
 }
 
 /* .editor__title {
@@ -81,6 +98,11 @@
   padding: 13px 10px;
   text-align: center;
 }
+
+/* .editor__text:focus+.editor__panel_type_top {
+  display: block;
+} */
+
 
 /* .editor__text_top {
   margin-bottom: 60px;
