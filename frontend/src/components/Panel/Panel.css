@@ -9,6 +9,7 @@
     border-radius: 6px;
     height: 36px;
     max-width: 570px;
+    position: relative;
 }
 
 .panel__section {
@@ -113,6 +114,23 @@
     border: none;
 }
 
+.panel___buttom_type_color {
+    position: relative;
+}
+
+.panel__choose-color {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    display: none;
+}
+
+.panel__choose-color_visible {
+    display: block;
+}
+
 .panel__section_type_4 {
     padding: 7px 5px;
     column-gap: 12px;
@@ -139,7 +157,7 @@
 
 .panel__btn-reset {
     padding: 8px 15px 0 5px;
-    position: relative;
+    /* position: relative; */
 }
 
 .panel__btn-reset-message {
@@ -156,12 +174,12 @@
     border-radius: 0px 20px 20px 20px;
     position: absolute;
     top: 35px;
-    left: 15px;
+    right: -250px;
     transition: all 1s;
     transition-delay: 1s, 0s;
     opacity: 0;
 }
 
-.panel__btn-reset:hover .panel__btn-reset-message {
+.panel__btn-reset:hover+.panel__btn-reset-message {
     opacity: 1;
 }

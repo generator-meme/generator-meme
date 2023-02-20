@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Panel.css";
 import fontFamily from "../../images/icons/font-family.svg";
 import sizePlus from "../../images/icons/font-size+.svg";
@@ -8,6 +8,7 @@ import strokeColor from "../../images/icons/stroke-color.svg";
 import backgroundColor from "../../images/icons/background-color.svg";
 import opacity from "../../images/icons/opacity.svg";
 import reset from "../../images/icons/reset.svg";
+import Palette from "../Palette/Palette";
 
 function Panel ({
     fontSize,
@@ -22,13 +23,16 @@ function Panel ({
     lineThroughChecked,
     textPosition,
     setFontPosition,
-    setFontFamily
+    setFontFamily,
+    setTextColor,
+    setStrokeTextColor,
+    setBackColor
   }) {
 
 //   const [areOpenFonts, setAreOpenFonts] = useState(false);
-  const [isOpenTextColor, setisOpenTextColor] = useState(false);
+  const [isOpenTextColor, setIsOpenTextColor] = useState(false);
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
-  const [isOpenBackgroundColor, setIsOpenBackgroundColore] = useState(false);
+  const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
 
   const increaseSize = (e) => {
@@ -61,6 +65,40 @@ function Panel ({
     } else {
         setFontItalic("normal")
     };
+  };
+
+  const openTextColor = (e) => {
+    e.preventDefault();
+    setIsOpenTextColor(true);
+  };
+
+    const openStrokeColor = (e) => {
+    e.preventDefault();
+    setIsOpenStrokeColor(true);
+  };
+
+  const changeTextColor = (color) => {
+    setTextColor(color);
+    setStrokeTextColor(null);
+  };
+
+  const openBackgroundColor = (e) => {
+    e.preventDefault();
+    setIsOpenBackgroundColor(true);
+  };
+
+  const resetForm = (e) => {
+    e.preventDefault();
+  };
+
+  const closeAllPalettes = () => {
+    setIsOpenTextColor(false);
+    setIsOpenStrokeColor(false);
+    setIsOpenBackgroundColor(false);
+  };
+
+  const openOpacity = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -124,16 +162,25 @@ function Panel ({
         </label>
       </fieldset>
       <fieldset className="panel__section panel__section_type_3">
-        <button className="panel__button" onClick={e=> setisOpenTextColor(true)}>
+        <button className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
           <img src={textColor} alt="Цвет текста." />
+          <span className={`panel__choose-color ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
+            <Palette selectedColor={changeTextColor} closePalette={closeAllPalettes} />
+          </span>
         </button>
-        <button className="panel__button" onClick={e => setIsOpenStrokeColor(true)}>
+        <button className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
           <img src={strokeColor} alt="Цвет контура." />
+          <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
+            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
+          </span>
         </button>
-        <button className="panel__button" onClick={e => setIsOpenBackgroundColore(true)}>
+        <button className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
           <img src={backgroundColor} alt="Цвет заливки." />
+          <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
+            <Palette selectedColor={setBackColor} closePalette={closeAllPalettes} />
+          </span>
         </button>
-        <button className="panel__button" onClick={e => setIsOpenOpacity(true)}>
+        <button className="panel__button" onClick={e => openOpacity(e)}>
           <img src={opacity} alt="Прозрачность." />
         </button>
       </fieldset>
@@ -169,10 +216,11 @@ function Panel ({
           </span>
         </label>
       </fieldset>
-      <button className="panel__button panel__btn-reset">
+      <button className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
           <img src={reset} alt="Сбросить." />
-          <span className="panel__btn-reset-message">сбросить форматирование</span>
+          {/* <span className="panel__btn-reset-message">сбросить форматирование</span> */}
       </button>
+      <span className="panel__btn-reset-message">сбросить форматирование</span>
     </form>
   )
 };

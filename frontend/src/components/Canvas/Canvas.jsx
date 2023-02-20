@@ -23,11 +23,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
   const [topFillTextColor, setTopFillTextColor] = useState('black');
-  const [topStrokeTextColor, setTopStrokeTextColor] = useState('black');
+  const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
   const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
-  const [topStrokeText, setTopStrokeText] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
+
+  const topStrokeText = useMemo(() => {
+    if (topStrokeTextColor) {
+      return true;
+    };
+     return false;
+  }, [topStrokeTextColor]);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
@@ -255,6 +261,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             textPosition={topFontPosition}
             setFontPosition={setTopFontPosition}
             setFontFamily={setTopFontFamily}
+            setTextColor={setTopFillTextColor}
+            setStrokeTextColor={setTopStrokeTextColor}
+            setBackColor={setTopBackColor}
           />
         </div>
         <canvas
