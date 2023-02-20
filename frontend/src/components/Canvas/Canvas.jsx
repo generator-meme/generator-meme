@@ -42,13 +42,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')
   const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
-  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState('black');
+  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
-  const [bottomStrokeText, setBottomStrokeText] = useState(false);
+  // const [bottomStrokeText, setBottomStrokeText] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
 
-  const [isRendered, setIsRendered] = useState(false);
+  const bottomStrokeText = useMemo(() => {
+    if (bottomStrokeTextColor) {
+      return true;
+    };
+     return false;
+  }, [bottomStrokeTextColor]);
+
+  // const [isRendered, setIsRendered] = useState(false);
 
   // function changeFontSize (size, setFontFunction) {
   //   setFontFunction(size);
@@ -264,6 +271,26 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             setTextColor={setTopFillTextColor}
             setStrokeTextColor={setTopStrokeTextColor}
             setBackColor={setTopBackColor}
+          />
+        </div>
+        <div className="editor__panel_type_bottom">
+          <Panel
+            fontSize={bottomFontSize}
+            setFontSize={setBottomFontSize}
+            setFontBold={setBottomFontWeight}
+            setFontItalic={setBottomFontStyle}
+            setFontUnderline={setBottomUnderline}
+            setFontLineThrough={setBottomLineThrough}
+            boldChecked={bottomFontWeight}
+            italicChecked={bottomFontStyle}
+            underlineChecked={bottomUnderline}
+            lineThroughChecked={bottomLineThrough}
+            textPosition={bottomFontPosition}
+            setFontPosition={setBottomFontPosition}
+            setFontFamily={setBottomFontFamily}
+            setTextColor={setBottomFillTextColor}
+            setStrokeTextColor={setbottomStrokeTextColor}
+            setBackColor={setBottomBackColor}
           />
         </div>
         <canvas

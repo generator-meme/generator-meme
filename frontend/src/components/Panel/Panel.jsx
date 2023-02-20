@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
 import fontFamily from "../../images/icons/font-family.svg";
 import sizePlus from "../../images/icons/font-size+.svg";
@@ -34,6 +34,8 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
+
+  const extraWindow = useRef();
 
   const increaseSize = (e) => {
     e.preventDefault();
@@ -95,11 +97,28 @@ function Panel ({
     setIsOpenTextColor(false);
     setIsOpenStrokeColor(false);
     setIsOpenBackgroundColor(false);
+    setIsOpenOpacity(false);
   };
 
-  const openOpacity = (e) => {
-    e.preventDefault();
-  };
+  // попытка повесить слушатели для закрытия мелких околон
+  // useEffect(() => {
+  //   function closeExtraWindows(event) {
+  //     event.preventDefault();
+  //     console.log('функ')
+  //     if(event.target !== extraWindow.current) {
+  //       closeAllPalettes();
+  //       console.log("усл")
+  //     }
+  //   };
+    
+  //   if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
+  //     window.addEventListener('click', closeExtraWindows);
+  //   };
+
+  //   return (
+  //     window.removeEventListener('click', closeExtraWindows)
+  //   )
+  // }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
 
   return (
     <form className="panel" noValidate>
@@ -165,22 +184,22 @@ function Panel ({
         <button className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
           <img src={textColor} alt="Цвет текста." />
           <span className={`panel__choose-color ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={changeTextColor} closePalette={closeAllPalettes} />
+            <Palette ref={extraWindow} selectedColor={changeTextColor} closePalette={closeAllPalettes} />
           </span>
         </button>
         <button className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
           <img src={strokeColor} alt="Цвет контура." />
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
+            <Palette ref={extraWindow} selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
           </span>
         </button>
         <button className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
           <img src={backgroundColor} alt="Цвет заливки." />
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={setBackColor} closePalette={closeAllPalettes} />
+            <Palette ref={extraWindow} selectedColor={setBackColor} closePalette={closeAllPalettes} />
           </span>
         </button>
-        <button className="panel__button" onClick={e => openOpacity(e)}>
+        <button className="panel__button" onClick={e => e.preventDefault()}>
           <img src={opacity} alt="Прозрачность." />
         </button>
       </fieldset>
@@ -218,7 +237,6 @@ function Panel ({
       </fieldset>
       <button className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
           <img src={reset} alt="Сбросить." />
-          {/* <span className="panel__btn-reset-message">сбросить форматирование</span> */}
       </button>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
     </form>
