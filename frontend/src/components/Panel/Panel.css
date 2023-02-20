@@ -8,7 +8,7 @@
     border: none;
     border-radius: 6px;
     height: 36px;
-    max-width: 555px;
+    max-width: 570px;
 }
 
 .panel__section {
@@ -32,6 +32,21 @@
     margin: 0;
     padding: 0;
     cursor: pointer;
+}
+
+.panel__selector {
+    margin: 0;
+    padding: 0;
+    width: 70px;
+    height: 24px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
 }
 
 .panel__section_type_2 {
@@ -63,6 +78,11 @@
     width: 19px;
     height: 24px;
     border: 1px solid transparent;
+}
+
+.panel__invisible-input:hover+.panel__pseudo-input {
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
 }
 
 .panel__invisible-input:checked+.panel__pseudo-input {

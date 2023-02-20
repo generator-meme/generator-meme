@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
 import { contain } from "../../utils/fit.js";
+import Panel from '../Panel/Panel';
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -239,86 +240,49 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        {/* <div className="editor__boxes"> */}
-          <canvas
-              className="editor__image"
-              ref={canvas}
-              width={538}
-              height={558}
-          >
-          </canvas>
-          <div className="editor__box">
-            {/* <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setTopFillTextColor(e.target.value)} className="editor__color" />
-              <input type="range" onChange={e => changeFontSize(e.target.value, setTopFontSize)} min="10" max="72" defaultValue="50" step="1"/>
-              <button onClick={e => increaseSize(topFontSize, setTopFontSize)} className="icon-size">A+</button>
-              <button onClick={e => decreaseSize(topFontSize, setTopFontSize)} className="icon-size">A-</button>
-              <button onClick={e => setTopFontPosition('start')}>
-                <img src={textLeft} alt="Текст слева" className="icon" />
-              </button>
-              <button onClick={e => setTopFontPosition('center')}>
-                <img src={textCenter} alt="Текст по середине" className="icon" />
-              </button>
-              <button onClick={e => setTopFontPosition('end')}>
-                <img src={textRight} alt="Текст справа" className="icon" />
-              </button>
-              <button onClick={e => setTopFontWeight('bold')}>
-                <img src={textBold} alt="Жирный текст" className="icon" />
-              </button>
-              <button onClick={e => setTopFontStyle('italic')}>
-                <img src={textItalic} alt="Курсивный текст" className="icon" />
-              </button>
-              <select>
-                <option onClick={e => setTopFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-                <option onClick={e => setTopFontFamily('Arial')}>Arial</option>
-                <option onClick={e => setTopFontFamily('Serif')}>Serif</option>
-              </select>
-            </div> */}
-            <form className="editor__text-form">
-              <textarea
-                className="editor__text"
-                type="text"
-                value={topText}
-                onChange={(e) => setTopText(e.target.value)}
-                placeholder="Текст сверху"
-              />
-            {/* <div className="editor__text-control-panel">
-              <input type="color" onChange={e => setBottomFillTextColor(e.target.value)} className="editor__color" />
-              <input type="range" onChange={e => changeFontSize(e.target.value, setBottomFontSize)} min="10" max="72" defaultValue="50" step="1"/>
-              <button onClick={e => increaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A+</button>
-              <button onClick={e => decreaseSize(bottomFontSize, setBottomFontSize)} className="icon-size">A-</button>
-              <button onClick={e => setBottomFontPosition('start')}>
-                <img src={textLeft} alt="Текст слева" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontPosition('center')}>
-                <img src={textCenter} alt="Текст по середине" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontPosition('end')}>
-                 <img src={textRight} alt="Текст справа" className="icon" />
-               </button>
-               <button onClick={e => setBottomFontWeight('bold')}>
-                 <img src={textBold} alt="Жирный текст" className="icon" />
-              </button>
-              <button onClick={e => setBottomFontStyle('italic')}>
-                <img src={textItalic} alt="Курсивный текст" className="icon" />
-              </button>
-              <select>
-                <option onClick={e => setBottomFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-                <option onClick={e => setBottomFontFamily('Arial')}>Arial</option>
-                <option onClick={e => setBottomFontFamily('Serif')}>Serif</option>
-              </select>
-            </div> */}
-              <textarea
-                className="editor__text"
-                type="text"
-                value={bottomText}
-                onChange={(e) => setBottomText(e.target.value)}
-                placeholder="Текст снизу"
-              />
-            </form>
-            <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
-          </div>
-        {/* </div> */}
+        <div className="editor__panel_type_top">
+          <Panel
+            fontSize={topFontSize}
+            setFontSize={setTopFontSize}
+            setFontBold={setTopFontWeight}
+            setFontItalic={setTopFontStyle}
+            setFontUnderline={setTopUnderline}
+            setFontLineThrough={setTopLineThrough}
+            boldChecked={topFontWeight}
+            italicChecked={topFontStyle}
+            underlineChecked={topUnderline}
+            lineThroughChecked={topLineThrough}
+            textPosition={topFontPosition}
+            setFontPosition={setTopFontPosition}
+            setFontFamily={setTopFontFamily}
+          />
+        </div>
+        <canvas
+            className="editor__image"
+            ref={canvas}
+            width={538}
+            height={558}
+        >
+        </canvas>
+        <div className="editor__box">
+          <form className="editor__text-form">
+            <textarea
+              className="editor__text"
+              type="text"
+              value={topText}
+              onChange={(e) => setTopText(e.target.value)}
+              placeholder="Текст сверху"
+            />
+            <textarea
+              className="editor__text"
+              type="text"
+              value={bottomText}
+              onChange={(e) => setBottomText(e.target.value)}
+              placeholder="Текст снизу"
+            />
+          </form>
+          <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
+        </div>
       </section>
     </main>
   )

@@ -12,6 +12,15 @@
   /* flex-direction: column; */
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
+}
+
+.editor__panel_type_top {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 87px;
+  left: 87px;
 }
 
 /* .editor__title {

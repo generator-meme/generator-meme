@@ -22,56 +22,82 @@ function Panel ({
     lineThroughChecked,
     textPosition,
     setFontPosition,
+    setFontFamily
   }) {
 
-  const [areOpenFonts, setAreOpenFonts] = useState(false);
+//   const [areOpenFonts, setAreOpenFonts] = useState(false);
   const [isOpenTextColor, setisOpenTextColor] = useState(false);
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColore] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
 
-  const increaseSize = (size, setFontFunction) => {
-    setFontFunction(size + 1);
+  const increaseSize = (e) => {
+    e.preventDefault();
+    setFontSize(fontSize + 1);
   };
 
-  const decreaseSize = (size, setFontFunction) => {
-    setFontFunction(size - 1);
+  const decreaseSize = (e) => {
+    e.preventDefault();
+    setFontSize(fontSize - 1);
   };
 
-  const openFonts = () => {
-    setAreOpenFonts(true);
+//   const openFonts = () => {
+//     setAreOpenFonts(true);
+//   };
+
+  const changeFontWeight = (e) => {
+    e.preventDefault();
+    if (boldChecked === "normal") {
+        setFontBold("bold")
+    } else {
+        setFontBold("normal")
+    };
+  };
+
+    const changeFontStyle = (e) => {
+    e.preventDefault();
+    if (italicChecked === "normal") {
+        setFontItalic("italic")
+    } else {
+        setFontItalic("normal")
+    };
   };
 
   return (
     <form className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
-        <button className="panel__button" onClick={openFonts}>
+        <select className="panel__selector">
+          <option onClick={e => setFontFamily('Comic Sans MS')}>Comic Sans MS</option>
+          <option onClick={e => setFontFamily('Arial')}>Arial</option>
+          <option onClick={e => setFontFamily('Serif')}>Serif</option>
+        </select>
+        {/* <button className="panel__button" onClick={openFonts}>
           <img src={fontFamily} alt="Шрифты." />
-        </button>
-        <button className="panel__button" onClick={e => increaseSize(fontSize, setFontSize)}>
+        </button> */}
+        <button className="panel__button" onClick={e => increaseSize(e)}>
           <img src={sizePlus} alt="Увеличить шрифт." />
         </button>
-        <button className="panel__button" onClick={e => decreaseSize(fontSize, setFontSize)}>
+        <button className="panel__button" onClick={e => decreaseSize(e)}>
           <img src={sizeMinus} alt="Уменьшить шрифт." />
         </button>
       </fieldset>
       <fieldset className="panel__section panel__section_type_2">
         <label className="panel__container">
           <input
-            checked={boldChecked}
+            checked={(boldChecked === "bold")? true : false}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontBold(!boldChecked)}
+            onChange={e => changeFontWeight(e)}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_bold">
           </span>
         </label>
          <label className="panel__container">
           <input
-            checked={italicChecked}
+            checked={(italicChecked === "italic")? true : false}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontItalic(!italicChecked)}
+            onChange={e => changeFontStyle(e)}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_italic">
           </span>
@@ -147,11 +173,6 @@ function Panel ({
           <img src={reset} alt="Сбросить." />
           <span className="panel__btn-reset-message">сбросить форматирование</span>
       </button>
-      {/* <select>
-        <option onClick={e => setTopFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-        <option onClick={e => setTopFontFamily('Arial')}>Arial</option>
-        <option onClick={e => setTopFontFamily('Serif')}>Serif</option>
-      </select> */}
     </form>
   )
 };
