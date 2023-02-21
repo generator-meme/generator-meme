@@ -17,6 +17,7 @@ from memes.models import Favorite, Meme, Tag, Template
 
 
 class MemeViewSet(viewsets.ModelViewSet):
+    '''Представление для модели готового мема'''
     queryset = Meme.objects.all()
 
     def get_serializer_class(self):
@@ -24,12 +25,13 @@ class MemeViewSet(viewsets.ModelViewSet):
             return MemeReadSerializer
         return MemeWriteSerializer
 
-    @method_decorator(cache_page(60))
+    @method_decorator(cache_page(60))  # добавим кеширование
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
     @action(detail=True)
     def download_meme(self, request, pk):
+        '''Скачивает готовый мем в формате jpeg'''
         image = get_object_or_404(Meme, pk=pk).image
         if request.user.is_authenticated:
             filename = f'{request.user.username}_meme.jpg'
@@ -41,7 +43,7 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    '''Представление для модели Meme пошел нахуй чертила'''
+    '''Представление для модели Meme'''
     queryset = Template.objects.with_rating().order_by('-rating')
     permission_classes = [AdminOrReadOnly]
     filter_backends = [OrderingFilter]
@@ -54,6 +56,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post', 'delete'])
     def favorite(self, request, pk):
+        '''Добавляет шаблон в избранные'''
         return create_delete_relation(
             self, request, pk, Favorite, FavoriteSerializer
         )
