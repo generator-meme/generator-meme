@@ -18,7 +18,10 @@ services:
       - "5432:5432"
 
   backend:
-    image: artkeyplex/generator-meme:latest
+    # image: artkeyplex/generator-meme:latest
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/app/backend-static/

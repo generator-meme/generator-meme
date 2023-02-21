@@ -6,7 +6,7 @@ from .models import Meme, Tag, Template
 @admin.register(Meme)
 class MemeAdmin(admin.ModelAdmin):
     '''Админ-панель модели Meme с фильтрацией по тегам'''
-    list_display = ('id', 'image', 'author', 'template')
+    list_display = ('image', 'author', 'template')
     list_filter = ('template',)
 
 

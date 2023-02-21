@@ -21,3 +21,4 @@ pytest-pythonpath==0.7.3
 django-environ==0.8.1
 six
 drf-yasg
+django-rest-framework-social-oauth2==1.1.0

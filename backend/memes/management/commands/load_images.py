@@ -1,14 +1,18 @@
-import requests
 import os
+import requests
+
 from django.core.management.base import BaseCommand
 from dotenv import load_dotenv
+from datetime import datetime
 
-DOMAIN = os.getenv('DOMAIN')
+DOMAIN = os.environ.get('DOMAIN')
+
+load_dotenv()
 
 AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
 TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
-EMAIL = os.getenv('EMAIL')
-PASSWORD = os.getenv('PASSWORD')
+EMAIL = os.environ.get('EMAIL')
+PASSWORD = os.environ.get('PASSWORD')
 
 AUTH_DATA = {
     "email": EMAIL,
@@ -17,7 +21,7 @@ AUTH_DATA = {
 
 
 class Command(BaseCommand):
-
+    """Команда для загрузки шаблонов в БД"""
     def handle(self, *args, **options):
         token = self.get_token()
         print('Вход выполнен')
@@ -29,7 +33,8 @@ class Command(BaseCommand):
         data = requests.post(AUTH_URL, data=AUTH_DATA)
         return data.content.decode('utf-8')[15:-2]
 
-    def upload_images(self, token, file='memes.csv'):
+    def upload_images(self, token):
+        file = f'{datetime.now().date()}_memes.csv'
         print(f'Загрузка {file}...')
         file_path = f'./data/{file}'
         with open(file_path, newline='') as f:
