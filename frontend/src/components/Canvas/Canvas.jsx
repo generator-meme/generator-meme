@@ -45,7 +45,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
-  // const [bottomStrokeText, setBottomStrokeText] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
 
   const bottomStrokeText = useMemo(() => {
@@ -54,20 +53,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     };
      return false;
   }, [bottomStrokeTextColor]);
-
-  // const [isRendered, setIsRendered] = useState(false);
-
-  // function changeFontSize (size, setFontFunction) {
-  //   setFontFunction(size);
-  // }
-
-  function increaseSize (size, setFontFunction) {
-    setFontFunction(size + 1);
-  }
-
-  function decreaseSize (size, setFontFunction) {
-    setFontFunction(size - 1);
-  }
 
   function createMeme () {
     handleCreateNewMeme(canvas.current.toDataURL(), currentMeme.id)

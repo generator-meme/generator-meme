@@ -100,6 +100,16 @@ function Panel ({
     setIsOpenOpacity(false);
   };
 
+  // const changeFontFamily = (e, fontFamily) => {
+  //   e.preventDefault();
+  //   setFontFamily(fontFamily);
+  // };
+
+  const onChange = (e) => {
+    e.preventDefault();
+    setFontFamily(e.target.value);
+  }
+
   // попытка повесить слушатели для закрытия мелких околон
   // useEffect(() => {
   //   function closeExtraWindows(event) {
@@ -123,14 +133,10 @@ function Panel ({
   return (
     <form className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
-        <select className="panel__selector">
-          <option onClick={e => setFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-          <option onClick={e => setFontFamily('Arial')}>Arial</option>
-          <option onClick={e => setFontFamily('Serif')}>Serif</option>
+        <select onChange={onChange} className="panel__selector" >
+          <option>Comic Sans MS</option>
+          <option>Russoone</option>
         </select>
-        {/* <button className="panel__button" onClick={openFonts}>
-          <img src={fontFamily} alt="Шрифты." />
-        </button> */}
         <button className="panel__button" onClick={e => increaseSize(e)}>
           <img src={sizePlus} alt="Увеличить шрифт." />
         </button>
