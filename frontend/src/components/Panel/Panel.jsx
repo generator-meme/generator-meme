@@ -29,7 +29,6 @@ function Panel ({
     setBackColor
   }) {
 
-//   const [areOpenFonts, setAreOpenFonts] = useState(false);
   const [isOpenTextColor, setIsOpenTextColor] = useState(false);
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
@@ -46,10 +45,6 @@ function Panel ({
     e.preventDefault();
     setFontSize(fontSize - 1);
   };
-
-//   const openFonts = () => {
-//     setAreOpenFonts(true);
-//   };
 
   const changeFontWeight = (e) => {
     e.preventDefault();
@@ -100,12 +95,7 @@ function Panel ({
     setIsOpenOpacity(false);
   };
 
-  // const changeFontFamily = (e, fontFamily) => {
-  //   e.preventDefault();
-  //   setFontFamily(fontFamily);
-  // };
-
-  const onChange = (e) => {
+  const onChangeFonts = (e) => {
     e.preventDefault();
     setFontFamily(e.target.value);
   }
@@ -133,7 +123,7 @@ function Panel ({
   return (
     <form className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
-        <select onChange={onChange} className="panel__selector" >
+        <select onChange={onChangeFonts} className="panel__selector" >
           <option>Comic Sans MS</option>
           <option>Russoone</option>
         </select>
