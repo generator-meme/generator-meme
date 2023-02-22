@@ -19,8 +19,9 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 54px;
+  top: 100px;
   left: 70px;
+  display: none;
 }
 
 .editor__panel_type_bottom {
@@ -29,6 +30,11 @@
   position: absolute;
   top: 100px;
   left: 70px;
+  display: none;
+}
+
+.editor__panel_typr_open {
+  display: block;
 }
 
 /* .editor__title {

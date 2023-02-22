@@ -47,6 +47,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
 
+  const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
+  const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
+
   const bottomStrokeText = useMemo(() => {
     if (bottomStrokeTextColor) {
       return true;
@@ -60,6 +63,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         navigate('/saved')
       });
   };
+
+  const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
+    e.preventDefault();
+    setMyPanelIsOpen(true);
+    setOtherPanelIsOpen(false);
+  }
 
   // коллбэк-расчет координаты по оси X текста
   const marginX = useCallback((fontPosition, offsetX) => {
@@ -238,7 +247,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        <div className="editor__panel_type_top">
+        <div className={`editor__panel_type_top ${firstPanelIsOpen? "editor__panel_typr_open" : "" }`}>
           <Panel
             fontSize={topFontSize}
             setFontSize={setTopFontSize}
@@ -258,7 +267,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             setBackColor={setTopBackColor}
           />
         </div>
-        <div className="editor__panel_type_bottom">
+        <div className={`editor__panel_type_bottom ${secondPanelIsOpen? "editor__panel_typr_open": ""}`}>
           <Panel
             fontSize={bottomFontSize}
             setFontSize={setBottomFontSize}
@@ -293,6 +302,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               value={topText}
               onChange={(e) => setTopText(e.target.value)}
               placeholder="Текст сверху"
+              onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
             />
             <textarea
               className="editor__text"
@@ -300,6 +310,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               value={bottomText}
               onChange={(e) => setBottomText(e.target.value)}
               placeholder="Текст снизу"
+              onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
             />
           </form>
           <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
