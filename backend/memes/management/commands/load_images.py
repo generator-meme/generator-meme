@@ -34,7 +34,7 @@ class Command(BaseCommand):
         return data.content.decode('utf-8')[15:-2]
 
     def upload_images(self, token):
-        file = f'{datetime.now().date()}_memes.csv'
+        file = f'memes.csv'
         print(f'Загрузка {file}...')
         file_path = f'./data/{file}'
         with open(file_path, newline='') as f:
