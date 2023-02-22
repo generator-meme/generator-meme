@@ -29,6 +29,8 @@ function Panel ({
     setBackColor
   }) {
 
+  const form = useRef();
+
   const [isOpenTextColor, setIsOpenTextColor] = useState(false);
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
@@ -84,10 +86,6 @@ function Panel ({
     setIsOpenBackgroundColor(true);
   };
 
-  const resetForm = (e) => {
-    e.preventDefault();
-  };
-
   const closeAllPalettes = () => {
     setIsOpenTextColor(false);
     setIsOpenStrokeColor(false);
@@ -99,6 +97,21 @@ function Panel ({
     e.preventDefault();
     setFontFamily(e.target.value);
   }
+
+  const resetForm = (e) => {
+    e.preventDefault();
+    setFontSize(40);
+    setFontBold('normal');
+    setFontItalic('normal');
+    setFontUnderline(false);
+    setFontLineThrough(false);
+    setFontPosition('center');
+    setFontFamily('Comic Sans MS');
+    setTextColor('black');
+    setStrokeTextColor(null);
+    setBackColor('transparent');
+    form.current.reset();
+  };
 
   // попытка повесить слушатели для закрытия мелких околон
   // useEffect(() => {
@@ -121,7 +134,7 @@ function Panel ({
   // }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
 
   return (
-    <form className="panel" noValidate>
+    <form ref={form} className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
         <select onChange={onChangeFonts} className="panel__selector" >
           <option>Comic Sans MS</option>
@@ -231,7 +244,7 @@ function Panel ({
           </span>
         </label>
       </fieldset>
-      <button className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
+      <button type="reset" className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
           <img src={reset} alt="Сбросить." />
       </button>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
