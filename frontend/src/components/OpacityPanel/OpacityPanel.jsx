@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import "./OpacityPanel.css";
 
-function OpacityPanel ({opacity}) {
-/*  function Palette({ selectedColor, closePalette }) {
+function OpacityPanel ({setOpacity}) {
+  const formattingOpacityValue = (value) => {
+    return (value*0.01).toFixed(2);
+  }
   
-  const onClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    selectedColor(e.target.value);
-    closePalette();
-  };*/
 
   const [ opacityLevel, setOpacityLevel ] = useState(100);
 
   function changeOpacity(e){
     e.preventDefault();
     setOpacityLevel(e.target.value);
-    console.log(e.target.value * 0.01, opacity)
-    opacity(e.target.value * 0.01)
+    setOpacity(formattingOpacityValue(e.target.value));
   }
 
   return(

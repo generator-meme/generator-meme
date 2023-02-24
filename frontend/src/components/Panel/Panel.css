@@ -131,6 +131,19 @@
     display: block;
 }
 
+.panel__opacity {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 130px;
+    left: 0;
+    display: none;
+}
+
+.panel__opacity_visible {
+    display: block;
+}
+
 .panel__section_type_4 {
     padding: 7px 5px;
     column-gap: 12px;
