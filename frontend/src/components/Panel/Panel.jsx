@@ -68,12 +68,24 @@ function Panel ({
 
   const openTextColor = (e) => {
     e.preventDefault();
-    setIsOpenTextColor(true);
+    if (!isOpenTextColor) {
+      setIsOpenTextColor(true);
+      setIsOpenStrokeColor(false);
+      setIsOpenBackgroundColor(false);
+    } else {
+      setIsOpenTextColor(false);
+    }
   };
 
     const openStrokeColor = (e) => {
     e.preventDefault();
-    setIsOpenStrokeColor(true);
+    if (!isOpenStrokeColor) {
+      setIsOpenStrokeColor(true);
+      setIsOpenBackgroundColor(false);
+      setIsOpenTextColor(false);
+    } else {
+      setIsOpenStrokeColor(false);
+    }
   };
 
   const changeTextColor = (color) => {
@@ -83,7 +95,13 @@ function Panel ({
 
   const openBackgroundColor = (e) => {
     e.preventDefault();
-    setIsOpenBackgroundColor(true);
+    if (!isOpenBackgroundColor) {
+      setIsOpenBackgroundColor(true);
+      setIsOpenStrokeColor(false);
+      setIsOpenTextColor(false);
+    } else {
+      setIsOpenBackgroundColor(false);
+    }
   };
 
   const closeAllPalettes = () => {
@@ -114,24 +132,21 @@ function Panel ({
   };
 
   // попытка повесить слушатели для закрытия мелких околон
-  // useEffect(() => {
-  //   function closeExtraWindows(event) {
-  //     event.preventDefault();
-  //     console.log('функ')
-  //     if(event.target !== extraWindow.current) {
-  //       closeAllPalettes();
-  //       console.log("усл")
-  //     }
-  //   };
-    
-  //   if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
-  //     window.addEventListener('click', closeExtraWindows);
-  //   };
+  useEffect(() => {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
+      function closeExtraWindows(event) {
+        console.log(event.target.closest("#smallWindow"));
+        if (!event.target.closest("#smallWindow")) {
+          closeAllPalettes();
+        }
+      };
+      document.addEventListener('click', closeExtraWindows);
 
-  //   return (
-  //     window.removeEventListener('click', closeExtraWindows)
-  //   )
-  // }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
+      return () => {
+        document.removeEventListener('click', closeExtraWindows)
+      }
+    }
+  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
 
   return (
     <form ref={form} className="panel" noValidate>
@@ -190,22 +205,22 @@ function Panel ({
         </label>
       </fieldset>
       <fieldset className="panel__section panel__section_type_3">
-        <button className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
           <img src={textColor} alt="Цвет текста." />
-          <span className={`panel__choose-color ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={changeTextColor} closePalette={closeAllPalettes} />
+          <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
+            <Palette selectedColor={changeTextColor} closePalette={closeAllPalettes} />
           </span>
         </button>
-        <button className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
           <img src={strokeColor} alt="Цвет контура." />
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
           </span>
         </button>
-        <button className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
           <img src={backgroundColor} alt="Цвет заливки." />
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={setBackColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setBackColor} closePalette={closeAllPalettes} />
           </span>
         </button>
         <button className="panel__button" onClick={e => e.preventDefault()}>
