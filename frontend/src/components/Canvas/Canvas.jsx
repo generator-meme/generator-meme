@@ -4,6 +4,7 @@ import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
 import { contain } from "../../utils/fit.js";
 import Panel from '../Panel/Panel';
+import { fontFamilyOptions } from '../../utils/constants';
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   const [topText, setTopText] = useState('')
   const [topFontSize, setTopFontSize] = useState(40)
-  const [topFontFamily, setTopFontFamily] = useState('Comic Sans MS')
+  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.arial)
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState('normal')
   const [topFontStyle, setTopFontStyle] = useState('normal')
@@ -37,7 +38,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
-  const [bottomFontFamily, setBottomFontFamily] = useState('Comic Sans MS')
+  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState('normal')
   const [bottomFontStyle, setBottomFontStyle] = useState('normal')

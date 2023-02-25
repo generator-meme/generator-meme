@@ -1,0 +1,175 @@
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/Rubik-Regular.woff2") format("woff2"),
+    url("../fonts/Rubik-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/Rubik-Medium.woff2") format("woff2"),
+    url("../fonts/Rubik-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/Rubik-Light.woff2") format("woff2"),
+    url("../fonts/Rubik-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/arial.woff2") format("woff2"),
+    url("../fonts/arial.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/arial-i.woff2") format("woff2"),
+    url("../fonts/arial-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/arial-bd.woff2") format("woff2"),
+    url("../fonts/arial-bd.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/calibri.woff2") format("woff2"),
+    url("../fonts/calibri.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Calibri';
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/calibri-i.woff2") format("woff2"),
+    url("../fonts/calibri-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Calibri';
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/calibri-b.woff2") format("woff2"),
+    url("../fonts/calibri-b.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Comic Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/comic.woff2") format("woff2"),
+    url("../fonts/comic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Comic Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/comic-i.woff2") format("woff2"),
+    url("../fonts/comic-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Comic Sans';
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/comic-bd.woff2") format("woff2"),
+    url("../fonts/comic-bd.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Courier';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/courier.woff2") format("woff2"),
+    url("../fonts/courier.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Courier';
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/courier-i.woff2") format("woff2"),
+    url("../fonts/courier-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Courier';
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/courier-bd.woff2") format("woff2"),
+    url("../fonts/courier-bd.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Impact';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/impact.woff2") format("woff2"),
+    url("../fonts/impact.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Times new roman";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/times.woff2") format("woff2"),
+    url("../fonts/times.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Times new roman";
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/times-i.woff2") format("woff2"),
+    url("../fonts/times-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Times new roman";
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/times-bd.woff2") format("woff2"),
+    url("../fonts/times-bd.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Verdana";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/verdana.woff2") format("woff2"),
+    url("../fonts/verdana.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Verdana";
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/verdana-i.woff2") format("woff2"),
+    url("../fonts/verdana-i.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Verdana";
+  font-style: bold;
+  font-weight: 500;
+  src: url("../fonts/verdana-b.woff2") format("woff2"),
+    url("../fonts/verdana-b.woff") format("woff");
+}

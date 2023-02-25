@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
-import fontFamily from "../../images/icons/font-family.svg";
 import sizePlus from "../../images/icons/font-size+.svg";
 import sizeMinus from "../../images/icons/font-size-.svg";
 import textColor from "../../images/icons/text-color.svg";
@@ -9,6 +8,8 @@ import backgroundColor from "../../images/icons/background-color.svg";
 import opacity from "../../images/icons/opacity.svg";
 import reset from "../../images/icons/reset.svg";
 import Palette from "../Palette/Palette";
+import { fontFamilyOptions } from "../../utils/constants";
+import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 
 function Panel ({
     fontSize,
@@ -35,6 +36,8 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
+  // для выбора fontFamily
+  const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
 
@@ -104,17 +107,11 @@ function Panel ({
     }
   };
 
-  const closeAllPalettes = () => {
+  const closeAllSmallWindows = () => {
     setIsOpenTextColor(false);
     setIsOpenStrokeColor(false);
     setIsOpenBackgroundColor(false);
-    setIsOpenOpacity(false);
   };
-
-  const onChangeFonts = (e) => {
-    e.preventDefault();
-    setFontFamily(e.target.value);
-  }
 
   const resetForm = (e) => {
     e.preventDefault();
@@ -124,20 +121,19 @@ function Panel ({
     setFontUnderline(false);
     setFontLineThrough(false);
     setFontPosition('center');
-    setFontFamily('Comic Sans MS');
+    setFontFamily(fontFamilyOptions.arial);
+    setSelectedOption(0);
     setTextColor('black');
     setStrokeTextColor(null);
     setBackColor('transparent');
     form.current.reset();
   };
 
-  // попытка повесить слушатели для закрытия мелких околон
   useEffect(() => {
-    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor) {
       function closeExtraWindows(event) {
-        console.log(event.target.closest("#smallWindow"));
         if (!event.target.closest("#smallWindow")) {
-          closeAllPalettes();
+          closeAllSmallWindows();
         }
       };
       document.addEventListener('click', closeExtraWindows);
@@ -146,15 +142,16 @@ function Panel ({
         document.removeEventListener('click', closeExtraWindows)
       }
     }
-  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
+  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, extraWindow]);
 
   return (
     <form ref={form} className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
-        <select onChange={onChangeFonts} className="panel__selector" >
-          <option>Comic Sans MS</option>
-          <option>Russoone</option>
-        </select>
+        <FontFamilyOptions
+          setFontFamily={setFontFamily}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
         <button className="panel__button" onClick={e => increaseSize(e)}>
           <img src={sizePlus} alt="Увеличить шрифт." />
         </button>
@@ -208,19 +205,19 @@ function Panel ({
         <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
           <img src={textColor} alt="Цвет текста." />
           <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={changeTextColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={changeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
         <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
           <img src={strokeColor} alt="Цвет контура." />
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
         <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
           <img src={backgroundColor} alt="Цвет заливки." />
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={setBackColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
         <button className="panel__button" onClick={e => e.preventDefault()}>
