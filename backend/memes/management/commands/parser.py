@@ -1,5 +1,4 @@
 import base64
-import csv
 import os
 import vk_api
 import requests
@@ -65,13 +64,14 @@ class Command(BaseCommand):
         return encoded_photos
 
     def create_csv_file(self, data: list):
-        """Создает csv файл, где название соответствует дате загрузке картинок"""
+        """
+        Создает csv файл, где название соответствует дате загрузке картинок
+        """
         file_name = f'{datetime.now().date()}_memes.csv'
         file_path = './data/'
         full_path = os.path.join(file_path, file_name)
         with open(full_path, 'w', newline='') as file_handler:
             for url in data:
                 string = "data:image/jpeg;base64,"
-                string += repr(url)[
-                          1:-1] + '\n'  # используем repr(), чтобы не потерять символы, но убираем b'', так как это byte type
+                string += repr(url)[1:-1] + '\n'
                 file_handler.write(string)

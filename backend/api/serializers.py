@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import (
