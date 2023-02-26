@@ -1,4 +1,134 @@
+.opacity-panel {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  background-color: #fff;
+  width: 225px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+.opacity-panel__label {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+}
 
+/* НИЖЕ СТИЛИ ДЛЯ РЭНДЖА */
+
+.opacity-panel__input-range {
+  -webkit-appearance: none;
+  margin-bottom: 3px;
+  background: transparent;
+  cursor: pointer;
+  width: 87px;
+  caret-color: transparent;
+}
+.opacity-panel__input-range::-webkit-media-controls-volume-slider{
+  -webkit-appearance: none;
+  background-color: #868484;
+  height: 1px;
+}
+/* Targets the track in Chrome, Safari, and Edge Chromium. */
+.opacity-panel__input-range::-webkit-slider-runnable-track{
+  background-color: #868484;
+  height: 1px;
+}
+/* Targets the track in Firefox. */
+.opacity-panel__input-range::-moz-range-track {
+  background-color: #868484;
+  height: 1px;
+}
+
+/* Targets the thumb in Chrome, Safari, and Edge Chromium. */
+.opacity-panel__input-range::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #D9D9D9;
+  border-radius: 100%;
+  width: 6px;
+  height: 6px;
+  margin-top: -2.5px;
+}
+/* Targets the thumb in Firefox. */
+.opacity-panel__input-range::-moz-range-thumb {
+  border: none;
+  width: 6px;
+  height: 6px;
+  background-color: #D9D9D9;
+  border-radius: 100%;
+}
+
+/* НИЖЕ СТИЛИ ДЛЯ ИНПУТ НАМБЕР */
+
+.opacity-panel__input-number_wrapper {
+  top: 15px;
+  right: 10px;
+  position: absolute;
+  width: 36px;
+}
+.opacity-panel__input-number {
+  top: 0;
+  width: 100%;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+   
+  border: 0.25px solid #000000 ;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  outline: none;
+  padding: 5px; 
+  box-sizing: border-box;    
+}
+.opacity-panel__input-number::-webkit-inner-spin-button, 
+.opacity-panel__input-number::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+}
+
+
+
+.opacity-panel__input-number-upBtn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: none;
+  padding: 0;
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  background-image: url("../../images/opacity-panel__Input-number-btn-arrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.opacity-panel__input-number-upBtn:hover {
+  cursor: pointer;
+}
+.opacity-panel__input-number-downBtn {
+  position: absolute;
+  right: 5px;
+  top: 11px;
+  border: none;
+  padding: 0;
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  background-image: url("../../images/opacity-panel__Input-number-btn-arrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.opacity-panel__input-number-downBtn:hover {
+  cursor: pointer;
+}
+
+
+/* 
 .opacity-panel {
  background-color: #fff;
  display: inline-flex;
@@ -27,7 +157,7 @@ input[type=range]:focus {
   outline: none;
 }
 /*chrome track*/
-input[type=range]::-webkit-slider-runnable-track {
+/* input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 1px;
   cursor: pointer;
@@ -43,7 +173,7 @@ input[type=range]::-webkit-slider-thumb {
   margin-top: -2.5px;
 }
 /*mozilla track*/
-input[type=range]::-moz-range-track {
+/* input[type=range]::-moz-range-track {
   width: 100%;
   height: 1px;
   cursor: pointer;
@@ -58,7 +188,7 @@ input[type=range]::-moz-range-thumb {
   -webkit-appearance: none;
   margin-top: -2.5px;
   border: none;
-}
+} */ 
 
 /*input[type=range]::-ms-track {
   width: 100%;
@@ -96,7 +226,7 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }*/
-
+/* 
 .opacity-panel__input-number {
   width: 30px;
   min-height: 22px;
@@ -111,4 +241,4 @@ input[type=range]:focus::-ms-fill-upper {
 
 .opacity-panel__input-number::-webkit-inner-spin-button {
   -webkit-appearance: none;
-}
+} */

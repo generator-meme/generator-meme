@@ -135,8 +135,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 130px;
-    left: 0;
+    top: 40px;
+    right: 130px;
     display: none;
 }
 
