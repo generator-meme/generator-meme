@@ -88,7 +88,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     if (topBackColor !== "transparent") {
       // меняем значение opacity (последнее значение в rgba)
       let replacedColor = topBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
-      setTopBackColor(replacedColor);    
+      setTopBackColor(replacedColor);
       return;
     }
     return;
@@ -101,8 +101,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     }
     setBottomBackColor(color);
     return;
-    
-  }
+  ;}
+
   function changeBottomOpacity(opacity) {
     // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
     const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
@@ -110,11 +110,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     if (bottomBackColor !== "transparent") {
       // меняем значение opacity (последнее значение в rgba)
       let replacedColor = bottomBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
-      setBottomBackColor(replacedColor);    
+      setBottomBackColor(replacedColor);
       return;
     }
     return;
-  }
+  };
+  
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
     e.preventDefault();
     setMyPanelIsOpen(true);
@@ -344,28 +345,28 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         <canvas
             className="editor__image"
             ref={canvas}
-            width={538}
-            height={558}
+            width={675}
+            height={556}
         >
         </canvas>
         <div className="editor__box">
           <form className="editor__text-form">
-            <textarea
-              className="editor__text"
-              type="text"
-              value={topText}
-              onChange={(e) => setTopText(e.target.value)}
-              placeholder="Текст сверху"
-              onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
-            />
-            <textarea
-              className="editor__text"
-              type="text"
-              value={bottomText}
-              onChange={(e) => setBottomText(e.target.value)}
-              placeholder="Текст снизу"
-              onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
-            />
+              <textarea
+                className="editor__text"
+                type="text"
+                value={topText}
+                onChange={(e) => setTopText(e.target.value)}
+                placeholder="Текст сверху"
+                onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
+              />
+              <textarea
+                className="editor__text"
+                type="text"
+                value={bottomText}
+                onChange={(e) => setBottomText(e.target.value)}
+                placeholder="Текст снизу"
+                onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
+              />
           </form>
           <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
         </div>

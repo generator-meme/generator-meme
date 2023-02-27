@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
-import sizePlus from "../../images/icons/font-size+.svg";
-import sizeMinus from "../../images/icons/font-size-.svg";
-import textColor from "../../images/icons/text-color.svg";
-import strokeColor from "../../images/icons/stroke-color.svg";
-import backgroundColor from "../../images/icons/background-color.svg";
-import opacityImg from "../../images/icons/opacity.svg";
-import reset from "../../images/icons/reset.svg";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import { fontFamilyOptions } from "../../utils/constants";
@@ -168,20 +161,16 @@ function Panel ({
 
   return (
     <form ref={form} className="panel" noValidate>
-      <fieldset className="panel__section panel__section_type_1">
+      <fieldset className="panel__section">
         <FontFamilyOptions
           setFontFamily={setFontFamily}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
         />
-        <button className="panel__button" onClick={e => increaseSize(e)}>
-          <img src={sizePlus} alt="Увеличить шрифт." />
-        </button>
-        <button className="panel__button" onClick={e => decreaseSize(e)}>
-          <img src={sizeMinus} alt="Уменьшить шрифт." />
-        </button>
+        <button className="panel__button panel__button_type_in-size" onClick={e => increaseSize(e)} />
+        <button className="panel__button panel__button_type_dec-size" onClick={e => decreaseSize(e)} />
       </fieldset>
-      <fieldset className="panel__section panel__section_type_2">
+      <fieldset className="panel__section">
         <label className="panel__container">
           <input
             checked={(boldChecked === "bold")? true : false}
@@ -223,33 +212,29 @@ function Panel ({
           </span>
         </label>
       </fieldset>
-      <fieldset className="panel__section panel__section_type_3">
-        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
-          <img src={textColor} alt="Цвет текста." />
+      <fieldset className="panel__section">
+        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_text-color" onClick={e => openTextColor(e)}>
           <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={changeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
-          <img src={strokeColor} alt="Цвет контура." />
+        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_stroke-color" onClick={e => openStrokeColor(e)}>
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
-          <img src={backgroundColor} alt="Цвет заливки." />
+        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_back-color" onClick={e => openBackgroundColor(e)}>
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
         <button  id="smallWindow" className="panel__button panel__button_opacity" onClick={e => toggleOpacityPanel(e)}>
-          <img className="panel__button_opacity" src={opacityImg} alt="Прозрачность." />
           <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           </span>
         </button>
       </fieldset>
-      <fieldset className="panel__section panel__section_type_4">
+      <fieldset className="panel__section">
         <label className="panel__container">
           <input
             checked={(textPosition === "start")? true : false}
@@ -281,8 +266,7 @@ function Panel ({
           </span>
         </label>
       </fieldset>
-      <button type="reset" className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
-          <img src={reset} alt="Сбросить." />
+      <button type="reset" className="panel__button panel__button_type_reset" onClick={e => resetForm(e)}>
       </button>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
     </form>
