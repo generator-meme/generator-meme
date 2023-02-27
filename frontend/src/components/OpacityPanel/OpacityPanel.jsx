@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./OpacityPanel.css";
 
-function OpacityPanel ({setOpacity}) {
+function OpacityPanel ({setOpacity, opacityLevel, setOpacityLevel}) {
   const formattingOpacityValue = (value) => {
     return (value*0.01).toFixed(2);
   }
   
 
-  const [ opacityLevel, setOpacityLevel ] = useState(100);
-  //
+  
   function enforceMinMax(el) {
     if (el.value != "") {
       if (parseInt(el.value) < parseInt(el.min)) {
@@ -19,7 +18,6 @@ function OpacityPanel ({setOpacity}) {
       }
     }
   }
-  // не доделаны кнопки()
   function decreaseOpacity(e){
     e.preventDefault();
     e.target.parentNode.querySelector('.opacity-panel__input-number').stepDown();
@@ -29,7 +27,7 @@ function OpacityPanel ({setOpacity}) {
   function increaseOpacity(e){
     e.preventDefault();
     e.target.parentNode.querySelector('.opacity-panel__input-number').stepUp();
-    setOpacityLevel(e.target.parentNode.querySelector('.opacity-panel__input-number').value);
+     setOpacityLevel(e.target.parentNode.querySelector('.opacity-panel__input-number').value);
     setOpacity(formattingOpacityValue(e.target.parentNode.querySelector('.opacity-panel__input-number').value));
   }
   function changeOpacity(e){

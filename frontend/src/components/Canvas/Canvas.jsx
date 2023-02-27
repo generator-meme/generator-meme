@@ -5,6 +5,8 @@ import './Canvas.css'
 import { contain } from "../../utils/fit.js";
 import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
+import { hexToRgb } from '../../utils/hexToRgb';
+
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -66,10 +68,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         navigate('/saved')
       });
   };
+
+
   // изменение цвета и прозрачности сверху
   function changeTopBackColor(color){
     if(color !== "transparent"){
-      setTopBackColor(`rgba(${color}, ${topOpacity})`);
+      setTopBackColor(`rgba(${hexToRgb(color)}, ${topOpacity})`);
       return;
     }
     setTopBackColor(color);
@@ -92,7 +96,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   // изменение цвета и прозрачности снизу
   function changeBottomBackColor(color){
     if(color !== "transparent"){
-      setBottomBackColor(`rgba(${color}, ${bottomOpacity})`);
+      setBottomBackColor(`rgba(${hexToRgb(color)}, ${bottomOpacity})`);
       return;
     }
     setBottomBackColor(color);

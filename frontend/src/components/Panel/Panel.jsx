@@ -5,7 +5,7 @@ import sizeMinus from "../../images/icons/font-size-.svg";
 import textColor from "../../images/icons/text-color.svg";
 import strokeColor from "../../images/icons/stroke-color.svg";
 import backgroundColor from "../../images/icons/background-color.svg";
-import opacity from "../../images/icons/opacity.svg";
+import opacityImg from "../../images/icons/opacity.svg";
 import reset from "../../images/icons/reset.svg";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
@@ -38,6 +38,7 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
+  const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
   const [selectedOption, setSelectedOption] = useState(0);
 
@@ -77,6 +78,7 @@ function Panel ({
       setIsOpenTextColor(true);
       setIsOpenStrokeColor(false);
       setIsOpenBackgroundColor(false);
+      setIsOpenOpacity(false);
     } else {
       setIsOpenTextColor(false);
     }
@@ -88,19 +90,28 @@ function Panel ({
       setIsOpenStrokeColor(true);
       setIsOpenBackgroundColor(false);
       setIsOpenTextColor(false);
+      setIsOpenOpacity(false);
     } else {
       setIsOpenStrokeColor(false);
     }
   };
 
   const changeTextColor = (color) => {
+    console.log(color, 'changeTextColor');
     setTextColor(color);
     setStrokeTextColor(null);
   };
 
   const toggleOpacityPanel = (e) => {
     e.preventDefault();
-    setIsOpenOpacity(true);
+    if (!isOpenOpacity) {
+      setIsOpenOpacity(true);
+      setIsOpenStrokeColor(false);
+      setIsOpenTextColor(false);
+      setIsOpenBackgroundColor(false);
+    } else if(e.target.classList.contains("panel__button_opacity")){
+       setIsOpenOpacity(false);
+      }
   }
 
   const openBackgroundColor = (e) => {
@@ -109,6 +120,7 @@ function Panel ({
       setIsOpenBackgroundColor(true);
       setIsOpenStrokeColor(false);
       setIsOpenTextColor(false);
+      setIsOpenOpacity(false);
     } else {
       setIsOpenBackgroundColor(false);
     }
@@ -118,8 +130,9 @@ function Panel ({
     setIsOpenTextColor(false);
     setIsOpenStrokeColor(false);
     setIsOpenBackgroundColor(false);
+    setIsOpenOpacity(false);
   };
-
+  
   const resetForm = (e) => {
     e.preventDefault();
     setFontSize(40);
@@ -133,11 +146,13 @@ function Panel ({
     setTextColor('black');
     setStrokeTextColor(null);
     setBackColor('transparent');
+    setOpacity(1);
+    setOpacityLevel(100);
     form.current.reset();
   };
 
   useEffect(() => {
-    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor) {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
       function closeExtraWindows(event) {
         if (!event.target.closest("#smallWindow")) {
           closeAllSmallWindows();
@@ -149,7 +164,7 @@ function Panel ({
         document.removeEventListener('click', closeExtraWindows)
       }
     }
-  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, extraWindow]);
+  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor,isOpenOpacity, extraWindow]);
 
   return (
     <form ref={form} className="panel" noValidate>
@@ -227,10 +242,10 @@ function Panel ({
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button className="panel__button" onClick={e => toggleOpacityPanel(e)}>
-          <img src={opacity} alt="Прозрачность." />
+        <button  id="smallWindow" className="panel__button panel__button_opacity" onClick={e => toggleOpacityPanel(e)}>
+          <img className="panel__button_opacity" src={opacityImg} alt="Прозрачность." />
           <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
-            <OpacityPanel setOpacity={setOpacity} />
+            <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           </span>
         </button>
       </fieldset>
