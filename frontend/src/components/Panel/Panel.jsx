@@ -22,7 +22,7 @@ function Panel ({
     setTextColor,
     setStrokeTextColor,
     setBackColor,
-    setOpacity
+    setOpacity,
   }) {
 
   const form = useRef();
@@ -138,9 +138,9 @@ function Panel ({
     setSelectedOption(0);
     setTextColor('black');
     setStrokeTextColor(null);
-    setBackColor('transparent');
     setOpacity(1);
     setOpacityLevel(100);
+    setBackColor('transparent');
     form.current.reset();
   };
 
@@ -228,7 +228,7 @@ function Panel ({
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button  id="smallWindow" className="panel__button panel__button_opacity" onClick={e => toggleOpacityPanel(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_opacity" onClick={e => toggleOpacityPanel(e)}>
           <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           </span>

@@ -78,7 +78,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     }
     setTopBackColor(color);
     return;
-    
   }
 
   function changeTopOpacity(opacity) {
