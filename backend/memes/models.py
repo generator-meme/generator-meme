@@ -6,6 +6,7 @@ from users.models import User
 
 
 class Tag(models.Model):
+    """Модель хэштегов"""
     name = models.CharField(
         verbose_name='Название тега',
         max_length=150,
@@ -26,11 +27,13 @@ class Tag(models.Model):
 
 
 class TemplateManager(models.Manager):
+    """Модель менеджера для подсчета рейтинга шаблона"""
     def with_rating(self):
         return self.annotate(rating=Count(F('memes')))
 
 
 class Template(models.Model):
+    """Модель шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     image = models.ImageField(
         verbose_name='Изображение',
@@ -53,6 +56,7 @@ class Template(models.Model):
 
 
 class Meme(models.Model):
+    """Модель готового мема пользователя"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     image = models.ImageField(
         verbose_name='Изображение',
@@ -77,6 +81,7 @@ class Meme(models.Model):
 
 
 class Favorite(models.Model):
+    """Модель избранного шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(
         User,

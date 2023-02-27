@@ -5,6 +5,7 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    '''Админ-панель модели User с фильтрацией по почте и имени пользователя'''
     list_display = (
         'id',
         'username',

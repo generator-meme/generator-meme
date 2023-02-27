@@ -6,6 +6,7 @@ from memes.models import Template
 
 
 def create_delete_relation(self, request, pk, model, modelserializer):
+    '''Утилита для добавления связей с шаблоном'''
     if request.method != 'POST':
         action_model = get_object_or_404(
             model,
