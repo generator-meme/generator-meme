@@ -1,8 +1,9 @@
-// export const memes = Array.from(Array(9).keys())
-
-// import image from "../images/meme-image.png";
-
-// export const meme = {
-//   id: 123,
-//   image: image,
-// };
+export const fontFamilyOptions = {
+  impact: "Impact",
+  arial: "Arial", //
+  verdana: "Verdana",
+  comicSans: "Comic Sans",
+  timesNewRoman: "Times New Roman",
+  courier: "Courier",
+  calibri: "Calibri", //
+};
