@@ -66,9 +66,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         navigate('/saved')
       });
   };
-
+  // изменение цвета и прозрачности сверху
   function changeTopBackColor(color){
-    setTopBackColor(`rgba(${color}, ${topOpacity})`)
+    if(color !== "transparent"){
+      setTopBackColor(`rgba(${color}, ${topOpacity})`);
+      return;
+    }
+    setTopBackColor(color);
+    return;
+    
   }
 
   function changeTopOpacity(opacity) {
@@ -83,7 +89,28 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     }
     return;
   }
-  
+  // изменение цвета и прозрачности снизу
+  function changeBottomBackColor(color){
+    if(color !== "transparent"){
+      setBottomBackColor(`rgba(${color}, ${bottomOpacity})`);
+      return;
+    }
+    setBottomBackColor(color);
+    return;
+    
+  }
+  function changeBottomOpacity(opacity) {
+    // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
+    const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+    setBottomOpacity(opacity);
+    if (bottomBackColor !== "transparent") {
+      // меняем значение opacity (последнее значение в rgba)
+      let replacedColor = bottomBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
+      setBottomBackColor(replacedColor);    
+      return;
+    }
+    return;
+  }
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
     e.preventDefault();
     setMyPanelIsOpen(true);
@@ -306,7 +333,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             setFontFamily={setBottomFontFamily}
             setTextColor={setBottomFillTextColor}
             setStrokeTextColor={setbottomStrokeTextColor}
-            setBackColor={setBottomBackColor}
+            setBackColor={changeBottomBackColor}
+            setOpacity={changeBottomOpacity}
           />
         </div>
         <canvas

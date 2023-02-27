@@ -31,7 +31,12 @@
 .color-palette__color:checked {
   border-width: 2px;
 }
-
+.color-palette__color_transparent {
+  background-color: #FFFFFF;
+  background-image: url(../../images/palette_transparent_symbol.svg);
+  background-size: 110%;
+  background-position: center;
+}
 .color-palette__color_000000 {
   background-color: #000000;
 }
