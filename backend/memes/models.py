@@ -83,6 +83,10 @@ class Meme(models.Model):
         verbose_name='Дата публикации',
         auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Готовый мем'
+        verbose_name_plural = 'Готовые мемы'
+
 
 class Favorite(models.Model):
     """Модель избранного шаблона"""

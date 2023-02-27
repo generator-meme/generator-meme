@@ -22,12 +22,17 @@ class TemplateAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Image'
     list_display = ('id', 'image_tag', 'is_published')
     list_filter = ('tag',)
-    actions = ['publish']
+    actions = ['publish', 'hide']
 
-    @admin.action(description='Опубликовать шаблоны')
+    @admin.action(description='Добавить на сайт выбранные шаблоны')
     def publish(self, request, queryset):
         '''Публикует выбранные шаблоны мемов'''
         queryset.update(is_published=True)
+
+    @admin.action(description='Убрать с сайта выбранные шаблоны')
+    def hide(self, request, queryset):
+        '''Публикует выбранные шаблоны мемов'''
+        queryset.update(is_published=False)
 
 
 @admin.register(Tag)
