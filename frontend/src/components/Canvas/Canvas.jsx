@@ -28,6 +28,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
+  const [topOpacity, setTopOpacity] = useState(1);
 
   const topStrokeText = useMemo(() => {
     if (topStrokeTextColor) {
@@ -47,6 +48,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
+  const [bottomOpacity, setBottomOpacity] = useState(1);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -65,6 +67,23 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       });
   };
 
+  function changeTopBackColor(color){
+    setTopBackColor(`rgba(${color}, ${topOpacity})`)
+  }
+
+  function changeTopOpacity(opacity) {
+    // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
+    const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+    setTopOpacity(opacity);
+    if (topBackColor !== "transparent") {
+      // меняем значение opacity (последнее значение в rgba)
+      let replacedColor = topBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
+      setTopBackColor(replacedColor);    
+      return;
+    }
+    return;
+  }
+  
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
     e.preventDefault();
     setMyPanelIsOpen(true);
@@ -109,9 +128,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.stroke()
     ctx.restore()
   }, []);
-
+  
   // отрисовка заливки фона текста
   const addTextBackground = useCallback((ctx, text, x, y, fontSize, color) => {
+    
     // вычисление метрик текста (нас интересует ширина)
     let metrics = ctx.measureText(text);
     // вычисление начальной координаты OX
@@ -127,7 +147,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     }
     
     y -= (fontSize - 5);
-    
+
     ctx.fillStyle = color;
     if (metrics.width > 0) {
     ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 8));
@@ -265,7 +285,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             setFontFamily={setTopFontFamily}
             setTextColor={setTopFillTextColor}
             setStrokeTextColor={setTopStrokeTextColor}
-            setBackColor={setTopBackColor}
+            setBackColor={changeTopBackColor}
+            setOpacity={changeTopOpacity}
           />
         </div>
         <div className={`editor__panel_type_bottom ${secondPanelIsOpen? "editor__panel_typr_open": ""}`}>

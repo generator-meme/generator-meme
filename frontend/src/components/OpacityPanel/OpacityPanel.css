@@ -1,0 +1,244 @@
+.opacity-panel {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  background-color: #fff;
+  width: 225px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+.opacity-panel__label {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+/* НИЖЕ СТИЛИ ДЛЯ РЭНДЖА */
+
+.opacity-panel__input-range {
+  -webkit-appearance: none;
+  margin-bottom: 3px;
+  background: transparent;
+  cursor: pointer;
+  width: 87px;
+  caret-color: transparent;
+}
+.opacity-panel__input-range::-webkit-media-controls-volume-slider{
+  -webkit-appearance: none;
+  background-color: #868484;
+  height: 1px;
+}
+/* Targets the track in Chrome, Safari, and Edge Chromium. */
+.opacity-panel__input-range::-webkit-slider-runnable-track{
+  background-color: #868484;
+  height: 1px;
+}
+/* Targets the track in Firefox. */
+.opacity-panel__input-range::-moz-range-track {
+  background-color: #868484;
+  height: 1px;
+}
+
+/* Targets the thumb in Chrome, Safari, and Edge Chromium. */
+.opacity-panel__input-range::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #D9D9D9;
+  border-radius: 100%;
+  width: 6px;
+  height: 6px;
+  margin-top: -2.5px;
+}
+/* Targets the thumb in Firefox. */
+.opacity-panel__input-range::-moz-range-thumb {
+  border: none;
+  width: 6px;
+  height: 6px;
+  background-color: #D9D9D9;
+  border-radius: 100%;
+}
+
+/* НИЖЕ СТИЛИ ДЛЯ ИНПУТ НАМБЕР */
+
+.opacity-panel__input-number_wrapper {
+  top: 15px;
+  right: 10px;
+  position: absolute;
+  width: 36px;
+}
+.opacity-panel__input-number {
+  top: 0;
+  width: 100%;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+   
+  border: 0.25px solid #000000 ;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  outline: none;
+  padding: 5px; 
+  box-sizing: border-box;    
+}
+.opacity-panel__input-number::-webkit-inner-spin-button, 
+.opacity-panel__input-number::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+}
+
+
+
+.opacity-panel__input-number-upBtn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: none;
+  padding: 0;
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  background-image: url("../../images/opacity-panel__Input-number-btn-arrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.opacity-panel__input-number-upBtn:hover {
+  cursor: pointer;
+}
+.opacity-panel__input-number-downBtn {
+  position: absolute;
+  right: 5px;
+  top: 11px;
+  border: none;
+  padding: 0;
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  background-image: url("../../images/opacity-panel__Input-number-btn-arrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.opacity-panel__input-number-downBtn:hover {
+  cursor: pointer;
+}
+
+
+/* 
+.opacity-panel {
+ background-color: #fff;
+ display: inline-flex;
+ width: 219px;
+ align-items: center;
+ justify-content: space-between;
+ padding: 15px 10px;
+ border-radius: 4px;
+ font-family: Inter;
+
+
+}
+
+.opacity-panel__label {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 87px;
+  display: inline-block;
+  line-height: 1.2;
+  }
+input[type=range]:focus {
+  outline: none;
+}
+/*chrome track*/
+/* input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: #868484;
+}
+input[type=range]::-webkit-slider-thumb {
+  height: 6px;
+  width: 6px;
+  background: #D9D9D9;
+  cursor: pointer;
+  border-radius: 100%;
+  -webkit-appearance: none;
+  margin-top: -2.5px;
+}
+/*mozilla track*/
+/* input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: #868484;
+}
+input[type=range]::-moz-range-thumb {
+  height: 6px;
+  width: 6px;
+  background: #D9D9D9;
+  cursor: pointer;
+  border-radius: 100%;
+  -webkit-appearance: none;
+  margin-top: -2.5px;
+  border: none;
+} */ 
+
+/*input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #2a6495;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #367ebd;
+}*/
+/* 
+.opacity-panel__input-number {
+  width: 30px;
+  min-height: 22px;
+  border: 0.25px solid black;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.opacity-panel__input-number:focus {
+  border: 0.25px solid black;
+}
+
+.opacity-panel__input-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+} */

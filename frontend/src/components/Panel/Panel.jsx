@@ -8,6 +8,7 @@ import backgroundColor from "../../images/icons/background-color.svg";
 import opacity from "../../images/icons/opacity.svg";
 import reset from "../../images/icons/reset.svg";
 import Palette from "../Palette/Palette";
+import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 
@@ -27,7 +28,8 @@ function Panel ({
     setFontFamily,
     setTextColor,
     setStrokeTextColor,
-    setBackColor
+    setBackColor,
+    setOpacity
   }) {
 
   const form = useRef();
@@ -95,6 +97,11 @@ function Panel ({
     setTextColor(color);
     setStrokeTextColor(null);
   };
+
+  const toggleOpacityPanel = (e) => {
+    e.preventDefault();
+    setIsOpenOpacity(true);
+  }
 
   const openBackgroundColor = (e) => {
     e.preventDefault();
@@ -220,8 +227,11 @@ function Panel ({
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button className="panel__button" onClick={e => e.preventDefault()}>
+        <button className="panel__button" onClick={e => toggleOpacityPanel(e)}>
           <img src={opacity} alt="Прозрачность." />
+          <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
+            <OpacityPanel setOpacity={setOpacity} />
+          </span>
         </button>
       </fieldset>
       <fieldset className="panel__section panel__section_type_4">
