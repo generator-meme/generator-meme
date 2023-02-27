@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import { fontFamilyOptions } from "../../utils/constants";
 import "./FontFamilyOptions.css";
 
-function FontFamilyOptions({ setFontFamily, selectedOption, setSelectedOption }) {
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+function FontFamilyOptions({ 
+  setFontFamily,
+  selectedOption,
+  setSelectedOption,
+  isOptionsOpen,
+  setIsOptionsOpen
+}) {
 
   const optionsList = [
     fontFamilyOptions.arial,
@@ -67,6 +72,7 @@ function FontFamilyOptions({ setFontFamily, selectedOption, setSelectedOption })
   return (
       <div className="font-family">
         <button
+          id="smallWindow"
           type="button"
           aria-haspopup="listbox"
           aria-expanded={isOptionsOpen}
