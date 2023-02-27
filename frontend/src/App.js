@@ -7,6 +7,7 @@ import Canvas from "./components/Canvas/Canvas";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
 import api from "./utils/api";
 import "./App.css";
+import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -75,6 +76,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
     </div>

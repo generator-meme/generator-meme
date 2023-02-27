@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
-import fontFamily from "../../images/icons/font-family.svg";
 import sizePlus from "../../images/icons/font-size+.svg";
 import sizeMinus from "../../images/icons/font-size-.svg";
 import textColor from "../../images/icons/text-color.svg";
@@ -9,6 +8,9 @@ import backgroundColor from "../../images/icons/background-color.svg";
 import opacity from "../../images/icons/opacity.svg";
 import reset from "../../images/icons/reset.svg";
 import Palette from "../Palette/Palette";
+import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
+import { fontFamilyOptions } from "../../utils/constants";
+import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 
 function Panel ({
     fontSize,
@@ -26,14 +28,18 @@ function Panel ({
     setFontFamily,
     setTextColor,
     setStrokeTextColor,
-    setBackColor
+    setBackColor,
+    setOpacity
   }) {
 
-//   const [areOpenFonts, setAreOpenFonts] = useState(false);
+  const form = useRef();
+
   const [isOpenTextColor, setIsOpenTextColor] = useState(false);
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
+  // для выбора fontFamily
+  const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
 
@@ -46,10 +52,6 @@ function Panel ({
     e.preventDefault();
     setFontSize(fontSize - 1);
   };
-
-//   const openFonts = () => {
-//     setAreOpenFonts(true);
-//   };
 
   const changeFontWeight = (e) => {
     e.preventDefault();
@@ -71,12 +73,24 @@ function Panel ({
 
   const openTextColor = (e) => {
     e.preventDefault();
-    setIsOpenTextColor(true);
+    if (!isOpenTextColor) {
+      setIsOpenTextColor(true);
+      setIsOpenStrokeColor(false);
+      setIsOpenBackgroundColor(false);
+    } else {
+      setIsOpenTextColor(false);
+    }
   };
 
     const openStrokeColor = (e) => {
     e.preventDefault();
-    setIsOpenStrokeColor(true);
+    if (!isOpenStrokeColor) {
+      setIsOpenStrokeColor(true);
+      setIsOpenBackgroundColor(false);
+      setIsOpenTextColor(false);
+    } else {
+      setIsOpenStrokeColor(false);
+    }
   };
 
   const changeTextColor = (color) => {
@@ -84,53 +98,67 @@ function Panel ({
     setStrokeTextColor(null);
   };
 
+  const toggleOpacityPanel = (e) => {
+    e.preventDefault();
+    setIsOpenOpacity(true);
+  }
+
   const openBackgroundColor = (e) => {
     e.preventDefault();
-    setIsOpenBackgroundColor(true);
+    if (!isOpenBackgroundColor) {
+      setIsOpenBackgroundColor(true);
+      setIsOpenStrokeColor(false);
+      setIsOpenTextColor(false);
+    } else {
+      setIsOpenBackgroundColor(false);
+    }
+  };
+
+  const closeAllSmallWindows = () => {
+    setIsOpenTextColor(false);
+    setIsOpenStrokeColor(false);
+    setIsOpenBackgroundColor(false);
   };
 
   const resetForm = (e) => {
     e.preventDefault();
+    setFontSize(40);
+    setFontBold('normal');
+    setFontItalic('normal');
+    setFontUnderline(false);
+    setFontLineThrough(false);
+    setFontPosition('center');
+    setFontFamily(fontFamilyOptions.arial);
+    setSelectedOption(0);
+    setTextColor('black');
+    setStrokeTextColor(null);
+    setBackColor('transparent');
+    form.current.reset();
   };
 
-  const closeAllPalettes = () => {
-    setIsOpenTextColor(false);
-    setIsOpenStrokeColor(false);
-    setIsOpenBackgroundColor(false);
-    setIsOpenOpacity(false);
-  };
+  useEffect(() => {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor) {
+      function closeExtraWindows(event) {
+        if (!event.target.closest("#smallWindow")) {
+          closeAllSmallWindows();
+        }
+      };
+      document.addEventListener('click', closeExtraWindows);
 
-  // попытка повесить слушатели для закрытия мелких околон
-  // useEffect(() => {
-  //   function closeExtraWindows(event) {
-  //     event.preventDefault();
-  //     console.log('функ')
-  //     if(event.target !== extraWindow.current) {
-  //       closeAllPalettes();
-  //       console.log("усл")
-  //     }
-  //   };
-    
-  //   if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
-  //     window.addEventListener('click', closeExtraWindows);
-  //   };
-
-  //   return (
-  //     window.removeEventListener('click', closeExtraWindows)
-  //   )
-  // }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, isOpenOpacity, extraWindow]);
+      return () => {
+        document.removeEventListener('click', closeExtraWindows)
+      }
+    }
+  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor, extraWindow]);
 
   return (
-    <form className="panel" noValidate>
+    <form ref={form} className="panel" noValidate>
       <fieldset className="panel__section panel__section_type_1">
-        <select className="panel__selector">
-          <option onClick={e => setFontFamily('Comic Sans MS')}>Comic Sans MS</option>
-          <option onClick={e => setFontFamily('Arial')}>Arial</option>
-          <option onClick={e => setFontFamily('Serif')}>Serif</option>
-        </select>
-        {/* <button className="panel__button" onClick={openFonts}>
-          <img src={fontFamily} alt="Шрифты." />
-        </button> */}
+        <FontFamilyOptions
+          setFontFamily={setFontFamily}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
         <button className="panel__button" onClick={e => increaseSize(e)}>
           <img src={sizePlus} alt="Увеличить шрифт." />
         </button>
@@ -181,26 +209,29 @@ function Panel ({
         </label>
       </fieldset>
       <fieldset className="panel__section panel__section_type_3">
-        <button className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openTextColor(e)}>
           <img src={textColor} alt="Цвет текста." />
-          <span className={`panel__choose-color ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={changeTextColor} closePalette={closeAllPalettes} />
+          <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
+            <Palette selectedColor={changeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openStrokeColor(e)}>
           <img src={strokeColor} alt="Цвет контура." />
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={setStrokeTextColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
+        <button id="smallWindow" className="panel__button panel___buttom_type_color" onClick={e => openBackgroundColor(e)}>
           <img src={backgroundColor} alt="Цвет заливки." />
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
-            <Palette ref={extraWindow} selectedColor={setBackColor} closePalette={closeAllPalettes} />
+            <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button className="panel__button" onClick={e => e.preventDefault()}>
+        <button className="panel__button" onClick={e => toggleOpacityPanel(e)}>
           <img src={opacity} alt="Прозрачность." />
+          <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
+            <OpacityPanel setOpacity={setOpacity} />
+          </span>
         </button>
       </fieldset>
       <fieldset className="panel__section panel__section_type_4">
@@ -235,7 +266,7 @@ function Panel ({
           </span>
         </label>
       </fieldset>
-      <button className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
+      <button type="reset" className="panel__button panel__btn-reset" onClick={e => resetForm(e)}>
           <img src={reset} alt="Сбросить." />
       </button>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
