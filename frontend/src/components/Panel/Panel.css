@@ -192,7 +192,7 @@
     padding: 0;
     position: absolute;
     top: 40px;
-    right: 130px;
+    right: -65px;
     display: none;
 }
 
@@ -224,6 +224,7 @@
 }
 
 .panel__btn-reset-message {
+    display: none;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -238,11 +239,12 @@
     position: absolute;
     top: 35px;
     right: -250px;
-    transition: all 1s;
-    transition-delay: 1s, 0s;
+    transition: all .3s;
+    transition-delay: .3s, 0s;
     opacity: 0;
 }
 
 .panel__btn-reset:hover+.panel__btn-reset-message {
+    display: inline-block;
     opacity: 1;
 }
