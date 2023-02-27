@@ -1,31 +1,33 @@
 .saved-meme {
-    padding: 43px 30px 130px;
+    padding: 30px 30px 98px;
     width: 100%;
     box-sizing: border-box;
+    position: relative;
 }
 
 .saved-meme__container {
-    padding: 124px 0 0;
+    padding: 111px 0 0;
     width: 100%;
     display: flex;
-    /* flex-direction: column; */
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    column-gap: 107px;
     box-sizing: border-box;
 }
 
 .saved-meme__image {
-    width: 550px;
-    height: 568px;
+    width: auto;
+    height: auto;
     object-fit: cover;
     object-position: center;
     border-radius: 20px;
 }
 
 .saved-meme__btn-save {
-    width: 551px;
-    height: 114px;
-    font-size: 40px;
-    line-height: 47px;
+    width: 500px;
+    height: 77px;
+    font-size: 35px;
+    line-height: 41px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
 }

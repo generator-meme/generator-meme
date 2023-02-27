@@ -12,13 +12,13 @@ function Palette({ selectedColor, closePalette }) {
 
   return (
       <nav className="color-palette">
+        <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_transparent" value="transparent" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_000000" value="#000000" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_444444" value="#444444" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_666666" value="#666666" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_999999" value="#999999" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_CCCCCC" value="#CCCCCC" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_EEEEEE" value="#EEEEEE" onClick= {e => onClick(e)}/>
-        <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_F3F3F3" value="#F3F3F3" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_FFFFFF" value="#FFFFFF" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_FF0000" value="#FF0000" onClick= {e => onClick(e)}/>
         <input type="radio" name="colorpaletteColor" class="color-palette__color color-palette__color_FF9900" value="#FF9900" onClick= {e => onClick(e)}/>

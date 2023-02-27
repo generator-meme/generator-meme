@@ -1,0 +1,98 @@
+.font-family {
+    width: 71px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    color: #101010;
+    position: relative;
+}
+
+.font-family__button {
+    border: 0;
+    border-radius: 3px;
+    background: #FFFCED;
+    width: 100%;
+    padding: 0 27px 0 0;
+    position: relative;
+    text-align: left;
+    font-size: 20px;
+    line-height: 24px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.font-family__button:hover {
+    cursor: pointer;
+    background-color: #FFFFFF;
+}
+
+.font-family__button:active {
+    box-shadow: inset 0px 1px 1px rgba(115, 114, 112, 0.5);
+}
+
+.font-family__button::after {
+    position: absolute;
+    right: 8px;
+    top: -3px;
+    content: url(../../images/icons/font-family-arrow.svg);
+}
+
+/* .font-family__button_expanded::after {
+    content: "\2193";
+} */
+
+.font-family__options {
+    display: none;
+    list-style: none;
+    font-size: 16px;
+    line-height: 19px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: #FFFCED;
+    border: 0.25px solid #000000;
+    border-radius: 4px;
+    padding: 8px 0 10px;
+    min-width: 165px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    margin: 0;
+}
+
+.font-family__options_show {
+    /* display: block; */
+    display: flex;
+}
+
+.font-family__option {
+    width: 100%;
+    border-bottom: 0.5px solid #C0C0C0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    box-sizing: border-box;
+    min-height: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    padding: 0 0 0 9px;
+}
+
+.font-family__option:active,
+.font-family__option:focus,
+.font-family__option:hover,
+.font-family__option[aria-selected="true"] {
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+.font-family__option:active {
+    box-shadow: inset 0px 1px 1px rgba(115, 114, 112, 0.5);
+}

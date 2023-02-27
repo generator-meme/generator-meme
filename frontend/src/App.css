@@ -14,7 +14,7 @@ body {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
+  /* text-rendering: optimizeLegibility; */
   background-color: #FDFFA1;
   background-size: contain;
 }
@@ -25,6 +25,6 @@ body {
   cursor: pointer;
   border: none;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-family: 'Rubik';
 }

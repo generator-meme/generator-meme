@@ -14,7 +14,7 @@ function SavedMeme ({ currentMeme, newMeme, handleDownloadMeme }) {
       <Navigation isSavedMeme={isSavedMeme} id={currentMeme.id} />
       <div className="saved-meme__container">
         <img className="saved-meme__image" src={newMeme.image} alt="Мем." />
-        <button onClick={onClick} className="saved-meme__btn-save btn">скачать мем</button>
+        <button onClick={onClick} className="btn saved-meme__btn-save">скачать мем</button>
       </div>
     </main>
   )
