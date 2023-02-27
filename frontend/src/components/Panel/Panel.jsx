@@ -47,24 +47,6 @@ function Panel ({
     setFontSize(fontSize - 1);
   };
 
-  const changeFontWeight = (e) => {
-    e.preventDefault();
-    if (boldChecked === "normal") {
-        setFontBold("bold")
-    } else {
-        setFontBold("normal")
-    };
-  };
-
-    const changeFontStyle = (e) => {
-    e.preventDefault();
-    if (italicChecked === "normal") {
-        setFontItalic("italic")
-    } else {
-        setFontItalic("normal")
-    };
-  };
-
   const openTextColor = (e) => {
     e.preventDefault();
     if (!isOpenTextColor) {
@@ -129,8 +111,8 @@ function Panel ({
   const resetForm = (e) => {
     e.preventDefault();
     setFontSize(40);
-    setFontBold('normal');
-    setFontItalic('normal');
+    setFontBold(false);
+    setFontItalic(false);
     setFontUnderline(false);
     setFontLineThrough(false);
     setFontPosition('center');
@@ -173,20 +155,20 @@ function Panel ({
       <fieldset className="panel__section">
         <label className="panel__container">
           <input
-            checked={(boldChecked === "bold")? true : false}
+            checked={boldChecked}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => changeFontWeight(e)}
+            onChange={e => setFontBold(!boldChecked)}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_bold">
           </span>
         </label>
          <label className="panel__container">
           <input
-            checked={(italicChecked === "italic")? true : false}
+            checked={italicChecked}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => changeFontStyle(e)}
+            onChange={e => setFontItalic(!italicChecked)}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_italic">
           </span>

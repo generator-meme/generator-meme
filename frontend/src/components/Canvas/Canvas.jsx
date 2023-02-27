@@ -23,8 +23,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontSize, setTopFontSize] = useState(40)
   const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.arial)
   const [topFontPosition, setTopFontPosition] = useState('center')
-  const [topFontWeight, setTopFontWeight] = useState('normal')
-  const [topFontStyle, setTopFontStyle] = useState('normal')
+  const [topFontWeight, setTopFontWeight] = useState(false)
+  const [topFontStyle, setTopFontStyle] = useState(false)
   const [topFillTextColor, setTopFillTextColor] = useState('black');
   const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
   const [topUnderline, setTopUnderline] = useState(false);
@@ -43,8 +43,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontSize, setBottomFontSize] = useState(40)
   const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
-  const [bottomFontWeight, setBottomFontWeight] = useState('normal')
-  const [bottomFontStyle, setBottomFontStyle] = useState('normal')
+  const [bottomFontWeight, setBottomFontWeight] = useState(false)
+  const [bottomFontStyle, setBottomFontStyle] = useState(false)
   const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
   const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
@@ -198,7 +198,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.drawImage(image, offsetX, offsetY, width, height);
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`;
+    ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
     // ctx.fillStyle = bottomFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = bottomStrokeTextColor;
     ctx.textAlign = bottomFontPosition;
@@ -232,7 +232,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     });
 
     // верхний текст основные характеристики
-    ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`;
+    ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
     // ctx.fillStyle = topFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
