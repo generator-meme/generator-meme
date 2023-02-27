@@ -28,7 +28,7 @@
 }
 .opacity-panel__input-range::-webkit-media-controls-volume-slider{
   -webkit-appearance: none;
-  background-color: #868484;
+  background-color:  #868484;
   height: 1px;
 }
 /* Targets the track in Chrome, Safari, and Edge Chromium. */

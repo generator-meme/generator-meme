@@ -4,7 +4,6 @@ import "./FontFamilyOptions.css";
 
 function FontFamilyOptions({ setFontFamily, selectedOption, setSelectedOption }) {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-//   const [selectedOption, setSelectedOption] = useState(0);
 
   const optionsList = [
     fontFamilyOptions.arial,

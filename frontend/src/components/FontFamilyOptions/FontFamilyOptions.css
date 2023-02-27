@@ -1,5 +1,6 @@
 .font-family {
-    width: 80px;
+    width: 71px;
+    height: 24px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -12,7 +13,7 @@
     border-radius: 3px;
     background: #FFFCED;
     width: 100%;
-    padding: 0 26px 0 0;
+    padding: 0 27px 0 0;
     position: relative;
     text-align: left;
     font-size: 20px;
@@ -24,6 +25,7 @@
 
 .font-family__button:hover {
     cursor: pointer;
+    background-color: #FFFFFF;
 }
 
 .font-family__button::after {
@@ -33,9 +35,10 @@
     content: url(../../images/icons/font-family-arrow.svg);
 }
 
-/* .font-family__button_expanded::after {
-    content: "\2193";
-} */
+.font-family__button_expanded {
+    background-color: #FFFFFF;
+    box-shadow: inset 0px 1px 1px rgba(115, 114, 112, 0.5);
+}
 
 .font-family__options {
     display: none;
@@ -58,7 +61,6 @@
 }
 
 .font-family__options_show {
-    /* display: block; */
     display: flex;
 }
 
@@ -85,4 +87,8 @@
 .font-family__option[aria-selected="true"] {
     background: #FFFFFF;
     cursor: pointer;
+}
+
+.font-family__option:active {
+    box-shadow: inset 0px 1px 1px rgba(115, 114, 112, 0.5);
 }

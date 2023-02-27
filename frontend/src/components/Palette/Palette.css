@@ -2,7 +2,7 @@
   z-index: 2;
   position: absolute;
   top: 0;
-  background-color: #fff;
+  background-color: #FFFCED;
   border-radius: 2%;
   box-sizing: border-box;
   column-gap: 2.2%;
@@ -30,6 +30,13 @@
 
 .color-palette__color:checked {
   border-width: 2px;
+}
+
+.color-palette__color_transparent {
+  background-color: #FFFFFF;
+  background-image: url(../../images/palette_transparent_symbol.svg);
+  background-size: 110%;
+  background-position: center;
 }
 
 .color-palette__color_000000 {

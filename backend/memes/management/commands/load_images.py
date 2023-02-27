@@ -34,7 +34,10 @@ class Command(BaseCommand):
         return data.content.decode('utf-8')[15:-2]
 
     def upload_images(self, token):
-        file = f'memes.csv'
+        if DOMAIN == 'host.docker.internal':
+            file = 'memes.csv'
+        else:
+            file = f'{datetime.now().date()}_memes.csv'
         print(f'Загрузка {file}...')
         file_path = f'./data/{file}'
         with open(file_path, newline='') as f:

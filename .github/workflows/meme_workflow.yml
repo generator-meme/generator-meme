@@ -77,9 +77,6 @@ jobs:
             echo DOMAIN=${{ secrets.DOMAIN }} >> .env
             echo EMAIL=${{ secrets.EMAIL }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
-            echo VK_LOGIN=${{ secrets.VK_LOGIN }} >> .env
-            echo VK_PASSWORD=${{ secrets.VK_PASSWORD }} >> .env
-            echo VK_TOKEN=${{ secrets.VK_TOKEN }} >> .env
             docker-compose up -d --build
             sudo docker-compose exec -T backend python manage.py makemigrations
             sudo docker-compose exec -T backend python manage.py migrate

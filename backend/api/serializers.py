@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import (
@@ -19,6 +17,7 @@ class TagSerializer(ModelSerializer):
 
 
 class TemplateReadSerializer(ModelSerializer):
+    '''Сериализатор модели Temlate для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     tags = TagSerializer(many=True, read_only=True)
 
@@ -28,7 +27,7 @@ class TemplateReadSerializer(ModelSerializer):
 
 
 class TemplateWriteSerializer(ModelSerializer):
-    '''Сериализатор модели Meme'''
+    '''Сериализатор модели Meme для записи объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     image = Base64ImageField(
         use_url=True,
@@ -45,6 +44,7 @@ class TemplateWriteSerializer(ModelSerializer):
 
 
 class MemeReadSerializer(ModelSerializer):
+    '''Сериализатор модели Meme для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     author = UserSerializer(read_only=True)
     template = TemplateReadSerializer(read_only=True)
@@ -55,6 +55,7 @@ class MemeReadSerializer(ModelSerializer):
 
 
 class MemeWriteSerializer(ModelSerializer):
+    '''Сериализатор модели Meme для записи объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     image = Base64ImageField(
         use_url=True,
@@ -69,6 +70,7 @@ class MemeWriteSerializer(ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
+        '''Проверяет на авторизацию, добавляет автора мема'''
         request = self.context.get('request')
         if request.user.is_authenticated:
             return Meme.objects.create(
@@ -89,6 +91,7 @@ class MemeWriteSerializer(ModelSerializer):
 
 
 class FavoriteSerializer(ModelSerializer):
+    '''Сериализатор модели Favorite'''
     id = UUIDField(read_only=True, default=uuid4)
 
     class Meta:
@@ -96,6 +99,7 @@ class FavoriteSerializer(ModelSerializer):
         model = Favorite
 
     def validate(self, data):
+        '''Валидирует на наличие шаблона в избранных'''
         request = self.context['request']
         if not request or request.user.is_anonymous:
             return False

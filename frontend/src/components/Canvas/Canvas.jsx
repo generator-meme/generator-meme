@@ -5,6 +5,8 @@ import './Canvas.css'
 import { contain } from "../../utils/fit.js";
 import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
+import { hexToRgb } from '../../utils/hexToRgb';
+
 
 const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
@@ -21,8 +23,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontSize, setTopFontSize] = useState(40)
   const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.arial)
   const [topFontPosition, setTopFontPosition] = useState('center')
-  const [topFontWeight, setTopFontWeight] = useState('normal')
-  const [topFontStyle, setTopFontStyle] = useState('normal')
+  const [topFontWeight, setTopFontWeight] = useState(false)
+  const [topFontStyle, setTopFontStyle] = useState(false)
   const [topFillTextColor, setTopFillTextColor] = useState('black');
   const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
   const [topUnderline, setTopUnderline] = useState(false);
@@ -41,8 +43,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontSize, setBottomFontSize] = useState(40)
   const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
-  const [bottomFontWeight, setBottomFontWeight] = useState('normal')
-  const [bottomFontStyle, setBottomFontStyle] = useState('normal')
+  const [bottomFontWeight, setBottomFontWeight] = useState(false)
+  const [bottomFontStyle, setBottomFontStyle] = useState(false)
   const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
   const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
   const [bottomUnderline, setBottomUnderline] = useState(false);
@@ -67,8 +69,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       });
   };
 
+  // изменение цвета и прозрачности сверху
   function changeTopBackColor(color){
-    setTopBackColor(`rgba(${color}, ${topOpacity})`)
+    if(color !== "transparent"){
+      setTopBackColor(`rgba(${hexToRgb(color)}, ${topOpacity})`);
+      return;
+    }
+    setTopBackColor(color);
+    return;
   }
 
   function changeTopOpacity(opacity) {
@@ -78,11 +86,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     if (topBackColor !== "transparent") {
       // меняем значение opacity (последнее значение в rgba)
       let replacedColor = topBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
-      setTopBackColor(replacedColor);    
+      setTopBackColor(replacedColor);
       return;
     }
     return;
   }
+  // изменение цвета и прозрачности снизу
+  function changeBottomBackColor(color){
+    if(color !== "transparent"){
+      setBottomBackColor(`rgba(${hexToRgb(color)}, ${bottomOpacity})`);
+      return;
+    }
+    setBottomBackColor(color);
+    return;
+  ;}
+
+  function changeBottomOpacity(opacity) {
+    // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
+    const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+    setBottomOpacity(opacity);
+    if (bottomBackColor !== "transparent") {
+      // меняем значение opacity (последнее значение в rgba)
+      let replacedColor = bottomBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
+      setBottomBackColor(replacedColor);
+      return;
+    }
+    return;
+  };
   
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
     e.preventDefault();
@@ -167,7 +197,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.drawImage(image, offsetX, offsetY, width, height);
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomFontStyle} ${bottomFontWeight} ${bottomFontSize}px ${bottomFontFamily}`;
+    ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
     // ctx.fillStyle = bottomFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = bottomStrokeTextColor;
     ctx.textAlign = bottomFontPosition;
@@ -201,7 +231,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     });
 
     // верхний текст основные характеристики
-    ctx.font = `${topFontStyle} ${topFontWeight} ${topFontSize}px ${topFontFamily}`;
+    ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
     // ctx.fillStyle = topFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
@@ -306,34 +336,35 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
             setFontFamily={setBottomFontFamily}
             setTextColor={setBottomFillTextColor}
             setStrokeTextColor={setbottomStrokeTextColor}
-            setBackColor={setBottomBackColor}
+            setBackColor={changeBottomBackColor}
+            setOpacity={changeBottomOpacity}
           />
         </div>
         <canvas
             className="editor__image"
             ref={canvas}
-            width={538}
-            height={558}
+            width={675}
+            height={556}
         >
         </canvas>
         <div className="editor__box">
           <form className="editor__text-form">
-            <textarea
-              className="editor__text"
-              type="text"
-              value={topText}
-              onChange={(e) => setTopText(e.target.value)}
-              placeholder="Текст сверху"
-              onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
-            />
-            <textarea
-              className="editor__text"
-              type="text"
-              value={bottomText}
-              onChange={(e) => setBottomText(e.target.value)}
-              placeholder="Текст снизу"
-              onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
-            />
+              <textarea
+                className="editor__text"
+                type="text"
+                value={topText}
+                onChange={(e) => setTopText(e.target.value)}
+                placeholder="Текст сверху"
+                onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
+              />
+              <textarea
+                className="editor__text"
+                type="text"
+                value={bottomText}
+                onChange={(e) => setBottomText(e.target.value)}
+                placeholder="Текст снизу"
+                onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
+              />
           </form>
           <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
         </div>
