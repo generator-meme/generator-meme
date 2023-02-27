@@ -347,7 +347,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         </canvas>
         <div className="editor__box">
           <form className="editor__text-form">
-            {/* <fieldset className="editor__text-fieldset"> */}
               <textarea
                 className="editor__text"
                 type="text"
@@ -364,7 +363,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
                 placeholder="Текст снизу"
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
               />
-            {/* </fieldset> */}
           </form>
           <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
         </div>
