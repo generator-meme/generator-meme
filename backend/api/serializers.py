@@ -1,8 +1,10 @@
 from django.db import transaction
-from drf_base64.fields import Base64ImageField
+
 from rest_framework.serializers import (
     ModelSerializer, PrimaryKeyRelatedField, ValidationError, UUIDField
 )
+
+from drf_base64.fields import Base64ImageField
 from uuid import uuid4
 
 from memes.models import Favorite, Meme, Tag, Template
