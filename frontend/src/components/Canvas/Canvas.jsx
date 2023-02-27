@@ -69,7 +69,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       });
   };
 
-
   // изменение цвета и прозрачности сверху
   function changeTopBackColor(color){
     if(color !== "transparent"){

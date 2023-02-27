@@ -195,22 +195,22 @@ function Panel ({
         </label>
       </fieldset>
       <fieldset className="panel__section">
-        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_text-color" onClick={e => openTextColor(e)}>
+        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_text-color ${isOpenTextColor ? "panel__button_type_pressed" : ""}`} onClick={e => openTextColor(e)}>
           <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={changeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_stroke-color" onClick={e => openStrokeColor(e)}>
+        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_stroke-color ${isOpenStrokeColor ? "panel__button_type_pressed" : ""}`} onClick={e => openStrokeColor(e)}>
           <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button id="smallWindow" className="panel__button panel___buttom_type_color panel___buttom_type_back-color" onClick={e => openBackgroundColor(e)}>
+        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_back-color ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => openBackgroundColor(e)}>
           <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           </span>
         </button>
-        <button id="smallWindow" className="panel__button panel___buttom_type_opacity" onClick={e => toggleOpacityPanel(e)}>
+        <button id="smallWindow" className={`panel__button panel___buttom_type_opacity ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           </span>
