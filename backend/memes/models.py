@@ -48,6 +48,9 @@ class Template(models.Model):
     created_at = models.DateTimeField(
         verbose_name='Дата публикации',
         auto_now_add=True)
+    is_published = models.BooleanField(
+        default=False
+    )
     objects = TemplateManager()
 
     class Meta:

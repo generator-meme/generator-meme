@@ -19,8 +19,14 @@ class TemplateAdmin(admin.ModelAdmin):
             '<img src="{}" width="150" height="100" />'.format(obj.image.url))
 
     image_tag.short_description = 'Image'
-    list_display = ('id', 'image_tag')
+    list_display = ('id', 'image_tag', 'is_published')
     list_filter = ('tag',)
+    actions = ['publish']
+
+    @admin.action(description='Опубликовать шаблоны')
+    def publish(self, request, queryset):
+        '''Публикует выбранные шаблоны мемов'''
+        queryset.update(is_published=True)
 
 
 @admin.register(Tag)
