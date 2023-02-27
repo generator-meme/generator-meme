@@ -46,30 +46,32 @@ class Command(BaseCommand):
 
         for public in PUBLICS:
             response = vk.photos.get(owner_id=PUBLICS[public], album_id="wall",
-                                     count='10', rev=1,
-                                     offset='10')
+                                     count='200', rev=1,
+                                     offset='0')
             for i in range(len(response['items'])):
                 url_photo = response['items'][i]['sizes'][-1]['url']
                 photos.append(url_photo)
-
         return photos
 
     def encode_photos_to_base64(self, photos: list):
         """Кодирует фото в base64"""
         encoded_photos = []
+        print(photos)
         for photo_url in photos:
-            url_encode = base64.b64encode(requests.get(photo_url).content)
+            response = requests.get(photo_url)
+            url_encode = base64.b64encode(response.content).decode('utf-8')
             encoded_photos.append(url_encode)
         return encoded_photos
 
     def create_csv_file(self, data: list):
-        """Создает csv файл, где название соответствует дате загрузке картинок"""
+        """
+        Создает csv файл, где название соответствует дате загрузке картинок
+        """
         file_name = f'{datetime.now().date()}_memes.csv'
         file_path = './data/'
         full_path = os.path.join(file_path, file_name)
-        with open(full_path, 'a') as file_handler:
-            for file in data:
-                image_base64 = base64.b64encode(file).decode('utf-8')
+        with open(full_path, 'w', newline='') as file_handler:
+            for url in data:
                 string = "data:image/jpeg;base64,"
-                string += repr(image_base64)[1:-1] + '\n'
+                string += repr(url)[1:-1] + '\n'
                 file_handler.write(string)
