@@ -146,14 +146,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         x += 0;
     }
     // рисование линии
-    ctx.save()
-    ctx.beginPath()
-    ctx.strokeStyle = ctx.fillStyle // цвет линии - цвет шрифта
-    ctx.lineWidth = Math.ceil(fontSize * 0.05) // вычисление ширины линии в зависимости от размера шрифта
-    ctx.moveTo(x, y)
-    ctx.lineTo(x + metrics.width, y)
-    ctx.stroke()
-    ctx.restore()
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle = ctx.fillStyle; // цвет линии - цвет шрифта
+    ctx.lineWidth = Math.ceil(fontSize * 0.05); // вычисление ширины линии в зависимости от размера шрифта
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + metrics.width, y);
+    ctx.stroke();
+    ctx.restore();
   }, []);
   
   // отрисовка заливки фона текста
@@ -237,6 +237,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach(function (t, i) {
+      if (t[t.length - 1] === " ") { // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
+        t = t.slice(0, t.length - 1);
+      };
+
       const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;// вычисление отступа по оси Y для каждой строчки текста
       
       addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor); // добавление заливки (default - transparent)
@@ -267,6 +271,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topTextWrap.split('\n').forEach(function (t, i) {
+      if (t[t.length - 1] === " ") { // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
+        t = t.slice(0, t.length - 1);
+      };
+
       const topMarginY = offsetY + 50 + i * (topFontSize + 5); // вычисление отступа по оси Y для каждой строчки текста
 
       addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor); // добавление заливки (default - transparent), выше, чтобы было за текстом
