@@ -322,48 +322,52 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme.id} />
       <section className="editor" aria-label="Editor">
-        <div className={`editor__panel_type_top ${firstPanelIsOpen? "editor__panel_typr_open" : "" }`}>
-          <Panel
-            fontSize={topFontSize}
-            setFontSize={setTopFontSize}
-            setFontBold={setTopFontWeight}
-            setFontItalic={setTopFontStyle}
-            setFontUnderline={setTopUnderline}
-            setFontLineThrough={setTopLineThrough}
-            boldChecked={topFontWeight}
-            italicChecked={topFontStyle}
-            underlineChecked={topUnderline}
-            lineThroughChecked={topLineThrough}
-            textPosition={topFontPosition}
-            setFontPosition={setTopFontPosition}
-            setFontFamily={setTopFontFamily}
-            setTextColor={setTopFillTextColor}
-            setStrokeTextColor={setTopStrokeTextColor}
-            setBackColor={changeTopBackColor}
-            setOpacity={changeTopOpacity}
-          />
+        {firstPanelIsOpen && (
+          <div className="editor__panel_type_top">
+            <Panel
+              fontSize={topFontSize}
+              setFontSize={setTopFontSize}
+              setFontBold={setTopFontWeight}
+              setFontItalic={setTopFontStyle}
+              setFontUnderline={setTopUnderline}
+              setFontLineThrough={setTopLineThrough}
+              boldChecked={topFontWeight}
+              italicChecked={topFontStyle}
+              underlineChecked={topUnderline}
+              lineThroughChecked={topLineThrough}
+              textPosition={topFontPosition}
+              setFontPosition={setTopFontPosition}
+              setFontFamily={setTopFontFamily}
+              setTextColor={setTopFillTextColor}
+              setStrokeTextColor={setTopStrokeTextColor}
+              setBackColor={changeTopBackColor}
+              setOpacity={changeTopOpacity}
+            />
         </div>
-        <div className={`editor__panel_type_bottom ${secondPanelIsOpen? "editor__panel_typr_open": ""}`}>
-          <Panel
-            fontSize={bottomFontSize}
-            setFontSize={setBottomFontSize}
-            setFontBold={setBottomFontWeight}
-            setFontItalic={setBottomFontStyle}
-            setFontUnderline={setBottomUnderline}
-            setFontLineThrough={setBottomLineThrough}
-            boldChecked={bottomFontWeight}
-            italicChecked={bottomFontStyle}
-            underlineChecked={bottomUnderline}
-            lineThroughChecked={bottomLineThrough}
-            textPosition={bottomFontPosition}
-            setFontPosition={setBottomFontPosition}
-            setFontFamily={setBottomFontFamily}
-            setTextColor={setBottomFillTextColor}
-            setStrokeTextColor={setbottomStrokeTextColor}
-            setBackColor={changeBottomBackColor}
-            setOpacity={changeBottomOpacity}
-          />
+        )}
+        {secondPanelIsOpen && (
+          <div className="editor__panel_type_bottom">
+            <Panel
+              fontSize={bottomFontSize}
+              setFontSize={setBottomFontSize}
+              setFontBold={setBottomFontWeight}
+              setFontItalic={setBottomFontStyle}
+              setFontUnderline={setBottomUnderline}
+              setFontLineThrough={setBottomLineThrough}
+              boldChecked={bottomFontWeight}
+              italicChecked={bottomFontStyle}
+              underlineChecked={bottomUnderline}
+              lineThroughChecked={bottomLineThrough}
+              textPosition={bottomFontPosition}
+              setFontPosition={setBottomFontPosition}
+              setFontFamily={setBottomFontFamily}
+              setTextColor={setBottomFillTextColor}
+              setStrokeTextColor={setbottomStrokeTextColor}
+              setBackColor={changeBottomBackColor}
+              setOpacity={changeBottomOpacity}
+            />
         </div>
+        )}
         <canvas
             className="editor__image"
             ref={canvas}

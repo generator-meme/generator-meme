@@ -1,7 +1,8 @@
 .color-palette {
   z-index: 2;
   position: absolute;
-  top: 0;
+  top: 30px;
+  left: 0;
   background-color: #FFFCED;
   border-radius: 2%;
   box-sizing: border-box;

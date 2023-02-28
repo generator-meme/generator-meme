@@ -9,7 +9,11 @@
   height: 56px;
   box-sizing: border-box;
   border-radius: 4px;
+  position: absolute;
+  top: 40px;
+  right: -65px;
 }
+
 .opacity-panel__label {
   font-family: "Inter", sans-serif;
   font-size: 10px;
@@ -26,16 +30,19 @@
   width: 87px;
   caret-color: transparent;
 }
-.opacity-panel__input-range::-webkit-media-controls-volume-slider{
+
+.opacity-panel__input-range::-webkit-media-controls-volume-slider {
   -webkit-appearance: none;
-  background-color:  #868484;
-  height: 1px;
-}
-/* Targets the track in Chrome, Safari, and Edge Chromium. */
-.opacity-panel__input-range::-webkit-slider-runnable-track{
   background-color: #868484;
   height: 1px;
 }
+
+/* Targets the track in Chrome, Safari, and Edge Chromium. */
+.opacity-panel__input-range::-webkit-slider-runnable-track {
+  background-color: #868484;
+  height: 1px;
+}
+
 /* Targets the track in Firefox. */
 .opacity-panel__input-range::-moz-range-track {
   background-color: #868484;
@@ -43,7 +50,7 @@
 }
 
 /* Targets the thumb in Chrome, Safari, and Edge Chromium. */
-.opacity-panel__input-range::-webkit-slider-thumb{
+.opacity-panel__input-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   background-color: #D9D9D9;
@@ -52,6 +59,7 @@
   height: 6px;
   margin-top: -2.5px;
 }
+
 /* Targets the thumb in Firefox. */
 .opacity-panel__input-range::-moz-range-thumb {
   border: none;
@@ -69,24 +77,26 @@
   position: absolute;
   width: 36px;
 }
+
 .opacity-panel__input-number {
   top: 0;
   width: 100%;
   -webkit-appearance: textfield;
   -moz-appearance: textfield;
   appearance: textfield;
-   
-  border: 0.25px solid #000000 ;
+
+  border: 0.25px solid #000000;
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   line-height: 12px;
   outline: none;
-  padding: 5px; 
-  box-sizing: border-box;    
+  padding: 5px;
+  box-sizing: border-box;
 }
-.opacity-panel__input-number::-webkit-inner-spin-button, 
-.opacity-panel__input-number::-webkit-outer-spin-button { 
+
+.opacity-panel__input-number::-webkit-inner-spin-button,
+.opacity-panel__input-number::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
@@ -105,9 +115,11 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .opacity-panel__input-number-upBtn:hover {
   cursor: pointer;
 }
+
 .opacity-panel__input-number-downBtn {
   position: absolute;
   right: 5px;
@@ -123,6 +135,7 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .opacity-panel__input-number-downBtn:hover {
   cursor: pointer;
 }
@@ -188,7 +201,7 @@ input[type=range]::-moz-range-thumb {
   -webkit-appearance: none;
   margin-top: -2.5px;
   border: none;
-} */ 
+} */
 
 /*input[type=range]::-ms-track {
   width: 100%;
