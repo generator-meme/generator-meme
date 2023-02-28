@@ -20,7 +20,7 @@ class TemplateAdmin(admin.ModelAdmin):
             '<img src="{}" width="150" height="100" />'.format(obj.image.url))
 
     image_tag.short_description = 'Image'
-    list_display = ('id', 'image_tag', 'is_published')
+    list_display = ('image_tag', 'is_published', 'name')
     list_filter = ('tag',)
     actions = ['publish', 'hide']
 
@@ -38,5 +38,5 @@ class TemplateAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
-    list_display = ('id', 'name', 'slug')
+    list_display = ('name', 'slug')
     list_filter = ('name',)

@@ -24,7 +24,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self) -> str:
-        return self.slug
+        return self.name
 
 
 class TemplateManager(models.Manager):
@@ -36,6 +36,12 @@ class TemplateManager(models.Manager):
 class Template(models.Model):
     """Модель шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    name = models.CharField(
+        verbose_name='Название шаблона',
+        max_length=100,
+        null=True,
+        blank=True
+    )
     image = models.ImageField(
         verbose_name='Изображение',
         upload_to='meme/template_images'
@@ -50,7 +56,8 @@ class Template(models.Model):
         verbose_name='Дата публикации',
         auto_now_add=True)
     is_published = models.BooleanField(
-        default=False
+        default=False,
+        verbose_name='Статус публикации'
     )
     objects = TemplateManager()
 
@@ -101,7 +108,7 @@ class Favorite(models.Model):
         Template,
         on_delete=models.CASCADE,
         related_name='favorite',
-        verbose_name='Избранный рецепт'
+        verbose_name='Избранный шаблон'
     )
 
     class Meta:
