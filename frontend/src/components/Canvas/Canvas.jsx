@@ -196,7 +196,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight);
     ctx.drawImage(image, offsetX, offsetY, width, height);
     ctx.miterLimit = 2;
-    ctx.lineJoin = 'milter';
+    ctx.lineJoin = 'round';
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
@@ -216,15 +216,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       // переключение цвета для текста
       ctx.fillStyle = bottomFillTextColor;
 
-      // добавление контура построчно
-      // ctx.lineJoin = 'round';
-          // ctx.lineJoin = 'milter';
-      ctx.lineWidth = 7; // увеличение ширины линии
+      // добавление контура
+      ctx.lineWidth = 7;
       ctx.strokeText(t, bottonMarginX, bottonMarginY);
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
 
       // добавление текста построчно
-      ctx.fillText(t, bottonMarginX, bottonMarginY);
+      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60);
 
       // отрисовка подчеркивания
       if (bottomUnderline) {
@@ -253,14 +251,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       // переключение цвета для текста
       ctx.fillStyle = topFillTextColor;
 
-      // добавление контура построчно
-      // ctx.lineJoin = 'round';
+      // добавление контура
       ctx.lineWidth = 7;
       ctx.strokeText(t, topMarginX, topMarginY);
       ctx.lineWidth = 1;
       
       // добавление текста построчно
-      ctx.fillText(t, topMarginX, topMarginY);
+      ctx.fillText(t, topMarginX, topMarginY, width - 60);
 
       // отрисовка подчеркивания
       if (topUnderline) {
