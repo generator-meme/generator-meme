@@ -7,3 +7,13 @@ export const fontFamilyOptions = {
   courier: "Courier",
   calibri: "Calibri",
 };
+
+export const optionsList = [
+  fontFamilyOptions.arial,
+  fontFamilyOptions.impact,
+  fontFamilyOptions.verdana,
+  fontFamilyOptions.comicSans,
+  fontFamilyOptions.timesNewRoman,
+  fontFamilyOptions.courier,
+  fontFamilyOptions.calibri,
+];

@@ -33,6 +33,7 @@ function Panel ({
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
   const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
@@ -106,6 +107,7 @@ function Panel ({
     setIsOpenStrokeColor(false);
     setIsOpenBackgroundColor(false);
     setIsOpenOpacity(false);
+    setIsOptionsOpen(false);
   };
   
   const resetForm = (e) => {
@@ -127,7 +129,7 @@ function Panel ({
   };
 
   useEffect(() => {
-    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity || isOptionsOpen) {
       function closeExtraWindows(event) {
         if (!event.target.closest("#smallWindow")) {
           closeAllSmallWindows();
@@ -139,7 +141,14 @@ function Panel ({
         document.removeEventListener('click', closeExtraWindows)
       }
     }
-  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor,isOpenOpacity, extraWindow]);
+  }, [
+    isOpenTextColor,
+    isOpenStrokeColor,
+    isOpenBackgroundColor,
+    isOpenOpacity,
+    isOptionsOpen,
+    extraWindow
+  ]);
 
   return (
     <form ref={form} className="panel" noValidate>
@@ -148,6 +157,8 @@ function Panel ({
           setFontFamily={setFontFamily}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
+          isOptionsOpen={isOptionsOpen}
+          setIsOptionsOpen={setIsOptionsOpen}
         />
         <button className="panel__button panel__button_type_in-size" onClick={e => increaseSize(e)} />
         <button className="panel__button panel__button_type_dec-size" onClick={e => decreaseSize(e)} />
