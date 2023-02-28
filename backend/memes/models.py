@@ -64,6 +64,7 @@ class Template(models.Model):
     class Meta:
         verbose_name = 'Шаблон мема'
         verbose_name_plural = 'Шаблоны мемов'
+        ordering = ('-created_at',)
 
 
 class Meme(models.Model):
