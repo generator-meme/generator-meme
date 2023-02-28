@@ -26,7 +26,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topFontWeight, setTopFontWeight] = useState(false)
   const [topFontStyle, setTopFontStyle] = useState(false)
   const [topFillTextColor, setTopFillTextColor] = useState('black');
-  const [topStrokeTextColor, setTopStrokeTextColor] = useState(null);
+  const [topStrokeTextColor, setTopStrokeTextColor] = useState('transparent');
   const [topUnderline, setTopUnderline] = useState(false);
   const [topLineThrough, setTopLineThrough] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
@@ -46,7 +46,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomFontWeight, setBottomFontWeight] = useState(false)
   const [bottomFontStyle, setBottomFontStyle] = useState(false)
   const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
-  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState(null);
+  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState('transparent');
   const [bottomUnderline, setBottomUnderline] = useState(false);
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
@@ -195,12 +195,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       height
     } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight);
     ctx.drawImage(image, offsetX, offsetY, width, height);
+    ctx.miterLimit = 2;
+    ctx.lineJoin = 'round';
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
-    // ctx.fillStyle = bottomFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
-    ctx.strokeStyle = bottomStrokeTextColor;
     ctx.textAlign = bottomFontPosition;
+    ctx.strokeStyle = bottomStrokeTextColor;
     // вычисление отступа по оси X в зависимости от расположения текста
     const bottonMarginX = marginX(bottomFontPosition, offsetX);
 
@@ -214,12 +215,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
       // переключение цвета для текста
       ctx.fillStyle = bottomFillTextColor;
-      // добавление текста построчно (обычный или контурный)
-      if (bottomStrokeText) {
-        ctx.strokeText(t, bottonMarginX, bottonMarginY, image.width);
-      } else {
-        ctx.fillText(t, bottonMarginX, bottonMarginY, image.width);
-      };
+
+      // добавление контура
+      ctx.lineWidth = 7;
+      ctx.strokeText(t, bottonMarginX, bottonMarginY);
+      ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
+
+      // добавление текста построчно
+      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60);
+
       // отрисовка подчеркивания
       if (bottomUnderline) {
         addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize);
@@ -232,7 +236,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
     // верхний текст основные характеристики
     ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
-    // ctx.fillStyle = topFillTextColor; - лишняя строка, тк ниже настройка меняется, пока закомментировала
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
     // вычисление отступа по оси X в зависимости от расположения текста
@@ -248,12 +251,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       // переключение цвета для текста
       ctx.fillStyle = topFillTextColor;
 
-      // добавление текста построчно (обычный или контур)
-      if (topStrokeText) {
-        ctx.strokeText(t, topMarginX, topMarginY, image.width);
-      } else {
-        ctx.fillText(t, topMarginX, topMarginY, image.width);
-      };
+      // добавление контура
+      ctx.lineWidth = 7;
+      ctx.strokeText(t, topMarginX, topMarginY);
+      ctx.lineWidth = 1;
+      
+      // добавление текста построчно
+      ctx.fillText(t, topMarginX, topMarginY, width - 60);
+
       // отрисовка подчеркивания
       if (topUnderline) {
         addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize);

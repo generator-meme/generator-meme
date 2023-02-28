@@ -121,7 +121,7 @@ function Panel ({
     setFontFamily(fontFamilyOptions.arial);
     setSelectedOption(0);
     setTextColor('black');
-    setStrokeTextColor(null);
+    setStrokeTextColor('transparent');
     setOpacity(1);
     setOpacityLevel(100);
     setBackColor('transparent');
