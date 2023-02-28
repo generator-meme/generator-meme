@@ -133,10 +133,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   // отрисовка подчеркивания или зачеркивания
   const addLineToText = useCallback((ctx, text, x, y, fontSize) => {
-    // вычисление метрик текста (нас интересует ширина)
-    let metrics = ctx.measureText(text);
-    // вычисление начальной координаты OX
-    switch (ctx.textAlign) {
+    let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
+    
+    switch (ctx.textAlign) { // вычисление начальной координаты OX 
       case "center":
         x -= (metrics.width / 2);
         break;
@@ -149,10 +148,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     // рисование линии
     ctx.save()
     ctx.beginPath()
-    // цвет линии - цвет шрифта
-    ctx.strokeStyle = ctx.fillStyle
-    // вычисление ширины линии в зависимости от размера шрифта
-    ctx.lineWidth = Math.ceil(fontSize * 0.05)
+    ctx.strokeStyle = ctx.fillStyle // цвет линии - цвет шрифта
+    ctx.lineWidth = Math.ceil(fontSize * 0.05) // вычисление ширины линии в зависимости от размера шрифта
     ctx.moveTo(x, y)
     ctx.lineTo(x + metrics.width, y)
     ctx.stroke()
@@ -161,11 +158,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   
   // отрисовка заливки фона текста
   const addTextBackground = useCallback((ctx, text, x, y, fontSize, color) => {
+    let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
     
-    // вычисление метрик текста (нас интересует ширина)
-    let metrics = ctx.measureText(text);
-    // вычисление начальной координаты OX
-    switch (ctx.textAlign) {
+    switch (ctx.textAlign) { // вычисление начальной координаты OX
       case "center":
         x -= (metrics.width / 2 + 5);
         break;
@@ -184,16 +179,50 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     };
   }, []);
 
+
+  const wrapText = useCallback((ctx, text, maxWidth) => {
+    // First, start by splitting all of our text into words, but splitting it into an array split by spaces
+    let words = text.split(' ');
+    let line = ''; // This will store the text of the current line
+    let testLine = ''; // This will store the text when we add a word, to test if it's too long
+    let lineArray = []; // This is an array of lines, which the function will return
+
+    // Lets iterate over each word
+    for(var n = 0; n < words.length; n++) {
+        // Create a test line, and measure it..
+        testLine += `${words[n]} `;
+        let metrics = ctx.measureText(testLine);
+        let testWidth = metrics.width;
+        // If the width of this test line is more than the max width
+        if (testWidth > maxWidth && n > 0) {
+            // Then the line is finished, add to line '\n' and push the current line into "lineArray"
+            line += "\n";
+            lineArray.push(line);
+            // Update line and test line to use this word as the first word on the next line
+            line = `${words[n]} `;
+            testLine = `${words[n]} `;
+        }
+        else {
+            // If the test line is still less than the max width, then add the word to the current line
+            line += `${words[n]} `;
+        }
+        // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
+        if (n === words.length - 1) {
+            lineArray.push(line);
+        }
+    }
+    // Return the new string
+    return lineArray.join("");
+  }, []);
+
   useEffect(() => {
-    // создание canvas с картинкой на фоне
-    const ctx = canvas.current.getContext('2d')
-    // масштабирование шаблона в рамки
+    const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
     const {
       offsetX, 
       offsetY, 
       width, 
       height
-    } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight);
+    } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса
     ctx.drawImage(image, offsetX, offsetY, width, height);
     ctx.miterLimit = 2;
     ctx.lineJoin = 'round';
@@ -202,35 +231,29 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
     ctx.textAlign = bottomFontPosition;
     ctx.strokeStyle = bottomStrokeTextColor;
-    // вычисление отступа по оси X в зависимости от расположения текста
-    const bottonMarginX = marginX(bottomFontPosition, offsetX);
-
-    // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    bottomText.split('\n').reverse().forEach(function (t, i) {
-      // вычисление отступа по оси Y для каждой строчки текста
-      const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;
-
-      // добавление заливки (default - transparent), выше, чтобы было за текстом
-      addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor);
-
-      // переключение цвета для текста
-      ctx.fillStyle = bottomFillTextColor;
-
-      // добавление контура
-      ctx.lineWidth = 7;
-      ctx.strokeText(t, bottonMarginX, bottonMarginY);
+    
+    const bottonMarginX = marginX(bottomFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomTextWrap = wrapText(ctx, bottomText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    
+    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+    bottomTextWrap.split('\n').reverse().forEach(function (t, i) {
+      const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;// вычисление отступа по оси Y для каждой строчки текста
+      
+      addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor); // добавление заливки (default - transparent)
+      ctx.fillStyle = bottomFillTextColor; // переключение цвета для текста
+      
+      ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
+      ctx.strokeText(t, bottonMarginX, bottonMarginY); // добавление контура
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
-
-      // добавление текста построчно
-      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60);
-
-      // отрисовка подчеркивания
+      
+      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60); // добавление текста построчно
+      
       if (bottomUnderline) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize);
+        addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize); // отрисовка подчеркивания
       };
-      // отрисовка зачеркивания
+      
       if(bottomLineThrough) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize);
+        addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize); // отрисовка зачеркивания
       };
     });
 
@@ -238,34 +261,29 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
     ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
-    // вычисление отступа по оси X в зависимости от расположения текста
-    const topMarginX = marginX(topFontPosition, offsetX);
-     // добавление текста с возмоностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    topText.split('\n').forEach(function (t, i) {
-      // вычисление отступа по оси Y для каждой строчки текста
-      const topMarginY = offsetY + 50 + i * (topFontSize + 5);
+    
+    const topMarginX = marginX(topFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topTextWrap = wrapText(ctx, topText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
-      // добавление заливки (default - transparent), выше, чтобы было за текстом
-      addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor);
+    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+    topTextWrap.split('\n').forEach(function (t, i) {
+      const topMarginY = offsetY + 50 + i * (topFontSize + 5); // вычисление отступа по оси Y для каждой строчки текста
 
-      // переключение цвета для текста
-      ctx.fillStyle = topFillTextColor;
+      addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor); // добавление заливки (default - transparent), выше, чтобы было за текстом
+      ctx.fillStyle = topFillTextColor; // переключение цвета для текста
 
-      // добавление контура
-      ctx.lineWidth = 7;
-      ctx.strokeText(t, topMarginX, topMarginY);
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
+      ctx.strokeText(t, topMarginX, topMarginY); // добавление контура
+      ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
       
-      // добавление текста построчно
-      ctx.fillText(t, topMarginX, topMarginY, width - 60);
+      ctx.fillText(t, topMarginX, topMarginY, width - 60); // добавление текста построчно
 
-      // отрисовка подчеркивания
       if (topUnderline) {
-        addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize);
+        addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize); // отрисовка подчеркивания
       };
-      // отрисовка зачеркивания
+
       if (topLineThrough) {
-        addLineToText(ctx, t, topMarginX, (topMarginY - topFontSize / 4), topFontSize);
+        addLineToText(ctx, t, topMarginX, (topMarginY - topFontSize / 4), topFontSize); // отрисовка зачеркивания
       };
     });
 
@@ -297,6 +315,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     marginX,
     addLineToText,
     addTextBackground,
+    wrapText,
   ])
 
   return (
