@@ -121,11 +121,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }
 
   // коллбэк-расчет координаты по оси X текста
-  const marginX = useCallback((fontPosition, offsetX) => {
+  const marginX = useCallback((fontPosition, offsetX, textMargin) => {
     if(fontPosition === "start") {
-      return 30 + offsetX;
+      return textMargin + offsetX;
     } else if (fontPosition === "end") {
-      return canvas.current.width - offsetX - 30;
+      return canvas.current.width - offsetX - textMargin;
     } else {
       return canvas.current.width / 2;
     }
@@ -157,7 +157,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }, []);
   
   // отрисовка заливки фона текста
-  const addTextBackground = useCallback((ctx, text, x, y, fontSize, color) => {
+  const addTextBackground = useCallback((ctx, text, x, y, lineHeight) => {
     let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
     
     switch (ctx.textAlign) { // вычисление начальной координаты OX
@@ -171,14 +171,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         x -= 5;
     }
     
-    y -= (fontSize - 5);
+    y -= (0.78125 * lineHeight); // вычисление начальной коодинаты OY
 
-    ctx.fillStyle = color;
     if (metrics.width > 0) {
-    ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 8));
+    ctx.fillRect(x, y, (metrics.width + 10), (1.1 * lineHeight));
     };
   }, []);
 
+  const lineHeight = (fontSize) => {
+    return fontSize * 1.12;
+  };
 
   const wrapText = useCallback((ctx, text, maxWidth) => {
     // First, start by splitting all of our text into words, but splitting it into an array split by spaces
@@ -224,16 +226,24 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       height
     } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса
     ctx.drawImage(image, offsetX, offsetY, width, height);
-    ctx.miterLimit = 2;
-    ctx.lineJoin = 'round';
+
+    ctx.miterLimit = 2; // настройка выступа контура для strokeText
+    ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
+    const textMarginX = 30; // значение бокового отступа текста
+    const textWidth = width - textMarginX * 2; // значение ширины, где текст отображается
+    const textMarginYTop = 50;
+    const textMarginYBottom = 20;
+
+    // вычисление границ для текста
+    const lineTop = offsetY + (lineHeight(topFontSize)) + textMarginYTop;
+    const lineBottom = canvas.current.height - offsetY - (lineHeight(bottomFontSize)) - textMarginYBottom;
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
     ctx.textAlign = bottomFontPosition;
-    ctx.strokeStyle = bottomStrokeTextColor;
     
-    const bottonMarginX = marginX(bottomFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const bottomMarginX = marginX(bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomTextWrap = wrapText(ctx, bottomText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
     
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach(function (t, i) {
@@ -241,33 +251,46 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         t = t.slice(0, t.length - 1);
       };
 
-      const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;// вычисление отступа по оси Y для каждой строчки текста
+      const bottomMarginY = canvas.current.height - offsetY - i * (lineHeight(bottomFontSize)) - textMarginYBottom; // вычисление отступа по оси Y для каждой строчки текста
       
-      addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor); // добавление заливки (default - transparent)
-      ctx.fillStyle = bottomFillTextColor; // переключение цвета для текста
+      if (bottomMarginY < lineTop) { // ограничение видимости нижних заливки и контура до верхнего края
+        ctx.fillStyle = "transparent"
+        ctx.strokeStyle = "transparent";
+        
+      } else {
+        ctx.fillStyle = bottomBackColor;
+        ctx.strokeStyle = bottomStrokeTextColor;
+      };
+
+      addTextBackground(ctx, t, bottomMarginX, bottomMarginY, lineHeight(bottomFontSize)); // добавление заливки (default - transparent)
+      
+      if (bottomMarginY < lineTop) { // ограничение видимости нижнего текста до верхнего края
+        ctx.fillStyle = "transparent"
+      } else {
+        ctx.fillStyle = bottomFillTextColor; // переключение цвета с заливки на текст
+      };
       
       ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
-      ctx.strokeText(t, bottonMarginX, bottonMarginY); // добавление контура
+      ctx.strokeText(t, bottomMarginX, bottomMarginY); // добавление контура
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
       
-      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60); // добавление текста построчно
+      ctx.fillText(t, bottomMarginX, bottomMarginY, textWidth); // добавление текста построчно
       
       if (bottomUnderline) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize); // отрисовка подчеркивания
+        addLineToText(ctx, t, bottomMarginX, (bottomMarginY + 0.125 * bottomFontSize), bottomFontSize); // отрисовка подчеркивания
       };
       
       if(bottomLineThrough) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize); // отрисовка зачеркивания
+        addLineToText(ctx, t, bottomMarginX, (bottomMarginY - bottomFontSize / 4), bottomFontSize); // отрисовка зачеркивания
       };
     });
 
     // верхний текст основные характеристики
     ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
-    ctx.strokeStyle = topStrokeTextColor;
     ctx.textAlign = topFontPosition;
     
-    const topMarginX = marginX(topFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const topMarginX = marginX(topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topTextWrap = wrapText(ctx, topText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topTextWrap.split('\n').forEach(function (t, i) {
@@ -275,19 +298,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         t = t.slice(0, t.length - 1);
       };
 
-      const topMarginY = offsetY + 50 + i * (topFontSize + 5); // вычисление отступа по оси Y для каждой строчки текста
+      const topMarginY = offsetY + i * (lineHeight(topFontSize)) + textMarginYTop ; // вычисление отступа по оси Y для каждой строчки текста
 
-      addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor); // добавление заливки (default - transparent), выше, чтобы было за текстом
-      ctx.fillStyle = topFillTextColor; // переключение цвета для текста
+      if (topMarginY > lineBottom) { // ограничение видимости верхних заливки и контура до нижнего края
+        ctx.fillStyle = "transparent"
+        ctx.strokeStyle = "transparent";
+        
+      } else {
+        ctx.fillStyle = topBackColor;
+        ctx.strokeStyle = topStrokeTextColor;
+      };
+
+      addTextBackground(ctx, t, topMarginX, topMarginY, lineHeight(topFontSize)); // добавление заливки (default - transparent), выше, чтобы было за текстом
+      
+      if (topMarginY > lineBottom) { // ограничение видимости верхнего текста до нижнего края
+        ctx.fillStyle = "transparent"
+      } else {
+        ctx.fillStyle = topFillTextColor; // переключение цвета с заливки на текст
+      };
 
       ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
       ctx.strokeText(t, topMarginX, topMarginY); // добавление контура
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
       
-      ctx.fillText(t, topMarginX, topMarginY, width - 60); // добавление текста построчно
+      ctx.fillText(t, topMarginX, topMarginY, textWidth); // добавление текста построчно
 
       if (topUnderline) {
-        addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize); // отрисовка подчеркивания
+        addLineToText(ctx, t, topMarginX, (topMarginY + 0.125 * topFontSize), topFontSize); // отрисовка подчеркивания
       };
 
       if (topLineThrough) {
