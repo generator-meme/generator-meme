@@ -7,6 +7,7 @@ function Meme({ elem, setCurrentMeme }) {
 
   const onClick = () => {
     setCurrentMeme(elem);
+    localStorage.setItem("currentMeme", JSON.stringify(elem));
     navigate(`/${elem.id}`)
   };
 
