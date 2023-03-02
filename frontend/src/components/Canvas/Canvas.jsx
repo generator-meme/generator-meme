@@ -32,13 +32,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topBackColor, setTopBackColor] = useState('transparent');
   const [topOpacity, setTopOpacity] = useState(1);
 
-  const topStrokeText = useMemo(() => {
-    if (topStrokeTextColor) {
-      return true;
-    };
-     return false;
-  }, [topStrokeTextColor]);
-
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
   const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
@@ -54,13 +47,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
-
-  const bottomStrokeText = useMemo(() => {
-    if (bottomStrokeTextColor) {
-      return true;
-    };
-     return false;
-  }, [bottomStrokeTextColor]);
 
   function createMeme () {
     handleCreateNewMeme(canvas.current.toDataURL(), currentMeme.id)
@@ -343,7 +329,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomFillTextColor,
     bottomUnderline,
     bottomLineThrough,
-    bottomStrokeText,
     bottomBackColor,
     topText,
     topFontSize,
@@ -355,13 +340,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     topStrokeTextColor,
     topUnderline,
     topLineThrough,
-    topStrokeText,
     topBackColor,
     marginX,
     addLineToText,
     addTextBackground,
     wrapText,
   ])
+
+  useEffect(() => {
+
+  });
 
   return (
     <main className='main-editor'>

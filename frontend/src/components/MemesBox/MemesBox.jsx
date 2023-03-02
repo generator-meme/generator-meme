@@ -52,7 +52,13 @@ const MemesBox = ({ memes, setCurrentMeme }) => {
           <button onClick={addMemes} className="memesbox__btn-show-more btn">показать больше</button>
         )
         }
-        <Link to='/#memes-start' className={` ${(scrollTop > window.innerHeight) ? "memesbox__up_type_fixed" : ""} memesbox__up ${(scrollTop > (fullHeight - 1.25 * window.innerHeight)) ? "memesbox__up_type_absolute" : ""}`}>
+        <Link 
+          to='/#memes-start'
+          className={`
+          ${(scrollTop > window.innerHeight) ? "memesbox__up_type_fixed" : ""} memesbox__up 
+          ${(scrollTop > (fullHeight - 1.25 * window.innerHeight)) ? "memesbox__up_type_absolute" : ""}`
+          }
+        >
           <img className="memesbox__up-arrow" src={arrowUp} alt="Стрелка вверх." />
           <p className="memesbox__up-text" >Наверх</p>
         </Link>
