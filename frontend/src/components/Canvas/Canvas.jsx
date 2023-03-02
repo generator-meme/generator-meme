@@ -8,12 +8,16 @@ import { fontFamilyOptions } from '../../utils/constants';
 import { hexToRgb } from '../../utils/hexToRgb';
 
 
-const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme, setCurrentMeme }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
     const img = new Image();
-    img.src = currentMeme.image;
+    if (currentMeme) {
+      img.src = currentMeme.image;
+    } else {
+      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
+    }
     return img;
   }, [currentMeme]);
 
@@ -221,8 +225,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     const textMarginYBottom = 20;
 
     // вычисление границ для текста
-    const lineTop = offsetY + (lineHeight(topFontSize)) + textMarginYTop;
-    const lineBottom = canvas.current.height - offsetY - (lineHeight(bottomFontSize)) - textMarginYBottom;
+    const lineTop = offsetY + textMarginYTop;
+    const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
     ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
@@ -239,7 +243,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
       const bottomMarginY = canvas.current.height - offsetY - i * (lineHeight(bottomFontSize)) - textMarginYBottom; // вычисление отступа по оси Y для каждой строчки текста
       
-      if (bottomMarginY < lineTop) { // ограничение видимости нижних заливки и контура до верхнего края
+      if (bottomMarginY < lineTop || bottomMarginY > lineBottom) { // ограничение видимости нижних заливки и контура до верхнего края
         ctx.fillStyle = "transparent"
         ctx.strokeStyle = "transparent";
         
@@ -250,7 +254,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
       addTextBackground(ctx, t, bottomMarginX, bottomMarginY, lineHeight(bottomFontSize)); // добавление заливки (default - transparent)
       
-      if (bottomMarginY < lineTop) { // ограничение видимости нижнего текста до верхнего края
+      if (bottomMarginY < lineTop || bottomMarginY > lineBottom) { // ограничение видимости нижнего текста до верхнего края
         ctx.fillStyle = "transparent"
       } else {
         ctx.fillStyle = bottomFillTextColor; // переключение цвета с заливки на текст
@@ -286,7 +290,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
       const topMarginY = offsetY + i * (lineHeight(topFontSize)) + textMarginYTop ; // вычисление отступа по оси Y для каждой строчки текста
 
-      if (topMarginY > lineBottom) { // ограничение видимости верхних заливки и контура до нижнего края
+      if (topMarginY > lineBottom || topMarginY < lineTop) { // ограничение видимости верхних заливки и контура до нижнего края
         ctx.fillStyle = "transparent"
         ctx.strokeStyle = "transparent";
         
@@ -297,7 +301,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
       addTextBackground(ctx, t, topMarginX, topMarginY, lineHeight(topFontSize)); // добавление заливки (default - transparent), выше, чтобы было за текстом
       
-      if (topMarginY > lineBottom) { // ограничение видимости верхнего текста до нижнего края
+      if (topMarginY > lineBottom || topMarginY < lineTop) { // ограничение видимости верхнего текста до нижнего края
         ctx.fillStyle = "transparent"
       } else {
         ctx.fillStyle = topFillTextColor; // переключение цвета с заливки на текст
@@ -318,7 +322,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       };
     });
 
-  }, [image,
+  }, [
+    image,
     bottomText,
     bottomFontSize,
     bottomFontStyle,
@@ -345,15 +350,119 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     addLineToText,
     addTextBackground,
     wrapText,
-  ])
+  ]);
+
+  const top = useMemo(() => {
+    return {
+      text: topText,
+      fontSize: topFontSize,
+      fontFamily: topFontFamily,
+      fontPosition: topFontPosition,
+      fontWeight: topFontWeight,
+      fontStyle: topFontStyle,
+      fillTextColor: topFillTextColor,
+      strokeTextColor: topStrokeTextColor,
+      underline: topUnderline,
+      lineThrough: topLineThrough,
+      backColor: topBackColor,
+      opacity: topOpacity
+    }
+  }, [topText,
+      topFontSize,
+      topFontFamily,
+      topFontPosition,
+      topFontWeight,
+      topFontStyle,
+      topFillTextColor,
+      topStrokeTextColor,
+      topUnderline,
+      topLineThrough,
+      topBackColor,
+      topOpacity
+  ]);
+
+  const bottom = useMemo(() => {
+    return {
+      text: bottomText,
+      fontSize: bottomFontSize,
+      fontFamily: bottomFontFamily,
+      fontPosition: bottomFontPosition,
+      fontWeight: bottomFontWeight,
+      fontStyle: bottomFontStyle,
+      fillTextColor: bottomFillTextColor,
+      strokeTextColor: bottomStrokeTextColor,
+      underline: bottomUnderline,
+      lineThrough: bottomLineThrough,
+      backColor: bottomBackColor,
+      opacity: bottomOpacity
+    }
+  }, [bottomText,
+      bottomFontSize,
+      bottomFontFamily,
+      bottomFontPosition,
+      bottomFontWeight,
+      bottomFontStyle,
+      bottomFillTextColor,
+      bottomStrokeTextColor,
+      bottomUnderline,
+      bottomLineThrough,
+      bottomBackColor,
+      bottomOpacity
+  ]);
+
+  const putValues = useCallback((
+      values,
+      setText,
+      setFontSize,
+      setFontFamily,
+      setFontPosition,
+      setFontBold,
+      setFontItalic,
+      setFillTextColor,
+      setStrokeTextColor,
+      setUnderline,
+      setLineThrough,
+      setOpacity,
+      setBackColor
+    ) => {
+    setText(values.text);
+    setFontSize(values.fontSize);
+    setFontFamily(values.fontFamily);
+    setFontPosition(values.fontPosition);
+    setFontBold(values.fontWeight);
+    setFontItalic(values.fontStyle);
+    setFillTextColor(values.fillTextColor);
+    setStrokeTextColor(values.strokeTextColor);
+    setUnderline(values.underline);
+    setLineThrough(values.lineThrough);
+    setOpacity(values.opacity);
+    setBackColor(values.backColor);
+  }, []);
+
+  useEffect(()=> {
+    if (!currentMeme && localStorage.getItem("topText") !== null) {
+      const topText = JSON.parse(localStorage.getItem("topText"));
+      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor)
+    };
+
+    if (!currentMeme && localStorage.getItem("bottomText") !== null) {
+      const bottomText = JSON.parse(localStorage.getItem("bottomText"));
+      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor)
+    };
+    
+  }, []);
 
   useEffect(() => {
+    localStorage.setItem("topText", JSON.stringify(top));
+  }, [top]);
 
-  });
+  useEffect(() => {
+    localStorage.setItem("bottomText", JSON.stringify(bottom));
+  }, [bottom]);
 
   return (
     <main className='main-editor'>
-      <Navigation isSavedMeme={false} id={currentMeme.id} />
+      <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id} />
       <section className="editor" aria-label="Editor">
         {firstPanelIsOpen && (
           <div className="editor__panel_type_top">

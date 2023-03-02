@@ -63,6 +63,7 @@ const App = () => {
             <Canvas
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
+              setCurrentMeme={setCurrentMeme}
             />
           }
         />
