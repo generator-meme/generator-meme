@@ -21,6 +21,7 @@ const App = () => {
       .then((res) => {
         console.log(res);
         setNewMeme(res);
+        localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);

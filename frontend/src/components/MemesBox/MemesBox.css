@@ -1,10 +1,10 @@
 .memesbox {
     margin: 0;
-    padding: 0 30px 69px;
+    padding: 0 30px 15px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    row-gap: 110px;
+    row-gap: 86px;
     align-items: center;
     position: relative;
 }
@@ -18,8 +18,8 @@
     z-index: 2;
     grid-template-columns: repeat(auto-fit, minmax(434px, 1fr));
     grid-template-rows: repeat(auto-fit, minmax(360px, auto));
-    column-gap: 35px;
-    row-gap: 60px;
+    column-gap: 30px;
+    row-gap: 50px;
     justify-items: stretch;
     align-items: stretch;
     box-sizing: border-box;
@@ -43,9 +43,6 @@
 
 .memesbox__btn-show-more {
     width: 457px;
-    /* height: 114px;
-    font-size: 45px;
-    line-height: 53px; */
 }
 
 .memesbox__up {
