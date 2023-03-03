@@ -16,13 +16,19 @@ services:
       - ./.env
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
 
   backend:
     image: artkeyplex/generator-meme:latest
     restart: always
     volumes:
       - static_value:/app/backend-static/
-      - media_value:/app/backend-media/ 
+      - media_value:/app/backend-media/
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - postgres
     env_file:
