@@ -42,10 +42,10 @@
 }
 
 .memesbox__btn-show-more {
-    width: 551px;
-    height: 114px;
+    width: 457px;
+    /* height: 114px;
     font-size: 45px;
-    line-height: 53px;
+    line-height: 53px; */
 }
 
 .memesbox__up {
@@ -62,6 +62,12 @@
     position: fixed;
     bottom: 50px;
     right: 30px;
+    background-image: url(../../images/circle.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 101px;
+    height: 101px;
 }
 
 .memesbox__up_type_fixed {
@@ -75,6 +81,7 @@
 }
 
 .memesbox__up-arrow {
+    padding: 14px 0 0;
     height: 25px;
     width: 32px;
 }
@@ -83,7 +90,7 @@
     margin: 0;
     padding: 0;
     font-weight: 500;
-    font-size: 30px;
-    line-height: 36px;
-    color: #592998;
+    font-size: 22px;
+    line-height: 26px;
+    color: #1E1D1D;
 }

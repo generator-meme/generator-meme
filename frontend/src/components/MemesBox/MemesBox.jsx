@@ -60,7 +60,7 @@ const MemesBox = ({ memes, setCurrentMeme }) => {
           }
         >
           <img className="memesbox__up-arrow" src={arrowUp} alt="Стрелка вверх." />
-          <p className="memesbox__up-text" >Наверх</p>
+          <p className="memesbox__up-text" >наверх</p>
         </Link>
       </section>
     )}

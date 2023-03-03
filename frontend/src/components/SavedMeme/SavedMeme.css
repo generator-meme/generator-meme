@@ -23,10 +23,10 @@
 }
 
 .saved-meme__btn-save {
-    width: 500px;
-    height: 77px;
-    font-size: 35px;
-    line-height: 41px;
+    width: 446px;
+    /* height: 77px; */
+    /* font-size: 35px; */
+    /* line-height: 41px; */
     position: absolute;
     top: 30px;
     right: 30px;

@@ -8,7 +8,7 @@ import { fontFamilyOptions } from '../../utils/constants';
 import { hexToRgb } from '../../utils/hexToRgb';
 
 
-const Canvas = ({ currentMeme, handleCreateNewMeme, setCurrentMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
@@ -536,7 +536,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setCurrentMeme }) => {
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
               />
           </form>
-          <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
+          <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
         </div>
       </section>
     </main>
