@@ -13,6 +13,7 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
+  const [isNewMeme, setIsNewMeme] = useState(false);
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
@@ -55,7 +56,13 @@ const App = () => {
         <Route
           exact
           path="/"
-          element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
+          element={
+            <Main
+              memes={memes}
+              setCurrentMeme={setCurrentMeme}
+              setIsNewMeme={setIsNewMeme}
+            />
+          }
         />
         <Route
           path="/:id"
@@ -63,6 +70,8 @@ const App = () => {
             <Canvas
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
+              setIsNewMeme={setIsNewMeme}
+              isNewMeme={isNewMeme}
             />
           }
         />

@@ -1,5 +1,5 @@
 .saved-meme {
-    padding: 30px 30px 98px;
+    padding: 30px 30px 140px;
     width: 100%;
     box-sizing: border-box;
     position: relative;
@@ -19,15 +19,18 @@
     height: auto;
     object-fit: cover;
     object-position: center;
+    /* width: 544px; */
+    height: 448px;
     border-radius: 20px;
 }
 
 .saved-meme__btn-save {
     width: 446px;
+    margin-top: 50px;
     /* height: 77px; */
     /* font-size: 35px; */
     /* line-height: 41px; */
-    position: absolute;
-    top: 30px;
-    right: 30px;
+    /* position: absolute; */
+    /* top: 30px;
+    right: 30px; */
 }

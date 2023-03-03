@@ -8,7 +8,7 @@ import { fontFamilyOptions } from '../../utils/constants';
 import { hexToRgb } from '../../utils/hexToRgb';
 
 
-const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
@@ -53,7 +53,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
   function createMeme () {
-    handleCreateNewMeme(canvas.current.toDataURL(), currentMeme.id)
+    const id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    handleCreateNewMeme(canvas.current.toDataURL(), id)
       .finally(()=> {
         navigate('/saved')
       });
@@ -440,12 +441,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }, []);
 
   useEffect(()=> {
-    if (!currentMeme && localStorage.getItem("topText") !== null) {
+    setIsNewMeme(false);
+   
+    if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
       putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor)
     };
 
-    if (!currentMeme && localStorage.getItem("bottomText") !== null) {
+    if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
       putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor)
     };
