@@ -27,6 +27,8 @@ services:
     volumes:
       - static_value:/app/backend-static/
       - media_value:/app/backend-media/
+    environment:
+      - PYTHONUNBUFFERED=1
     depends_on:
       - postgres
     env_file:
