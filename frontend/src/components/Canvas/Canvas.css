@@ -2,6 +2,13 @@
   padding: 25px 30px 62px;
   width: 100%;
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Oswald', sans-serif;
+  font-family: 'Pacifico', cursive;
+  font-family: 'Playfair Display', serif;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Rubik', sans-serif;
 }
 
 .editor {

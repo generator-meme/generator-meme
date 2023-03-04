@@ -25,7 +25,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   const [topText, setTopText] = useState('')
   const [topFontSize, setTopFontSize] = useState(40)
-  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.arial)
+  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.roboto)
+  const [topSelectedOption, setTopSelectedOption] = useState(0);
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState(false)
   const [topFontStyle, setTopFontStyle] = useState(false)
@@ -38,7 +39,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
-  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
+  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.roboto);
+  const [bottomSelectedOption, setBottomSelectedOption] = useState(0);
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState(false)
   const [bottomFontStyle, setBottomFontStyle] = useState(false)
@@ -230,7 +232,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
+    ctx.font = `${bottomFontStyle ? "italic" : ""} ${bottomFontWeight ? "bold" : ""} ${bottomFontSize}px ${bottomFontFamily}`;
     ctx.textAlign = bottomFontPosition;
     
     const bottomMarginX = marginX(bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
@@ -277,7 +279,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     });
 
     // верхний текст основные характеристики
-    ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
+    ctx.font = `${topFontStyle ? "italic" : ""} ${topFontWeight ? "bold" : ""} ${topFontSize}px ${topFontFamily}`;
     ctx.textAlign = topFontPosition;
     
     const topMarginX = marginX(topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
@@ -366,7 +368,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       underline: topUnderline,
       lineThrough: topLineThrough,
       backColor: topBackColor,
-      opacity: topOpacity
+      opacity: topOpacity,
+      selectedOption: topSelectedOption
     }
   }, [topText,
       topFontSize,
@@ -379,7 +382,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       topUnderline,
       topLineThrough,
       topBackColor,
-      topOpacity
+      topOpacity,
+      topSelectedOption
   ]);
 
   const bottom = useMemo(() => {
@@ -395,7 +399,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       underline: bottomUnderline,
       lineThrough: bottomLineThrough,
       backColor: bottomBackColor,
-      opacity: bottomOpacity
+      opacity: bottomOpacity,
+      selectedOption: bottomSelectedOption
     }
   }, [bottomText,
       bottomFontSize,
@@ -408,7 +413,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       bottomUnderline,
       bottomLineThrough,
       bottomBackColor,
-      bottomOpacity
+      bottomOpacity,
+      bottomSelectedOption
   ]);
 
   const putValues = useCallback((
@@ -424,7 +430,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       setUnderline,
       setLineThrough,
       setOpacity,
-      setBackColor
+      setBackColor,
+      setSelectedOption
     ) => {
     setText(values.text);
     setFontSize(values.fontSize);
@@ -438,6 +445,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     setLineThrough(values.lineThrough);
     setOpacity(values.opacity);
     setBackColor(values.backColor);
+    setSelectedOption(values.selectedOption);
   }, []);
 
   useEffect(()=> {
@@ -445,12 +453,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
    
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
-      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor)
+      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption);
     };
 
     if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
-      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor)
+      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor, setBottomSelectedOption);
     };
     
   }, []);
@@ -487,6 +495,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
               setStrokeTextColor={setTopStrokeTextColor}
               setBackColor={changeTopBackColor}
               setOpacity={changeTopOpacity}
+              selectedOption={topSelectedOption}
+              setSelectedOption={setTopSelectedOption}
             />
         </div>
         )}
@@ -510,6 +520,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
               setStrokeTextColor={setbottomStrokeTextColor}
               setBackColor={changeBottomBackColor}
               setOpacity={changeBottomOpacity}
+              selectedOption={bottomSelectedOption}
+              setSelectedOption={setBottomSelectedOption}
             />
         </div>
         )}
