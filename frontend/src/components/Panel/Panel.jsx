@@ -25,6 +25,8 @@ function Panel ({
     setOpacity,
     selectedOption,
     setSelectedOption,
+    opacityLevel,
+    setOpacityLevel
   }) {
 
   const form = useRef();
@@ -33,10 +35,8 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
-  const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
 

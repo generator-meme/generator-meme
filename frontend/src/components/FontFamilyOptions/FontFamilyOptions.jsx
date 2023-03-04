@@ -16,7 +16,6 @@ function FontFamilyOptions({
 
   const setSelectedThenCloseDropdown = (index) => {
     setSelectedOption(index);
-    // localStorage.setItem("index", index);
     setIsOptionsOpen(false);
   };
 
@@ -59,12 +58,6 @@ function FontFamilyOptions({
   useEffect(() => {
     setFontFamily(optionsList[selectedOption]);
   }, [selectedOption, setFontFamily]);
-
-  // useEffect(()=> {
-  //   if (!isRemembered && localStorage.getItem("index") !== null) {
-  //     setSelectedOption(localStorage.getItem("index"));
-  //   };
-  // }, []);
 
   return (
       <div className="font-family">

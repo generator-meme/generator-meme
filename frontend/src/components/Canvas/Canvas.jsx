@@ -36,6 +36,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [topLineThrough, setTopLineThrough] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
   const [topOpacity, setTopOpacity] = useState(1);
+  const [topOpacityLevel, setTopOpacityLevel] = useState(100);
+
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
@@ -50,6 +52,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
   const [bottomOpacity, setBottomOpacity] = useState(1);
+  const [bottomOpacityLevel, setBottomOpacityLevel] = useState(100);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -369,7 +372,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       lineThrough: topLineThrough,
       backColor: topBackColor,
       opacity: topOpacity,
-      selectedOption: topSelectedOption
+      selectedOption: topSelectedOption,
+      opacityLevel: topOpacityLevel
     }
   }, [topText,
       topFontSize,
@@ -383,7 +387,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       topLineThrough,
       topBackColor,
       topOpacity,
-      topSelectedOption
+      topSelectedOption,
+      topOpacityLevel
   ]);
 
   const bottom = useMemo(() => {
@@ -400,7 +405,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       lineThrough: bottomLineThrough,
       backColor: bottomBackColor,
       opacity: bottomOpacity,
-      selectedOption: bottomSelectedOption
+      selectedOption: bottomSelectedOption,
+      opacityLevel: bottomOpacityLevel
     }
   }, [bottomText,
       bottomFontSize,
@@ -414,7 +420,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       bottomLineThrough,
       bottomBackColor,
       bottomOpacity,
-      bottomSelectedOption
+      bottomSelectedOption,
+      bottomOpacityLevel
   ]);
 
   const putValues = useCallback((
@@ -431,7 +438,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       setLineThrough,
       setOpacity,
       setBackColor,
-      setSelectedOption
+      setSelectedOption,
+      setOpacityLevel
     ) => {
     setText(values.text);
     setFontSize(values.fontSize);
@@ -446,6 +454,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     setOpacity(values.opacity);
     setBackColor(values.backColor);
     setSelectedOption(values.selectedOption);
+    setOpacityLevel(values.opacityLevel)
   }, []);
 
   useEffect(()=> {
@@ -453,12 +462,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
    
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
-      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption);
+      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption, setTopOpacityLevel);
     };
 
     if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
-      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor, setBottomSelectedOption);
+      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor, setBottomSelectedOption, setBottomOpacityLevel);
     };
     
   }, []);
@@ -497,6 +506,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
               setOpacity={changeTopOpacity}
               selectedOption={topSelectedOption}
               setSelectedOption={setTopSelectedOption}
+              opacityLevel={topOpacityLevel}
+              setOpacityLevel={setTopOpacityLevel}
             />
         </div>
         )}
@@ -522,6 +533,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
               setOpacity={changeBottomOpacity}
               selectedOption={bottomSelectedOption}
               setSelectedOption={setBottomSelectedOption}
+              opacityLevel={bottomOpacityLevel}
+              setOpacityLevel={setBottomOpacityLevel}
             />
         </div>
         )}
