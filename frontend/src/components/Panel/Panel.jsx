@@ -23,6 +23,8 @@ function Panel ({
     setStrokeTextColor,
     setBackColor,
     setOpacity,
+    selectedOption,
+    setSelectedOption,
   }) {
 
   const form = useRef();
@@ -34,7 +36,7 @@ function Panel ({
   const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(0);
+  // const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
 
@@ -112,7 +114,7 @@ function Panel ({
     setFontUnderline(false);
     setFontLineThrough(false);
     setFontPosition('center');
-    setFontFamily(fontFamilyOptions.arial);
+    setFontFamily(fontFamilyOptions.roboto);
     setSelectedOption(0);
     setTextColor('black');
     setStrokeTextColor('transparent');

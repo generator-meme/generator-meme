@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { optionsList } from "../../utils/constants";
 import "./FontFamilyOptions.css";
 
-function FontFamilyOptions({ 
+function FontFamilyOptions({
   setFontFamily,
   selectedOption,
   setSelectedOption,
   isOptionsOpen,
-  setIsOptionsOpen
+  setIsOptionsOpen,
 }) {
 
   const toggleOptions = () => {
@@ -16,6 +16,7 @@ function FontFamilyOptions({
 
   const setSelectedThenCloseDropdown = (index) => {
     setSelectedOption(index);
+    // localStorage.setItem("index", index);
     setIsOptionsOpen(false);
   };
 
@@ -58,6 +59,12 @@ function FontFamilyOptions({
   useEffect(() => {
     setFontFamily(optionsList[selectedOption]);
   }, [selectedOption, setFontFamily]);
+
+  // useEffect(()=> {
+  //   if (!isRemembered && localStorage.getItem("index") !== null) {
+  //     setSelectedOption(localStorage.getItem("index"));
+  //   };
+  // }, []);
 
   return (
       <div className="font-family">
