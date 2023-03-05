@@ -13,6 +13,7 @@ const App = () => {
   const [memes, setMemes] = useState([]);
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
+  const [isNewMeme, setIsNewMeme] = useState(false);
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
@@ -20,6 +21,7 @@ const App = () => {
       .then((res) => {
         console.log(res);
         setNewMeme(res);
+        localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -50,12 +52,21 @@ const App = () => {
 
   return (
     <div className="page">
+      {/* <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></link> */}
       <Header />
       <Routes>
         <Route
           exact
           path="/"
-          element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
+          element={
+            <Main
+              memes={memes}
+              setCurrentMeme={setCurrentMeme}
+              setIsNewMeme={setIsNewMeme}
+            />
+          }
         />
         <Route
           path="/:id"
@@ -63,6 +74,8 @@ const App = () => {
             <Canvas
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
+              setIsNewMeme={setIsNewMeme}
+              isNewMeme={isNewMeme}
             />
           }
         />

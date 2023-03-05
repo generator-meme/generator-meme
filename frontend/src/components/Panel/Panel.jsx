@@ -23,6 +23,10 @@ function Panel ({
     setStrokeTextColor,
     setBackColor,
     setOpacity,
+    selectedOption,
+    setSelectedOption,
+    opacityLevel,
+    setOpacityLevel
   }) {
 
   const form = useRef();
@@ -31,9 +35,8 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
-  const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   const extraWindow = useRef();
 
@@ -71,12 +74,6 @@ function Panel ({
     }
   };
 
-  const changeTextColor = (color) => {
-    console.log(color, 'changeTextColor');
-    setTextColor(color);
-    setStrokeTextColor(null);
-  };
-
   const toggleOpacityPanel = (e) => {
     e.preventDefault();
     if (!isOpenOpacity) {
@@ -106,6 +103,7 @@ function Panel ({
     setIsOpenStrokeColor(false);
     setIsOpenBackgroundColor(false);
     setIsOpenOpacity(false);
+    setIsOptionsOpen(false);
   };
   
   const resetForm = (e) => {
@@ -116,10 +114,10 @@ function Panel ({
     setFontUnderline(false);
     setFontLineThrough(false);
     setFontPosition('center');
-    setFontFamily(fontFamilyOptions.arial);
+    setFontFamily(fontFamilyOptions.roboto);
     setSelectedOption(0);
     setTextColor('black');
-    setStrokeTextColor(null);
+    setStrokeTextColor('transparent');
     setOpacity(1);
     setOpacityLevel(100);
     setBackColor('transparent');
@@ -127,7 +125,7 @@ function Panel ({
   };
 
   useEffect(() => {
-    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity) {
+    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity || isOptionsOpen) {
       function closeExtraWindows(event) {
         if (!event.target.closest("#smallWindow")) {
           closeAllSmallWindows();
@@ -139,7 +137,14 @@ function Panel ({
         document.removeEventListener('click', closeExtraWindows)
       }
     }
-  }, [isOpenTextColor, isOpenStrokeColor, isOpenBackgroundColor,isOpenOpacity, extraWindow]);
+  }, [
+    isOpenTextColor,
+    isOpenStrokeColor,
+    isOpenBackgroundColor,
+    isOpenOpacity,
+    isOptionsOpen,
+    extraWindow
+  ]);
 
   return (
     <form ref={form} className="panel" noValidate>
@@ -148,6 +153,8 @@ function Panel ({
           setFontFamily={setFontFamily}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
+          isOptionsOpen={isOptionsOpen}
+          setIsOptionsOpen={setIsOptionsOpen}
         />
         <button className="panel__button panel__button_type_in-size" onClick={e => increaseSize(e)} />
         <button className="panel__button panel__button_type_dec-size" onClick={e => decreaseSize(e)} />
@@ -195,25 +202,25 @@ function Panel ({
         </label>
       </fieldset>
       <fieldset className="panel__section">
-        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_text-color ${isOpenTextColor ? "panel__button_type_pressed" : ""}`} onClick={e => openTextColor(e)}>
-          <span className={`panel__choose-color panel__choose-color_type_text ${isOpenTextColor? "panel__choose-color_visible": "" }`}>
-            <Palette selectedColor={changeTextColor} closePalette={closeAllSmallWindows} />
-          </span>
+        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_text-color ${isOpenTextColor ? "panel__button_type_pressed" : ""}`} onClick={e => openTextColor(e)}>
+          {isOpenTextColor && (
+            <Palette selectedColor={setTextColor} closePalette={closeAllSmallWindows} />
+          )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_stroke-color ${isOpenStrokeColor ? "panel__button_type_pressed" : ""}`} onClick={e => openStrokeColor(e)}>
-          <span className={`panel__choose-color ${isOpenStrokeColor? "panel__choose-color_visible": "" }`}>
+        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_stroke-color ${isOpenStrokeColor ? "panel__button_type_pressed" : ""}`} onClick={e => openStrokeColor(e)}>
+          {isOpenStrokeColor && (
             <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
-          </span>
+          )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___buttom_type_color panel___buttom_type_back-color ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => openBackgroundColor(e)}>
-          <span className={`panel__choose-color ${isOpenBackgroundColor? "panel__choose-color_visible": "" }`}>
+        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_back-color ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => openBackgroundColor(e)}>
+          {isOpenBackgroundColor && (
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
-          </span>
+          )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___buttom_type_opacity ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
-          <span className={`panel__opacity ${isOpenOpacity? "panel__opacity_visible": "" }`}>
+        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
+          {isOpenOpacity && (
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
-          </span>
+          )}
         </button>
       </fieldset>
       <fieldset className="panel__section">

@@ -2,6 +2,7 @@
   font-family: 'Rubik';
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
   src: url("../fonts/Rubik-Regular.woff2") format("woff2"),
     url("../fonts/Rubik-Regular.woff") format("woff");
 }
@@ -10,6 +11,7 @@
   font-family: 'Rubik';
   font-style: normal;
   font-weight: 500;
+  font-display: swap;
   src: url("../fonts/Rubik-Medium.woff2") format("woff2"),
     url("../fonts/Rubik-Medium.woff") format("woff");
 }
@@ -18,158 +20,142 @@
   font-family: 'Rubik';
   font-style: normal;
   font-weight: 300;
+  font-display: swap;
   src: url("../fonts/Rubik-Light.woff2") format("woff2"),
     url("../fonts/Rubik-Light.woff") format("woff");
 }
 
 @font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/Inter-Regular.woff2") format("woff2"),
+    url("../fonts/Inter-Regular.woff") format("woff");
+}
+
+/*
+Подключены с google fonts:
+Roboto: regular 400, regular 400 italic, bold 700, bold 700 italic;
+Oswald: regular 400, bold 700; - нет italic
+Noto sans: regular 400, regular 400 italic, bold 700, bold 700 italic;;
+Montserrat: regular 400, regular 400 italic, bold 700, bold 700 italic;
+Playfair display: regular 400, regular 400 italic, bold 700, bold 700 italic;
+Pacifico: regular 400;
+*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/*Попытка подключить остальные*/
+/* 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/roboto-regular-webfont.woff2") format("woff2"),
+    url("../fonts/roboto-regular-webfont.woff") format("woff");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/roboto-italic-webfont.woff2") format("woff2"),
+    url("../fonts/roboto-italic-webfont.woff") format("woff");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/roboto-bold-webfont.woff2") format("woff2"),
+    url("../fonts/roboto-bold-webfont.woff") format("woff");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/roboto-bolditalic-webfont.woff2") format("woff2"),
+    url("../fonts/roboto-bolditalic-webfont.woff") format("woff");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+*/
+/* Нормально подключенные шрифты*/
+@font-face {
+  font-family: 'Times New Roman';
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/TimesNewRomanpsmt-webfont.woff2") format("woff2"),
+    url("../fonts/TimesNewRomanPSMT.woff") format("woff"),
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+  src: url("../fonts/TimesNewRomanps-italicmt-webfont.woff2") format("woff2"),
+    url("../fonts/TimesNewRomanPS-ItalicMT.woff") format("woff"),
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  src: url("../fonts/TimesNewRomanps-boldmt-webfont.woff2") format("woff2"),
+    url("../fonts/TimesNewRomanPS-BoldMT.woff") format("woff"),
+}
+
+@font-face {
+  font-family: 'Times New Roman';
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+  src: url("../fonts/TimesNewRomanps-bolditalicmt-webfont.woff2") format("woff2"),
+    url("../fonts/TimesNewRomanPS-BoldItalicMT.woff") format("woff"),
+}
+
+@font-face {
   font-family: 'Arial';
+  font-weight: normal;
   font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/arial.woff2") format("woff2"),
-    url("../fonts/arial.woff") format("woff");
+  font-display: swap;
+  src: url("../fonts/Arialmt-webfont.woff2") format("woff2"),
+    url("../fonts/ArialMT.woff") format("woff"),
 }
 
 @font-face {
   font-family: 'Arial';
+  font-weight: normal;
   font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/arial-i.woff2") format("woff2"),
-    url("../fonts/arial-i.woff") format("woff");
+  font-display: swap;
+  src: url("../fonts/Arial-italicmt-webfont.woff2") format("woff2"),
+    url("../fonts/Arial-ItalicMT.woff") format("woff"),
 }
 
 @font-face {
   font-family: 'Arial';
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/arial-bd.woff2") format("woff2"),
-    url("../fonts/arial-bd.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Calibri';
+  font-weight: bold;
   font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/calibri.woff2") format("woff2"),
-    url("../fonts/calibri.woff") format("woff");
+  font-display: swap;
+  src: url("../fonts/Arial-boldmt-webfont.woff2") format("woff2"),
+    url("../fonts/Arial-BoldMT.woff") format("woff"),
 }
 
 @font-face {
-  font-family: 'Calibri';
+  font-family: 'Arial';
+  font-weight: bold;
   font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/calibri-i.woff2") format("woff2"),
-    url("../fonts/calibri-i.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Calibri';
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/calibri-b.woff2") format("woff2"),
-    url("../fonts/calibri-b.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Comic Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/comic.woff2") format("woff2"),
-    url("../fonts/comic.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Comic Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/comic-i.woff2") format("woff2"),
-    url("../fonts/comic-i.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Comic Sans';
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/comic-bd.woff2") format("woff2"),
-    url("../fonts/comic-bd.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Courier';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/courier.woff2") format("woff2"),
-    url("../fonts/courier.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Courier';
-  font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/courier-i.woff2") format("woff2"),
-    url("../fonts/courier-i.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Courier';
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/courier-bd.woff2") format("woff2"),
-    url("../fonts/courier-bd.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Impact';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/impact.woff2") format("woff2"),
-    url("../fonts/impact.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Times new roman";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/times.woff2") format("woff2"),
-    url("../fonts/times.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Times new roman";
-  font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/times-i.woff2") format("woff2"),
-    url("../fonts/times-i.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Times new roman";
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/times-bd.woff2") format("woff2"),
-    url("../fonts/times-bd.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Verdana";
-  font-style: normal;
-  font-weight: 400;
-  src: url("../fonts/verdana.woff2") format("woff2"),
-    url("../fonts/verdana.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Verdana";
-  font-style: italic;
-  font-weight: 400;
-  src: url("../fonts/verdana-i.woff2") format("woff2"),
-    url("../fonts/verdana-i.woff") format("woff");
-}
-
-@font-face {
-  font-family: "Verdana";
-  font-style: bold;
-  font-weight: 500;
-  src: url("../fonts/verdana-b.woff2") format("woff2"),
-    url("../fonts/verdana-b.woff") format("woff");
+  font-display: swap;
+  src: url("../fonts/Arial-bolditalicmt-webfont.woff2") format("woff2"),
+    url("../fonts/Arial-BoldItalicMT.woff") format("woff"),
 }

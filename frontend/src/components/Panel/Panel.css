@@ -46,7 +46,7 @@
 
 .panel__button:hover,
 .panel__invisible-input:hover+.panel__pseudo-input {
-    background-color: #FFFFFF;
+    background-color: rgba(192, 192, 192, 0.51);
 }
 
 .panel__button_type_pressed,
@@ -118,6 +118,7 @@
     height: 1px;
     overflow: hidden;
     clip-path: inset(0 0 0 0);
+    opacity: 0;
 }
 
 .panel__pseudo-input_type_bold {
@@ -136,54 +137,29 @@
     background-image: url('../../images/icons/line-through.svg');
 }
 
-.panel___buttom_type_color {
+.panel___button_type_color {
     position: relative;
 }
 
-.panel___buttom_type_text-color {
+.panel___button_type_text-color {
     background-image: url(../../images/icons/text-color.svg);
     width: 34px;
 }
 
-.panel___buttom_type_stroke-color {
+.panel___button_type_stroke-color {
     background-image: url(../../images/icons/stroke-color.svg);
     width: 33px;
 }
 
-.panel___buttom_type_back-color {
+.panel___button_type_back-color {
     background-image: url(../../images/icons/background-color.svg);
     width: 44px;
 }
 
-.panel___buttom_type_opacity {
+.panel___button_type_opacity {
     background-image: url(../../images/icons/opacity.svg);
     width: 24px;
-}
-
-.panel__choose-color {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 30px;
-    left: 0;
-    display: none;
-}
-
-.panel__choose-color_visible {
-    display: block;
-}
-
-.panel__opacity {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 40px;
-    right: -65px;
-    display: none;
-}
-
-.panel__opacity_visible {
-    display: block;
+    position: relative;
 }
 
 .panel__pseudo-input_type_start {
