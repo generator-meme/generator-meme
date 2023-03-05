@@ -217,7 +217,7 @@ function Panel ({
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
+        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           {isOpenOpacity && (
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           )}
