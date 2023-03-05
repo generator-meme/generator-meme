@@ -7,7 +7,6 @@ import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
 import { hexToRgb } from '../../utils/hexToRgb';
 
-
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
   const navigate = useNavigate();
 
@@ -459,7 +458,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   useEffect(()=> {
     setIsNewMeme(false);
-   
+    
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
       putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption, setTopOpacityLevel);

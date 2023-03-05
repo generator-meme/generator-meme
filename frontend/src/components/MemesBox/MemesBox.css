@@ -14,15 +14,12 @@
     padding: 0;
     width: 100%;
     display: grid;
-    justify-content: center;
+    justify-content: space-between;
     z-index: 2;
-    grid-template-columns: repeat(auto-fit, minmax(434px, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(360px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(423px, 453px));
+    grid-template-rows: repeat(auto-fit, minmax(auto, 440px));
     column-gap: 30px;
     row-gap: 50px;
-    justify-items: stretch;
-    align-items: stretch;
-    box-sizing: border-box;
 }
 
 
