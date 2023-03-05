@@ -90,7 +90,15 @@ const App = () => {
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
-      <div class="font-preload" style={{ opacity: 0 }}>
+      <div
+        class="font-preload"
+        style={{
+          opacity: 0,
+          backgroundColor: "transparent",
+          height: 0,
+          overflow: "hidden",
+        }}
+      >
         {optionsList.map((font, index) => {
           return (
             <span key={index}>
