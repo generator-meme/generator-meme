@@ -46,7 +46,7 @@
 
 .panel__button:hover,
 .panel__invisible-input:hover+.panel__pseudo-input {
-    background-color: #FFFFFF;
+    background-color: rgba(192, 192, 192, 0.51);
 }
 
 .panel__button_type_pressed,

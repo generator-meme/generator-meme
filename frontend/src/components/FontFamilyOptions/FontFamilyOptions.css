@@ -25,7 +25,7 @@
 
 .font-family__button:hover {
     cursor: pointer;
-    background-color: #FFFFFF;
+    background-color: rgba(192, 192, 192, 0.51);
 }
 
 .font-family__button::after {
@@ -51,8 +51,8 @@
     background: #FFFCED;
     border: 0.25px solid #000000;
     border-radius: 4px;
-    padding: 8px 0 10px;
-    min-width: 165px;
+    padding: 0;
+    min-width: 145px;
     box-sizing: border-box;
     position: absolute;
     top: 30px;
@@ -78,17 +78,16 @@
     display: flex;
     justify-content: flex-start;
     align-items: end;
-    padding: 0 0 0 9px;
+    padding: 6px 0 0 9px;
 }
 
-.font-family__option:active,
 .font-family__option:focus,
-.font-family__option:hover,
-.font-family__option[aria-selected="true"] {
-    background: #FFFFFF;
+.font-family__option:hover {
+    background-color: rgba(192, 192, 192, 0.51);
     cursor: pointer;
 }
 
-.font-family__option:active {
+.font-family__option[aria-selected="true"] {
+    background-color: #FFFFFF;
     box-shadow: inset 0px 1px 1px rgba(115, 114, 112, 0.5);
 }
