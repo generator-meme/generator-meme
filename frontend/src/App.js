@@ -8,6 +8,7 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import api from "./utils/api";
 import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
+import { optionsList } from "./utils/constants.js";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -52,9 +53,6 @@ const App = () => {
 
   return (
     <div className="page">
-      {/* <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"></link> */}
       <Header />
       <Routes>
         <Route
@@ -92,6 +90,42 @@ const App = () => {
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
+      <div
+        class="font-preload"
+        style={{
+          opacity: 0,
+          backgroundColor: "transparent",
+          height: 0,
+          overflow: "hidden",
+        }}
+      >
+        {optionsList.map((font, index) => {
+          return (
+            <span key={index}>
+              <span style={{ fontFamily: font, fontWeight: 400 }}>т</span>
+              <span style={{ fontFamily: font, fontWeight: 700 }}>т</span>
+              <span
+                style={{
+                  fontFamily: font,
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                }}
+              >
+                т
+              </span>
+              <span
+                style={{
+                  fontFamily: font,
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                }}
+              >
+                т
+              </span>
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 };

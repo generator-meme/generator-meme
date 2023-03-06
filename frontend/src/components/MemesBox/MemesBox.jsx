@@ -6,9 +6,10 @@ import arrowUp from "../../images/arrow-up.svg"
 import Meme from "../Meme/Meme"
 import { HashLink as Link } from "react-router-hash-link";
 
-const MemesBox = ({ memes, setCurrentMeme, setIsNewMeme }) => {
+const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVisibleMems, setNumberOfVisibleMems, setIsNewMeme }) => {
+
   const [scrollTop, setScrollTop] = useState(null);
-  const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
+  
   
   const fullHeight = Math.max(
     document.body.scrollHeight,
