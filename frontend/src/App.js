@@ -8,11 +8,13 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import api from "./utils/api";
 import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
+import { optionsList } from "./utils/constants.js";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
+  const [isNewMeme, setIsNewMeme] = useState(false);
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
@@ -20,6 +22,7 @@ const App = () => {
       .then((res) => {
         console.log(res);
         setNewMeme(res);
+        localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
@@ -55,7 +58,13 @@ const App = () => {
         <Route
           exact
           path="/"
-          element={<Main memes={memes} setCurrentMeme={setCurrentMeme} />}
+          element={
+            <Main
+              memes={memes}
+              setCurrentMeme={setCurrentMeme}
+              setIsNewMeme={setIsNewMeme}
+            />
+          }
         />
         <Route
           path="/:id"
@@ -63,6 +72,8 @@ const App = () => {
             <Canvas
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
+              setIsNewMeme={setIsNewMeme}
+              isNewMeme={isNewMeme}
             />
           }
         />
@@ -79,6 +90,42 @@ const App = () => {
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
+      <div
+        class="font-preload"
+        style={{
+          opacity: 0,
+          backgroundColor: "transparent",
+          height: 0,
+          overflow: "hidden",
+        }}
+      >
+        {optionsList.map((font, index) => {
+          return (
+            <span key={index}>
+              <span style={{ fontFamily: font, fontWeight: 400 }}>т</span>
+              <span style={{ fontFamily: font, fontWeight: 700 }}>т</span>
+              <span
+                style={{
+                  fontFamily: font,
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                }}
+              >
+                т
+              </span>
+              <span
+                style={{
+                  fontFamily: font,
+                  fontWeight: 700,
+                  fontStyle: "italic",
+                }}
+              >
+                т
+              </span>
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 };

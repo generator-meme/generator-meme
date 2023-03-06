@@ -6,7 +6,8 @@ import arrowUp from "../../images/arrow-up.svg"
 import Meme from "../Meme/Meme"
 import { HashLink as Link } from "react-router-hash-link";
 
-const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVisibleMems, setNumberOfVisibleMems }) => {
+const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVisibleMems, setNumberOfVisibleMems, setIsNewMeme }) => {
+
   const [scrollTop, setScrollTop] = useState(null);
   
   
@@ -45,16 +46,22 @@ const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVis
           {memes
             .slice(0, numberOfVisibleMems)
             .map((elem) => {
-              return <Meme elem={elem} key={elem.id} setCurrentMeme={setCurrentMeme} />
+              return <Meme elem={elem} key={elem.id} setCurrentMeme={setCurrentMeme} setIsNewMeme={setIsNewMeme} />
           })}
         </ul>
         {memes.length > numberOfVisibleMems && (
           <button onClick={addMemes} className="memesbox__btn-show-more btn">показать больше</button>
         )
         }
-        <Link to='/#memes-start' className={` ${(scrollTop > window.innerHeight) ? "memesbox__up_type_fixed" : ""} memesbox__up ${(scrollTop > (fullHeight - 1.25 * window.innerHeight)) ? "memesbox__up_type_absolute" : ""}`}>
+        <Link 
+          to='/#memes-start'
+          className={`
+          ${(scrollTop > window.innerHeight) ? "memesbox__up_type_fixed" : ""} memesbox__up 
+          ${(scrollTop > (fullHeight - 1.25 * window.innerHeight)) ? "memesbox__up_type_absolute" : ""}`
+          }
+        >
           <img className="memesbox__up-arrow" src={arrowUp} alt="Стрелка вверх." />
-          <p className="memesbox__up-text" >Наверх</p>
+          <p className="memesbox__up-text" >наверх</p>
         </Link>
       </section>
     )}

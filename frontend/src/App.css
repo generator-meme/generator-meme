@@ -24,7 +24,19 @@ body {
   border-radius: 20px;
   cursor: pointer;
   border: none;
+  font-family: 'Rubik';
   font-style: normal;
   font-weight: 400;
-  font-family: 'Rubik';
+  font-size: 35px;
+  line-height: 41px;
+  height: 77px;
+  /* width: 457px; */
+}
+
+.btn:hover {
+  background: linear-gradient(180deg, rgba(148, 27, 219, 0.662831) 39.06%, rgba(171, 95, 218, 0.63) 100%);
+}
+
+.btn:active {
+  background: rgba(148, 27, 219, 0.76);
 }

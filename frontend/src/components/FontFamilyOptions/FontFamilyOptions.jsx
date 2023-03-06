@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { optionsList } from "../../utils/constants";
 import "./FontFamilyOptions.css";
 
-function FontFamilyOptions({ 
+function FontFamilyOptions({
   setFontFamily,
   selectedOption,
   setSelectedOption,
   isOptionsOpen,
-  setIsOptionsOpen
+  setIsOptionsOpen,
 }) {
 
   const toggleOptions = () => {

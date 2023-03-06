@@ -1,11 +1,11 @@
 .main-editor {
-  padding: 25px 30px 62px;
+  padding: 20px 30px 20px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .editor {
-  padding: 142px 155px 0 0px;
+  padding: 81px 155px 0 0px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -19,16 +19,16 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 66px;
-  left: 33px;
+  top: 15px;
+  left: 0;
 }
 
 .editor__panel_type_bottom {
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 66px;
-  left: 33px;
+  top: 15px;
+  left: 0px;
 }
 
 .editor__image {
@@ -120,11 +120,5 @@
 }
 
 .editor__btn {
-  margin: 0;
   width: 500px;
-  height: 77px;
-  padding: 0;
-  font-weight: 400;
-  font-size: 35px;
-  line-height: 41px;
 }

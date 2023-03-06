@@ -1,19 +1,21 @@
 export const fontFamilyOptions = {
-  impact: "Impact",
+  roboto: "Roboto",
+  oswald: "Oswald",
+  notoSans: "Noto Sans",
+  montserrat: "Montserrat",
+  playfairDisplay: "Playfair Display",
   arial: "Arial",
-  verdana: "Verdana",
-  comicSans: "Comic Sans",
   timesNewRoman: "Times New Roman",
-  courier: "Courier",
-  calibri: "Calibri",
+  pacifico: "Pacifico",
 };
 
 export const optionsList = [
+  fontFamilyOptions.roboto,
+  fontFamilyOptions.oswald,
+  fontFamilyOptions.notoSans,
+  fontFamilyOptions.montserrat,
+  fontFamilyOptions.playfairDisplay,
   fontFamilyOptions.arial,
-  fontFamilyOptions.impact,
-  fontFamilyOptions.verdana,
-  fontFamilyOptions.comicSans,
   fontFamilyOptions.timesNewRoman,
-  fontFamilyOptions.courier,
-  fontFamilyOptions.calibri,
+  fontFamilyOptions.pacifico,
 ];

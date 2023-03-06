@@ -23,6 +23,10 @@ function Panel ({
     setStrokeTextColor,
     setBackColor,
     setOpacity,
+    selectedOption,
+    setSelectedOption,
+    opacityLevel,
+    setOpacityLevel
   }) {
 
   const form = useRef();
@@ -31,10 +35,8 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
-  const [opacityLevel, setOpacityLevel] = useState(100);
   // для выбора fontFamily
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(0);
 
   const extraWindow = useRef();
 
@@ -112,7 +114,7 @@ function Panel ({
     setFontUnderline(false);
     setFontLineThrough(false);
     setFontPosition('center');
-    setFontFamily(fontFamilyOptions.arial);
+    setFontFamily(fontFamilyOptions.roboto);
     setSelectedOption(0);
     setTextColor('black');
     setStrokeTextColor('transparent');
@@ -215,7 +217,7 @@ function Panel ({
             <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
           )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
+        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           {isOpenOpacity && (
             <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           )}

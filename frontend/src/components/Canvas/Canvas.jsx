@@ -7,13 +7,16 @@ import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
 import { hexToRgb } from '../../utils/hexToRgb';
 
-
-const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
     const img = new Image();
-    img.src = currentMeme.image;
+    if (currentMeme) {
+      img.src = currentMeme.image;
+    } else {
+      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
+    }
     return img;
   }, [currentMeme]);
 
@@ -21,7 +24,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
 
   const [topText, setTopText] = useState('')
   const [topFontSize, setTopFontSize] = useState(40)
-  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.arial)
+  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.roboto)
+  const [topSelectedOption, setTopSelectedOption] = useState(0);
   const [topFontPosition, setTopFontPosition] = useState('center')
   const [topFontWeight, setTopFontWeight] = useState(false)
   const [topFontStyle, setTopFontStyle] = useState(false)
@@ -31,17 +35,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [topLineThrough, setTopLineThrough] = useState(false);
   const [topBackColor, setTopBackColor] = useState('transparent');
   const [topOpacity, setTopOpacity] = useState(1);
+  const [topOpacityLevel, setTopOpacityLevel] = useState(100);
 
-  const topStrokeText = useMemo(() => {
-    if (topStrokeTextColor) {
-      return true;
-    };
-     return false;
-  }, [topStrokeTextColor]);
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
-  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.arial)
+  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.roboto);
+  const [bottomSelectedOption, setBottomSelectedOption] = useState(0);
   const [bottomFontPosition, setBottomFontPosition] = useState('center')
   const [bottomFontWeight, setBottomFontWeight] = useState(false)
   const [bottomFontStyle, setBottomFontStyle] = useState(false)
@@ -51,19 +51,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   const [bottomLineThrough, setBottomLineThrough] = useState(false);
   const [bottomBackColor, setBottomBackColor] = useState('transparent');
   const [bottomOpacity, setBottomOpacity] = useState(1);
+  const [bottomOpacityLevel, setBottomOpacityLevel] = useState(100);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
-  const bottomStrokeText = useMemo(() => {
-    if (bottomStrokeTextColor) {
-      return true;
-    };
-     return false;
-  }, [bottomStrokeTextColor]);
-
   function createMeme () {
-    handleCreateNewMeme(canvas.current.toDataURL(), currentMeme.id)
+    const id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    handleCreateNewMeme(canvas.current.toDataURL(), id)
       .finally(()=> {
         navigate('/saved')
       });
@@ -121,11 +116,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }
 
   // коллбэк-расчет координаты по оси X текста
-  const marginX = useCallback((fontPosition, offsetX) => {
+  const marginX = useCallback((fontPosition, offsetX, textMargin) => {
     if(fontPosition === "start") {
-      return 30 + offsetX;
+      return textMargin + offsetX;
     } else if (fontPosition === "end") {
-      return canvas.current.width - offsetX - 30;
+      return canvas.current.width - offsetX - textMargin;
     } else {
       return canvas.current.width / 2;
     }
@@ -157,7 +152,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
   }, []);
   
   // отрисовка заливки фона текста
-  const addTextBackground = useCallback((ctx, text, x, y, fontSize, color) => {
+  const addTextBackground = useCallback((ctx, text, x, y, lineHeight) => {
     let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
     
     switch (ctx.textAlign) { // вычисление начальной координаты OX
@@ -171,14 +166,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         x -= 5;
     }
     
-    y -= (fontSize - 5);
+    y -= (0.78125 * lineHeight); // вычисление начальной коодинаты OY
 
-    ctx.fillStyle = color;
     if (metrics.width > 0) {
-    ctx.fillRect(x, y, (metrics.width + 10), (fontSize + 8));
+    ctx.fillRect(x, y, (metrics.width + 10), (1.1 * lineHeight));
     };
   }, []);
 
+  const lineHeight = (fontSize) => {
+    return fontSize * 1.12;
+  };
 
   const wrapText = useCallback((ctx, text, maxWidth) => {
     // First, start by splitting all of our text into words, but splitting it into an array split by spaces
@@ -224,16 +221,24 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       height
     } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса
     ctx.drawImage(image, offsetX, offsetY, width, height);
-    ctx.miterLimit = 2;
-    ctx.lineJoin = 'round';
+
+    ctx.miterLimit = 2; // настройка выступа контура для strokeText
+    ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
+    const textMarginX = 30; // значение бокового отступа текста
+    const textWidth = width - textMarginX * 2; // значение ширины, где текст отображается
+    const textMarginYTop = 50;
+    const textMarginYBottom = 20;
+
+    // вычисление границ для текста
+    const lineTop = offsetY + textMarginYTop;
+    const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomFontStyle ? "italic" : "normal"} ${bottomFontWeight ? "bold" : "normal"} ${bottomFontSize}px ${bottomFontFamily}`;
+    ctx.font = `${bottomFontStyle ? "italic" : ""} ${bottomFontWeight ? "bold" : ""} ${bottomFontSize}px ${bottomFontFamily}`;
     ctx.textAlign = bottomFontPosition;
-    ctx.strokeStyle = bottomStrokeTextColor;
     
-    const bottonMarginX = marginX(bottomFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const bottomMarginX = marginX(bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomTextWrap = wrapText(ctx, bottomText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
     
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach(function (t, i) {
@@ -241,33 +246,46 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         t = t.slice(0, t.length - 1);
       };
 
-      const bottonMarginY = canvas.current.height - offsetY - i * (bottomFontSize + 5) - 20;// вычисление отступа по оси Y для каждой строчки текста
+      const bottomMarginY = canvas.current.height - offsetY - i * (lineHeight(bottomFontSize)) - textMarginYBottom; // вычисление отступа по оси Y для каждой строчки текста
       
-      addTextBackground(ctx, t, bottonMarginX, bottonMarginY, bottomFontSize, bottomBackColor); // добавление заливки (default - transparent)
-      ctx.fillStyle = bottomFillTextColor; // переключение цвета для текста
+      if (bottomMarginY < lineTop || bottomMarginY > lineBottom) { // ограничение видимости нижних заливки и контура до верхнего края
+        ctx.fillStyle = "transparent"
+        ctx.strokeStyle = "transparent";
+        
+      } else {
+        ctx.fillStyle = bottomBackColor;
+        ctx.strokeStyle = bottomStrokeTextColor;
+      };
+
+      addTextBackground(ctx, t, bottomMarginX, bottomMarginY, lineHeight(bottomFontSize)); // добавление заливки (default - transparent)
+      
+      if (bottomMarginY < lineTop || bottomMarginY > lineBottom) { // ограничение видимости нижнего текста до верхнего края
+        ctx.fillStyle = "transparent"
+      } else {
+        ctx.fillStyle = bottomFillTextColor; // переключение цвета с заливки на текст
+      };
       
       ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
-      ctx.strokeText(t, bottonMarginX, bottonMarginY); // добавление контура
+      ctx.strokeText(t, bottomMarginX, bottomMarginY); // добавление контура
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
       
-      ctx.fillText(t, bottonMarginX, bottonMarginY, width - 60); // добавление текста построчно
+      ctx.fillText(t, bottomMarginX, bottomMarginY, textWidth); // добавление текста построчно
       
       if (bottomUnderline) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY + 5), bottomFontSize); // отрисовка подчеркивания
+        addLineToText(ctx, t, bottomMarginX, (bottomMarginY + 0.125 * bottomFontSize), bottomFontSize); // отрисовка подчеркивания
       };
       
       if(bottomLineThrough) {
-        addLineToText(ctx, t, bottonMarginX, (bottonMarginY - bottomFontSize / 4), bottomFontSize); // отрисовка зачеркивания
+        addLineToText(ctx, t, bottomMarginX, (bottomMarginY - bottomFontSize / 4), bottomFontSize); // отрисовка зачеркивания
       };
     });
 
     // верхний текст основные характеристики
-    ctx.font = `${topFontStyle ? "italic" : "normal"} ${topFontWeight ? "bold" : "normal"} ${topFontSize}px ${topFontFamily}`;
-    ctx.strokeStyle = topStrokeTextColor;
+    ctx.font = `${topFontStyle ? "italic" : ""} ${topFontWeight ? "bold" : ""} ${topFontSize}px ${topFontFamily}`;
     ctx.textAlign = topFontPosition;
     
-    const topMarginX = marginX(topFontPosition, offsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topText, width - 60); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const topMarginX = marginX(topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topTextWrap = wrapText(ctx, topText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topTextWrap.split('\n').forEach(function (t, i) {
@@ -275,19 +293,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
         t = t.slice(0, t.length - 1);
       };
 
-      const topMarginY = offsetY + 50 + i * (topFontSize + 5); // вычисление отступа по оси Y для каждой строчки текста
+      const topMarginY = offsetY + i * (lineHeight(topFontSize)) + textMarginYTop ; // вычисление отступа по оси Y для каждой строчки текста
 
-      addTextBackground(ctx, t, topMarginX, topMarginY, topFontSize, topBackColor); // добавление заливки (default - transparent), выше, чтобы было за текстом
-      ctx.fillStyle = topFillTextColor; // переключение цвета для текста
+      if (topMarginY > lineBottom || topMarginY < lineTop) { // ограничение видимости верхних заливки и контура до нижнего края
+        ctx.fillStyle = "transparent"
+        ctx.strokeStyle = "transparent";
+        
+      } else {
+        ctx.fillStyle = topBackColor;
+        ctx.strokeStyle = topStrokeTextColor;
+      };
+
+      addTextBackground(ctx, t, topMarginX, topMarginY, lineHeight(topFontSize)); // добавление заливки (default - transparent), выше, чтобы было за текстом
+      
+      if (topMarginY > lineBottom || topMarginY < lineTop) { // ограничение видимости верхнего текста до нижнего края
+        ctx.fillStyle = "transparent"
+      } else {
+        ctx.fillStyle = topFillTextColor; // переключение цвета с заливки на текст
+      };
 
       ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
       ctx.strokeText(t, topMarginX, topMarginY); // добавление контура
       ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
       
-      ctx.fillText(t, topMarginX, topMarginY, width - 60); // добавление текста построчно
+      ctx.fillText(t, topMarginX, topMarginY, textWidth); // добавление текста построчно
 
       if (topUnderline) {
-        addLineToText(ctx, t, topMarginX, (topMarginY + 5), topFontSize); // отрисовка подчеркивания
+        addLineToText(ctx, t, topMarginX, (topMarginY + 0.125 * topFontSize), topFontSize); // отрисовка подчеркивания
       };
 
       if (topLineThrough) {
@@ -295,7 +327,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
       };
     });
 
-  }, [image,
+  }, [
+    image,
     bottomText,
     bottomFontSize,
     bottomFontStyle,
@@ -306,7 +339,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     bottomFillTextColor,
     bottomUnderline,
     bottomLineThrough,
-    bottomStrokeText,
     bottomBackColor,
     topText,
     topFontSize,
@@ -318,17 +350,138 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
     topStrokeTextColor,
     topUnderline,
     topLineThrough,
-    topStrokeText,
     topBackColor,
     marginX,
     addLineToText,
     addTextBackground,
     wrapText,
-  ])
+  ]);
+
+  const top = useMemo(() => {
+    return {
+      text: topText,
+      fontSize: topFontSize,
+      fontFamily: topFontFamily,
+      fontPosition: topFontPosition,
+      fontWeight: topFontWeight,
+      fontStyle: topFontStyle,
+      fillTextColor: topFillTextColor,
+      strokeTextColor: topStrokeTextColor,
+      underline: topUnderline,
+      lineThrough: topLineThrough,
+      backColor: topBackColor,
+      opacity: topOpacity,
+      selectedOption: topSelectedOption,
+      opacityLevel: topOpacityLevel
+    }
+  }, [topText,
+      topFontSize,
+      topFontFamily,
+      topFontPosition,
+      topFontWeight,
+      topFontStyle,
+      topFillTextColor,
+      topStrokeTextColor,
+      topUnderline,
+      topLineThrough,
+      topBackColor,
+      topOpacity,
+      topSelectedOption,
+      topOpacityLevel
+  ]);
+
+  const bottom = useMemo(() => {
+    return {
+      text: bottomText,
+      fontSize: bottomFontSize,
+      fontFamily: bottomFontFamily,
+      fontPosition: bottomFontPosition,
+      fontWeight: bottomFontWeight,
+      fontStyle: bottomFontStyle,
+      fillTextColor: bottomFillTextColor,
+      strokeTextColor: bottomStrokeTextColor,
+      underline: bottomUnderline,
+      lineThrough: bottomLineThrough,
+      backColor: bottomBackColor,
+      opacity: bottomOpacity,
+      selectedOption: bottomSelectedOption,
+      opacityLevel: bottomOpacityLevel
+    }
+  }, [bottomText,
+      bottomFontSize,
+      bottomFontFamily,
+      bottomFontPosition,
+      bottomFontWeight,
+      bottomFontStyle,
+      bottomFillTextColor,
+      bottomStrokeTextColor,
+      bottomUnderline,
+      bottomLineThrough,
+      bottomBackColor,
+      bottomOpacity,
+      bottomSelectedOption,
+      bottomOpacityLevel
+  ]);
+
+  const putValues = useCallback((
+      values,
+      setText,
+      setFontSize,
+      setFontFamily,
+      setFontPosition,
+      setFontBold,
+      setFontItalic,
+      setFillTextColor,
+      setStrokeTextColor,
+      setUnderline,
+      setLineThrough,
+      setOpacity,
+      setBackColor,
+      setSelectedOption,
+      setOpacityLevel
+    ) => {
+    setText(values.text);
+    setFontSize(values.fontSize);
+    setFontFamily(values.fontFamily);
+    setFontPosition(values.fontPosition);
+    setFontBold(values.fontWeight);
+    setFontItalic(values.fontStyle);
+    setFillTextColor(values.fillTextColor);
+    setStrokeTextColor(values.strokeTextColor);
+    setUnderline(values.underline);
+    setLineThrough(values.lineThrough);
+    setOpacity(values.opacity);
+    setBackColor(values.backColor);
+    setSelectedOption(values.selectedOption);
+    setOpacityLevel(values.opacityLevel)
+  }, []);
+
+  useEffect(()=> {
+    setIsNewMeme(false);
+    
+    if (!isNewMeme && localStorage.getItem("topText") !== null) {
+      const topText = JSON.parse(localStorage.getItem("topText"));
+      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption, setTopOpacityLevel);
+    };
+
+    if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
+      const bottomText = JSON.parse(localStorage.getItem("bottomText"));
+      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor, setBottomSelectedOption, setBottomOpacityLevel);
+    };
+    
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("topText", JSON.stringify(top));
+  }, [top]);
+
+  useEffect(() => {
+    localStorage.setItem("bottomText", JSON.stringify(bottom));
+  }, [bottom]);
 
   return (
     <main className='main-editor'>
-      <Navigation isSavedMeme={false} id={currentMeme.id} />
+      <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id} />
       <section className="editor" aria-label="Editor">
         {firstPanelIsOpen && (
           <div className="editor__panel_type_top">
@@ -350,6 +503,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               setStrokeTextColor={setTopStrokeTextColor}
               setBackColor={changeTopBackColor}
               setOpacity={changeTopOpacity}
+              selectedOption={topSelectedOption}
+              setSelectedOption={setTopSelectedOption}
+              opacityLevel={topOpacityLevel}
+              setOpacityLevel={setTopOpacityLevel}
             />
         </div>
         )}
@@ -373,6 +530,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
               setStrokeTextColor={setbottomStrokeTextColor}
               setBackColor={changeBottomBackColor}
               setOpacity={changeBottomOpacity}
+              selectedOption={bottomSelectedOption}
+              setSelectedOption={setBottomSelectedOption}
+              opacityLevel={bottomOpacityLevel}
+              setOpacityLevel={setBottomOpacityLevel}
             />
         </div>
         )}
@@ -402,7 +563,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme }) => {
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
               />
           </form>
-          <button onClick={createMeme} className="editor__btn btn">сгенерить мем</button>
+          <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
         </div>
       </section>
     </main>

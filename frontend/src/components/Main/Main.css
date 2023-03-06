@@ -1,10 +1,10 @@
 .main {
   margin: 0;
-  padding: 135px 0 80px;
+  padding: 15px 0 107px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  row-gap: 115px;
+  row-gap: 35px;
   align-items: center;
   position: relative;
   color: #1E1D1D;
@@ -13,8 +13,8 @@
 
 .main__cat {
   position: absolute;
-  top: 72px;
-  left: 25px;
+  top: 46px;
+  left: 31px;
   z-index: 1;
 }
 
@@ -23,8 +23,8 @@
   padding: 0;
   font-style: normal;
   font-weight: 400;
-  font-size: 80px;
-  line-height: 95px;
+  font-size: 50px;
+  line-height: 90%;
   z-index: 2;
   text-align: center;
 }
@@ -38,11 +38,15 @@
 }
 
 .main__text-advice {
-  margin: 0;
+  margin: 0 0 0 95px;
   padding: 0;
   font-weight: 500;
-  font-size: 42px;
-  line-height: 50px;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.main__future-input {
+  text-decoration: underline;
 }
 
 .main__btn-block {
@@ -50,15 +54,8 @@
 }
 
 .main__btn {
-  margin: 0;
-  padding: 0;
-  font-size: 25px;
-  line-height: 30px;
-  border: none;
-  width: 331px;
-  height: 55px;
-  cursor: pointer;
   position: relative;
+  width: 457px;
 }
 
 .main__btn_help {
