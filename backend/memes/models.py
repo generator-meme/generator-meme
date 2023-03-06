@@ -1,6 +1,7 @@
+from uuid import uuid4
+
 from django.db import models
 from django.db.models import Count, F
-from uuid import uuid4
 
 from users.models import User
 
@@ -23,7 +24,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self) -> str:
-        return self.slug
+        return self.name
 
 
 class TemplateManager(models.Manager):
@@ -35,6 +36,12 @@ class TemplateManager(models.Manager):
 class Template(models.Model):
     """Модель шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    name = models.CharField(
+        verbose_name='Название шаблона',
+        max_length=100,
+        null=True,
+        blank=True
+    )
     image = models.ImageField(
         verbose_name='Изображение',
         upload_to='meme/template_images'
@@ -48,11 +55,16 @@ class Template(models.Model):
     created_at = models.DateTimeField(
         verbose_name='Дата публикации',
         auto_now_add=True)
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name='Статус публикации'
+    )
     objects = TemplateManager()
 
     class Meta:
         verbose_name = 'Шаблон мема'
         verbose_name_plural = 'Шаблоны мемов'
+        ordering = ('-created_at',)
 
 
 class Meme(models.Model):
@@ -79,6 +91,10 @@ class Meme(models.Model):
         verbose_name='Дата публикации',
         auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Готовый мем'
+        verbose_name_plural = 'Готовые мемы'
+
 
 class Favorite(models.Model):
     """Модель избранного шаблона"""
@@ -93,7 +109,7 @@ class Favorite(models.Model):
         Template,
         on_delete=models.CASCADE,
         related_name='favorite',
-        verbose_name='Избранный рецепт'
+        verbose_name='Избранный шаблон'
     )
 
     class Meta:

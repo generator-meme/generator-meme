@@ -23,10 +23,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
 
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
-
     'django_filters',
     'api',
     'memes',
@@ -106,6 +102,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'backend-media')
 
 AUTH_USER_MODEL = 'users.User'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -115,8 +113,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication'
     ],
 }
 
@@ -145,11 +141,6 @@ DJOSER = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_NAME = "Generator-meme"
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-    'django.contrib.auth.backends.ModelBackend'
-)
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
-SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+# SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
