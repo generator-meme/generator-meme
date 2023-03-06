@@ -34,9 +34,9 @@ body {
 }
 
 .btn:hover {
-  background: linear-gradient(180deg, #F197DD 0%, rgba(171, 95, 218, 0.63) 77.16%);
+  background: linear-gradient(180deg, rgba(148, 27, 219, 0.662831) 39.06%, rgba(171, 95, 218, 0.63) 100%);
 }
 
 .btn:active {
-  background: linear-gradient(180deg, #FFA8EC 0%, rgba(168, 37, 249, 0.63) 77.16%);
+  background: rgba(148, 27, 219, 0.76);
 }
