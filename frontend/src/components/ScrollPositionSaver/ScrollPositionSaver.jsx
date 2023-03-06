@@ -28,14 +28,19 @@ function ScrollPositionSaver({pageName, numberOfVisibleMems, setNumberOfVisibleM
         window.addEventListener('scroll', handleScroll);
     }        
     useEffect(()=>{
-        setNumberOfVisibleMems(Number(window.sessionStorage.getItem('number')))
+        const sessionStorageNumberOfSavedMemes = Number(window.sessionStorage.getItem('number'));
+        if(sessionStorageNumberOfSavedMemes !== 0){
+            setNumberOfVisibleMems(sessionStorageNumberOfSavedMemes);
+        } else {
+            setNumberOfVisibleMems(numberOfVisibleMems);
+        }
+       
         if (document.readyState === 'complete') {
             onPageLoad();
           } else {
             window.addEventListener('load', onPageLoad);}
         window.addEventListener("beforeunload", refreshNumberOfVisibleMems);
         return(()=>{
-            console.log(ref.current, 'unmount');
             window.sessionStorage.setItem(pageName, ref.current);
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('load', onPageLoad);
