@@ -1,14 +1,15 @@
 .color-palette {
   z-index: 2;
+  padding: 15px 15px;
   position: absolute;
   top: 30px;
   left: 0;
   background-color: #FFFCED;
+  border: 0.25px solid #000000;
   border-radius: 2%;
   box-sizing: border-box;
   column-gap: 2.2%;
   row-gap: 2.2%;
-  padding: 0.76%;
   width: 220px;
   height: 220px;
   display: grid;
