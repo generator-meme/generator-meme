@@ -7,6 +7,9 @@
     row-gap: 86px;
     align-items: center;
     position: relative;
+    background-image: url(../../images/полосы.svg);
+    background-repeat: no-repeat space;
+    background-size: 100% 466px;
 }
 
 .memesbox__container {
@@ -23,7 +26,9 @@
 }
 
 
-.memesbox__lines {
+
+
+/* .memesbox__lines {
     position: absolute;
     z-index: 1;
 }
@@ -36,7 +41,7 @@
 .memesbox__lines_right {
     right: 0;
     top: 1100px;
-}
+} */
 
 .memesbox__btn-show-more {
     width: 457px;

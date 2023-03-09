@@ -81,7 +81,7 @@
   top: 286px;
 }
 
-/* 
+
 .meme__hashtags {
   list-style: none;
   display: flex;
@@ -95,24 +95,6 @@
   color: #000000;
   align-self: flex-start;
   padding: 0;
-}
-
-.meme__hashtags_type_main {
   max-height: 50px;
   overflow: hidden;
 }
-
-.meme__hashtags_type_hidden {
-  position: absolute;
-  top: 390px;
-  display: none;
-}
-
-.meme__hashtags_type_main:hover {
-  opacity: 0;
-}
-
-.meme__hashtags_type_main:hover+.meme__hashtags_type_hidden {
-  display: flex;
-  z-index: 1;
-} */

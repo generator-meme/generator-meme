@@ -10,6 +10,7 @@ import ScrollPositionSaver from '../ScrollPositionSaver/ScrollPositionSaver';
 const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
   const navigate = useNavigate();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
+  
   const onClick = () => {
     navigate("/canvas");
   };
