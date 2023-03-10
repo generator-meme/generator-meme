@@ -7,6 +7,11 @@
     row-gap: 86px;
     align-items: center;
     position: relative;
+    background-image: url(../../images/lines.svg);
+    background-repeat: repeat-y;
+    background-size: 100% 980px;
+    background-position: top;
+    /* background-size: cover; */
 }
 
 .memesbox__container {
@@ -23,7 +28,9 @@
 }
 
 
-.memesbox__lines {
+
+
+/* .memesbox__lines {
     position: absolute;
     z-index: 1;
 }
@@ -36,7 +43,7 @@
 .memesbox__lines_right {
     right: 0;
     top: 1100px;
-}
+} */
 
 .memesbox__btn-show-more {
     width: 457px;
