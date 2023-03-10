@@ -4,17 +4,16 @@ import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
 import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
-//functions
-import { 
+import {
   contain,
   marginX,
   addLineToText,
   addTextBackground,
   lineHeight,
   wrapText,
-  changeOpacity
+  changeOpacity,
+  changeBackColor
 } from "../../utils/functionsForCanvas.js";
-import { hexToRgb } from '../../utils/hexToRgb';
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
   const navigate = useNavigate();
@@ -64,7 +63,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
-  function createMeme () {
+  const createMeme = () => {
     const id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
     handleCreateNewMeme(canvas.current.toDataURL(), id)
       .finally(()=> {
@@ -73,33 +72,24 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   };
 
   // изменение цвета и прозрачности сверху
-  function changeTopBackColor(color){
-    if(color !== "transparent"){
-      setTopBackColor(`rgba(${hexToRgb(color)}, ${topOpacity})`);
-      return;
-    }
-    setTopBackColor(color);
-    return;
+  const changeTopBackColor = (color) => {
+    changeBackColor(color, setTopBackColor, topOpacity);
   }
 
-  function changeTopOpacity(opacity) {
+  const changeTopOpacity = (opacity) => {
     changeOpacity(opacity, setTopOpacity, topBackColor, setTopBackColor);
-  }
-
-  // изменение цвета и прозрачности снизу
-  function changeBottomBackColor(color){
-    if(color !== "transparent"){
-      setBottomBackColor(`rgba(${hexToRgb(color)}, ${bottomOpacity})`);
-      return;
-    }
-    setBottomBackColor(color);
-    return;
   };
 
-  function changeBottomOpacity(opacity) {
+  // изменение цвета и прозрачности снизу
+  const changeBottomBackColor = (color) => {
+    changeBackColor(color, setBottomBackColor, bottomOpacity);
+  };
+
+  const changeBottomOpacity = (opacity) => {
     changeOpacity(opacity, setBottomOpacity, bottomBackColor, setBottomBackColor);
   };
   
+  // открытие/закрытие панелей
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
     e.preventDefault();
     setMyPanelIsOpen(true);
