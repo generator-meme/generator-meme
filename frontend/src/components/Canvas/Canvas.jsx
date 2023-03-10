@@ -2,9 +2,17 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
-import { contain } from "../../utils/fit.js";
 import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
+//functions
+import { 
+  contain,
+  marginX,
+  addLineToText,
+  addTextBackground,
+  lineHeight,
+  wrapText
+} from "../../utils/functionsForCanvas.js";
 import { hexToRgb } from '../../utils/hexToRgb';
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
@@ -36,7 +44,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [topBackColor, setTopBackColor] = useState('transparent');
   const [topOpacity, setTopOpacity] = useState(1);
   const [topOpacityLevel, setTopOpacityLevel] = useState(100);
-
 
   const [bottomText, setBottomText] = useState('')
   const [bottomFontSize, setBottomFontSize] = useState(40)
@@ -115,103 +122,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     setOtherPanelIsOpen(false);
   }
 
-  // коллбэк-расчет координаты по оси X текста
-  const marginX = useCallback((fontPosition, offsetX, textMargin) => {
-    if(fontPosition === "start") {
-      return textMargin + offsetX;
-    } else if (fontPosition === "end") {
-      return canvas.current.width - offsetX - textMargin;
-    } else {
-      return canvas.current.width / 2;
-    }
-  }, []);
-
-  // отрисовка подчеркивания или зачеркивания
-  const addLineToText = useCallback((ctx, text, x, y, fontSize) => {
-    let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
-    
-    switch (ctx.textAlign) { // вычисление начальной координаты OX 
-      case "center":
-        x -= (metrics.width / 2);
-        break;
-      case "end":
-        x -= metrics.width;
-        break;
-      default:
-        x += 0;
-    }
-    // рисование линии
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = ctx.fillStyle; // цвет линии - цвет шрифта
-    ctx.lineWidth = Math.ceil(fontSize * 0.05); // вычисление ширины линии в зависимости от размера шрифта
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + metrics.width, y);
-    ctx.stroke();
-    ctx.restore();
-  }, []);
-  
-  // отрисовка заливки фона текста
-  const addTextBackground = useCallback((ctx, text, x, y, lineHeight) => {
-    let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
-    
-    switch (ctx.textAlign) { // вычисление начальной координаты OX
-      case "center":
-        x -= (metrics.width / 2 + 5);
-        break;
-      case "end":
-        x -= (metrics.width + 5);
-        break;
-      default:
-        x -= 5;
-    }
-    
-    y -= (0.78125 * lineHeight); // вычисление начальной коодинаты OY
-
-    if (metrics.width > 0) {
-    ctx.fillRect(x, y, (metrics.width + 10), (1.1 * lineHeight));
-    };
-  }, []);
-
-  const lineHeight = (fontSize) => {
-    return fontSize * 1.12;
-  };
-
-  const wrapText = useCallback((ctx, text, maxWidth) => {
-    // First, start by splitting all of our text into words, but splitting it into an array split by spaces
-    let words = text.split(' ');
-    let line = ''; // This will store the text of the current line
-    let testLine = ''; // This will store the text when we add a word, to test if it's too long
-    let lineArray = []; // This is an array of lines, which the function will return
-
-    // Lets iterate over each word
-    for(var n = 0; n < words.length; n++) {
-        // Create a test line, and measure it..
-        testLine += `${words[n]} `;
-        let metrics = ctx.measureText(testLine);
-        let testWidth = metrics.width;
-        // If the width of this test line is more than the max width
-        if (testWidth > maxWidth && n > 0) {
-            // Then the line is finished, add to line '\n' and push the current line into "lineArray"
-            line += "\n";
-            lineArray.push(line);
-            // Update line and test line to use this word as the first word on the next line
-            line = `${words[n]} `;
-            testLine = `${words[n]} `;
-        }
-        else {
-            // If the test line is still less than the max width, then add the word to the current line
-            line += `${words[n]} `;
-        }
-        // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
-        if (n === words.length - 1) {
-            lineArray.push(line);
-        }
-    }
-    // Return the new string
-    return lineArray.join("");
-  }, []);
-
   useEffect(() => {
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
     const {
@@ -237,7 +147,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     ctx.font = `${bottomFontStyle ? "italic" : ""} ${bottomFontWeight ? "bold" : ""} ${bottomFontSize}px ${bottomFontFamily}`;
     ctx.textAlign = bottomFontPosition;
     
-    const bottomMarginX = marginX(bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomMarginX = marginX(canvas.current, bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
     const bottomTextWrap = wrapText(ctx, bottomText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
     
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
@@ -284,7 +194,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     ctx.font = `${topFontStyle ? "italic" : ""} ${topFontWeight ? "bold" : ""} ${topFontSize}px ${topFontFamily}`;
     ctx.textAlign = topFontPosition;
     
-    const topMarginX = marginX(topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topMarginX = marginX(canvas.current, topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
     const topTextWrap = wrapText(ctx, topText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
@@ -351,10 +261,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     topUnderline,
     topLineThrough,
     topBackColor,
-    marginX,
-    addLineToText,
-    addTextBackground,
-    wrapText,
   ]);
 
   const top = useMemo(() => {
