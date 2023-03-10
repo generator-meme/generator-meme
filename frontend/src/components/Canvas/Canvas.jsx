@@ -11,7 +11,8 @@ import {
   addLineToText,
   addTextBackground,
   lineHeight,
-  wrapText
+  wrapText,
+  changeOpacity
 } from "../../utils/functionsForCanvas.js";
 import { hexToRgb } from '../../utils/hexToRgb';
 
@@ -82,17 +83,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   }
 
   function changeTopOpacity(opacity) {
-    // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-    const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-    setTopOpacity(opacity);
-    if (topBackColor !== "transparent") {
-      // меняем значение opacity (последнее значение в rgba)
-      let replacedColor = topBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
-      setTopBackColor(replacedColor);
-      return;
-    }
-    return;
+    changeOpacity(opacity, setTopOpacity, topBackColor, setTopBackColor);
   }
+
   // изменение цвета и прозрачности снизу
   function changeBottomBackColor(color){
     if(color !== "transparent"){
@@ -101,19 +94,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     }
     setBottomBackColor(color);
     return;
-  ;}
+  };
 
   function changeBottomOpacity(opacity) {
-    // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-    const regExpFromLastCommaToLastRoundBracket = /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-    setBottomOpacity(opacity);
-    if (bottomBackColor !== "transparent") {
-      // меняем значение opacity (последнее значение в rgba)
-      let replacedColor = bottomBackColor.replace(regExpFromLastCommaToLastRoundBracket, `,${opacity})`);
-      setBottomBackColor(replacedColor);
-      return;
-    }
-    return;
+    changeOpacity(opacity, setBottomOpacity, bottomBackColor, setBottomBackColor);
   };
   
   const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {

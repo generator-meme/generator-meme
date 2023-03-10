@@ -133,3 +133,21 @@ export const wrapText = (ctx, text, maxWidth) => {
   // Return the new string
   return lineArray.join("");
 };
+
+// изменение opacity
+export const changeOpacity = (opacity, setOpacity, backColor, setBackColor) => {
+  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
+  const regExpFromLastCommaToLastRoundBracket =
+    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+  setOpacity(opacity);
+  if (backColor !== "transparent") {
+    // меняем значение opacity (последнее значение в rgba)
+    let replacedColor = backColor.replace(
+      regExpFromLastCommaToLastRoundBracket,
+      `,${opacity})`
+    );
+    setBackColor(replacedColor);
+    return;
+  }
+  return;
+};
