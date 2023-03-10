@@ -32,7 +32,7 @@ const fit = (contains) => {
 export const contain = fit(true);
 export const cover = fit(false);
 
-// коллбэк-расчет координаты по оси X текста
+// расчет координаты по оси X текста
 export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
   if (fontPosition === "start") {
     return textMargin + offsetX;
@@ -59,7 +59,7 @@ export const addLineToText = (ctx, text, x, y, fontSize) => {
     default:
       x += 0;
   }
-  // рисование линии
+
   ctx.save();
   ctx.beginPath();
   ctx.strokeStyle = ctx.fillStyle; // цвет линии - цвет шрифта
@@ -135,18 +135,18 @@ export const wrapText = (ctx, text, maxWidth) => {
 };
 
 // изменение opacity
-export const changeOpacity = (opacity, setOpacity, backColor, setBackColor) => {
+export const changeOpacity = (opacity, setValues, values) => {
   // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
   const regExpFromLastCommaToLastRoundBracket =
     /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setOpacity(opacity);
-  if (backColor !== "transparent") {
+  setValues((prev) => ({ ...prev, opacity: opacity }));
+  if (values.backColor !== "transparent") {
     // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = backColor.replace(
+    let replacedColor = values.backColor.replace(
       regExpFromLastCommaToLastRoundBracket,
       `,${opacity})`
     );
-    setBackColor(replacedColor);
+    setValues((prev) => ({ ...prev, backColor: replacedColor }));
     return;
   }
   return;
@@ -166,15 +166,19 @@ const hexToRgb = (hex) => {
 };
 
 // изменение цвета фона текста
-export const changeBackColor = (color, setBackColor, opacity) => {
+export const changeBackColor = (color, setValues, values) => {
   if (color !== "transparent") {
-    setBackColor(`rgba(${hexToRgb(color)}, ${opacity})`);
+    setValues((prev) => ({
+      ...prev,
+      backColor: `rgba(${hexToRgb(color)}, ${values.opacity})`,
+    }));
     return;
   }
-  setBackColor(color);
+  setValues((prev) => ({ ...prev, backColor: color }));
   return;
 };
 
+// отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
 export const drawText = (
   t,
   i,
@@ -188,12 +192,7 @@ export const drawText = (
   lineBottom,
   marginX,
   textWidth,
-  fontSize,
-  backColor,
-  strokeTextColor,
-  fillTextColor,
-  underline,
-  lineThrough
+  textValues
 ) => {
   if (t[t.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
@@ -202,10 +201,13 @@ export const drawText = (
 
   let marginY;
   if (top) {
-    marginY = offsetY + i * lineHeight(fontSize) + textMarginYTop;
+    marginY = offsetY + i * lineHeight(textValues.fontSize) + textMarginYTop;
   } else {
     marginY =
-      canvas.height - offsetY - i * lineHeight(fontSize) - textMarginYBottom;
+      canvas.height -
+      offsetY -
+      i * lineHeight(textValues.fontSize) -
+      textMarginYBottom;
   }
 
   if (
@@ -216,11 +218,11 @@ export const drawText = (
     ctx.fillStyle = "transparent";
     ctx.strokeStyle = "transparent";
   } else {
-    ctx.fillStyle = backColor;
-    ctx.strokeStyle = strokeTextColor;
+    ctx.fillStyle = textValues.backColor;
+    ctx.strokeStyle = textValues.strokeTextColor;
   }
 
-  addTextBackground(ctx, t, marginX, marginY, lineHeight(fontSize)); // добавление заливки (default - transparent)
+  addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
   if (
     (top && (marginY > lineBottom || marginY < lineTop)) ||
@@ -229,7 +231,7 @@ export const drawText = (
     // ограничение видимости нижнего текста до верхнего края
     ctx.fillStyle = "transparent";
   } else {
-    ctx.fillStyle = fillTextColor; // переключение цвета с заливки на текст
+    ctx.fillStyle = textValues.fillTextColor; // переключение цвета с заливки на текст
   }
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
@@ -238,11 +240,23 @@ export const drawText = (
 
   ctx.fillText(t, marginX, marginY, textWidth); // добавление текста построчно
 
-  if (underline) {
-    addLineToText(ctx, t, marginX, marginY + 0.125 * fontSize, fontSize); // отрисовка подчеркивания
+  if (textValues.underline) {
+    addLineToText(
+      ctx,
+      t,
+      marginX,
+      marginY + 0.125 * textValues.fontSize,
+      textValues.fontSize
+    ); // отрисовка подчеркивания
   }
 
-  if (lineThrough) {
-    addLineToText(ctx, t, marginX, marginY - fontSize / 4, fontSize); // отрисовка зачеркивания
+  if (textValues.lineThrough) {
+    addLineToText(
+      ctx,
+      t,
+      marginX,
+      marginY - textValues.fontSize / 4,
+      textValues.fontSize
+    ); // отрисовка зачеркивания
   }
 };

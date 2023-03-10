@@ -28,35 +28,39 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   const canvas = useRef()
 
-  const [topText, setTopText] = useState('')
-  const [topFontSize, setTopFontSize] = useState(40)
-  const [topFontFamily, setTopFontFamily] = useState(fontFamilyOptions.roboto)
-  const [topSelectedOption, setTopSelectedOption] = useState(0);
-  const [topFontPosition, setTopFontPosition] = useState('center')
-  const [topFontWeight, setTopFontWeight] = useState(false)
-  const [topFontStyle, setTopFontStyle] = useState(false)
-  const [topFillTextColor, setTopFillTextColor] = useState('black');
-  const [topStrokeTextColor, setTopStrokeTextColor] = useState('transparent');
-  const [topUnderline, setTopUnderline] = useState(false);
-  const [topLineThrough, setTopLineThrough] = useState(false);
-  const [topBackColor, setTopBackColor] = useState('transparent');
-  const [topOpacity, setTopOpacity] = useState(1);
-  const [topOpacityLevel, setTopOpacityLevel] = useState(100);
+  const [topTextValues, setTopTextValues] = useState({
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100
+  });
 
-  const [bottomText, setBottomText] = useState('')
-  const [bottomFontSize, setBottomFontSize] = useState(40)
-  const [bottomFontFamily, setBottomFontFamily] = useState(fontFamilyOptions.roboto);
-  const [bottomSelectedOption, setBottomSelectedOption] = useState(0);
-  const [bottomFontPosition, setBottomFontPosition] = useState('center')
-  const [bottomFontWeight, setBottomFontWeight] = useState(false)
-  const [bottomFontStyle, setBottomFontStyle] = useState(false)
-  const [bottomFillTextColor, setBottomFillTextColor] = useState('black');
-  const [bottomStrokeTextColor, setbottomStrokeTextColor] = useState('transparent');
-  const [bottomUnderline, setBottomUnderline] = useState(false);
-  const [bottomLineThrough, setBottomLineThrough] = useState(false);
-  const [bottomBackColor, setBottomBackColor] = useState('transparent');
-  const [bottomOpacity, setBottomOpacity] = useState(1);
-  const [bottomOpacityLevel, setBottomOpacityLevel] = useState(100);
+  const [bottomTextValues, setBottomTextValues] = useState({
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100
+});
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -71,20 +75,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   // изменение цвета и прозрачности сверху
   const changeTopBackColor = (color) => {
-    changeBackColor(color, setTopBackColor, topOpacity);
+    changeBackColor(color, setTopTextValues, topTextValues);
   }
 
   const changeTopOpacity = (opacity) => {
-    changeOpacity(opacity, setTopOpacity, topBackColor, setTopBackColor);
+    changeOpacity(opacity, setTopTextValues, topTextValues);
   };
 
   // изменение цвета и прозрачности снизу
   const changeBottomBackColor = (color) => {
-    changeBackColor(color, setBottomBackColor, bottomOpacity);
+    changeBackColor(color, setBottomTextValues, bottomTextValues);
   };
 
   const changeBottomOpacity = (opacity) => {
-    changeOpacity(opacity, setBottomOpacity, bottomBackColor, setBottomBackColor);
+    changeOpacity(opacity, setBottomTextValues, bottomTextValues);
   };
   
   // открытие/закрытие панелей
@@ -116,11 +120,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomFontStyle ? "italic" : ""} ${bottomFontWeight ? "bold" : ""} ${bottomFontSize}px ${bottomFontFamily}`;
-    ctx.textAlign = bottomFontPosition;
+    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
+    ctx.textAlign = bottomTextValues.fontPosition;
     
-    const bottomMarginX = calculateMarginX(canvas.current, bottomFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const bottomMarginX = calculateMarginX(canvas.current, bottomTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
     
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
@@ -136,20 +140,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       lineBottom,
       bottomMarginX,
       textWidth,
-      bottomFontSize,
-      bottomBackColor,
-      bottomStrokeTextColor,
-      bottomFillTextColor,
-      bottomUnderline,
-      bottomLineThrough
+      bottomTextValues
     ));
 
     // верхний текст основные характеристики
-    ctx.font = `${topFontStyle ? "italic" : ""} ${topFontWeight ? "bold" : ""} ${topFontSize}px ${topFontFamily}`;
-    ctx.textAlign = topFontPosition;
+    ctx.font = `${topTextValues.fontStyle ? "italic" : ""} ${topTextValues.fontWeight ? "bold" : ""} ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+    ctx.textAlign = topTextValues.fontPosition;
     
-    const topMarginX = calculateMarginX(canvas.current, topFontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topText, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const topMarginX = calculateMarginX(canvas.current, topTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topTextWrap = wrapText(ctx, topTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topTextWrap.split('\n').forEach((t, i) => drawText(
@@ -165,161 +164,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
       lineBottom,
       topMarginX,
       textWidth,
-      topFontSize,
-      topBackColor,
-      topStrokeTextColor,
-      topFillTextColor,
-      topUnderline,
-      topLineThrough
+      topTextValues
     ));
 
-  }, [
-    image,
-    bottomText,
-    bottomFontSize,
-    bottomFontStyle,
-    bottomFontWeight,
-    bottomFontFamily,
-    bottomFontPosition,
-    bottomStrokeTextColor,
-    bottomFillTextColor,
-    bottomUnderline,
-    bottomLineThrough,
-    bottomBackColor,
-    topText,
-    topFontSize,
-    topFontStyle,
-    topFontWeight,
-    topFontFamily,
-    topFontPosition,
-    topFillTextColor,
-    topStrokeTextColor,
-    topUnderline,
-    topLineThrough,
-    topBackColor,
-  ]);
-
-  const top = useMemo(() => {
-    return {
-      text: topText,
-      fontSize: topFontSize,
-      fontFamily: topFontFamily,
-      fontPosition: topFontPosition,
-      fontWeight: topFontWeight,
-      fontStyle: topFontStyle,
-      fillTextColor: topFillTextColor,
-      strokeTextColor: topStrokeTextColor,
-      underline: topUnderline,
-      lineThrough: topLineThrough,
-      backColor: topBackColor,
-      opacity: topOpacity,
-      selectedOption: topSelectedOption,
-      opacityLevel: topOpacityLevel
-    }
-  }, [topText,
-      topFontSize,
-      topFontFamily,
-      topFontPosition,
-      topFontWeight,
-      topFontStyle,
-      topFillTextColor,
-      topStrokeTextColor,
-      topUnderline,
-      topLineThrough,
-      topBackColor,
-      topOpacity,
-      topSelectedOption,
-      topOpacityLevel
-  ]);
-
-  const bottom = useMemo(() => {
-    return {
-      text: bottomText,
-      fontSize: bottomFontSize,
-      fontFamily: bottomFontFamily,
-      fontPosition: bottomFontPosition,
-      fontWeight: bottomFontWeight,
-      fontStyle: bottomFontStyle,
-      fillTextColor: bottomFillTextColor,
-      strokeTextColor: bottomStrokeTextColor,
-      underline: bottomUnderline,
-      lineThrough: bottomLineThrough,
-      backColor: bottomBackColor,
-      opacity: bottomOpacity,
-      selectedOption: bottomSelectedOption,
-      opacityLevel: bottomOpacityLevel
-    }
-  }, [bottomText,
-      bottomFontSize,
-      bottomFontFamily,
-      bottomFontPosition,
-      bottomFontWeight,
-      bottomFontStyle,
-      bottomFillTextColor,
-      bottomStrokeTextColor,
-      bottomUnderline,
-      bottomLineThrough,
-      bottomBackColor,
-      bottomOpacity,
-      bottomSelectedOption,
-      bottomOpacityLevel
-  ]);
-
-  const putValues = useCallback((
-      values,
-      setText,
-      setFontSize,
-      setFontFamily,
-      setFontPosition,
-      setFontBold,
-      setFontItalic,
-      setFillTextColor,
-      setStrokeTextColor,
-      setUnderline,
-      setLineThrough,
-      setOpacity,
-      setBackColor,
-      setSelectedOption,
-      setOpacityLevel
-    ) => {
-    setText(values.text);
-    setFontSize(values.fontSize);
-    setFontFamily(values.fontFamily);
-    setFontPosition(values.fontPosition);
-    setFontBold(values.fontWeight);
-    setFontItalic(values.fontStyle);
-    setFillTextColor(values.fillTextColor);
-    setStrokeTextColor(values.strokeTextColor);
-    setUnderline(values.underline);
-    setLineThrough(values.lineThrough);
-    setOpacity(values.opacity);
-    setBackColor(values.backColor);
-    setSelectedOption(values.selectedOption);
-    setOpacityLevel(values.opacityLevel)
-  }, []);
+  }, [image, bottomTextValues, topTextValues]);
 
   useEffect(()=> {
     setIsNewMeme(false);
     
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
-      putValues(topText, setTopText, setTopFontSize, setTopFontFamily, setTopFontPosition, setTopFontWeight, setTopFontStyle, setTopFillTextColor, setTopStrokeTextColor, setTopUnderline, setTopLineThrough, setTopOpacity, setTopBackColor, setTopSelectedOption, setTopOpacityLevel);
+      setTopTextValues(topText);
     };
 
     if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
-      putValues(bottomText, setBottomText, setBottomFontSize, setBottomFontFamily, setBottomFontPosition, setBottomFontWeight, setBottomFontStyle, setBottomFillTextColor, setbottomStrokeTextColor, setBottomUnderline, setBottomLineThrough, setBottomOpacity, setBottomBackColor, setBottomSelectedOption, setBottomOpacityLevel);
+      setBottomTextValues(bottomText);
     };
     
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("topText", JSON.stringify(top));
-  }, [top]);
+    localStorage.setItem("topText", JSON.stringify(topTextValues));
+  }, [topTextValues]);
 
   useEffect(() => {
-    localStorage.setItem("bottomText", JSON.stringify(bottom));
-  }, [bottom]);
+    localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
+  }, [bottomTextValues]);
 
   return (
     <main className='main-editor'>
@@ -328,54 +199,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
         {firstPanelIsOpen && (
           <div className="editor__panel_type_top">
             <Panel
-              fontSize={topFontSize}
-              setFontSize={setTopFontSize}
-              setFontBold={setTopFontWeight}
-              setFontItalic={setTopFontStyle}
-              setFontUnderline={setTopUnderline}
-              setFontLineThrough={setTopLineThrough}
-              boldChecked={topFontWeight}
-              italicChecked={topFontStyle}
-              underlineChecked={topUnderline}
-              lineThroughChecked={topLineThrough}
-              textPosition={topFontPosition}
-              setFontPosition={setTopFontPosition}
-              setFontFamily={setTopFontFamily}
-              setTextColor={setTopFillTextColor}
-              setStrokeTextColor={setTopStrokeTextColor}
+              textValues={topTextValues}
+              setTextValues={setTopTextValues}
               setBackColor={changeTopBackColor}
               setOpacity={changeTopOpacity}
-              selectedOption={topSelectedOption}
-              setSelectedOption={setTopSelectedOption}
-              opacityLevel={topOpacityLevel}
-              setOpacityLevel={setTopOpacityLevel}
             />
         </div>
         )}
         {secondPanelIsOpen && (
           <div className="editor__panel_type_bottom">
             <Panel
-              fontSize={bottomFontSize}
-              setFontSize={setBottomFontSize}
-              setFontBold={setBottomFontWeight}
-              setFontItalic={setBottomFontStyle}
-              setFontUnderline={setBottomUnderline}
-              setFontLineThrough={setBottomLineThrough}
-              boldChecked={bottomFontWeight}
-              italicChecked={bottomFontStyle}
-              underlineChecked={bottomUnderline}
-              lineThroughChecked={bottomLineThrough}
-              textPosition={bottomFontPosition}
-              setFontPosition={setBottomFontPosition}
-              setFontFamily={setBottomFontFamily}
-              setTextColor={setBottomFillTextColor}
-              setStrokeTextColor={setbottomStrokeTextColor}
+              textValues={bottomTextValues}
+              setTextValues={setBottomTextValues}
               setBackColor={changeBottomBackColor}
               setOpacity={changeBottomOpacity}
-              selectedOption={bottomSelectedOption}
-              setSelectedOption={setBottomSelectedOption}
-              opacityLevel={bottomOpacityLevel}
-              setOpacityLevel={setBottomOpacityLevel}
             />
         </div>
         )}
@@ -391,16 +228,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
               <textarea
                 className="editor__text"
                 type="text"
-                value={topText}
-                onChange={(e) => setTopText(e.target.value)}
+                value={topTextValues.text}
+                onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
                 placeholder="Текст сверху"
                 onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
               />
               <textarea
                 className="editor__text"
                 type="text"
-                value={bottomText}
-                onChange={(e) => setBottomText(e.target.value)}
+                value={bottomTextValues.text}
+                onChange={(e) => setBottomTextValues({ ...bottomTextValues, text: e.target.value})}
                 placeholder="Текст снизу"
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
               />
