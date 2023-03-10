@@ -7,9 +7,11 @@
     row-gap: 86px;
     align-items: center;
     position: relative;
-    background-image: url(../../images/полосы.svg);
-    background-repeat: no-repeat space;
-    background-size: 100% 466px;
+    background-image: url(../../images/lines.svg);
+    background-repeat: repeat-y;
+    background-size: 100% 980px;
+    background-position: top;
+    /* background-size: cover; */
 }
 
 .memesbox__container {
