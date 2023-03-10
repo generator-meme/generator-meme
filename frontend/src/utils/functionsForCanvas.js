@@ -33,7 +33,7 @@ export const contain = fit(true);
 export const cover = fit(false);
 
 // коллбэк-расчет координаты по оси X текста
-export const marginX = (canvas, fontPosition, offsetX, textMargin) => {
+export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
   if (fontPosition === "start") {
     return textMargin + offsetX;
   } else if (fontPosition === "end") {
@@ -173,4 +173,76 @@ export const changeBackColor = (color, setBackColor, opacity) => {
   }
   setBackColor(color);
   return;
+};
+
+export const drawText = (
+  t,
+  i,
+  ctx,
+  top,
+  canvas,
+  offsetY,
+  textMarginYBottom,
+  textMarginYTop,
+  lineTop,
+  lineBottom,
+  marginX,
+  textWidth,
+  fontSize,
+  backColor,
+  strokeTextColor,
+  fillTextColor,
+  underline,
+  lineThrough
+) => {
+  if (t[t.length - 1] === " ") {
+    // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
+    t = t.slice(0, t.length - 1);
+  }
+
+  let marginY;
+  if (top) {
+    marginY = offsetY + i * lineHeight(fontSize) + textMarginYTop;
+  } else {
+    marginY =
+      canvas.height - offsetY - i * lineHeight(fontSize) - textMarginYBottom;
+  }
+
+  if (
+    (top && (marginY > lineBottom || marginY < lineTop)) ||
+    (!top && (marginY < lineTop || marginY > lineBottom))
+  ) {
+    // ограничение видимости нижних заливки и контура до верхнего края
+    ctx.fillStyle = "transparent";
+    ctx.strokeStyle = "transparent";
+  } else {
+    ctx.fillStyle = backColor;
+    ctx.strokeStyle = strokeTextColor;
+  }
+
+  addTextBackground(ctx, t, marginX, marginY, lineHeight(fontSize)); // добавление заливки (default - transparent)
+
+  if (
+    (top && (marginY > lineBottom || marginY < lineTop)) ||
+    (!top && (marginY < lineTop || marginY > lineBottom))
+  ) {
+    // ограничение видимости нижнего текста до верхнего края
+    ctx.fillStyle = "transparent";
+  } else {
+    ctx.fillStyle = fillTextColor; // переключение цвета с заливки на текст
+  }
+
+  ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
+  ctx.strokeText(t, marginX, marginY); // добавление контура
+  ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
+
+  ctx.fillText(t, marginX, marginY, textWidth); // добавление текста построчно
+
+  if (underline) {
+    addLineToText(ctx, t, marginX, marginY + 0.125 * fontSize, fontSize); // отрисовка подчеркивания
+  }
+
+  if (lineThrough) {
+    addLineToText(ctx, t, marginX, marginY - fontSize / 4, fontSize); // отрисовка зачеркивания
+  }
 };
