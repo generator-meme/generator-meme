@@ -6,27 +6,10 @@ import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 
 function Panel ({
-    fontSize,
-    setFontSize,
-    setFontBold,
-    setFontItalic,
-    setFontUnderline,
-    setFontLineThrough,
-    boldChecked,
-    italicChecked,
-    underlineChecked,
-    lineThroughChecked,
-    textPosition,
-    setFontPosition,
-    setFontFamily,
-    setTextColor,
-    setStrokeTextColor,
+    textValues,
+    setTextValues,
     setBackColor,
     setOpacity,
-    selectedOption,
-    setSelectedOption,
-    opacityLevel,
-    setOpacityLevel
   }) {
 
   const form = useRef();
@@ -42,12 +25,12 @@ function Panel ({
 
   const increaseSize = (e) => {
     e.preventDefault();
-    setFontSize(fontSize + 1);
+    setTextValues((prev) => ({ ...prev, fontSize: textValues.fontSize + 1}));
   };
 
   const decreaseSize = (e) => {
     e.preventDefault();
-    setFontSize(fontSize - 1);
+    setTextValues((prev) => ({ ...prev, fontSize: textValues.fontSize - 1}));
   };
 
   const openTextColor = (e) => {
@@ -105,22 +88,37 @@ function Panel ({
     setIsOpenOpacity(false);
     setIsOptionsOpen(false);
   };
+
+  const setTextColor = (color) => {
+    setTextValues((prev) => ({ ...prev, fillTextColor: color}));
+  };
+
+  const setStrokeTextColor = (color) => {
+    setTextValues((prev) => ({ ...prev, strokeTextColor: color}));
+  };
+
+  const setOpacityLevel = (level) => {
+    setTextValues((prev) => ({ ...prev, opacityLevel: level}));
+  };
   
   const resetForm = (e) => {
     e.preventDefault();
-    setFontSize(40);
-    setFontBold(false);
-    setFontItalic(false);
-    setFontUnderline(false);
-    setFontLineThrough(false);
-    setFontPosition('center');
-    setFontFamily(fontFamilyOptions.roboto);
-    setSelectedOption(0);
-    setTextColor('black');
-    setStrokeTextColor('transparent');
     setOpacity(1);
-    setOpacityLevel(100);
     setBackColor('transparent');
+    setTextValues((prev) => ({
+      ...prev,
+      fontSize: 40,
+      fontFamily: fontFamilyOptions.roboto,
+      selectedOption: 0,
+      fontPosition: "center",
+      fontWeight: false,
+      fontStyle: false,
+      fillTextColor: "black",
+      strokeTextColor: "transparent",
+      underline: false,
+      lineThrough: false,
+      opacityLevel: 100
+    }));
     form.current.reset();
   };
 
@@ -150,9 +148,8 @@ function Panel ({
     <form ref={form} className="panel" noValidate>
       <fieldset className="panel__section">
         <FontFamilyOptions
-          setFontFamily={setFontFamily}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
+          selectedOption={textValues.selectedOption}
+          setTextValues={setTextValues}
           isOptionsOpen={isOptionsOpen}
           setIsOptionsOpen={setIsOptionsOpen}
         />
@@ -162,40 +159,40 @@ function Panel ({
       <fieldset className="panel__section">
         <label className="panel__container">
           <input
-            checked={boldChecked}
+            checked={textValues.fontWeight}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontBold(!boldChecked)}
+            onChange={e => setTextValues((prev) => ({ ...prev, fontWeight: !textValues.fontWeight}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_bold">
           </span>
         </label>
          <label className="panel__container">
           <input
-            checked={italicChecked}
+            checked={textValues.fontStyle}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontItalic(!italicChecked)}
+            onChange={e => setTextValues((prev) => ({ ...prev, fontStyle: !textValues.fontStyle}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_italic">
           </span>
         </label>
          <label className="panel__container">
           <input
-            checked={underlineChecked}
+            checked={textValues.underline}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontUnderline(!underlineChecked)}
+            onChange={e => setTextValues((prev) => ({ ...prev, underline: !textValues.underline}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_underline">
           </span>
         </label>
          <label className="panel__container">
           <input
-            checked={lineThroughChecked}
+            checked={textValues.lineThrough}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setFontLineThrough(!lineThroughChecked)}
+            onChange={e => setTextValues((prev) => ({ ...prev, lineThrough: !textValues.lineThrough}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_line-through">
           </span>
@@ -219,37 +216,37 @@ function Panel ({
         </button>
         <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           {isOpenOpacity && (
-            <OpacityPanel setOpacity={setOpacity} opacityLevel={opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
+            <OpacityPanel setOpacity={setOpacity} opacityLevel={textValues.opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
           )}
         </button>
       </fieldset>
       <fieldset className="panel__section">
         <label className="panel__container">
           <input
-            checked={(textPosition === "start")? true : false}
+            checked={(textValues.fontPosition === "start")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setFontPosition('start')}
+            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: 'start'}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_start">
           </span>
         </label>
         <label className="panel__container">
           <input
-            checked={(textPosition === "center")? true : false}
+            checked={(textValues.fontPosition === "center")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setFontPosition('center')}
+            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: "center"}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_center">
           </span>
         </label>
         <label className="panel__container">
           <input
-            checked={(textPosition === "end")? true : false}
+            checked={(textValues.fontPosition === "end")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setFontPosition('end')}
+            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: "end"}))}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_end">
           </span>
