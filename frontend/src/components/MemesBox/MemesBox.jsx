@@ -8,7 +8,6 @@ const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVis
 
   const [scrollTop, setScrollTop] = useState(null);
   
-  
   const fullHeight = Math.max(
     document.body.scrollHeight,
     document.documentElement.scrollHeight,

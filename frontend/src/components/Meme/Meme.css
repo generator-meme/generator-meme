@@ -98,3 +98,9 @@
   max-height: 50px;
   overflow: hidden;
 }
+
+.meme__hashtags_more {
+  max-height: 80px;
+  position: absolute;
+  top: 390px;
+}
