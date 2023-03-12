@@ -63,7 +63,10 @@ class MemeWriteSerializer(ModelSerializer):
         max_length=None
     )
     author = UserSerializer(read_only=True)
-    template = PrimaryKeyRelatedField(queryset=Template.objects.all(), )
+    template = PrimaryKeyRelatedField(
+        queryset=Template.objects.all(),
+        required=False
+    )
 
     class Meta:
         model = Meme
