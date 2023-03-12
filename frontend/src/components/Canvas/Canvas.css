@@ -76,6 +76,41 @@
   text-align: center;
 }
 
+.editor__text_top {
+  position: absolute;
+  top: 101px;
+  /*надо высчитывать в зависимости от offsetY канваса*/
+  left: -10px;
+  /*надо высчитывать от offsetX канваса*/
+  background-color: transparent;
+  border: none;
+  color: transparent;
+  width: 695px;
+  height: 100px;
+}
+
+.editor__text_top::-webkit-input-placeholder,
+.editor__text_top::-moz-placeholder,
+.editor__text_top::-ms-input-placeholder,
+.editor__text_top::placeholder {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 47px;
+  color: #FFFFFF;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: rgba(29, 27, 27, 0.5);
+  padding-top: 25px;
+}
+
+.editor__text_top:focus {
+  border: none;
+  outline: none;
+}
+
 .editor__color {
   margin-bottom: 20px;
 }

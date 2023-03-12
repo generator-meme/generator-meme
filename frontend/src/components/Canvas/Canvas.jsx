@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
@@ -13,7 +13,7 @@ import {
   drawText
 } from "../../utils/functionsForCanvas.js";
 
-const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
@@ -66,11 +66,21 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
   const createMeme = () => {
-    const id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
-    handleCreateNewMeme(canvas.current.toDataURL(), id)
-      .finally(()=> {
-        navigate('/saved')
-      });
+    let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    const template = memes.some((item) => {
+      return item.id === id;
+    });
+    if (template) {
+      handleCreateNewMeme(canvas.current.toDataURL(), id)
+        .finally(()=> {
+          navigate('/saved')
+        });
+    } else {
+      handleCreateNewMeme(canvas.current.toDataURL())
+        .finally(()=> {
+          navigate('/saved')
+        });
+    };
   };
 
   // изменение цвета и прозрачности сверху
