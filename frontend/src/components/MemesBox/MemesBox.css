@@ -27,10 +27,10 @@
     grid-template-rows: repeat(auto-fit, minmax(auto, 440px));
     column-gap: 30px;
     row-gap: 50px;
-    background-image: url(../../images/lines.svg);
+    /* background-image: url(../../images/lines.svg);
     background-repeat: repeat-y;
     background-size: 100% 980px;
-    background-position: top;
+    background-position: top; */
     box-sizing: border-box;
 }
 
