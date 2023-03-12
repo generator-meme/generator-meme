@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Meme.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import like from "../../images/like.svg";
 
 function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
+  const [isMore, setIsMore] = useState(false);
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -14,14 +15,9 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
   };
 
   const hashtags = [
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
+    "создать мем",
+    "мем шаблон",
+    "генератор мемов",
   ];
 
   return (
@@ -30,7 +26,7 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
       <div className="meme__image-hover"></div>
       <img className="meme__like" src={like} alt="Лайк." />
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
-      <ul className="meme__hashtags">
+      <ul className={`meme__hashtags ${isMore ? "meme__hashtags_more" : ""} `} onClick={e => setIsMore(!isMore)}>
         {hashtags.map((hashtag, index) => {
           return <li className="meme__hashtag" key={index}>#{hashtag}</li>
         })}

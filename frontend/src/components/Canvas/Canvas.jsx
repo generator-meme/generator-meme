@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css'
@@ -13,16 +13,16 @@ import {
   drawText
 } from "../../utils/functionsForCanvas.js";
 
-const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) => {
+const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const navigate = useNavigate();
 
   const image = useMemo(() => {
     const img = new Image();
     if (currentMeme) {
       img.src = currentMeme.image;
-    } else {
+    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
       img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
-    }
+    };
     return img;
   }, [currentMeme]);
 
@@ -66,11 +66,21 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
   const createMeme = () => {
-    const id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
-    handleCreateNewMeme(canvas.current.toDataURL(), id)
-      .finally(()=> {
-        navigate('/saved')
-      });
+    let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    const template = memes.some((item) => {
+      return item.id === id;
+    });
+    if (template) {
+      handleCreateNewMeme(canvas.current.toDataURL(), id)
+        .finally(()=> {
+          navigate('/saved')
+        });
+    } else {
+      handleCreateNewMeme(canvas.current.toDataURL())
+        .finally(()=> {
+          navigate('/saved')
+        });
+    };
   };
 
   // изменение цвета и прозрачности сверху
@@ -96,9 +106,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     e.preventDefault();
     setMyPanelIsOpen(true);
     setOtherPanelIsOpen(false);
-  }
+  };
 
-  useEffect(() => {
+  useEffect(() => { // отрисовка канвас
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
     const {
       offsetX, 
@@ -169,8 +179,22 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   }, [image, bottomTextValues, topTextValues]);
 
+  const handleOnBeforeUnload = (event) => {
+    event.preventDefault();
+    return event.returnValue = '';
+  };
+
   useEffect(()=> {
+    // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
+    // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
+    if (!currentMeme && localStorage.getItem("currentMeme") === null) {
+      setImageNotFoundOpen(true);
+      navigate("/");
+      return;
+    };
+
     setIsNewMeme(false);
+    localStorage.removeItem("createdMeme");
     
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
@@ -180,6 +204,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
     if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
       setBottomTextValues(bottomText);
+    };
+
+    // личные изображения не созраняются в localstorage,
+    // если это личное изображение - навешиваем слушатель на закрытие вкладки,
+    // чтобы предупредить пользователя о том, что изменения не сохранятся
+    if (localStorage.getItem("currentMeme") === null) {
+      window.addEventListener('beforeunload', handleOnBeforeUnload);
+
+      return () => {
+        window.removeEventListener('beforeunload', handleOnBeforeUnload);
+      };
     };
     
   }, []);
@@ -194,7 +229,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme }) =
 
   return (
     <main className='main-editor'>
-      <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id} />
+      <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
       <section className="editor" aria-label="Editor">
         {firstPanelIsOpen && (
           <div className="editor__panel_type_top">
