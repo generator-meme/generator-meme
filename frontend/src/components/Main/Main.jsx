@@ -21,7 +21,8 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
       };
       setCurrentMeme(myCurrentMeme);
       setIsNewMeme(true);
-      // localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme)); надо удалить все данные в локалстораджа
+      localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
+      //localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme)); //надо удалить все данные в локалстораджа
       navigate(`/${myCurrentMeme.id}`);
     };
   };
