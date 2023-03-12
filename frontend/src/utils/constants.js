@@ -7,6 +7,7 @@ export const fontFamilyOptions = {
   arial: "Arial",
   timesNewRoman: "Times New Roman",
   pacifico: "Pacifico",
+  balsamiqSans: "Balsamiq Sans",
 };
 
 export const optionsList = [
@@ -18,4 +19,5 @@ export const optionsList = [
   fontFamilyOptions.arial,
   fontFamilyOptions.timesNewRoman,
   fontFamilyOptions.pacifico,
+  fontFamilyOptions.balsamiqSans,
 ];
