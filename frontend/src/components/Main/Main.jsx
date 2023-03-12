@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import cat from '../../images/cat.png'
-import help from '../../images/help.png'
+// import help from '../../images/help.png'
 import './Main.css'
 import MemesBox from '../MemesBox/MemesBox.jsx'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +13,10 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
   
   const onChange = (event) => {
+    if (event.target.files[0].size > 400000) {
+      alert("Вес изображения не должен превышать 400 КБ");
+      return;
+    };
     const currentFile = event.target.files[0];
     if (event.target.closest("form").checkValidity()) {
       const myCurrentMeme = {
@@ -22,7 +26,6 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
       setCurrentMeme(myCurrentMeme);
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
-      //localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme)); //надо удалить все данные в локалстораджа
       navigate(`/${myCurrentMeme.id}`);
     };
   };
