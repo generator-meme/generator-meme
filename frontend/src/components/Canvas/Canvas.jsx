@@ -22,10 +22,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       img.src = currentMeme.image;
     } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
       img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
-    } 
-    // else {
-    //   navigate("/image-not-found");
-    // }
+    };
     return img;
   }, [currentMeme]);
 
@@ -109,9 +106,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     e.preventDefault();
     setMyPanelIsOpen(true);
     setOtherPanelIsOpen(false);
-  }
+  };
 
-  useEffect(() => {
+  useEffect(() => { // отрисовка канвас
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
     const {
       offsetX, 
@@ -188,8 +185,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   };
 
   useEffect(()=> {
-    // если изображение пользователя, оно не сохраняется с localStorage и при обновлении его данных не будет
-    // осуществляется переход на страницу с пояснением - временное решение, мб будет попап
+    // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
+    // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
     if (!currentMeme && localStorage.getItem("currentMeme") === null) {
       setImageNotFoundOpen(true);
       navigate("/");
@@ -209,7 +206,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       setBottomTextValues(bottomText);
     };
 
-    // личные изображение не созраняются в localstorage,
+    // личные изображения не созраняются в localstorage,
     // если это личное изображение - навешиваем слушатель на закрытие вкладки,
     // чтобы предупредить пользователя о том, что изменения не сохранятся
     if (localStorage.getItem("currentMeme") === null) {
