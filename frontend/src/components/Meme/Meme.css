@@ -50,11 +50,17 @@
   width: 453px;
   /* width: 100%; */
   z-index: 1;
-  display: none;
+  opacity: 0;
+  transition: .1s ease;
 }
 
-.meme__image:hover+.meme__image-hover {
-  display: block;
+.meme__image-hover:hover {
+  transition: .1s ease;
+  opacity: 1;
+  cursor: pointer;
+}
+.meme:hover > .meme__create-btn {
+  background-color: #F8FD22;
 }
 
 .meme__like {
@@ -79,6 +85,12 @@
   z-index: 2;
   position: absolute;
   top: 286px;
+}
+.meme__create-btn:hover{
+  background-color: #F8FD22;
+}
+.meme__create-btn:hover ~ .meme__image-hover {
+  opacity: 1;
 }
 
 /* 

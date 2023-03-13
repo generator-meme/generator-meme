@@ -36,9 +36,9 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
   return (
     <li className="meme">
       <img className="meme__image" src={elem.image} alt="Шаблон." />
-      <div className="meme__image-hover"></div>
-      <img className="meme__like" src={like} alt="Лайк." />
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
+      <div onClick={onClick} className="meme__image-hover"></div>
+      <img className="meme__like" src={like} alt="Лайк." />
       <HashtagsList hashtags={hashtags} isHidden={false} />
       <HashtagsList hashtags={hashtags} isHidden={true} />
       {/* <ul className="meme__hashtags meme__hashtags_type_main">
