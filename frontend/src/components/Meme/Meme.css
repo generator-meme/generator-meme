@@ -34,27 +34,31 @@
 }
 
 .meme__image {
+  position: relative;
   height: 360px;
   width: 453px;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;
 }
-
-.meme__image-hover {
+/* .meme__image-container{
   background: linear-gradient(0deg, rgba(157, 0, 149, 0.28), rgba(157, 0, 149, 0.28));
-  position: absolute;
   top: 0;
   border-radius: 20px;
   height: 360px;
   width: 453px;
-  /* width: 100%; */
-  z-index: 1;
-  display: none;
-}
+  transition: .1s ease;
+} */
 
-.meme__image:hover+.meme__image-hover {
-  display: block;
+
+
+.meme__image-hover:hover {
+  transition: .1s ease;
+  opacity: 1;
+  cursor: pointer;
+}
+.meme:hover > .meme__create-btn {
+  background-color: #F8FD22;
 }
 
 .meme__like {
@@ -76,9 +80,15 @@
   border-radius: 8px;
   box-shadow: 2px 5px 9px rgba(0, 0, 0, 0.64);
   cursor: pointer;
-  z-index: 2;
+  z-index: 3;
   position: absolute;
   top: 286px;
+}
+.meme__create-btn:hover{
+  background-color: #F8FD22;
+}
+.meme__create-btn:hover ~ .meme__image-hover {
+  opacity: 1;
 }
 
 
