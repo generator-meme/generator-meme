@@ -9,18 +9,21 @@ import api from "./utils/api";
 import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 import { optionsList } from "./utils/constants.js";
+import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
+  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  // const []
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
-        console.log(res);
+        // console.log(memeUrl, memeId);
         setNewMeme(res);
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
@@ -74,6 +77,8 @@ const App = () => {
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
               isNewMeme={isNewMeme}
+              memes={memes}
+              setImageNotFoundOpen={setImageNotFoundOpen}
             />
           }
         />
@@ -90,6 +95,12 @@ const App = () => {
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
+      {imageNotFoundOpen && (
+        <InfoTooltip
+          title="Личные изображения не сохраняется при перезагрузке, пожалуйста, вернитесь к выбору изображения"
+          onClose={setImageNotFoundOpen}
+        />
+      )}
       <div
         class="font-preload"
         style={{
