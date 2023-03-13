@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react"
 import "./MemesBox.css"
-import lines from "../../images/lines.png"
-import lines2 from "../../images/lines2.png"
 import arrowUp from "../../images/arrow-up.svg"
-import Meme from "../Meme/Meme"
+import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
 
 const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVisibleMems, setNumberOfVisibleMems, setIsNewMeme }) => {
 
   const [scrollTop, setScrollTop] = useState(null);
-  
   
   const fullHeight = Math.max(
     document.body.scrollHeight,
@@ -40,8 +37,6 @@ const MemesBox = ({ memes, setCurrentMeme, saveNumberOfVisibleMemes, numberOfVis
     <>
     {(memes.length > 0) && (
       <section className="memesbox" aria-label="Box of memes" id="memes-start">
-        <img className="memesbox__lines memesbox__lines_left" src={lines} alt="Линии." />
-        <img className="memesbox__lines memesbox__lines_right" src={lines2} alt="Линии." />
         <ul className="memesbox__container">
           {memes
             .slice(0, numberOfVisibleMems)

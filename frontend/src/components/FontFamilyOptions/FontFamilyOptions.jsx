@@ -3,9 +3,8 @@ import { optionsList } from "../../utils/constants";
 import "./FontFamilyOptions.css";
 
 function FontFamilyOptions({
-  setFontFamily,
   selectedOption,
-  setSelectedOption,
+  setTextValues,
   isOptionsOpen,
   setIsOptionsOpen,
 }) {
@@ -15,7 +14,7 @@ function FontFamilyOptions({
   };
 
   const setSelectedThenCloseDropdown = (index) => {
-    setSelectedOption(index);
+    setTextValues((prev) => ({ ...prev, selectedOption: index}));
     setIsOptionsOpen(false);
   };
 
@@ -40,15 +39,15 @@ function FontFamilyOptions({
         break;
       case "ArrowUp":
         e.preventDefault();
-        setSelectedOption(
-          selectedOption - 1 >= 0 ? selectedOption - 1 : optionsList.length - 1
-        );
+        setTextValues((prev) => ({
+          ...prev,
+          selectedOption: selectedOption - 1 >= 0 ? (selectedOption - 1) : (optionsList.length - 1)}));
         break;
       case "ArrowDown":
         e.preventDefault();
-        setSelectedOption(
-          selectedOption == optionsList.length - 1 ? 0 : selectedOption + 1
-        );
+        setTextValues((prev) => ({
+          ...prev,
+          selectedOption: selectedOption === (optionsList.length - 1) ? 0 : (selectedOption + 1)}));
         break;
       default:
         break;
@@ -56,8 +55,8 @@ function FontFamilyOptions({
   };
 
   useEffect(() => {
-    setFontFamily(optionsList[selectedOption]);
-  }, [selectedOption, setFontFamily]);
+    setTextValues((prev) => ({ ...prev, fontFamily: optionsList[selectedOption]}));
+  }, [selectedOption, setTextValues]);
 
   return (
       <div className="font-family">

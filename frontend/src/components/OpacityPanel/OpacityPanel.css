@@ -10,8 +10,9 @@
   box-sizing: border-box;
   border-radius: 4px;
   position: absolute;
-  top: 40px;
+  top: 30px;
   right: -65px;
+  border: 0.25px solid #000000;
 }
 
 .opacity-panel__label {

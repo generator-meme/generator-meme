@@ -33,7 +33,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-style: normal;
+  /* font-style: normal; */
   column-gap: 5px;
 }
 
@@ -45,10 +45,27 @@
   line-height: 36px;
 }
 
-.main__future-input {
+.main__label {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 36px;
   text-decoration: underline;
 }
 
+.main__invisible-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0);
+  opacity: 0;
+}
+
+/* .main__future-input {
+  text-decoration: underline;
+} */
+
+/* 
 .main__btn-block {
   position: relative;
 }
@@ -69,4 +86,4 @@
 
 .main__btn:hover+.main__btn_help {
   opacity: 1;
-}
+} */

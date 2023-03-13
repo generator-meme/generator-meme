@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Meme.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import like from "../../images/like.svg";
-import HashtagsList from '../HashtagsList/HashtagsList';
 
 function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
+  const [isMore, setIsMore] = useState(false);
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -15,42 +15,22 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
   };
 
   const hashtags = [
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
-    "смелость",
-    "отвага",
-    "безупречность",
-    "изыск",
+    "создать мем",
+    "мем шаблон",
+    "генератор мемов",
   ];
-  // закомментированный код удалю позже, если этот вариант останется актуальным
+
   return (
     <li className="meme">
       <img className="meme__image" src={elem.image} alt="Шаблон." />
-      <div className="meme__image-hover"></div>
-      <img className="meme__like" src={like} alt="Лайк." />
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
-      <HashtagsList hashtags={hashtags} isHidden={false} />
-      <HashtagsList hashtags={hashtags} isHidden={true} />
-      {/* <ul className="meme__hashtags meme__hashtags_type_main">
+      <div onClick={onClick} className="meme__image-hover"></div>
+      <img className="meme__like" src={like} alt="Лайк." />
+      <ul className={`meme__hashtags ${isMore ? "meme__hashtags_more" : ""} `} onClick={e => setIsMore(!isMore)}>
         {hashtags.map((hashtag, index) => {
           return <li className="meme__hashtag" key={index}>#{hashtag}</li>
         })}
       </ul>
-      <ul className="meme__hashtags meme__hashtags_type_hidden">
-        {hashtags.map((hashtag, index) => {
-          return <li className="meme__hashtag" key={index}>#{hashtag}</li>
-        })}
-      </ul> */}
     </li>
   )
 }
