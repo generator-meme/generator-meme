@@ -56,7 +56,6 @@ class Command(BaseCommand):
     def encode_photos_to_base64(self, photos: list):
         """Кодирует фото в base64"""
         encoded_photos = []
-        print(photos)
         for photo_url in photos:
             response = requests.get(photo_url)
             url_encode = base64.b64encode(response.content).decode('utf-8')

@@ -43,7 +43,7 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    '''Представление для модели Meme'''
+    """Представление для модели Meme"""
     queryset = Template.objects.with_rating().filter(
         is_published=True).order_by('-rating')
     permission_classes = [AdminOrReadOnly]
