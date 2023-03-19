@@ -15,18 +15,8 @@ import {
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const navigate = useNavigate();
-
-  const image = useMemo(() => {
-    const img = new Image();
-    if (currentMeme) {
-      img.src = currentMeme.image;
-    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
-      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
-    };
-    return img;
-  }, [currentMeme]);
-
-  const canvas = useRef()
+  const [image, setImage] = useState(null);
+  const canvas = useRef();
 
   const [topTextValues, setTopTextValues] = useState({
     text: "",
@@ -109,6 +99,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   };
 
   useEffect(() => { // отрисовка канвас
+    if (!image) {
+      return;
+    }
+
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
     const {
       offsetX, 
@@ -195,6 +189,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     setIsNewMeme(false);
     localStorage.removeItem("createdMeme");
+
+    const img = new Image();
+    if (currentMeme) {
+      img.src = currentMeme.image;
+    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
+      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
+    };
+    img.addEventListener("load", () => {
+      setImage(img);
+    });
     
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
@@ -226,6 +230,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   useEffect(() => {
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
+
+  if (!image) {
+    return null;
+  };
 
   return (
     <main className='main-editor'>
@@ -267,6 +275,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
                 placeholder="Текст сверху"
                 onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
+                style={{
+                  resize: "none"
+                }}
               />
               <textarea
                 className="editor__text"
@@ -275,6 +286,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 onChange={(e) => setBottomTextValues({ ...bottomTextValues, text: e.target.value})}
                 placeholder="Текст снизу"
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
+                style={{
+                  resize: "none"
+                }}
               />
           </form>
           <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
