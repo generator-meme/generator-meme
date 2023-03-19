@@ -40,7 +40,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
           <p className="main__text-advice">
             Выберите шаблон для создания мема или загрузите&nbsp;
           </p>
-          <form>
+          <form className="main__form">
             <label className="main__label">
               свое изображение
               <input
@@ -54,21 +54,6 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
             </label>
           </form>
         </div>
-          {/* <p className="main__text-advice">
-            Выберите шаблон для создания мема или загрузите&nbsp;
-            <span className="main__future-input">свое изображение</span>
-          </p> */}
-          {/* 
-          <div className="main__text-box">
-            <h3 className="main__text-advice">
-              Выберите шаблон для создания мема или 
-            </h3>
-            <div className="main__btn-block">
-              <button onClick={onClick} className="main__btn btn">загрузите изображение</button>
-              <img className="main__btn_help" src={help} alt='Подсказка.' />
-            </div>
-          </div>
-          */}
       </section>
 
       <MemesBox memes={memes} setCurrentMeme={setCurrentMeme} numberOfVisibleMems={numberOfVisibleMems} setNumberOfVisibleMems={setNumberOfVisibleMems} setIsNewMeme={setIsNewMeme} />

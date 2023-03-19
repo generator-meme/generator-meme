@@ -26,11 +26,14 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
       <div onClick={onClick} className="meme__image-hover"></div>
       <img className="meme__like" src={like} alt="Лайк." />
-      <ul className={`meme__hashtags ${isMore ? "meme__hashtags_more" : ""} `} onClick={e => setIsMore(!isMore)}>
-        {hashtags.map((hashtag, index) => {
-          return <li className="meme__hashtag" key={index}>#{hashtag}</li>
-        })}
-      </ul>
+      <div className="meme__hashtags-container">
+        <ul className={`meme__hashtags ${isMore ? "meme__hashtags_more" : ""} `} onClick={e => setIsMore(!isMore)}>
+          {hashtags.map((hashtag, index) => {
+            return <li className="meme__hashtag" key={index}>#{hashtag}</li>
+          })}
+        </ul>
+
+      </div>
     </li>
   )
 }
