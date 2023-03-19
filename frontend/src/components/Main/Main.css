@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  row-gap: 35px;
+  row-gap: 38px;
   align-items: center;
   position: relative;
   color: #1E1D1D;
@@ -13,9 +13,11 @@
 
 .main__cat {
   position: absolute;
-  top: 46px;
+  top: 68px;
   left: 31px;
   z-index: 1;
+  width: 179px;
+  height: 154px;
 }
 
 .main__title {
@@ -38,7 +40,7 @@
 }
 
 .main__text-advice {
-  margin: 0 0 0 95px;
+  margin: 0 0 0 65px;
   padding: 0;
   font-weight: 500;
   font-size: 30px;
@@ -50,6 +52,17 @@
   font-size: 30px;
   line-height: 36px;
   text-decoration: underline;
+  cursor: pointer;
+}
+
+.main__label:hover {
+  color: #1083DD;
+  opacity: 0.51;
+}
+
+.main__label:hover:active {
+  color: #125A93;
+  opacity: 1;
 }
 
 .main__invisible-input {
@@ -60,6 +73,9 @@
   clip-path: inset(0 0 0 0);
   opacity: 0;
 }
+
+
+
 
 /* .main__future-input {
   text-decoration: underline;
