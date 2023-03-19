@@ -275,6 +275,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
                 placeholder="Текст сверху"
                 onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
+                style={{
+                  resize: "none"
+                }}
               />
               <textarea
                 className="editor__text"
@@ -283,6 +286,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 onChange={(e) => setBottomTextValues({ ...bottomTextValues, text: e.target.value})}
                 placeholder="Текст снизу"
                 onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
+                style={{
+                  resize: "none"
+                }}
               />
           </form>
           <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
