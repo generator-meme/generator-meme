@@ -227,12 +227,32 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
 
+
+
+
+
+
+
+  
+
+
+
+  const canvasWrapper = useRef();
+  console.log(canvasWrapper)
+  const onMouseMoveCaptureHandler = () => {
+    console.log("onMouseMoveCapture Event!");
+  };
+
+
+
+  const formTop = {top:0, right:0}
+
   return (
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
       <section className="editor" aria-label="Editor">
         {firstPanelIsOpen && (
-          <div className="editor__panel_type_top">
+          <div className="editor__panel_type_top" onMouseMoveCapture={onMouseMoveCaptureHandler}>
             <Panel
               textValues={topTextValues}
               setTextValues={setTopTextValues}
@@ -251,16 +271,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             />
         </div>
         )}
-        <canvas
-            className="editor__image"
-            ref={canvas}
-            width={675}
-            height={556}
-        >
-        </canvas>
-        <div className="editor__box">
-          <form className="editor__text-form">
-              <textarea
+
+
+
+
+
+
+        <div className='editor-canvas_wrapper' ref={canvasWrapper}>
+        <textarea
+                style={formTop}
                 className="editor__text"
                 type="text"
                 value={topTextValues.text}
@@ -268,6 +287,22 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 placeholder="Текст сверху"
                 onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
               />
+        <canvas
+            className="editor__image"
+            ref={canvas}
+            width={675}
+            height={556}
+        >
+          
+        </canvas>
+        </div>
+
+
+
+
+        <div className="editor__box">
+          <form className="editor__text-form">
+              
               <textarea
                 className="editor__text"
                 type="text"

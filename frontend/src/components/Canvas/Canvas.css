@@ -1,3 +1,26 @@
+.editor-canvas_wrapper {
+  position: relative;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .main-editor {
   padding: 20px 30px 20px;
   width: 100%;
@@ -52,6 +75,7 @@
 }
 
 .editor__text-form {
+  position: absolute;
   margin: 0;
   padding: 0;
   display: flex;
