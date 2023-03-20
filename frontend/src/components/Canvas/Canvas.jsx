@@ -240,7 +240,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
       <section className="editor" aria-label="Editor">
         {firstPanelIsOpen && (
-          <div className="editor__panel_type_top" onMouseMoveCapture={onMouseMoveCaptureHandler}>
+          <div className="editor__panel_type_top">
             <Panel
               textValues={topTextValues}
               setTextValues={setTopTextValues}
@@ -259,38 +259,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             />
         </div>
         )}
-
-
-
-
-
-
-        <div className='editor-canvas_wrapper' ref={canvasWrapper}>
-        <textarea
-                style={formTop}
-                className="editor__text"
-                type="text"
-                value={topTextValues.text}
-                onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
-                placeholder="Текст сверху"
-                onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
-              />
         <canvas
             className="editor__image"
             ref={canvas}
             width={675}
             height={556}
         >
-          
         </canvas>
-        </div>
-
-
-
-
         <div className="editor__box">
           <form className="editor__text-form">
-
               <textarea
                 className="editor__text"
                 type="text"
