@@ -39,7 +39,6 @@ class TemplateWriteSerializer(ModelSerializer):
         many=True
     )
 
-
     class Meta:
         model = Template
         fields = '__all__'
