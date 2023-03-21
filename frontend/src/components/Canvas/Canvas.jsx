@@ -16,6 +16,16 @@ import {
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
+
+  const imageSizes = useMemo(() => {
+    if (image) {
+      return contain(675, 556, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
+    };
+    return null;
+  }, [image]);
+
+  console.log(imageSizes);
+
   const canvas = useRef();
 
   const [topTextValues, setTopTextValues] = useState({
@@ -104,39 +114,34 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     }
 
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
-    const {
-      offsetX, 
-      offsetY, 
-      width, 
-      height
-    } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса
-    ctx.drawImage(image, offsetX, offsetY, width, height);
+    ctx.drawImage(image, 0, 0, imageSizes.width, imageSizes.height);
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
     const textMarginX = 30; // значение бокового отступа текста
-    const textWidth = width - textMarginX * 2; // значение ширины, где текст отображается
+    const textWidth = imageSizes.width - textMarginX * 2; // значение ширины, где текст отображается
     const textMarginYTop = 50;
     const textMarginYBottom = 20;
+    const offsetY = 0; // offsetY для текста "снаружи" - после добавим стейт или переменную и будем записывать сюда
 
     // вычисление границ для текста
     const lineTop = offsetY + textMarginYTop;
-    const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
+    const lineBottom = imageSizes.height - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
     ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
     ctx.textAlign = bottomTextValues.fontPosition;
     
-    const bottomMarginX = calculateMarginX(canvas.current, bottomTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomMarginX = calculateMarginX(imageSizes.width, bottomTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
     const bottomTextWrap = wrapText(ctx, bottomTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
-    
+
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
       t,
       i,
       ctx,
       false,
-      canvas.current,
+      imageSizes,
       offsetY,
       textMarginYBottom,
       textMarginYTop,
@@ -150,8 +155,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     // верхний текст основные характеристики
     ctx.font = `${topTextValues.fontStyle ? "italic" : ""} ${topTextValues.fontWeight ? "bold" : ""} ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
     ctx.textAlign = topTextValues.fontPosition;
-    
-    const topMarginX = calculateMarginX(canvas.current, topTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+
+    const topMarginX = calculateMarginX(imageSizes.width, topTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
     const topTextWrap = wrapText(ctx, topTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
@@ -160,7 +165,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       i,
       ctx,
       true,
-      canvas.current,
+      imageSizes,
       offsetY,
       textMarginYBottom,
       textMarginYTop,
@@ -171,7 +176,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       topTextValues
     ));
 
-  }, [image, bottomTextValues, topTextValues]);
+  }, [image, imageSizes, bottomTextValues, topTextValues]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -187,7 +192,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       return;
     };
 
-    setIsNewMeme(false);
+    setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
     const img = new Image();
@@ -259,13 +264,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             />
         </div>
         )}
-        <canvas
-            className="editor__image"
-            ref={canvas}
-            width={675}
-            height={556}
-        >
+        <div className="editor__canvas">
+          <canvas
+              className="editor__image"
+              ref={canvas}
+              width={imageSizes.width}
+              height={imageSizes.height}
+          >
         </canvas>
+        </div>
         <div className="editor__box">
           <form className="editor__text-form">
               <textarea
