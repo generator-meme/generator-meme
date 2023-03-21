@@ -33,15 +33,25 @@ export const contain = fit(true);
 export const cover = fit(false);
 
 // расчет координаты по оси X текста
-export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
+export const calculateMarginX = (width, fontPosition, textMargin) => {
   if (fontPosition === "start") {
-    return textMargin + offsetX;
+    return textMargin;
   } else if (fontPosition === "end") {
-    return canvas.width - offsetX - textMargin;
+    return width - textMargin;
   } else {
-    return canvas.width / 2;
+    return width / 2;
   }
 };
+
+// export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
+//   if (fontPosition === "start") {
+//     return textMargin + offsetX;
+//   } else if (fontPosition === "end") {
+//     return canvas.width - offsetX - textMargin;
+//   } else {
+//     return canvas.width / 2;
+//   }
+// };
 
 // отрисовка подчеркивания или зачеркивания
 export const addLineToText = (ctx, text, x, y, fontSize) => {
@@ -184,7 +194,8 @@ export const drawText = (
   i,
   ctx,
   top,
-  canvas,
+  imageSizes,
+  // canvas,
   offsetY,
   textMarginYBottom,
   textMarginYTop,
@@ -204,7 +215,7 @@ export const drawText = (
     marginY = offsetY + i * lineHeight(textValues.fontSize) + textMarginYTop;
   } else {
     marginY =
-      canvas.height -
+      imageSizes.height -
       offsetY -
       i * lineHeight(textValues.fontSize) -
       textMarginYBottom;

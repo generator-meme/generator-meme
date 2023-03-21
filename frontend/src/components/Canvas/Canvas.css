@@ -31,6 +31,14 @@
   left: 0px;
 }
 
+.editor__canvas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 556px;
+  width: 675px;
+}
+
 .editor__image {
   font-weight: 500;
   font-size: 70px;
@@ -38,7 +46,6 @@
   white-space: pre-wrap;
   word-break: break-all
 }
-
 
 .editor__box {
   margin: 0;
