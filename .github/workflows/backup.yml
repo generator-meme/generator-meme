@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Create backup
         run: |
-          cd /backup/
+          cd backup/
           docker exec -t root_postgres_1 pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
       - name: Upload backup
         uses: actions/upload-artifact@v2
