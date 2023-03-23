@@ -194,7 +194,7 @@ export const drawText = (
   i,
   ctx,
   top,
-  imageSizes,
+  canvasHeight,
   // canvas,
   offsetY,
   textMarginYBottom,
@@ -215,7 +215,7 @@ export const drawText = (
     marginY = offsetY + i * lineHeight(textValues.fontSize) + textMarginYTop;
   } else {
     marginY =
-      imageSizes.height -
+      canvasHeight -
       offsetY -
       i * lineHeight(textValues.fontSize) -
       textMarginYBottom;

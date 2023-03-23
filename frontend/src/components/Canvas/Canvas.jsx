@@ -24,8 +24,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     return null;
   }, [image]);
 
-  console.log(imageSizes);
-
   const canvas = useRef();
 
   const [topTextValues, setTopTextValues] = useState({
@@ -42,7 +40,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     lineThrough: false,
     backColor: "transparent",
     opacity: 1,
-    opacityLevel: 100
+    opacityLevel: 100,
+    outside: false,
   });
 
   const [bottomTextValues, setBottomTextValues] = useState({
@@ -59,8 +58,18 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     lineThrough: false,
     backColor: "transparent",
     opacity: 1,
-    opacityLevel: 100
+    opacityLevel: 100,
+    outside: false,
 });
+
+  const canvasHeight = useMemo(() => { // изменение высоты canvas в зависимости от текста внутри мема или снаружи
+    if (imageSizes) {
+      if (topTextValues.outside && bottomTextValues.outside) return imageSizes.height + 160;
+      if (topTextValues.outside || bottomTextValues.outside) return imageSizes.height + 80;
+      return imageSizes.height;
+      };
+    return null;
+  }, [imageSizes, topTextValues, bottomTextValues]);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -114,7 +123,21 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     }
 
     const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
-    ctx.drawImage(image, 0, 0, imageSizes.width, imageSizes.height);
+    
+    let imageInitialY = 0;
+    
+    if(topTextValues.outside) {
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, imageSizes.width, 80);
+      imageInitialY = 80;
+    };
+    
+    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height);
+
+    if(bottomTextValues.outside) {
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, topTextValues.outside? imageSizes.height + 80 : imageSizes.height, imageSizes.width, 80);
+    };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
@@ -126,7 +149,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     // вычисление границ для текста
     const lineTop = offsetY + textMarginYTop;
-    const lineBottom = imageSizes.height - offsetY - textMarginYBottom;
+    const lineBottom = canvasHeight - offsetY - textMarginYBottom;
 
     // нижний текст основные характеристики
     ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
@@ -141,7 +164,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       i,
       ctx,
       false,
-      imageSizes,
+      canvasHeight,
       offsetY,
       textMarginYBottom,
       textMarginYTop,
@@ -165,7 +188,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       i,
       ctx,
       true,
-      imageSizes,
+      canvasHeight,
       offsetY,
       textMarginYBottom,
       textMarginYTop,
@@ -176,7 +199,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       topTextValues
     ));
 
-  }, [image, imageSizes, bottomTextValues, topTextValues]);
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -269,7 +292,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
               className="editor__image"
               ref={canvas}
               width={imageSizes.width}
-              height={imageSizes.height}
+              height={canvasHeight}
           >
         </canvas>
         </div>
