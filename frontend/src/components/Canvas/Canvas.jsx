@@ -145,11 +145,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const textWidth = imageSizes.width - textMarginX * 2; // значение ширины, где текст отображается
     const textMarginYTop = 50;
     const textMarginYBottom = 20;
-    const offsetY = 0; // offsetY для текста "снаружи" - после добавим стейт или переменную и будем записывать сюда
+    const offsetY = 0; // для перемещения текста по высоте картинки (скорее всего добавим в стейт-объект текста)
 
     // вычисление границ для текста
-    const lineTop = offsetY + textMarginYTop;
-    const lineBottom = canvasHeight - offsetY - textMarginYBottom;
+    const lineTop = textMarginYTop;
+    const lineBottom = canvasHeight - textMarginYBottom;
 
     // нижний текст основные характеристики
     ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;

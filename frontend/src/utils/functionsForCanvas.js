@@ -195,7 +195,6 @@ export const drawText = (
   ctx,
   top,
   canvasHeight,
-  // canvas,
   offsetY,
   textMarginYBottom,
   textMarginYTop,
