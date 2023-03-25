@@ -22,7 +22,8 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
 
   return (
     <li className="meme">
-      <img className="meme__image" src={elem.image} alt="Шаблон." />
+      <img className="meme__image" src={elem.image} alt={`${elem.name} шаблон.`} />
+      {/* <img className="meme__image" src={elem.image} alt="Шаблон." /> */}
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
       <div onClick={onClick} className="meme__image-hover"></div>
       <img className="meme__like" src={like} alt="Лайк." />
