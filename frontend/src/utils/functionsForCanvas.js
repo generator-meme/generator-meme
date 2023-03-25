@@ -201,7 +201,7 @@ export const drawText = (
   lineTop,
   lineBottom,
   marginX,
-  textWidth,
+  // textWidth,
   textValues
 ) => {
   if (t[t.length - 1] === " ") {
@@ -248,7 +248,7 @@ export const drawText = (
   ctx.strokeText(t, marginX, marginY); // добавление контура
   ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
 
-  ctx.fillText(t, marginX, marginY, textWidth); // добавление текста построчно
+  ctx.fillText(t, marginX, marginY, textValues.width); // добавление текста построчно
 
   if (textValues.underline) {
     addLineToText(

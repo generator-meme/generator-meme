@@ -56,6 +56,7 @@
   row-gap: 80px;
   align-items: flex-end;
   height: 556px;
+
 }
 
 .editor__text-form {
@@ -64,42 +65,39 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  row-gap: 46px;
-  align-items: flex-end;
+  align-items: center;
+  /* row-gap: 46px; */
+  /* align-items: flex-end; */
+}
+
+.editor__fieldset {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 .editor__text {
-  width: 500px;
-  height: 59px;
-  box-sizing: border-box;
   margin: 0;
-  background: #fef8ff;
-  border: 1px solid #000000;
-  border-radius: 20px;
-  font-weight: 400;
-  font-size: 40px;
-  line-height: 47px;
-  padding: 5px 10px;
-  text-align: center;
-}
-
-.editor__text_top {
-  position: absolute;
-  top: 101px;
-  /*надо высчитывать в зависимости от offsetY канваса*/
-  left: -10px;
-  /*надо высчитывать от offsetX канваса*/
   background-color: transparent;
   border: none;
   color: transparent;
-  width: 695px;
-  height: 100px;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.2;
 }
 
-.editor__text_top::-webkit-input-placeholder,
-.editor__text_top::-moz-placeholder,
-.editor__text_top::-ms-input-placeholder,
-.editor__text_top::placeholder {
+.editor__text::-webkit-input-placeholder,
+.editor__text::-moz-placeholder,
+.editor__text::-ms-input-placeholder,
+.editor__text::placeholder {
   font-family: 'Rubik';
   font-style: normal;
   font-weight: 500;
@@ -109,12 +107,13 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background-color: rgba(29, 27, 27, 0.5);
-  padding-top: 25px;
+  padding-top: 20px;
+  margin: 0;
+  text-align: center;
 }
 
-.editor__text_top:focus {
-  border: none;
+.editor__text:focus {
+  border: 2px solid yellow;
   outline: none;
 }
 
