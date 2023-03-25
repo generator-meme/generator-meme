@@ -1,0 +1,35 @@
+.editor__text {
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    color: transparent;
+    box-sizing: border-box;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.2;
+    text-align: center;
+    position: absolute;
+    resize: horizontal;
+}
+
+.editor__text::-webkit-input-placeholder,
+.editor__text::-moz-placeholder,
+.editor__text::-ms-input-placeholder,
+.editor__text::placeholder {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 47px;
+    color: #FFFFFF;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 20px;
+    margin: 0;
+    text-align: center;
+}

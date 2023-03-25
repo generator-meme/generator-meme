@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
-import './Canvas.css'
+import './Canvas.css';
+import TextareaCanvas from '../TextareaCanvas/TextareaCanvas';
 import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
 import {
@@ -14,6 +15,8 @@ import {
 } from "../../utils/functionsForCanvas.js";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
+  const canvas = useRef(null);
+  
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -23,8 +26,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
     return null;
   }, [image]);
-
-  const canvas = useRef();
 
   const [topTextValues, setTopTextValues] = useState({
     text: "",
@@ -42,6 +43,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacity: 1,
     opacityLevel: 100,
     outside: false,
+    // marginX: 0,
+    // marginY: 0,
+    width: imageSizes?.width,
+    height: 80,
   });
 
   const [bottomTextValues, setBottomTextValues] = useState({
@@ -60,6 +65,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacity: 1,
     opacityLevel: 100,
     outside: false,
+    // marginX: 0,
+    // marginY: 0,
+    width: imageSizes?.width,
+    height: 80,
 });
 
   const canvasHeight = useMemo(() => { // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -109,13 +118,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   const changeBottomOpacity = (opacity) => {
     changeOpacity(opacity, setBottomTextValues, bottomTextValues);
   };
-  
-  // открытие/закрытие панелей
-  const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
-    e.preventDefault();
-    setMyPanelIsOpen(true);
-    setOtherPanelIsOpen(false);
-  };
 
   useEffect(() => { // отрисовка канвас
     if (!image) {
@@ -142,7 +144,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
     const textMarginX = 30; // значение бокового отступа текста
-    const textWidth = imageSizes.width - textMarginX * 2; // значение ширины, где текст отображается
     const textMarginYTop = 50;
     const textMarginYBottom = 20;
     const offsetY = 0; // для перемещения текста по высоте картинки (скорее всего добавим в стейт-объект текста)
@@ -152,11 +153,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const lineBottom = canvasHeight - textMarginYBottom;
 
     // нижний текст основные характеристики
-    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
+    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
+                ${bottomTextValues.fontWeight ? "bold" : ""}
+                ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
     ctx.textAlign = bottomTextValues.fontPosition;
     
-    const bottomMarginX = calculateMarginX(imageSizes.width, bottomTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const bottomMarginX = calculateMarginX(bottomTextValues.width, bottomTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, bottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
@@ -171,16 +174,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       lineTop,
       lineBottom,
       bottomMarginX,
-      textWidth,
-      bottomTextValues
+      bottomTextValues,
     ));
 
     // верхний текст основные характеристики
-    ctx.font = `${topTextValues.fontStyle ? "italic" : ""} ${topTextValues.fontWeight ? "bold" : ""} ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+    ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+                ${topTextValues.fontWeight ? "bold" : ""}
+                ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
     ctx.textAlign = topTextValues.fontPosition;
 
-    const topMarginX = calculateMarginX(imageSizes.width, topTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
+    const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
     topTextWrap.split('\n').forEach((t, i) => drawText(
@@ -195,8 +199,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       lineTop,
       lineBottom,
       topMarginX,
-      textWidth,
-      topTextValues
+      topTextValues,
     ));
 
   }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues]);
@@ -218,7 +221,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
-    const img = new Image();
+    const img = new Image(); // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте
     if (currentMeme) {
       img.src = currentMeme.image;
     } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
@@ -258,7 +261,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   useEffect(() => {
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
-
+  
   if (!image) {
     return null;
   };
@@ -297,29 +300,38 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
         </canvas>
         </div>
         <div className="editor__box">
-          <form className="editor__text-form">
-              <textarea
-                className="editor__text"
-                type="text"
-                value={topTextValues.text}
-                onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
-                placeholder="Текст сверху"
-                onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
-                style={{
-                  resize: "none"
-                }}
+          <form 
+            className="editor__text-form"
+            style={{
+              position: "absolute",
+              top: 81 + imageSizes.offsetY,
+              left: imageSizes.offsetX,
+              height: imageSizes.height,
+              width: imageSizes.width,
+            }}
+          >
+            <fieldset className="editor__fieldset">
+              <TextareaCanvas 
+                textValues={topTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setTopTextValues}
+                setMyPanelIsOpen={setFirstPanelIsOpen}
+                setOtherPanelIsOpen={setSecondPanelIsOpen}
+                top={0}
+                left={0}
+                bottom={null}
               />
-              <textarea
-                className="editor__text"
-                type="text"
-                value={bottomTextValues.text}
-                onChange={(e) => setBottomTextValues({ ...bottomTextValues, text: e.target.value})}
-                placeholder="Текст снизу"
-                onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
-                style={{
-                  resize: "none"
-                }}
+              <TextareaCanvas 
+                textValues={bottomTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setBottomTextValues}
+                setMyPanelIsOpen={setSecondPanelIsOpen}
+                setOtherPanelIsOpen={setFirstPanelIsOpen}
+                top={null}
+                left={0}
+                bottom={0}
               />
+            </fieldset>
           </form>
           <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
         </div>
