@@ -320,7 +320,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 top={0}
                 left={0}
                 bottom={null}
-                paddingTop={15}
+                paddingTop={0}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
