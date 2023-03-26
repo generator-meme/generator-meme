@@ -11,24 +11,19 @@ services:
   postgres:
     image: postgres:14.4-alpine
     volumes:
-      - meme_data:/var/lib/postgresql/data/
+      - /pg_data/:/var/lib/postgresql/data/
     env_file:
       - ./.env
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=postgres
 
   backend:
     image: artkeyplex/generator-meme:latest
     restart: always
     volumes:
-      - static_value:/app/backend-static/
-      - media_value:/app/backend-media/
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - /data/static/:/app/backend-static/
+      - /data/media/:/app/backend-media/
+      - /data/:/add/data/
     depends_on:
       - postgres
     env_file:
@@ -38,16 +33,22 @@ services:
     image: nginx:1.19.3
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx-old.conf:/etc/nginx/conf.d/default.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - static_value:/var/html/backend-static/
-      - media_value:/var/html/backend-media/
+      - /data/static/:/var/html/backend-static/
+      - /data/media/:/var/html/backend-media/
     depends_on:
       - backend
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
-volumes:
-  static_value:
-  media_value:
-  meme_data:
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

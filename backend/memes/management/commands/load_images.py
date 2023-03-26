@@ -20,6 +20,8 @@ AUTH_DATA = {
 }
 
 
+
+
 class Command(BaseCommand):
     """Команда для загрузки шаблонов в БД"""
     def handle(self, *args, **options):
