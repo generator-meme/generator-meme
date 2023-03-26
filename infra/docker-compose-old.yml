@@ -1,11 +1,9 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    volumes:
+  frontend: 
+    image: artkeyplex/frontend-generator-meme:latest
+    volumes: 
       - ../frontend/:/app/result_build/
     depends_on:
       - backend
@@ -18,23 +16,23 @@ services:
       - ./.env
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: artkeyplex/generator-meme:latest
     restart: always
     volumes:
       - static_value:/app/backend-static/
       - media_value:/app/backend-media/
     environment:
-      - PYTHONUNBUFFERED=1
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - postgres
     env_file:
       - ./.env
-    # extra_hosts:
-    # - "host.docker.internal:host-gateway"
 
   nginx:
     image: nginx:1.19.3
