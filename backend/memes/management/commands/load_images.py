@@ -9,14 +9,14 @@ DOMAIN = os.environ.get('DOMAIN')
 
 load_dotenv()
 
-AUTH_URL = f'https://ilovememes.ru/api/auth/token/login'
-TEMPLATE_URL = f'https://ilovememes.ru/api/templates/'
+AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
+TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
 EMAIL = os.environ.get('EMAIL')
 PASSWORD = os.environ.get('PASSWORD')
 
 AUTH_DATA = {
-    "email": 'alex2717@yandex.ru',
-    "password": '52133125'
+    "email": EMAIL,
+    "password": PASSWORD
 }
 
 
@@ -32,7 +32,6 @@ class Command(BaseCommand):
 
     def get_token(self):
         print('Аутентификация...')
-        print(str(DOMAIN))
         data = requests.post(AUTH_URL, data=AUTH_DATA)
         return data.content.decode('utf-8')[15:-2]
 
