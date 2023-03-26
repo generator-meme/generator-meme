@@ -320,6 +320,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 top={0}
                 left={0}
                 bottom={null}
+                paddingTop={15}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
@@ -330,6 +331,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 top={null}
                 left={0}
                 bottom={0}
+                paddingTop={0}
               />
             </fieldset>
           </form>
