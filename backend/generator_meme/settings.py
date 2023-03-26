@@ -12,6 +12,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru', 'host.docker.internal']
 
+CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
