@@ -33,6 +33,8 @@ services:
       - postgres
     env_file:
       - ./.env
+    # extra_hosts:
+    # - "host.docker.internal:host-gateway"
 
   nginx:
     image: nginx:1.19.3
