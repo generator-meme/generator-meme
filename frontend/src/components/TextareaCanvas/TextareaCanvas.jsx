@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 
-const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpen, setOtherPanelIsOpen, top, left, bottom }) => {
+const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpen, setOtherPanelIsOpen, top, left, bottom, paddingTop }) => {
   const text = useRef(null);
 
   const openMyPanel = (e) => { // открытие/закрытие панелей
@@ -40,6 +40,11 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpe
         left: left,
         bottom: bottom,
         backgroundColor: (textValues.text !== "")? "transparent" : "rgba(29, 27, 27, 0.5)",
+        fontFamily: textValues.fontFamily,
+        fontStyle: textValues.fontStyle ? "italic" : "normal",
+        fontWeight: textValues.fontWeight ? 700 : 400,
+        fontSize: textValues.fontSize,
+        paddingTop: paddingTop,
       }}
       autocorrect="off"
       spellcheck="false"
