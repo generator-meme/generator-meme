@@ -4,12 +4,8 @@
     border: none;
     color: transparent;
     box-sizing: border-box;
-    padding: 0;
+    /* padding: 0; */
     overflow: hidden;
-    font-family: 'Rubik';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 40px;
     line-height: 1.2;
     text-align: center;
     position: absolute;
