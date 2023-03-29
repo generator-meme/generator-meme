@@ -1,14 +1,13 @@
-version: '3.8'
-name: test
+version: '3.3'
 services:
-  test-frontend:
+  frontend:
     image: artkeyplex/frontend-generator-meme:latest
     volumes: 
       - ../test-frontend/:/app/result_build/
     depends_on:
-      - test-backend
+      - backend
 
-  test-postgres:
+  postgres:
     image: postgres:14.4-alpine
     volumes:
       - /root/pg-data-test:/var/lib/postgresql/data/
@@ -17,7 +16,7 @@ services:
     ports:
       - "5432:5432"
 
-  test-backend:
+  backend:
     image: artkeyplex/generator-meme:latest
     restart: always
     volumes:
@@ -25,7 +24,7 @@ services:
       - /root/test-data/media/:/app/backend-media/
       - /root/test-data/:/app/data/
     depends_on:
-      - test-postgres
+      - postgres
     env_file:
       - ./.env
 
@@ -40,6 +39,6 @@ services:
       - /root/data/static/:/var/html/backend-static/
       - /root/data/media/:/var/html/backend-media/
     depends_on:
-      - test-backend
+      - backend
 
 
