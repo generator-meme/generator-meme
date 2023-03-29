@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   frontend: 
     image: artkeyplex/frontend-generator-meme:latest
