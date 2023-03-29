@@ -1,0 +1,82 @@
+name: Django-app workflow
+
+on:
+  push:
+    branches: [ "test" ]
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependecies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
+        pip install -r backend/requirements.txt
+        pip install psycopg2-binary
+    - name: Test with flake8 and django tests
+      run: |
+        python -m flake8
+  build_and_push_to_docker_hub:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push Backend to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/generator-meme:test
+      - name: Push Frontend to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme:test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme:test
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme:test
+            docker-compose -f docker-compose-test.yml stop
+            docker-compose -f docker-compose-test.yml rm backend
+            rm .env
+            touch .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+            echo DOMAIN=${{ secrets.DOMAIN }} >> .env
+            echo EMAIL=${{ secrets.EMAIL }} >> .env
+            echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+            docker-compose -f docker-compose-test.yml up -d --build
+            sudo docker-compose -f docker-compose-test.yml exec -T test-backend python manage.py migrate
+            sudo docker-compose -f docker-compose-test.yml exec -T test-backend python manage.py collectstatic --no-input
