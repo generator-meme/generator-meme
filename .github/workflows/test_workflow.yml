@@ -62,10 +62,11 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            cd test
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme:test
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme:test
-            docker-compose -f docker-compose-test.yml stop
-            docker-compose -f docker-compose-test.yml rm backend
+            docker-compose -f docker-compose-test.yml -p 'test' stop
+            docker-compose -f docker-compose-test.yml rm test-backend
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -73,7 +74,7 @@ jobs:
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+            echo POSTGRES_PORT=${{ secrets.TEST_POSTGRES_PORT }} >> .env
             echo DOMAIN=${{ secrets.DOMAIN }} >> .env
             echo EMAIL=${{ secrets.EMAIL }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
