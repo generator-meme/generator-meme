@@ -66,7 +66,7 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme:test
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme:test
             docker-compose -f docker-compose-test.yml -p 'test' stop
-            docker-compose -f docker-compose-test.yml rm test-backend
+            docker-compose -f docker-compose-test.yml rm testbackend
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env

@@ -1,44 +1,47 @@
 version: '3.3'
 services:
-  frontend:
-    image: artkeyplex/frontend-generator-meme:latest
+  testfrontend:
+    image: artkeyplex/frontend-generator-meme:test
     volumes: 
-      - ../test-frontend/:/app/result_build/
+      - /root/test/test-frontend/:/app/result_build/
     depends_on:
-      - backend
+      - testbackend
 
-  postgres:
+  testdb:
     image: postgres:14.4-alpine
     volumes:
-      - /root/pg-data-test:/var/lib/postgresql/data/
+      - /root/test/pg-data-test:/var/lib/postgresql/data/
     env_file:
       - ./.env
+    expose:
+      - "5433" # Publishes 5433 to other containers but NOT to host machine
     ports:
-      - "5432:5432"
+      - "5433:5433"
+    command: -p 5433
 
-  backend:
-    image: artkeyplex/generator-meme:latest
+  testbackend:
+    image: artkeyplex/generator-meme:test
     restart: always
     volumes:
-      - /root/test-data/static/:/app/backend-static/
-      - /root/test-data/media/:/app/backend-media/
-      - /root/test-data/:/app/data/
+      - /root/test/test-data/static/:/app/backend-static/
+      - /root/test/test-data/media/:/app/backend-media/
+      - /root/test/test-data/:/app/data/
     depends_on:
-      - postgres
+      - testdb
     env_file:
       - ./.env
 
-  nginx:
+  testnginx:
     image: nginx:1.19.3
     ports:
       - "100:80"
     volumes:
       - ./test-nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../test-frontend/build:/usr/share/nginx/html/
+      - /root/test/test-frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - /root/data/static/:/var/html/backend-static/
-      - /root/data/media/:/var/html/backend-media/
+      - /root/test/test-data/static/:/var/html/backend-static/
+      - /root/test/test-data/media/:/var/html/backend-media/
     depends_on:
-      - backend
+      - testbackend
 
 
