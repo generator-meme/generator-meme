@@ -10,7 +10,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru', 'host.docker.internal']
+ALLOWED_HOSTS = ['localhost',
+                 '82.146.61.116',
+                 'ilovememes.ru',
+                 'host.docker.internal',
+                 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru']
 
@@ -25,7 +29,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     # 'social_django',
-
     'django_filters',
     'api',
     'memes',
