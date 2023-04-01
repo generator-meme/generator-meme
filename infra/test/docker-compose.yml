@@ -10,7 +10,7 @@ services:
   testdb:
     image: postgres:14.4-alpine
     volumes:
-      - ./test-/pg-data-test:/var/lib/postgresql/data/
+      - ./pg-data-test:/var/lib/postgresql/data/
     env_file:
       - ./.env
     expose:
