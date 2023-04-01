@@ -4,7 +4,7 @@ server {
   server_name www.ilovememes.ru ilovememes.ru;
 
   location / {
-    proxy_pass http://site-nginx-1;
+    proxy_pass http://site_nginx_1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -26,7 +26,7 @@ server {
   server_name testmemes.ddns.net www.testmemes.ddns.net;
 
   location / {
-    proxy_pass http://test-testnginx-1;
+    proxy_pass http://test_testnginx_1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -48,7 +48,7 @@ server {
   server_name _;
 
   location / {
-    proxy_pass http://site-nginx-1;
+    proxy_pass http://site_nginx_1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
