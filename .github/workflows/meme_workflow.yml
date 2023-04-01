@@ -2,7 +2,7 @@ name: Django-app workflow
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main" ]
 
 
 jobs:
@@ -62,6 +62,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            cd infra/site
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme
             docker-compose stop

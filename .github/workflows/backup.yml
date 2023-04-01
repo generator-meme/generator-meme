@@ -2,7 +2,7 @@ name: Backup
 
 on:
   schedule:
-    - cron: '0 0 */3 * *' # каждые 3 дня будет срабатывать
+    - cron: '0 0 */1 * *' # каждые 1 день будет срабатывать
 
 jobs:
   backup:
@@ -13,7 +13,7 @@ jobs:
       - name: Create backup
         run: |
           cd backup/
-          docker exec -t root_postgres_1 pg_dumpall -c -U postgres > dumped_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+          docker exec -t site-postgres-1 pg_dumpall -c -U postgres > dumped_`date +%d-%m-%Y"_"%H_%M_%S`.sql
       - name: Upload backup
         uses: actions/upload-artifact@v2
         with:
