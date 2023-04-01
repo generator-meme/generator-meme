@@ -65,8 +65,8 @@ jobs:
             cd infra/site
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme
-            docker-compose stop
-            docker-compose rm backend
+            docker compose stop
+            docker compose rm backend
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -78,6 +78,6 @@ jobs:
             echo DOMAIN=${{ secrets.DOMAIN }} >> .env
             echo EMAIL=${{ secrets.EMAIL }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
-            docker-compose up -d --build
-            sudo docker-compose exec -T backend python manage.py migrate
-            sudo docker-compose exec -T backend python manage.py collectstatic --no-input
+            docker compose up -d --build
+            sudo docker compose exec -T backend python manage.py migrate
+            sudo docker compose exec -T backend python manage.py collectstatic --no-input
