@@ -9,8 +9,8 @@ DOMAIN = os.environ.get('DOMAIN')
 
 load_dotenv()
 
-AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
-TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
+AUTH_URL = f'https://{DOMAIN}/api/auth/token/login'
+TEMPLATE_URL = f'https://{DOMAIN}/api/templates/'
 EMAIL = os.environ.get('EMAIL')
 PASSWORD = os.environ.get('PASSWORD')
 

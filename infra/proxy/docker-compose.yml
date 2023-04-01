@@ -1,0 +1,19 @@
+version: '3.3'
+services:
+  proxy:
+    image: nginx:1.19.3
+    volumes:
+      - ./proxy-nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - site
+      - test
+    ports:
+      - "80:80"
+
+networks:
+  site:
+    name: site_default
+    external: true
+  test:
+    name: test_default
+    external: true
