@@ -42,6 +42,7 @@ class TemplateAdmin(admin.ModelAdmin):
     ]
     list_per_page = 10
     actions = ['publish', 'hide']
+    actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
     def publish(self, request, queryset):
