@@ -48,7 +48,7 @@ class Template(models.Model):
     )
     tag = models.ManyToManyField(
         Tag,
-        verbose_name='теги',
+        verbose_name='Теги',
         related_name='memes',
         blank=True
     )
