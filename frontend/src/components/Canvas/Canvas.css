@@ -79,7 +79,7 @@
   border: none;
 }
 
-.editor__text {
+/* .editor__text {
   margin: 0;
   background-color: transparent;
   border: none;
@@ -92,9 +92,9 @@
   font-weight: 400;
   font-size: 40px;
   line-height: 1.2;
-}
+} */
 
-.editor__text::-webkit-input-placeholder,
+/* .editor__text::-webkit-input-placeholder,
 .editor__text::-moz-placeholder,
 .editor__text::-ms-input-placeholder,
 .editor__text::placeholder {
@@ -110,7 +110,7 @@
   padding-top: 20px;
   margin: 0;
   text-align: center;
-}
+} */
 
 .editor__text:focus {
   border: 2px solid yellow;
