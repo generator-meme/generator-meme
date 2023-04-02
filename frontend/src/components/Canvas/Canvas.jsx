@@ -165,9 +165,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     // нижний текст основные характеристики
     ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
-               
                 ${bottomTextValues.fontWeight ? "bold" : ""}
-               
                 ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
     ctx.textAlign = bottomTextValues.fontPosition;
     
@@ -192,9 +190,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     // верхний текст основные характеристики
     ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
-               
                 ${topTextValues.fontWeight ? "bold" : ""}
-               
                 ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
     ctx.textAlign = topTextValues.fontPosition;
 
