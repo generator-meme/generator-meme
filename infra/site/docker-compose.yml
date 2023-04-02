@@ -1,0 +1,53 @@
+version: '3.3'
+services:
+  frontend:
+    image: artkeyplex/frontend-generator-meme:latest
+    volumes:
+      - ./data/frontend/:/app/result_build/
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:14.4-alpine
+    volumes:
+      - ./pg_data/:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+
+  backend:
+    image: artkeyplex/generator-meme:latest
+    restart: always
+    volumes:
+      - ./data/static/:/app/backend-static/
+      - ./data/media/:/app/backend-media/
+      - ./data/:/app/data/
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+
+  nginx:
+    image: nginx:1.19.3
+    expose:
+      - "80"
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - /root/data/certbot/conf:/etc/letsencrypt
+      - /root/data/certbot/www:/var/www/certbot
+      - ./data/frontend/build:/usr/share/nginx/html/
+      - ./docs/:/usr/share/nginx/html/api/docs/
+      - ./data/static/:/var/html/backend-static/
+      - ./data/media/:/var/html/backend-media/
+    depends_on:
+      - backend
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /root/data/certbot/conf:/etc/letsencrypt
+      - /root/data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
