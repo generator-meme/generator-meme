@@ -12,12 +12,11 @@ import {
   changeOpacity,
   changeBackColor,
   drawText,
-  addTextBackground,
 } from "../../utils/functionsForCanvas.js";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
-  
+    
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -166,7 +165,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     // нижний текст основные характеристики
     ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
+               
                 ${bottomTextValues.fontWeight ? "bold" : ""}
+               
                 ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
     ctx.textAlign = bottomTextValues.fontPosition;
     
@@ -191,7 +192,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     // верхний текст основные характеристики
     ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+               
                 ${topTextValues.fontWeight ? "bold" : ""}
+               
                 ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
     ctx.textAlign = topTextValues.fontPosition;
 
@@ -233,7 +236,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
-    const img = new Image(); // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте
+    const img = new Image(); // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте
     if (currentMeme) {
       img.src = currentMeme.image;
     } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
@@ -273,7 +276,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   useEffect(() => {
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
-  
+    
   if (!image) {
     return null;
   };
@@ -332,7 +335,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 top={0}
                 left={0}
                 bottom={null}
-                paddingTop={15}
+                paddingTop={0}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}

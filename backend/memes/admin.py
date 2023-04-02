@@ -4,6 +4,12 @@ from django.utils.html import format_html
 from .models import Meme, Tag, Template
 
 
+class TagsInline(admin.TabularInline):
+    """Инлайн для редактирования тегов конкретного шаблона."""
+    model = Tag.memes.through
+    extra = 3
+
+
 @admin.register(Meme)
 class MemeAdmin(admin.ModelAdmin):
     '''Админ-панель модели Meme с фильтрацией по тегам'''
@@ -16,13 +22,27 @@ class TemplateAdmin(admin.ModelAdmin):
     '''Админ-панель модели Meme с фильтрацией по тегам'''
 
     def image_tag(self, obj):
+        """Форматирование картинки шаблона для вывода в общем списке."""
         return format_html(
-            '<img src="{}" width="150" height="100" />'.format(obj.image.url))
+            '<img src="{}" width="500" height="450" />'.format(obj.image.url))
 
+    def get_tags(self, obj):
+        """Получить строку с тегами для отображения в общем списке шаблонов."""
+        return ",  " . join([x.__str__() for x in obj.tag.all()])
+
+    get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
-    list_display = ('image_tag', 'is_published', 'name')
-    list_filter = ('tag',)
+
+    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
+    fields = ('name', 'image', 'is_published')
+    list_editable = ('name',)
+    list_filter = ('is_published', 'tag')
+    inlines = [
+        TagsInline,
+    ]
+    list_per_page = 10
     actions = ['publish', 'hide']
+    actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
     def publish(self, request, queryset):
