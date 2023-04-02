@@ -11,7 +11,8 @@ import {
   wrapText,
   changeOpacity,
   changeBackColor,
-  drawText
+  drawText,
+  addTextBackground,
 } from "../../utils/functionsForCanvas.js";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
@@ -143,6 +144,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
+
+    // watermark
+    ctx.font = "bold 12px Inter";
+    ctx.textAlign = "end";
+    ctx.strokeStyle = "#737270";
+    ctx.lineWidth = 2;
+    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10);
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "#EBDFDF";
+    ctx.fillText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10, 86)
+
     const textMarginX = 30; // значение бокового отступа текста
     const textMarginYTop = 50;
     const textMarginYBottom = 20;
