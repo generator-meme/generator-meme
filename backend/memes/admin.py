@@ -33,10 +33,11 @@ class TemplateAdmin(admin.ModelAdmin):
     get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
 
-    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
-    fields = ('name', 'image', 'is_published')
-    list_editable = ('name',)
-    list_filter = ('is_published', 'tag')
+    list_display = ('image_tag', 'is_published', 'is_trash',
+                    'get_tags', 'name')
+    fields = ('name', 'image', 'is_published', 'is_trash')
+    list_editable = ('name', 'is_published', 'is_trash')
+    list_filter = ('is_published', 'is_trash', 'tag')
     inlines = [
         TagsInline,
     ]

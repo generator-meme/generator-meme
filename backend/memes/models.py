@@ -59,6 +59,10 @@ class Template(models.Model):
         default=False,
         verbose_name='Статус публикации'
     )
+    is_trash = models.BooleanField(
+        default=False,
+        verbose_name='Trash'
+    )
     objects = TemplateManager()
 
     class Meta:
