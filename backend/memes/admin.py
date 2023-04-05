@@ -42,7 +42,7 @@ class TemplateAdmin(admin.ModelAdmin):
         TagsInline,
     ]
     list_per_page = 10
-    actions = ['publish', 'hide']
+    actions = ['publish', 'hide', 'trash', 'untrash']
     actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
@@ -52,8 +52,18 @@ class TemplateAdmin(admin.ModelAdmin):
 
     @admin.action(description='Убрать с сайта выбранные шаблоны')
     def hide(self, request, queryset):
-        '''Публикует выбранные шаблоны мемов'''
+        '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
+
+    @admin.action(description='Отправить в трэш выбранные шаблоны')
+    def trash(self, request, queryset):
+        '''Отправляет в трэш выбранные шаблонов мемов'''
+        queryset.update(is_trash=True)
+
+    @admin.action(description='Вернуть из трэша выбранные шаблоны')
+    def untrash(self, request, queryset):
+        '''Возвращает из трэша выбранные шаблонов мемов'''
+        queryset.update(is_trash=False)
 
 
 @admin.register(Tag)
