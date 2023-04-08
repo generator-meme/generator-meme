@@ -33,16 +33,16 @@ class TemplateAdmin(admin.ModelAdmin):
     get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
 
-    list_display = ('image_tag', 'is_published', 'is_trash',
+    list_display = ('image_tag', 'is_published',
                     'get_tags', 'name')
-    fields = ('name', 'image', 'is_published', 'is_trash')
-    list_editable = ('name', 'is_published', 'is_trash')
-    list_filter = ('is_published', 'is_trash', 'tag')
+    fields = ('name', 'image', 'is_published')
+    list_editable = ('name', 'is_published')
+    list_filter = ('is_published', 'tag')
     inlines = [
         TagsInline,
     ]
     list_per_page = 10
-    actions = ['publish', 'hide', 'trash', 'untrash']
+    actions = ['publish', 'hide']
     actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
@@ -54,16 +54,6 @@ class TemplateAdmin(admin.ModelAdmin):
     def hide(self, request, queryset):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
-
-    @admin.action(description='Отправить в трэш выбранные шаблоны')
-    def trash(self, request, queryset):
-        '''Отправляет в трэш выбранные шаблонов мемов'''
-        queryset.update(is_trash=True)
-
-    @admin.action(description='Вернуть из трэша выбранные шаблоны')
-    def untrash(self, request, queryset):
-        '''Возвращает из трэша выбранные шаблонов мемов'''
-        queryset.update(is_trash=False)
 
 
 @admin.register(Tag)
