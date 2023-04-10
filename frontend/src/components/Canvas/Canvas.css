@@ -111,10 +111,10 @@
   text-align: center;
 } */
 
-.editor__text:focus {
+/* .editor__text:focus {
   border: 2px solid yellow;
   outline: none;
-}
+} */
 
 .editor__color {
   margin-bottom: 20px;
