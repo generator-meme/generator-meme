@@ -33,9 +33,10 @@ class TemplateAdmin(admin.ModelAdmin):
     get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
 
-    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
+    list_display = ('image_tag', 'is_published',
+                    'get_tags', 'name')
     fields = ('name', 'image', 'is_published')
-    list_editable = ('name',)
+    list_editable = ('name', 'is_published')
     list_filter = ('is_published', 'tag')
     inlines = [
         TagsInline,
@@ -51,7 +52,7 @@ class TemplateAdmin(admin.ModelAdmin):
 
     @admin.action(description='Убрать с сайта выбранные шаблоны')
     def hide(self, request, queryset):
-        '''Публикует выбранные шаблоны мемов'''
+        '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
 
 
