@@ -198,8 +198,8 @@ export const drawText = (
   offsetY,
   textMarginYBottom,
   textMarginYTop,
-  lineTop,
-  lineBottom,
+  // lineTop,
+  // lineBottom,
   marginX,
   // textWidth,
   textValues
@@ -220,29 +220,12 @@ export const drawText = (
       textMarginYBottom;
   }
 
-  if (
-    (top && (marginY > lineBottom || marginY < lineTop)) ||
-    (!top && (marginY < lineTop || marginY > lineBottom))
-  ) {
-    // ограничение видимости нижних заливки и контура до верхнего края
-    ctx.fillStyle = "transparent";
-    ctx.strokeStyle = "transparent";
-  } else {
-    ctx.fillStyle = textValues.backColor;
-    ctx.strokeStyle = textValues.strokeTextColor;
-  }
+  ctx.fillStyle = textValues.backColor;
+  ctx.strokeStyle = textValues.strokeTextColor;
 
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
-  if (
-    (top && (marginY > lineBottom || marginY < lineTop)) ||
-    (!top && (marginY < lineTop || marginY > lineBottom))
-  ) {
-    // ограничение видимости нижнего текста до верхнего края
-    ctx.fillStyle = "transparent";
-  } else {
-    ctx.fillStyle = textValues.fillTextColor; // переключение цвета с заливки на текст
-  }
+  ctx.fillStyle = textValues.fillTextColor;
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура

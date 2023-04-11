@@ -178,10 +178,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const textMarginYBottom = 18;//20
     // const offsetY = 0; // для перемещения текста по высоте картинки (скорее всего добавим в стейт-объект текста)
 
-    // вычисление границ для текста
-    const lineTop = textMarginYTop;
-    const lineBottom = canvasHeight - textMarginYBottom;
-
     // нижний текст основные характеристики
     const bottomOffsetY = bottomTextValues.bottom;
     const bottomOffsetX = bottomTextValues.left;
@@ -203,8 +199,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       bottomOffsetY,
       textMarginYBottom,
       textMarginYTop,
-      lineTop,
-      lineBottom,
       bottomMarginX,
       bottomTextValues,
     ));
@@ -231,8 +225,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       topOffsetY,
       textMarginYBottom,
       textMarginYTop,
-      lineTop,
-      lineBottom,
       topMarginX,
       topTextValues,
     ));
