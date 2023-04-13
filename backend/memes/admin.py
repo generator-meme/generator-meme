@@ -1,13 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
+from django.forms import TextInput
+from django.db import models
 from .models import Meme, Tag, Template
-
-
-class TagsInline(admin.TabularInline):
-    """Инлайн для редактирования тегов конкретного шаблона."""
-    model = Tag.memes.through
-    extra = 3
 
 
 @admin.register(Meme)
@@ -24,7 +20,7 @@ class TemplateAdmin(admin.ModelAdmin):
     def image_tag(self, obj):
         """Форматирование картинки шаблона для вывода в общем списке."""
         return format_html(
-            '<img src="{}" width="500" height="450" />'.format(obj.image.url))
+            '<img src="{}" width="430" height="380" />'.format(obj.image.url))
 
     def get_tags(self, obj):
         """Получить строку с тегами для отображения в общем списке шаблонов."""
@@ -33,14 +29,14 @@ class TemplateAdmin(admin.ModelAdmin):
     get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
 
-    list_display = ('image_tag', 'is_published',
-                    'get_tags', 'name')
-    fields = ('name', 'image', 'is_published')
-    list_editable = ('name', 'is_published')
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+    }
+
+    list_display = ('image_tag', 'is_published', 'tag', 'name')
+    list_editable = ('name', 'is_published', 'tag')
     list_filter = ('is_published', 'tag')
-    inlines = [
-        TagsInline,
-    ]
+    filter_horizontal = ('tag', )
     list_per_page = 10
     actions = ['publish', 'hide']
     actions_on_bottom = True
@@ -54,6 +50,11 @@ class TemplateAdmin(admin.ModelAdmin):
     def hide(self, request, queryset):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
+
+    class Media:
+        css = {
+            'all': ('admin/css/resize_widget.css',),
+        }
 
 
 @admin.register(Tag)
