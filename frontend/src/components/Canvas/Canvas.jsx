@@ -108,7 +108,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       return item.id === id;
     });
     if (template) {
-      handleCreateNewMeme(canvas.current.toDataURL(), id)
+      handleCreateNewMeme(canvas.current.toDataURL('image/jpeg', 0.92), id)
         .finally(()=> {
           navigate('/saved')
         });
