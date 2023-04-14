@@ -103,3 +103,17 @@
   position: absolute;
   top: 0;
 }
+
+.meme__bth-see-more {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #1E1D1D;
+  cursor: pointer;
+}
