@@ -145,6 +145,7 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpe
         minHeight: 70,
         height: textValues.height,
         maxHeight: imageSizes?.height,
+        backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
       }}
       onMouseDown={pickup}
     >

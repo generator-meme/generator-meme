@@ -1,12 +1,12 @@
 import base64
+import hashlib
 import os
-import vk_api
-import requests
-
-
-from django.core.management.base import BaseCommand
-from dotenv import load_dotenv, find_dotenv
 from datetime import datetime
+
+import requests
+import vk_api
+from django.core.management.base import BaseCommand
+from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
@@ -27,9 +27,29 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Start')
         photos = self.download_photo()
-        encoded_photos = self.encode_photos_to_base64(photos)
+        path = './backend-media/meme/template_images/'
+        template_hash = self.hash_all_exsist(path)
+        encoded_photos = self.encode_photos_to_base64(photos,
+                                                      template_hash)
         self.create_csv_file(encoded_photos)
         print('End')
+
+    def hash_md5_name(self, fname: str):
+        """Получает хэш-сумму файла по названию."""
+        with open(fname, "rb") as f:
+            file_base_64 = base64.b64encode(f.read()).decode('utf-8')
+        return hashlib.md5(file_base_64.encode('utf-8')).hexdigest()
+
+    def hash_md5_file(self, file):
+        """Получает хэш-сумму файла."""
+        return hashlib.md5(file.encode('utf-8')).hexdigest()
+
+    def hash_all_exsist(self, path: str) -> set[str]:
+        """Возвращает множество уже имеющихся шаблонов."""
+        templates_hash = set()
+        for file in os.listdir(path):
+            templates_hash.add(self.hash_md5_name(path+file))
+        return templates_hash
 
     def download_photo(self):
         """Получает ссылки на изображения из пабликов в ВК"""
@@ -45,7 +65,8 @@ class Command(BaseCommand):
         photos = []
 
         for public in PUBLICS:
-            response = vk.photos.get(owner_id=PUBLICS[public], album_id="wall",
+            response = vk.photos.get(owner_id=PUBLICS[public],
+                                     album_id="wall",
                                      count='200', rev=1,
                                      offset='0')
             for i in range(len(response['items'])):
@@ -53,13 +74,18 @@ class Command(BaseCommand):
                 photos.append(url_photo)
         return photos
 
-    def encode_photos_to_base64(self, photos: list):
+    def encode_photos_to_base64(self, photos: list, template_hash: set):
         """Кодирует фото в base64"""
         encoded_photos = []
         for photo_url in photos:
             response = requests.get(photo_url)
             url_encode = base64.b64encode(response.content).decode('utf-8')
-            encoded_photos.append(url_encode)
+            hash_new_template = self.hash_md5_file(url_encode)
+            if not (hash_new_template in template_hash):
+                encoded_photos.append(url_encode)
+                print('add')
+            else:
+                print('double')
         return encoded_photos
 
     def create_csv_file(self, data: list):
