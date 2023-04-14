@@ -1,8 +1,8 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import TextInput
 from django.utils.html import format_html
 
-from django.forms import TextInput
-from django.db import models
 from .models import Meme, Tag, Template
 
 
@@ -33,8 +33,14 @@ class TemplateAdmin(admin.ModelAdmin):
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
 
-    list_display = ('image_tag', 'is_published', 'tag', 'name')
-    list_editable = ('name', 'is_published', 'tag')
+    list_display = ('image_tag', 'is_published',
+                    # при создании миграций комментировать строку tag
+                    'tag',
+                    'name')
+    list_editable = ('name', 'is_published',
+                     # при создании миграций комментировать строку tag
+                     'tag',
+                     )
     list_filter = ('is_published', 'tag')
     filter_horizontal = ('tag', )
     list_per_page = 10
@@ -62,3 +68,4 @@ class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
     list_display = ('name', 'slug')
     list_filter = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
