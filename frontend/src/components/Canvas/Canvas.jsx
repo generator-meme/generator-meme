@@ -17,7 +17,6 @@ import {
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
-    
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -27,6 +26,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
     return null;
   }, [image]);
+
+  console.log(imageSizes);
+
+  const [outsideText, setOutsideText] = useState({
+    top: false,
+    bottom: false,
+  });
 
   const [topTextValues, setTopTextValues] = useState({
     name: "topTextValues",
@@ -44,7 +50,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    outside: false,
+    // outside: false,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
     height: 70,//80
@@ -74,7 +80,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    outside: false,
+    // outside: false,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
     height: 70,//80
@@ -92,12 +98,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const canvasHeight = useMemo(() => { // изменение высоты canvas в зависимости от текста внутри мема или снаружи
     if (imageSizes) {
-      if (topTextValues.outside && bottomTextValues.outside) return imageSizes.height + 160;
-      if (topTextValues.outside || bottomTextValues.outside) return imageSizes.height + 80;
+      if (outsideText.top && outsideText.bottom) return imageSizes.height + 160;
+      if (outsideText.top || outsideText.bottom) return imageSizes.height + 80;
       return imageSizes.height;
       };
     return null;
-  }, [imageSizes, topTextValues, bottomTextValues]);
+  }, [imageSizes, outsideText]);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -147,7 +153,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     let imageInitialY = 0;
     
-    if(topTextValues.outside) {
+    if(outsideText.top) {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, imageSizes.width, 80);
       imageInitialY = 80;
@@ -155,9 +161,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height);
 
-    if(bottomTextValues.outside) {
+    if(outsideText.bottom) {
       ctx.fillStyle = "white";
-      ctx.fillRect(0, topTextValues.outside? imageSizes.height + 80 : imageSizes.height, imageSizes.width, 80);
+      ctx.fillRect(0, outsideText.top? imageSizes.height + 80 : imageSizes.height, imageSizes.width, 80);
     };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
@@ -168,10 +174,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     ctx.textAlign = "end";
     ctx.strokeStyle = "#737270";
     ctx.lineWidth = 2;
-    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10);
+    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10);
+    // ctx.strokeText("ilovememes.ru", imageSizes.width - 10, outsideText.top? imageSizes.height + 80 - 10 : imageSizes.height - 10);
     ctx.lineWidth = 1;
     ctx.fillStyle = "#EBDFDF";
-    ctx.fillText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10, 86)
+    ctx.fillText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10, 86)
+    // ctx.fillText("ilovememes.ru", imageSizes.width - 10, outsideText.top? imageSizes.height + 80 - 10 : imageSizes.height - 10, 86)
 
     const textMarginX = 30; // значение бокового отступа текста
     const textMarginYTop = 62; //50
