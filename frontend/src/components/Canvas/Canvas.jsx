@@ -27,8 +27,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     return null;
   }, [image]);
 
-  console.log(imageSizes);
-
   const [outsideText, setOutsideText] = useState({
     top: false,
     bottom: false,
@@ -53,8 +51,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacityLevel: 100,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
-    height: 70,//80
-    top: 0,
+    height: 70,
+    top: outsideText.top ? outsideText.height : 0,
     left: 0,
     bottom: null,
     startTop: 0,
@@ -82,10 +80,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacityLevel: 100,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
-    height: 70,//80
+    height: 70,
     top: null,
     left: 0,
-    bottom: 0,
+    bottom: outsideText.bottom ? outsideText.height : 0,
     startTop: 0,
     startLeft: 0,
     isMoving: false,
@@ -336,11 +334,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: (outsideText.top && !outsideText.bottom) ? 81 + imageSizes.offsetY + 0.5 * outsideText.height
-                : (!outsideText.top && outsideText.bottom) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
+              top: (outsideText.top && outsideText.bottom) ? 81 + imageSizes.offsetY - outsideText.height
+                : (outsideText.top || outsideText.bottom) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
                 : 81 + imageSizes.offsetY,
               left: imageSizes.offsetX,
-              height: imageSizes.height,
+              height: canvasHeight,
               width: imageSizes.width,
             }}
           >
