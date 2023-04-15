@@ -13,14 +13,14 @@ from users.serializers import UserSerializer
 class TagSerializer(ModelSerializer):
     '''Сериализатор модели Tag'''
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'name', 'slug')
         model = Tag
 
 
 class TemplateReadSerializer(ModelSerializer):
     '''Сериализатор модели Temlate для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
-    tags = TagSerializer(many=True, read_only=True)
+    tag = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Template
