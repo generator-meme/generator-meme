@@ -18,7 +18,7 @@ class TagSerializer(ModelSerializer):
 
 
 class TemplateReadSerializer(ModelSerializer):
-    '''Сериализатор модели Temlate для чтения объекта'''
+    '''Сериализатор модели Template для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
 
