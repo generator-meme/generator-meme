@@ -27,26 +27,26 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
       <div onClick={onClick} className="meme__image-hover"></div>
       <img className="meme__like" src={like} alt="Лайк." />
       {elem.tag.length > 0 && (
-      <div className="meme__hashtags-container">
+      <div className="meme__tags-container">
         <ul 
-          className={`meme__hashtags ${isMore ? "meme__hashtags_more" : ""} `}
+          className={`meme__tags ${isMore ? "meme__tags_more" : ""} `}
           onClick={e => setIsMore(false)}
 
         >
           {elem.tag.map((hashtag, index) => {
-            return <li className="meme__hashtag" key={index}>#{hashtag}</li>
+            return <li className="meme__hashtag" key={index}>#{hashtag.name}</li>
           })}
         </ul>
         <ul 
           ref={allTags} // невидимый полный список для сравнения высоты всех тегов с минимальной
-          className="meme__hashtags meme__hashtags_more"
+          className="meme__tags meme__tags_more"
           style={{
             opacity: 0,
             zIndex: -2,
           }}
         >
           {elem.tag.map((hashtag, index) => {
-            return <li className="meme__hashtag" key={index}>#{hashtag}</li>
+            return <li className="meme__hashtag" key={index}>#{hashtag.name}</li>
           })}
         </ul>
 
