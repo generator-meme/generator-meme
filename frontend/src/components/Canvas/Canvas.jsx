@@ -17,7 +17,6 @@ import {
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
-    
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -27,6 +26,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
     return null;
   }, [image]);
+
+  const [outsideText, setOutsideText] = useState({
+    top: false,
+    bottom: false,
+    height: 80,
+  });
 
   const [topTextValues, setTopTextValues] = useState({
     name: "topTextValues",
@@ -44,11 +49,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    outside: false,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
-    height: 70,//80
-    top: 0,
+    height: 70,
+    top: outsideText.top ? outsideText.height : 0,
     left: 0,
     bottom: null,
     startTop: 0,
@@ -74,13 +78,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    outside: false,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
-    height: 70,//80
+    height: 70,
     top: null,
     left: 0,
-    bottom: 0,
+    bottom: outsideText.bottom ? outsideText.height : 0,
     startTop: 0,
     startLeft: 0,
     isMoving: false,
@@ -92,12 +95,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const canvasHeight = useMemo(() => { // изменение высоты canvas в зависимости от текста внутри мема или снаружи
     if (imageSizes) {
-      if (topTextValues.outside && bottomTextValues.outside) return imageSizes.height + 160;
-      if (topTextValues.outside || bottomTextValues.outside) return imageSizes.height + 80;
+      if (outsideText.top && outsideText.bottom) return imageSizes.height + outsideText.height * 2;
+      if (outsideText.top || outsideText.bottom) return imageSizes.height + outsideText.height;
       return imageSizes.height;
       };
     return null;
-  }, [imageSizes, topTextValues, bottomTextValues]);
+  }, [imageSizes, outsideText]);
 
   const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
   const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
@@ -147,17 +150,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     let imageInitialY = 0;
     
-    if(topTextValues.outside) {
+    if(outsideText.top) {
       ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, imageSizes.width, 80);
-      imageInitialY = 80;
+      ctx.fillRect(0, 0, imageSizes.width, outsideText.height);
+      imageInitialY = outsideText.height;
     };
     
     ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height);
 
-    if(bottomTextValues.outside) {
+    if(outsideText.bottom) {
       ctx.fillStyle = "white";
-      ctx.fillRect(0, topTextValues.outside? imageSizes.height + 80 : imageSizes.height, imageSizes.width, 80);
+      ctx.fillRect(0, outsideText.top? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
     };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
@@ -168,10 +171,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     ctx.textAlign = "end";
     ctx.strokeStyle = "#737270";
     ctx.lineWidth = 2;
-    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10);
+    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10);
     ctx.lineWidth = 1;
     ctx.fillStyle = "#EBDFDF";
-    ctx.fillText("ilovememes.ru", imageSizes.width - 10, topTextValues.outside? imageSizes.height + 80 - 10 : imageSizes.height - 10, 86)
+    ctx.fillText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10, 86)
 
     const textMarginX = 30; // значение бокового отступа текста
     const textMarginYTop = 62; //50
@@ -229,7 +232,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       topTextValues,
     ));
 
-  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues]);
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -331,9 +334,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: 81 + imageSizes.offsetY,
+              top: (outsideText.top && outsideText.bottom) ? 81 + imageSizes.offsetY - outsideText.height
+                : (outsideText.top || outsideText.bottom) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
+                : 81 + imageSizes.offsetY,
               left: imageSizes.offsetX,
-              height: imageSizes.height,
+              height: canvasHeight,
               width: imageSizes.width,
             }}
           >
@@ -347,9 +352,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 setTextValues={setTopTextValues}
                 setMyPanelIsOpen={setFirstPanelIsOpen}
                 setOtherPanelIsOpen={setSecondPanelIsOpen}
-                // top={topTextValues.topPosition}
-                // left={topTextValues.leftPosition}
-                // bottom={topTextValues.bottomPosition}
                 paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
               />
@@ -359,9 +361,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 setTextValues={setBottomTextValues}
                 setMyPanelIsOpen={setSecondPanelIsOpen}
                 setOtherPanelIsOpen={setFirstPanelIsOpen}
-                // top={null}
-                // left={0}
-                // bottom={0}
                 paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
               />
