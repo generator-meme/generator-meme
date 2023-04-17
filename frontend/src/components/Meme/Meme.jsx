@@ -33,8 +33,8 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
           onClick={e => setIsMore(false)}
 
         >
-          {elem.tag.map((hashtag, index) => {
-            return <li className="meme__hashtag" key={index}>#{hashtag.name}</li>
+          {elem.tag.map((tag, index) => {
+            return <li className="meme__tag" key={index}>#{tag.name}</li>
           })}
         </ul>
         <ul 
@@ -45,8 +45,8 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
             zIndex: -2,
           }}
         >
-          {elem.tag.map((hashtag, index) => {
-            return <li className="meme__hashtag" key={index}>#{hashtag.name}</li>
+          {elem.tag.map((tag, index) => {
+            return <li className="meme__tag" key={index}>#{tag.name}</li>
           })}
         </ul>
 
