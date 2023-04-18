@@ -74,13 +74,13 @@
   opacity: 1;
 }
 
-.meme__hashtags-container {
+.meme__tags-container {
   height: 96px;
   position: relative;
   width: 100%;
 }
 
-.meme__hashtags {
+.meme__tags {
   list-style: none;
   display: flex;
   justify-content: flex-start;
@@ -98,8 +98,22 @@
   width: 100%;
 }
 
-.meme__hashtags_more {
+.meme__tags_more {
   max-height: 96px;
   position: absolute;
   top: 0;
+}
+
+.meme__bth-see-more {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #1E1D1D;
+  cursor: pointer;
 }
