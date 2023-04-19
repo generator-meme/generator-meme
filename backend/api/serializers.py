@@ -6,6 +6,7 @@ from rest_framework.serializers import (IntegerField, ModelSerializer,
                                         PrimaryKeyRelatedField,
                                         SerializerMethodField, UUIDField,
                                         ValidationError)
+
 from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 from users.serializers import UserSerializer
 
@@ -22,7 +23,6 @@ class TemplateReadSerializer(ModelSerializer):
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
     used_times = IntegerField()
-
 
     class Meta:
         model = Template
@@ -63,6 +63,7 @@ class MemeReadSerializer(ModelSerializer):
         ).used_times
         serializer = TemplateReadSerializer(template)
         return serializer.data
+
 
 class MemeWriteSerializer(ModelSerializer):
     '''Сериализатор модели Meme для записи объекта'''

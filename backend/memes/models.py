@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from django.db import models
-from django.db.models import Count, F
 
 from users.models import User
 

@@ -1,4 +1,4 @@
-from django.db.models import Case, When, OuterRef, Value, Exists
+from django.db.models import Case, Exists, OuterRef, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -15,7 +15,7 @@ from .serializers import (FavoriteSerializer, MemeReadSerializer,
                           MemeWriteSerializer, TagSerializer,
                           TemplateReadSerializer, TemplateWriteSerializer)
 from .services import create_delete_relation
-from memes.models import Favorite, Meme, TemplateUsedTimes, Tag, Template
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -59,11 +59,9 @@ class TemplateViewSet(viewsets.ModelViewSet):
                     TemplateUsedTimes.objects.filter(
                         template=OuterRef('pk')
                     )
-                ),
-                    then=TemplateUsedTimes.objects.filter(
-                        template=OuterRef('pk')
-                    ).values('used_times')
-                ),
+                ), then=TemplateUsedTimes.objects.filter(
+                    template=OuterRef('pk')
+                ).values('used_times')),
                 default=Value(0)
             )
         ).order_by('-used_times')
