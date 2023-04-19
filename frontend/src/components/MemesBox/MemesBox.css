@@ -17,7 +17,6 @@
     justify-content: space-between;
     z-index: 2;
     grid-template-columns: repeat(auto-fit, minmax(423px, 453px));
-    grid-template-rows: repeat(auto-fit, 466px);
     column-gap: 30px;
     row-gap: 25px;
     box-sizing: border-box;

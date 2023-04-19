@@ -22,6 +22,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+        ordering = ('name',)
 
     def __str__(self) -> str:
         return self.name
@@ -51,7 +52,7 @@ class Template(models.Model):
         auto_now_add=True)
     is_published = models.BooleanField(
         default=False,
-        verbose_name='Статус публикации'
+        verbose_name='Опубликован'
     )
 
     class Meta:

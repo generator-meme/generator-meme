@@ -1,14 +1,13 @@
 from django.contrib import admin
+
 from django.db.models import OuterRef, Case, When, Value, Exists
+
+from django.db import models
+from django.forms import TextInput
+
 from django.utils.html import format_html
 
 from .models import Meme, TemplateUsedTimes, Tag, Template
-
-
-class TagsInline(admin.TabularInline):
-    """Инлайн для редактирования тегов конкретного шаблона."""
-    model = Tag.memes.through
-    extra = 3
 
 
 @admin.register(Meme)
@@ -25,7 +24,7 @@ class TemplateAdmin(admin.ModelAdmin):
     def image_tag(self, obj):
         """Форматирование картинки шаблона для вывода в общем списке."""
         return format_html(
-            '<img src="{}" width="500" height="450" />'.format(obj.image.url))
+            '<img src="{}" width="430" height="380" />'.format(obj.image.url))
 
     def get_tags(self, obj):
         """Получить строку с тегами для отображения в общем списке шаблонов."""
@@ -34,15 +33,22 @@ class TemplateAdmin(admin.ModelAdmin):
     get_tags.short_description = 'Tags'
     image_tag.short_description = 'Image'
 
-    list_display = ('image_tag', 'is_published',
-                    'get_tags', 'name')
+    formfield_overrides = {
+        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+    }
     fields = ('name', 'image', 'is_published', 'used_times')
     readonly_fields = ('used_times', )
-    list_editable = ('name', 'is_published')
+    list_display = ('image_tag', 'is_published',
+                    # при создании миграций комментировать строку tag
+                    'tag',
+                    'name')
+    list_editable = ('name', 'is_published',
+                     # при создании миграций комментировать строку tag
+                     'tag',
+                     )
+
     list_filter = ('is_published', 'tag')
-    inlines = [
-        TagsInline,
-    ]
+    filter_horizontal = ('tag', )
     list_per_page = 10
     actions = ['publish', 'hide']
     actions_on_bottom = True
@@ -56,6 +62,7 @@ class TemplateAdmin(admin.ModelAdmin):
     def hide(self, request, queryset):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
+
 
     def get_queryset(self, request):
         return Template.objects.annotate(
@@ -81,8 +88,16 @@ class TemplateAdmin(admin.ModelAdmin):
         return obj.used_times
 
 
+    class Media:
+        css = {
+            'all': ('admin/css/resize_widget.css',),
+        }
+
+
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
     list_display = ('name', 'slug')
     list_filter = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
