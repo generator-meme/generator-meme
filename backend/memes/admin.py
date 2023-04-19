@@ -1,9 +1,13 @@
 from django.contrib import admin
+
+from django.db.models import OuterRef, Case, When, Value, Exists
+
 from django.db import models
 from django.forms import TextInput
+
 from django.utils.html import format_html
 
-from .models import Meme, Tag, Template
+from .models import Meme, TemplateUsedTimes, Tag, Template
 
 
 @admin.register(Meme)
@@ -32,7 +36,8 @@ class TemplateAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '20'})},
     }
-
+    fields = ('name', 'image', 'is_published', 'used_times')
+    readonly_fields = ('used_times', )
     list_display = ('image_tag', 'is_published',
                     # при создании миграций комментировать строку tag
                     'tag',
@@ -41,6 +46,7 @@ class TemplateAdmin(admin.ModelAdmin):
                      # при создании миграций комментировать строку tag
                      'tag',
                      )
+
     list_filter = ('is_published', 'tag')
     filter_horizontal = ('tag', )
     list_per_page = 10
@@ -57,10 +63,36 @@ class TemplateAdmin(admin.ModelAdmin):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
 
+
+    def get_queryset(self, request):
+        return Template.objects.annotate(
+            used_times=Case(
+                When(Exists(
+                    TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    )
+                ),
+                    then=TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    ).values('used_times')
+                ),
+                default=Value(0)
+            )
+        )
+
+    @admin.display(
+        ordering='used_times',
+        description='Использовано раз',
+    )
+    def used_times(self, obj):
+        return obj.used_times
+
+
     class Media:
         css = {
             'all': ('admin/css/resize_widget.css',),
         }
+
 
 
 @admin.register(Tag)
