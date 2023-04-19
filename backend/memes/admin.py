@@ -1,6 +1,6 @@
 from django.contrib import admin
-from django.db.models import Case, Exists, OuterRef, Value, When
 from django.db import models
+from django.db.models import Case, Exists, OuterRef, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
@@ -37,11 +37,11 @@ class TemplateAdmin(admin.ModelAdmin):
     readonly_fields = ('used_times', )
     list_display = ('image_tag', 'is_published',
                     # при создании миграций комментировать строку tag
-#                    'tag',
+                    'tag',
                     'name')
     list_editable = ('name', 'is_published',
                      # при создании миграций комментировать строку tag
-#                     'tag',
+                     'tag',
                      )
 
     list_filter = ('is_published', 'tag')
@@ -68,9 +68,8 @@ class TemplateAdmin(admin.ModelAdmin):
                         template=OuterRef('pk')
                     )
                 ), then=TemplateUsedTimes.objects.filter(
-                        template=OuterRef('pk')
-                    ).values('used_times')
-                ),
+                    template=OuterRef('pk')
+                ).values('used_times')),
                 default=Value(0)
             )
         )

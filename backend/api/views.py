@@ -52,7 +52,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_queryset(self):
-        queryset = Template.objects.filter(
+        return Template.objects.filter(
             is_published=True).annotate(
             used_times=Case(
                 When(Exists(
@@ -65,7 +65,6 @@ class TemplateViewSet(viewsets.ModelViewSet):
                 default=Value(0)
             )
         ).order_by('-used_times')
-        return queryset
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
