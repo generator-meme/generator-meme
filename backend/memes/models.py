@@ -27,12 +27,6 @@ class Tag(models.Model):
         return self.name
 
 
-class TemplateManager(models.Manager):
-    """Модель менеджера для подсчета рейтинга шаблона"""
-    def with_rating(self):
-        return self.annotate(rating=Count(F('memes')))
-
-
 class Template(models.Model):
     """Модель шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -59,7 +53,6 @@ class Template(models.Model):
         default=False,
         verbose_name='Статус публикации'
     )
-    objects = TemplateManager()
 
     class Meta:
         verbose_name = 'Шаблон мема'
@@ -125,3 +118,14 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.template} - избранный шаблон для: {self.user}'
+
+
+class TemplateUsedTimes(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    template = models.ForeignKey(
+        Template,
+        on_delete=models.CASCADE,
+        related_name='template_used_times',
+        verbose_name='Использован раз'
+    )
+    used_times = models.IntegerField(default=0)

@@ -1,7 +1,8 @@
 from django.contrib import admin
+from django.db.models import OuterRef, Case, When, Value, Exists
 from django.utils.html import format_html
 
-from .models import Meme, Tag, Template
+from .models import Meme, TemplateUsedTimes, Tag, Template
 
 
 class TagsInline(admin.TabularInline):
@@ -35,7 +36,8 @@ class TemplateAdmin(admin.ModelAdmin):
 
     list_display = ('image_tag', 'is_published',
                     'get_tags', 'name')
-    fields = ('name', 'image', 'is_published')
+    fields = ('name', 'image', 'is_published', 'used_times')
+    readonly_fields = ('used_times', )
     list_editable = ('name', 'is_published')
     list_filter = ('is_published', 'tag')
     inlines = [
@@ -54,6 +56,29 @@ class TemplateAdmin(admin.ModelAdmin):
     def hide(self, request, queryset):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
+
+    def get_queryset(self, request):
+        return Template.objects.annotate(
+            used_times=Case(
+                When(Exists(
+                    TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    )
+                ),
+                    then=TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    ).values('used_times')
+                ),
+                default=Value(0)
+            )
+        )
+
+    @admin.display(
+        ordering='used_times',
+        description='Использовано раз',
+    )
+    def used_times(self, obj):
+        return obj.used_times
 
 
 @admin.register(Tag)
