@@ -97,3 +97,4 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ('name')
     search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {'slug': ('name',)}
+    actions_on_bottom = True
