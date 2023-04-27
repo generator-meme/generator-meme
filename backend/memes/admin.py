@@ -93,8 +93,7 @@ class TemplateAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
     list_display = ('name', 'slug')
-    list_filter = ('name',)
-    # list_per_page = 50
-    # search_fields = ['name']
-    # search_help_text = ('Поиск по имени тега')
+    list_per_page = 50
+    search_fields = ('name')
+    search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {'slug': ('name',)}
