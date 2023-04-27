@@ -46,6 +46,8 @@ class TemplateAdmin(admin.ModelAdmin):
 
     list_filter = ('is_published', 'tag')
     filter_horizontal = ('tag', )
+    search_fields = ('=id')
+    search_help_text = ('Поиск по идентификатору шаблона (точное совпадение)')
     list_per_page = 10
     actions = ['publish', 'hide']
     actions_on_bottom = True
@@ -91,5 +93,7 @@ class TemplateAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
     list_display = ('name', 'slug')
-    list_filter = ('name',)
+    list_per_page = 50
+    search_fields = ('name')
+    search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {'slug': ('name',)}
