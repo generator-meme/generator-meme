@@ -217,11 +217,19 @@ export const drawText = (
   marginX,
   // textWidth,
   textValues
+  // canvasTextVisible
 ) => {
+  if (t[0] === " ") {
+    // если первый символ - пробел - убрать его из строки
+    t = t.slice(1);
+  }
+
   if (t[t.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
     t = t.slice(0, t.length - 1);
   }
+
+  // t += "\n";
 
   let marginY;
   if (top) {
@@ -240,6 +248,12 @@ export const drawText = (
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
   ctx.fillStyle = textValues.fillTextColor;
+
+  // if (canvasTextVisible) { // если будем отправлять текст в канвас перед генерацией мема
+  //   ctx.fillStyle = textValues.fillTextColor;
+  // } else {
+  //   ctx.fillStyle = "transparent";
+  // }
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура

@@ -1,24 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
+import Panel from '../Panel/Panel';
 
-const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpen, setOtherPanelIsOpen, paddingTop, setCurrentTextarea }) => {
+const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpen, setOtherPanelIsOpen, paddingTop, setCurrentTextarea, setBackColor, setOpacity }) => {
   const text = useRef(null);
   const textMoving = useRef(null);
+  const panel = useRef(null);
 
-  const openMyPanel = (e) => { // открытие/закрытие панелей
-    e.preventDefault();
-    setMyPanelIsOpen(true);
-    setOtherPanelIsOpen(false);
-  };
-
-  const outputSize = () => {
-    setTextValues((prev) => ({ ...prev, width: text.current.offsetWidth, height: text.current.offsetHeight}));
-  };
-
-  useEffect(() => { // подписка на изменение размера
+  useEffect(() => { // подписка на изменение размера области textarea
     if (text.current) {
-      new ResizeObserver(outputSize).observe(text.current);
+      new ResizeObserver(
+        () => {
+        setTextValues((prev) => ({ ...prev, width: text.current.offsetWidth, height: text.current.offsetHeight}));
+      }
+      ).observe(text.current);
     };
   }, [text.current]);
 
@@ -124,16 +120,24 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpe
   // };
 
   useEffect(() => {
+    const removeCurrentPosition = (e) => {
+      if (textMoving.current?.contains(e.target) || panel.current?.contains(e.target)) return;
+      setTextValues((prev) => ({ ...prev, isCurrent: false }));
+    };
+    
     window.addEventListener("mouseup", drop);
     window.addEventListener("touchend", drop, {passive: true});
+    window.addEventListener("click", removeCurrentPosition);
 
     return () => {
       window.removeEventListener("mouseup", drop);
       window.removeEventListener("touchend", drop, {passive: true});
+      window.removeEventListener("click", removeCurrentPosition);
     };
   }, []);
 
   return (
+    <>
     <label
       className="textarea__moving"
       ref={textMoving}
@@ -146,17 +150,19 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpe
         height: textValues.height,
         maxHeight: imageSizes?.height,
         backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
+        borderColor: textValues.isCurrent ? "#EBFF00" : 'transparent',
       }}
       onMouseDown={pickup}
     >
       <TextareaAutosize
+        wrap="hard"
         ref={text}
         className="textarea__text"
         type="text"
         value={textValues.text}
         onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
         placeholder="Введите свой текст"
-        onClick={e => openMyPanel(e)}
+        onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
         style={{
           width: textValues.width || imageSizes?.width,
           maxWidth: textValues.maxWidth,
@@ -167,13 +173,34 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setMyPanelIsOpe
           fontStyle: textValues.fontStyle ? "italic" : "normal",
           fontWeight: textValues.fontWeight ? 700 : 400,
           fontSize: textValues.fontSize,
-          paddingTop: paddingTop,
+          lineHeight: 1.12,
           textAlign: textValues.fontPosition,
+          color: textValues.fillTextColor,
+          paddingLeft: 30,
+          paddingRight: 30,
+          paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
         }}
         autocorrect="off"
         spellcheck="false"
       />
     </label>
+      {textValues.isCurrent && (
+        <div 
+          ref={panel}
+          className="textarea__panel"
+          style={{
+            top: - imageSizes.offsetY - 36 - 23,
+          }}
+        >
+          <Panel
+            textValues={textValues}
+            setTextValues={setTextValues}
+            setBackColor={setBackColor}
+            setOpacity={setOpacity}
+          />
+        </div>
+      )}
+    </>
   )
 };
 

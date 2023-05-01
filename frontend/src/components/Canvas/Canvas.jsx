@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css';
 import TextareaCanvas from '../TextareaCanvas/TextareaCanvas';
-import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
 import {
   contain,
@@ -34,6 +33,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   });
 
   const [topTextValues, setTopTextValues] = useState({
+    isCurrent: false,
     name: "topTextValues",
     text: "",
     fontSize: 40,
@@ -51,6 +51,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacityLevel: 100,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
+    textAreaWidth: 0,
     height: 70,
     top: outsideText.top ? outsideText.height : 0,
     left: 0,
@@ -63,6 +64,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   });
 
   const [bottomTextValues, setBottomTextValues] = useState({
+    isCurrent: false,
     name: "bottomTextValues",
     text: "",
     fontSize: 40,
@@ -101,9 +103,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       };
     return null;
   }, [imageSizes, outsideText]);
-
-  const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
-  const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
   const createMeme = () => {
     let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
@@ -150,15 +149,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     let imageInitialY = 0;
     
-    if(outsideText.top) {
+    if(outsideText.top) { // верхнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, imageSizes.width, outsideText.height);
       imageInitialY = outsideText.height;
     };
     
-    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height);
+    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height); // картинка мема
 
-    if(outsideText.bottom) {
+    if(outsideText.bottom) { // нижнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, outsideText.top? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
     };
@@ -177,9 +176,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     ctx.fillText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10, 86)
 
     const textMarginX = 30; // значение бокового отступа текста
-    const textMarginYTop = 62; //50
-    const textMarginYBottom = 18;//20
-    // const offsetY = 0; // для перемещения текста по высоте картинки (скорее всего добавим в стейт-объект текста)
+    const textMarginYTop = 58; //50
+    const textMarginYBottom = 20;//20
 
     // нижний текст основные характеристики
     const bottomOffsetY = bottomTextValues.bottom;
@@ -281,7 +279,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
         window.removeEventListener('beforeunload', handleOnBeforeUnload);
       };
     };
-    
   }, []);
 
   useEffect(() => {
@@ -300,26 +297,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
       <section className="editor" aria-label="Editor">
-        {firstPanelIsOpen && (
-          <div className="editor__panel_type_top">
-            <Panel
-              textValues={topTextValues}
-              setTextValues={setTopTextValues}
-              setBackColor={changeTopBackColor}
-              setOpacity={changeTopOpacity}
-            />
-        </div>
-        )}
-        {secondPanelIsOpen && (
-          <div className="editor__panel_type_bottom">
-            <Panel
-              textValues={bottomTextValues}
-              setTextValues={setBottomTextValues}
-              setBackColor={changeBottomBackColor}
-              setOpacity={changeBottomOpacity}
-            />
-        </div>
-        )}
         <div className="editor__canvas">
           <canvas
               className="editor__image"
@@ -350,19 +327,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 textValues={topTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
-                setMyPanelIsOpen={setFirstPanelIsOpen}
-                setOtherPanelIsOpen={setSecondPanelIsOpen}
-                paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
+                setBackColor={changeTopBackColor}
+                setOpacity={changeTopOpacity}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
-                setMyPanelIsOpen={setSecondPanelIsOpen}
-                setOtherPanelIsOpen={setFirstPanelIsOpen}
-                paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
+                setBackColor={changeBottomBackColor}
+                setOpacity={changeBottomOpacity}
               />
             </fieldset>
           </form>
