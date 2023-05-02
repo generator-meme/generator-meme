@@ -11,7 +11,6 @@ root.render(
     <BrowserRouter>
       <Helmet>
         <html lang="ru" />
-        {/* <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/510/fabric.min.js"></script> */}
       </Helmet>
       <App />
     </BrowserRouter>

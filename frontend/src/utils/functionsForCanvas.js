@@ -111,8 +111,14 @@ export const lineHeight = (fontSize) => {
 
 // функция добавления "/n" к строкам, если они не вмещаются в допустимую ширину
 export const wrapText = (ctx, text, maxWidth) => {
+  let textArr = text.split("\n"); // добавление пробела после каждого знака переноса
+  for (let i = 0; i < textArr.length - 1; i++) {
+    textArr[i] += "\n ";
+  }
+  let textWithSpace = textArr.join("");
+
   // First, start by splitting all of our text into words, but splitting it into an array split by spaces
-  let words = text.split(" ");
+  let words = textWithSpace.split(" ");
   let line = ""; // This will store the text of the current line
   let testLine = ""; // This will store the text when we add a word, to test if it's too long
   let lineArray = []; // This is an array of lines, which the function will return
@@ -123,6 +129,7 @@ export const wrapText = (ctx, text, maxWidth) => {
     testLine += `${words[n]} `;
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
+
     // If the width of this test line is more than the max width
     if (testWidth > maxWidth && n > 0) {
       // Then the line is finished, add to line '\n' and push the current line into "lineArray"
@@ -131,10 +138,17 @@ export const wrapText = (ctx, text, maxWidth) => {
       // Update line and test line to use this word as the first word on the next line
       line = `${words[n]} `;
       testLine = `${words[n]} `;
+    } else if (words[n].includes("\n")) {
+      // проверка на наличие переноса в слове, обнуление line и testLine в этом случае
+      line += `${words[n]} `;
+      lineArray.push(line);
+      line = "";
+      testLine = "";
     } else {
       // If the test line is still less than the max width, then add the word to the current line
       line += `${words[n]} `;
     }
+
     // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
     if (n === words.length - 1) {
       lineArray.push(line);
@@ -203,11 +217,19 @@ export const drawText = (
   marginX,
   // textWidth,
   textValues
+  // canvasTextVisible
 ) => {
+  if (t[0] === " ") {
+    // если первый символ - пробел - убрать его из строки
+    t = t.slice(1);
+  }
+
   if (t[t.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
     t = t.slice(0, t.length - 1);
   }
+
+  // t += "\n";
 
   let marginY;
   if (top) {
@@ -226,6 +248,12 @@ export const drawText = (
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
   ctx.fillStyle = textValues.fillTextColor;
+
+  // if (canvasTextVisible) { // если будем отправлять текст в канвас перед генерацией мема
+  //   ctx.fillStyle = textValues.fillTextColor;
+  // } else {
+  //   ctx.fillStyle = "transparent";
+  // }
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура
