@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css';
 import TextareaCanvas from '../TextareaCanvas/TextareaCanvas';
-import Panel from '../Panel/Panel';
 import { fontFamilyOptions } from '../../utils/constants';
 import {
   contain,
@@ -14,9 +13,14 @@ import {
   drawText,
   move,
 } from "../../utils/functionsForCanvas.js";
+// import outsideTextImage from "../../images/editor/outside-text.svg";
+// import addTextImage from "../../images/editor/add-text-main-part.svg";
+// import addImageImage from "../../images/editor/add-image-main-part.svg";
+// import plus from "../../images/editor/add-something.svg";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
+  const outsizeTextList = useRef(null);
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -27,14 +31,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     return null;
   }, [image]);
 
+  const [listIsVisible, setListIsVisible] = useState(false);
+
   const [outsideText, setOutsideText] = useState({
     top: false,
     bottom: false,
     height: 80,
   });
 
-  const [topTextValues, setTopTextValues] = useState({
-    name: "topTextValues",
+  const [outsideTopTextValues, setOutsideTopTextValues] = useState({
+    name: "outsideTopTextValues",
+    isOutsideTop: true,
+    isCurrent: false,
+    isVisible: true,
+    hover: false,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -51,6 +61,74 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     opacityLevel: 100,
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
+    textAreaWidth: 0,
+    height: 70,
+    top: 0,
+    left: 0,
+    bottom: null,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
+  });
+
+  const [outsideBottomTextValues, setOutsideBottomTextValues] = useState({
+    name: "outsideBottomTextValues",
+    isOutsideBottom: true,
+    isCurrent: false,
+    isVisible: true,
+    hover: false,
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100,
+    width: imageSizes?.width,
+    maxWidth: imageSizes?.width,
+    textAreaWidth: 0,
+    height: 70,
+    top: 0,
+    left: 0,
+    bottom: null,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
+  });
+
+  const [topTextValues, setTopTextValues] = useState({
+    name: "topTextValues",
+    isCurrent: false,
+    isVisible: true,
+    hover: false,
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100,
+    width: imageSizes?.width,
+    maxWidth: imageSizes?.width,
+    textAreaWidth: 0,
     height: 70,
     top: outsideText.top ? outsideText.height : 0,
     left: 0,
@@ -64,6 +142,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const [bottomTextValues, setBottomTextValues] = useState({
     name: "bottomTextValues",
+    isCurrent: false,
+    isVisible: true,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -101,9 +181,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       };
     return null;
   }, [imageSizes, outsideText]);
-
-  const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
-  const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
 
   const createMeme = () => {
     let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
@@ -150,15 +227,15 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     let imageInitialY = 0;
     
-    if(outsideText.top) {
+    if(outsideText.top) { // верхнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, imageSizes.width, outsideText.height);
       imageInitialY = outsideText.height;
     };
     
-    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height);
+    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height); // картинка мема
 
-    if(outsideText.bottom) {
+    if(outsideText.bottom) { // нижнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, outsideText.top? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
     };
@@ -177,60 +254,61 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     ctx.fillText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10, 86)
 
     const textMarginX = 30; // значение бокового отступа текста
-    const textMarginYTop = 62; //50
-    const textMarginYBottom = 18;//20
-    // const offsetY = 0; // для перемещения текста по высоте картинки (скорее всего добавим в стейт-объект текста)
+    const textMarginYTop = 58; //50
+    const textMarginYBottom = 20;//20
 
-    // нижний текст основные характеристики
-    const bottomOffsetY = bottomTextValues.bottom;
-    const bottomOffsetX = bottomTextValues.left;
-    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
-                ${bottomTextValues.fontWeight ? "bold" : ""}
-                ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
-    ctx.textAlign = bottomTextValues.fontPosition;
-    
-    const bottomMarginX = calculateMarginX(bottomTextValues.width, bottomTextValues.fontPosition, textMarginX, bottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, bottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    if (topTextValues.isVisible) { // верхний текст основные характеристики
+      const topOffsetY = topTextValues.top;
+      const topOffsetX = topTextValues.left;
 
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      false,
-      canvasHeight,
-      bottomOffsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      bottomMarginX,
-      bottomTextValues,
-    ));
+      ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+                  ${topTextValues.fontWeight ? "bold" : ""}
+                  ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+      ctx.textAlign = topTextValues.fontPosition;
+  
+      const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX, topOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+  
+        // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      topTextWrap.split('\n').forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        true,
+        canvasHeight,
+        topOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        topMarginX,
+        topTextValues,
+      ));
+    };
 
-    // верхний текст основные характеристики
-    const topOffsetY = topTextValues.top;
-    const topOffsetX = topTextValues.left;
+    if (bottomTextValues.isVisible) { // нижний текст основные характеристики
+      const bottomOffsetY = bottomTextValues.bottom;
+      const bottomOffsetX = bottomTextValues.left;
+      ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
+                  ${bottomTextValues.fontWeight ? "bold" : ""}
+                  ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
+      ctx.textAlign = bottomTextValues.fontPosition;
+      
+      const bottomMarginX = calculateMarginX(bottomTextValues.width, bottomTextValues.fontPosition, textMarginX, bottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const bottomTextWrap = wrapText(ctx, bottomTextValues.text, bottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
-    ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
-                ${topTextValues.fontWeight ? "bold" : ""}
-                ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
-    ctx.textAlign = topTextValues.fontPosition;
-
-    const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX, topOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
-
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    topTextWrap.split('\n').forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      true,
-      canvasHeight,
-      topOffsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      topMarginX,
-      topTextValues,
-    ));
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        false,
+        canvasHeight,
+        bottomOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        bottomMarginX,
+        bottomTextValues,
+      ));
+    };
 
   }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText]);
 
@@ -281,7 +359,18 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
         window.removeEventListener('beforeunload', handleOnBeforeUnload);
       };
     };
-    
+
+    const hideList = (e) => {
+      if (!outsizeTextList.current.contains(e.target)) {
+        setListIsVisible(false);
+      };
+    };
+
+    window.addEventListener("click", hideList);
+
+    return () => {
+      window.removeEventListener("click", hideList);
+    };
   }, []);
 
   useEffect(() => {
@@ -300,26 +389,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     <main className='main-editor'>
       <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
       <section className="editor" aria-label="Editor">
-        {firstPanelIsOpen && (
-          <div className="editor__panel_type_top">
-            <Panel
-              textValues={topTextValues}
-              setTextValues={setTopTextValues}
-              setBackColor={changeTopBackColor}
-              setOpacity={changeTopOpacity}
-            />
-        </div>
-        )}
-        {secondPanelIsOpen && (
-          <div className="editor__panel_type_bottom">
-            <Panel
-              textValues={bottomTextValues}
-              setTextValues={setBottomTextValues}
-              setBackColor={changeBottomBackColor}
-              setOpacity={changeBottomOpacity}
-            />
-        </div>
-        )}
         <div className="editor__canvas">
           <canvas
               className="editor__image"
@@ -327,7 +396,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
               width={imageSizes.width}
               height={canvasHeight}
           >
-        </canvas>
+          </canvas>
         </div>
         <div className="editor__box">
           <form 
@@ -350,23 +419,83 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 textValues={topTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
-                setMyPanelIsOpen={setFirstPanelIsOpen}
-                setOtherPanelIsOpen={setSecondPanelIsOpen}
-                paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
+                setBackColor={changeTopBackColor}
+                setOpacity={changeTopOpacity}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
-                setMyPanelIsOpen={setSecondPanelIsOpen}
-                setOtherPanelIsOpen={setFirstPanelIsOpen}
-                paddingTop={0}
                 setCurrentTextarea={setCurrentTextarea}
+                setBackColor={changeBottomBackColor}
+                setOpacity={changeBottomOpacity}
               />
             </fieldset>
           </form>
-          <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
+          <ul className="editor__bth-container">
+            <li>
+              <button 
+                ref={outsizeTextList}
+                className="editor__bth editor__bth_type_outside-text"
+                onClick={e => setListIsVisible(true)}
+              >
+                <div className="editor__bth-main-image editor__bth-main-image_type_outside-text" />
+                <p className="editor__bth-text">текст снаружи</p>
+                {listIsVisible && (
+                  <ul className="editor__bth-list">
+                    <li className="editor__bth-list-element">верхнее поле</li>
+                    <li className="editor__bth-list-element">нижнее поле</li>
+                    <li className="editor__bth-list-element">оба поля</li>
+                  </ul>
+                )}
+              </button>
+            </li>
+            <li>
+              <button className="editor__bth editor__bth_type_add-text">
+                <div className="editor__bth-img">
+                  <div className="editor__bth-main-image editor__bth-main-image_type_add-text" />
+                  <div className="editor__bth-plus"/>
+                </div>
+                <p className="editor__bth-text">добавить текст</p>
+              </button>
+            </li>
+            <li>
+              <button className="editor__bth editor__bth_type_add-image">
+                <div className="editor__bth-img">
+                  <div className="editor__bth-main-image editor__bth-main-image_type_add-img" />
+                  <div className="editor__bth-plus" />
+                </div>
+                <p className="editor__bth-text">добавить изображение</p>
+              </button>
+            </li>
+            {/* 
+            <li>
+              <button className="editor__bth editor__bth_type_outside-text">
+                <img className="editor__bth-main-image" alt="Текст снаружи." src={outsideTextImage} />
+                <p className="editor__bth-text">текст снаружи</p>
+              </button>
+            </li>
+            <li>
+              <button className="editor__bth editor__bth_type_add-text">
+                <div className="editor__bth-img">
+                  <img className="editor__bth-main-image" alt="Добавить текст." src={addTextImage}/>
+                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
+                </div>
+                <p className="editor__bth-text">добавить текст</p>
+              </button>
+            </li>
+            <li>
+              <button className="editor__bth editor__bth_type_add-image">
+                <div className="editor__bth-img">
+                  <img className="editor__bth-main-image" alt="Добавить изображение." src={addImageImage}/>
+                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
+                </div>
+                <p className="editor__bth-text">добавить изображение</p>
+              </button>
+            </li> */}
+          </ul>
+          <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
       </section>
     </main>
