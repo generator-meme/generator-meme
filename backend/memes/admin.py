@@ -31,18 +31,12 @@ class TemplateAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Image'
 
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '30'})},
     }
-    fields = ('name', 'image', 'is_published', 'used_times')
+    fields = ('name', 'image', 'is_published', 'tag', 'used_times')
     readonly_fields = ('used_times', )
-    list_display = ('image_tag', 'is_published',
-                    # при создании миграций комментировать строку tag
-                    'tag',
-                    'name')
-    list_editable = ('name', 'is_published',
-                     # при создании миграций комментировать строку tag
-                     'tag',
-                     )
+    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
+    list_editable = ('name', 'is_published',)
 
     list_filter = ('is_published', 'tag')
     filter_horizontal = ('tag', )
