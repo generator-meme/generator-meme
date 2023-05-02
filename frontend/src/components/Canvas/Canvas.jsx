@@ -33,8 +33,10 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   });
 
   const [topTextValues, setTopTextValues] = useState({
-    isCurrent: false,
     name: "topTextValues",
+    isCurrent: false,
+    isVisible: true,
+    hover: false,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -64,8 +66,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   });
 
   const [bottomTextValues, setBottomTextValues] = useState({
-    isCurrent: false,
     name: "bottomTextValues",
+    isCurrent: false,
+    isVisible: true,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -179,56 +182,86 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const textMarginYTop = 58; //50
     const textMarginYBottom = 20;//20
 
-    // нижний текст основные характеристики
-    const bottomOffsetY = bottomTextValues.bottom;
-    const bottomOffsetX = bottomTextValues.left;
-    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
-                ${bottomTextValues.fontWeight ? "bold" : ""}
-                ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
-    ctx.textAlign = bottomTextValues.fontPosition;
-    
-    const bottomMarginX = calculateMarginX(bottomTextValues.width, bottomTextValues.fontPosition, textMarginX, bottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, bottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    if (topTextValues.isVisible) { // верхний текст основные характеристики
+      const topOffsetY = topTextValues.top;
+      const topOffsetX = topTextValues.left;
 
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      false,
-      canvasHeight,
-      bottomOffsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      bottomMarginX,
-      bottomTextValues,
-    ));
+      ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+                  ${topTextValues.fontWeight ? "bold" : ""}
+                  ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+      ctx.textAlign = topTextValues.fontPosition;
+  
+      const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX, topOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+  
+        // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      topTextWrap.split('\n').forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        true,
+        canvasHeight,
+        topOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        topMarginX,
+        topTextValues,
+      ));
+    };
 
-    // верхний текст основные характеристики
-    const topOffsetY = topTextValues.top;
-    const topOffsetX = topTextValues.left;
+    if (bottomTextValues.isVisible) { // нижний текст основные характеристики
+      const bottomOffsetY = bottomTextValues.bottom;
+      const bottomOffsetX = bottomTextValues.left;
+      ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
+                  ${bottomTextValues.fontWeight ? "bold" : ""}
+                  ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
+      ctx.textAlign = bottomTextValues.fontPosition;
+      
+      const bottomMarginX = calculateMarginX(bottomTextValues.width, bottomTextValues.fontPosition, textMarginX, bottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const bottomTextWrap = wrapText(ctx, bottomTextValues.text, bottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
 
-    ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
-                ${topTextValues.fontWeight ? "bold" : ""}
-                ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
-    ctx.textAlign = topTextValues.fontPosition;
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        false,
+        canvasHeight,
+        bottomOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        bottomMarginX,
+        bottomTextValues,
+      ));
+    };
+  
+    // if (topTextValues.isVisible) {
+    //   // верхний текст основные характеристики
+    //   const topOffsetY = topTextValues.top;
+    //   const topOffsetX = topTextValues.left;
 
-    const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX, topOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
-
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    topTextWrap.split('\n').forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      true,
-      canvasHeight,
-      topOffsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      topMarginX,
-      topTextValues,
-    ));
+    //   ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+    //               ${topTextValues.fontWeight ? "bold" : ""}
+    //               ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+    //   ctx.textAlign = topTextValues.fontPosition;
+  
+    //   const topMarginX = calculateMarginX(topTextValues.width, topTextValues.fontPosition, textMarginX, topOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+    //   const topTextWrap = wrapText(ctx, topTextValues.text, topTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+  
+    //     // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+    //   topTextWrap.split('\n').forEach((t, i) => drawText(
+    //     t,
+    //     i,
+    //     ctx,
+    //     true,
+    //     canvasHeight,
+    //     topOffsetY,
+    //     textMarginYBottom,
+    //     textMarginYTop,
+    //     topMarginX,
+    //     topTextValues,
+    //   ));
+    // };
 
   }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText]);
 
