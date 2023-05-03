@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navigation from "../Navigation/Navigation";
 import './Canvas.css';
-import TextareaCanvas from '../TextareaCanvas/TextareaCanvas';
+import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
+import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from '../../utils/constants';
 import {
   contain,
@@ -14,14 +15,8 @@ import {
   move,
 } from "../../utils/functionsForCanvas.js";
 
-import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-text.svg";
-import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
-import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
-import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
-
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
-  const outsizeTextList = useRef(null);
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
@@ -31,8 +26,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
     return null;
   }, [image]);
-
-  const [listIsVisible, setListIsVisible] = useState(false);
 
   const [outsideText, setOutsideText] = useState({
     top: false,
@@ -360,18 +353,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
         window.removeEventListener('beforeunload', handleOnBeforeUnload);
       };
     };
-
-    const hideList = (e) => {
-      if (!outsizeTextList.current.contains(e.target)) {
-        setListIsVisible(false);
-      };
-    };
-
-    window.addEventListener("click", hideList);
-
-    return () => {
-      window.removeEventListener("click", hideList);
-    };
   }, []);
 
   useEffect(() => {
@@ -434,43 +415,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
               />
             </fieldset>
           </form>
-          <ul className="editor__bth-container">
-            <li>
-              <button 
-                className="editor__bth editor__bth_type_outside-text"
-                ref={outsizeTextList}
-                onClick={e => setListIsVisible(true)}
-              >
-                <OutsideTextImage className="editor__bth-outside" />
-                <p className="editor__bth-text">текст снаружи</p>
-                {listIsVisible && (
-                  <ul className="editor__bth-list">
-                    <li className="editor__bth-list-element">верхнее поле</li>
-                    <li className="editor__bth-list-element">нижнее поле</li>
-                    <li className="editor__bth-list-element">оба поля</li>
-                  </ul>
-                )}
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-text">
-                <div className="editor__bth-img">
-                  <AddTextImage className="editor__bth-add-text" />
-                  <Plus className="editor__bth-plus" />
-                </div>
-                <p className="editor__bth-text">добавить текст</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-image">
-                <div className="editor__bth-img">
-                  <AddImageImage className="editor__bth-add-image" />
-                  <Plus className="editor__bth-plus" />
-                </div>
-                <p className="editor__bth-text">добавить изображение</p>
-              </button>
-            </li>
-          </ul>
+          <EditorButtonsList />
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
       </section>
