@@ -4,11 +4,14 @@ services:
     image: nginx:1.19.3
     volumes:
       - ./proxy-nginx.conf:/etc/nginx/conf.d/default.conf
+      - /root/data/certbot/conf:/etc/letsencrypt
+      - /root/data/certbot/www:/var/www/certbot
     networks:
       - site
       - test
     ports:
       - "80:80"
+      - "443:443"
 
 networks:
   site:

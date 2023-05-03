@@ -18,7 +18,7 @@ ALLOWED_HOSTS = [
     'testmemes.ddns.net',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru', 'http://testmemes.ddns.net']
+CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru', 'https://testmemes.ddns.net']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
