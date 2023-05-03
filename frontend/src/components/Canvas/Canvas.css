@@ -56,7 +56,7 @@
   row-gap: 42px;
   align-items: center;
   height: 556px;
-  width: 100%;
+  width: calc(100% - 675px);
 }
 
 .editor__text-form {
