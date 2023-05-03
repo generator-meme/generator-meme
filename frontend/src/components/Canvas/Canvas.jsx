@@ -433,68 +433,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
               />
             </fieldset>
           </form>
-          <ul className="editor__bth-container">
-            <li>
-              <button 
-                ref={outsizeTextList}
-                className="editor__bth editor__bth_type_outside-text"
-                onClick={e => setListIsVisible(true)}
-              >
-                <div className="editor__bth-main-image editor__bth-main-image_type_outside-text" />
-                <p className="editor__bth-text">текст снаружи</p>
-                {listIsVisible && (
-                  <ul className="editor__bth-list">
-                    <li className="editor__bth-list-element">верхнее поле</li>
-                    <li className="editor__bth-list-element">нижнее поле</li>
-                    <li className="editor__bth-list-element">оба поля</li>
-                  </ul>
-                )}
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-text">
-                <div className="editor__bth-img">
-                  <div className="editor__bth-main-image editor__bth-main-image_type_add-text" />
-                  <div className="editor__bth-plus"/>
-                </div>
-                <p className="editor__bth-text">добавить текст</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-image">
-                <div className="editor__bth-img">
-                  <div className="editor__bth-main-image editor__bth-main-image_type_add-img" />
-                  <div className="editor__bth-plus" />
-                </div>
-                <p className="editor__bth-text">добавить изображение</p>
-              </button>
-            </li>
-            {/* 
-            <li>
-              <button className="editor__bth editor__bth_type_outside-text">
-                <img className="editor__bth-main-image" alt="Текст снаружи." src={outsideTextImage} />
-                <p className="editor__bth-text">текст снаружи</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-text">
-                <div className="editor__bth-img">
-                  <img className="editor__bth-main-image" alt="Добавить текст." src={addTextImage}/>
-                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
-                </div>
-                <p className="editor__bth-text">добавить текст</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-image">
-                <div className="editor__bth-img">
-                  <img className="editor__bth-main-image" alt="Добавить изображение." src={addImageImage}/>
-                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
-                </div>
-                <p className="editor__bth-text">добавить изображение</p>
-              </button>
-            </li> */}
-          </ul>
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
       </section>
