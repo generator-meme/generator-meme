@@ -13,10 +13,11 @@ import {
   drawText,
   move,
 } from "../../utils/functionsForCanvas.js";
-// import outsideTextImage from "../../images/editor/outside-text.svg";
-// import addTextImage from "../../images/editor/add-text-main-part.svg";
-// import addImageImage from "../../images/editor/add-image-main-part.svg";
-// import plus from "../../images/editor/add-something.svg";
+
+import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-text.svg";
+import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
+import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
+import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 
 const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
   const canvas = useRef(null);
@@ -436,11 +437,11 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
           <ul className="editor__bth-container">
             <li>
               <button 
-                ref={outsizeTextList}
                 className="editor__bth editor__bth_type_outside-text"
+                ref={outsizeTextList}
                 onClick={e => setListIsVisible(true)}
               >
-                <div className="editor__bth-main-image editor__bth-main-image_type_outside-text" />
+                <OutsideTextImage className="editor__bth-outside" />
                 <p className="editor__bth-text">текст снаружи</p>
                 {listIsVisible && (
                   <ul className="editor__bth-list">
@@ -454,8 +455,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             <li>
               <button className="editor__bth editor__bth_type_add-text">
                 <div className="editor__bth-img">
-                  <div className="editor__bth-main-image editor__bth-main-image_type_add-text" />
-                  <div className="editor__bth-plus"/>
+                  <AddTextImage className="editor__bth-add-text" />
+                  <Plus className="editor__bth-plus" />
                 </div>
                 <p className="editor__bth-text">добавить текст</p>
               </button>
@@ -463,37 +464,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             <li>
               <button className="editor__bth editor__bth_type_add-image">
                 <div className="editor__bth-img">
-                  <div className="editor__bth-main-image editor__bth-main-image_type_add-img" />
-                  <div className="editor__bth-plus" />
+                  <AddImageImage className="editor__bth-add-image" />
+                  <Plus className="editor__bth-plus" />
                 </div>
                 <p className="editor__bth-text">добавить изображение</p>
               </button>
             </li>
-            {/* 
-            <li>
-              <button className="editor__bth editor__bth_type_outside-text">
-                <img className="editor__bth-main-image" alt="Текст снаружи." src={outsideTextImage} />
-                <p className="editor__bth-text">текст снаружи</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-text">
-                <div className="editor__bth-img">
-                  <img className="editor__bth-main-image" alt="Добавить текст." src={addTextImage}/>
-                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
-                </div>
-                <p className="editor__bth-text">добавить текст</p>
-              </button>
-            </li>
-            <li>
-              <button className="editor__bth editor__bth_type_add-image">
-                <div className="editor__bth-img">
-                  <img className="editor__bth-main-image" alt="Добавить изображение." src={addImageImage}/>
-                  <img className="editor__bth-plus" alt="Плюс." src={plus} />
-                </div>
-                <p className="editor__bth-text">добавить изображение</p>
-              </button>
-            </li> */}
           </ul>
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
