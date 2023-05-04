@@ -19,6 +19,14 @@ services:
     ports:
       - "5432:5432"
 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    env_file:
+      - ./.env
+
   backend:
     build:
       context: ../backend
@@ -53,3 +61,4 @@ volumes:
   static_value:
   media_value:
   meme_data:
+  pgadmin_data:
