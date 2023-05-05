@@ -138,9 +138,9 @@ EMAIL_USE_TLS = False
 # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'testmemesauth@yandex.ru'
+EMAIL_HOST_USER = 'testmemesauth'
 EMAIL_HOST_PASSWORD = '1h1JKAdRx0X7'
-DEFAULT_FROM_EMAIL = 'testmemesauth@yandex.ru'
+# DEFAULT_FROM_EMAIL = 'testmemesauth@yandex.ru'
 
 DJOSER = {
     "HIDE_USER": True,
