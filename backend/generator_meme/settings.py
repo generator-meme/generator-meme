@@ -83,7 +83,6 @@ DATABASES = {
     }
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -132,7 +131,7 @@ REST_FRAMEWORK = {
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
@@ -158,7 +157,7 @@ DOMAIN = os.getenv('DOMAIN')
 # SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 AUTHENTICATION_BACKENDS = (
-#    'social_core.backends.vk.VKOAuth2',
+    #   'social_core.backends.vk.VKOAuth2',
     'social_core.backends.yandex.YandexOAuth2',
     'social_core.backends.telegram.TelegramAuth',
     'django.contrib.auth.backends.ModelBackend',
@@ -184,4 +183,3 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_by_email',
 )
-
