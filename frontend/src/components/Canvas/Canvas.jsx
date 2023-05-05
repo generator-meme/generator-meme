@@ -9,7 +9,6 @@ import {
   contain,
   calculateMarginX,
   wrapText,
-  changeOpacity,
   drawText,
   move,
 } from "../../utils/functionsForCanvas.js";
@@ -191,14 +190,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
           navigate('/saved')
         });
     };
-  };
-
-  const changeTopOpacity = (opacity) => {
-    changeOpacity(opacity, setTopTextValues, topTextValues);
-  };
-
-  const changeBottomOpacity = (opacity) => {
-    changeOpacity(opacity, setBottomTextValues, bottomTextValues);
   };
 
   useEffect(() => { // отрисовка канвас
@@ -391,14 +382,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-                setOpacity={changeTopOpacity}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-                setOpacity={changeBottomOpacity}
               />
             </fieldset>
           </form>

@@ -4,12 +4,11 @@ import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
-import { hexToRgb } from "../../utils/functionsForCanvas.js";
+import { hexToRgb, changeOpacity } from "../../utils/functionsForCanvas.js";
 
 function Panel ({
     textValues,
     setTextValues,
-    setOpacity,
   }) {
 
   const form = useRef();
@@ -106,6 +105,10 @@ function Panel ({
     } else {
       setTextValues((prev) => ({ ...prev, backColor: color }));
     };
+  };
+
+  const setOpacity = (opacity) => {
+    changeOpacity(opacity, setTextValues, textValues);
   };
 
   const setOpacityLevel = (level) => {
