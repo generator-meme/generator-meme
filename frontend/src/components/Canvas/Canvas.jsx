@@ -27,7 +27,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const [outsideText, setOutsideText] = useState({
     top: true,
-    bottom: false,
+    bottom: true,
     height: 80,
   });
 
@@ -51,8 +51,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    width: imageSizes?.width,
-    maxWidth: imageSizes?.width,
+    width: imageSizes?.width - 4,
+    maxWidth: imageSizes?.width - 4,
     textAreaWidth: 0,
     height: 80,
     top: 0,
@@ -69,7 +69,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     name: "outsideBottomTextValues",
     isOutside: true,
     isCurrent: false,
-    isVisible: false,
+    isVisible: true,
     hover: false,
     text: "",
     fontSize: 40,
@@ -85,13 +85,13 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     backColor: "transparent",
     opacity: 1,
     opacityLevel: 100,
-    width: imageSizes?.width,
-    maxWidth: imageSizes?.width,
+    width: imageSizes?.width - 4,
+    maxWidth: imageSizes?.width - 4,
     textAreaWidth: 0,
     height: 80,
-    top: 0,
+    top: null,
     left: 0,
-    bottom: null,
+    bottom: 0,
     startTop: 0,
     startLeft: 0,
     isMoving: false,
@@ -313,7 +313,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       ));
     };
 
-  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText, outsideTopTextValues]);
+    if (outsideBottomTextValues.isVisible) { // нижний текст основные характеристики
+      const outsideBottomOffsetY = outsideBottomTextValues.bottom;
+      const outsideBottomOffsetX = outsideBottomTextValues.left;
+      ctx.font = `${outsideBottomTextValues.fontStyle ? "italic" : ""}
+                  ${outsideBottomTextValues.fontWeight ? "bold" : ""}
+                  ${outsideBottomTextValues.fontSize}px ${outsideBottomTextValues.fontFamily}`;
+      ctx.textAlign = outsideBottomTextValues.fontPosition;
+      
+      const outsideBottomMarginX = calculateMarginX(outsideBottomTextValues.width, outsideBottomTextValues.fontPosition, textMarginX, outsideBottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const outsideBottomTextWrap = wrapText(ctx, outsideBottomTextValues.text, outsideBottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      outsideBottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        false,
+        canvasHeight,
+        outsideBottomOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        outsideBottomMarginX,
+        outsideBottomTextValues,
+      ));
+    };
+
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText, outsideTopTextValues, outsideBottomTextValues]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -422,6 +448,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
+                setCurrentTextarea={setCurrentTextarea}
+              />
+              <TextareaCanvas 
+                textValues={outsideBottomTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setOutsideBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
               />
             </fieldset>

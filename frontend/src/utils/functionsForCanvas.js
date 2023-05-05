@@ -368,3 +368,57 @@ export const move = (e, textValues, setTextValues) => {
     bottom: prev.bottom !== null ? -newY : null,
   }));
 };
+
+// функции из textarea - пока там все не работает
+
+// первый вариант перемещения с внутренним стейтом
+// const [textArea, setTextArea] = useState({
+//   isMoving: false,
+//   oldX: null,
+//   oldY: null,
+// });
+
+// const pickup = (e) => {
+//   if (!(e.target === textMoving.current)) return;
+//   setTextArea((prev) => ({ ...prev, isMoving: true }))
+
+//   if (e.clientX) {
+//     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+//   } else {
+//     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
+//   };
+// };
+
+// const move = (e) => {
+//   if (!textArea.isMoving) return;
+
+//   let distX;
+//   let distY;
+
+//   if (e.clientX) {
+//     distX = e.clientX - textArea.oldX;
+//     distY = e.clientY - textArea.oldY;
+//   } else {
+//     distX = e.touches[0].clientX - textArea.oldX;
+//     distY = e.touches[0].clientY - textArea.oldY;
+//   }
+
+//   const newY = textValues.startTop + distY;
+//   const newX = textValues.startLeft + distX;
+
+//   setTextValues((prev) => ({
+//     ...prev,
+//     top: (prev.top !== null) ? newY : null,
+//     left: newX,
+//     bottom: (prev.bottom !== null) ? - newY : null,
+//   }))
+// };
+
+// const drop = (e) => {
+//   setTextArea((prev) => ({ ...prev, isMoving: false }))
+//   setTextValues((prev) => ({
+//     ...prev,
+//     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
+//     startLeft: prev.left
+//   }))
+// };

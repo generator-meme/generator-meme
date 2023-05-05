@@ -23,31 +23,6 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
     };
   };
 
-  // const move = (e) => { // теперь в dunctionForCanvas
-  //   if (!textValues.isMoving) return;
-
-  //   let distX;
-  //   let distY;
-
-  //   if (e.clientX) {
-  //     distX = e.clientX - textValues.oldX;
-  //     distY = e.clientY - textValues.oldY;
-  //   } else {
-  //     distX = e.touches[0].clientX - textValues.oldX;
-  //     distY = e.touches[0].clientY - textValues.oldY;
-  //   }
-
-  //   const newY = textValues.startTop + distY;
-  //   const newX = textValues.startLeft + distX;
-
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     top: (prev.top !== null) ? newY : null,
-  //     left: newX,
-  //     bottom: (prev.bottom !== null) ? - newY : null,
-  //   }))
-  // };
-
   const drop = (e) => {
     setTextValues((prev) => ({
       ...prev,
@@ -57,73 +32,29 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
     }))
   };
 
-
-  // первый вариант перемещения с внутренним стейтом
-  // const [textArea, setTextArea] = useState({
-  //   isMoving: false,
-  //   oldX: null,
-  //   oldY: null,
-  // });
-
-  // const pickup = (e) => {
-  //   if (!(e.target === textMoving.current)) return;
-  //   setTextArea((prev) => ({ ...prev, isMoving: true }))
-
-  //   if (e.clientX) {
-  //     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
-  //   } else {
-  //     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
-  //   };
-  // };
-
-  // const move = (e) => {
-  //   if (!textArea.isMoving) return;
-
-  //   let distX;
-  //   let distY;
-
-  //   if (e.clientX) {
-  //     distX = e.clientX - textArea.oldX;
-  //     distY = e.clientY - textArea.oldY;
-  //   } else {
-  //     distX = e.touches[0].clientX - textArea.oldX;
-  //     distY = e.touches[0].clientY - textArea.oldY;
-  //   }
-
-  //   const newY = textValues.startTop + distY;
-  //   const newX = textValues.startLeft + distX;
-
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     top: (prev.top !== null) ? newY : null,
-  //     left: newX,
-  //     bottom: (prev.bottom !== null) ? - newY : null,
-  //   }))
-  // };
-
-  // const drop = (e) => {
-  //   setTextArea((prev) => ({ ...prev, isMoving: false }))
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-  //     startLeft: prev.left
-  //   }))
-  // };
-
   const deleteText = (e) => {
     e.preventDefault();
-    console.log(e.target);
     if (e.target === deleteTextButton.current) {
       setTextValues((prev) => ({ ...prev, isVisible: false }));
     };
   };
+
+  useEffect(() => { // подписка на изменение размера области textarea
+    if (text.current !== null) {
+      new ResizeObserver(
+        () => {
+        setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
+      }
+      ).observe(text.current);
+    };
+  }, [text.current]);
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
       if (textMoving.current?.contains(e.target) || panel.current?.contains(e.target)) return;
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
-    
+
     if (textValues.isOutside) {
       window.addEventListener("click", removeCurrentPosition);
       return () => {
@@ -203,8 +134,8 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
               fontSize: textValues.fontSize,
               lineHeight: 1.12,
               textAlign: textValues.fontPosition,
-              paddingLeft: textValues.isOutside ? 28 : 29,
-              paddingRight: textValues.isOutside ? 28 : 29,
+              paddingLeft: textValues.isOutside ? 28 : 30,
+              paddingRight: textValues.isOutside ? 28 : 30,
               paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
               resize: textValues.isOutside ? "none" : "horizontal",
             }}
