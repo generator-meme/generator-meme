@@ -128,14 +128,19 @@ REST_FRAMEWORK = {
     ],
 }
 
-SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
+# DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_HOST = os.getenv('EMAIL_HOST')
+# EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'testmemesauth@yandex.ru'
+EMAIL_HOST_PASSWORD = '1h1JKAdRx0X7'
+DEFAULT_FROM_EMAIL = 'testmemesauth@yandex.ru'
 
 DJOSER = {
     "HIDE_USER": True,
@@ -151,7 +156,6 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": True
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_NAME = "Generator-meme"
 DOMAIN = os.getenv('DOMAIN')
 
