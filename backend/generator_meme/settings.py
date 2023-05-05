@@ -130,6 +130,7 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 EMAIL_HOST = os.getenv('EMAIL_HOST')
