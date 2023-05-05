@@ -5,8 +5,15 @@ import { ReactComponent as AddTextImage } from "../../images/editor/add-text-mai
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 
-
-const EditorButtonsList = ({ setOutsideTopVisible, setOutsideBottomVisible }) => {
+const EditorButtonsList = ({
+  setOutsideTopVisible,
+  setOutsideBottomVisible,
+  topTextValues,
+  setTopTextValues,
+  bottomTextValues,
+  setBottomTextValues,
+  outsideTextHeight,
+}) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
   const bthList = useRef(null);
@@ -14,9 +21,11 @@ const EditorButtonsList = ({ setOutsideTopVisible, setOutsideBottomVisible }) =>
   const openOutsideText = (e, top, bottom) => {
     if (top) {
       setOutsideTopVisible((prev) => ({ ...prev, isVisible: true}));
+      setTopTextValues((prev) => ({ ...prev, top: topTextValues.top + outsideTextHeight}))
     };
     if (bottom) {
       setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
+      setBottomTextValues((prev) => ({ ...prev, bottom: bottomTextValues.bottom + outsideTextHeight}))
     };
   };
 
