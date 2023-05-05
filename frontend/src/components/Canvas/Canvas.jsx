@@ -26,8 +26,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   }, [image]);
 
   const [outsideText, setOutsideText] = useState({
-    top: true,
-    bottom: true,
+    // top: true,
+    // bottom: true,
     height: 80,
   });
 
@@ -35,7 +35,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     name: "outsideTopTextValues",
     isOutside: true,
     isCurrent: false,
-    isVisible: true,
+    isVisible: false,
     hover: false,
     text: "",
     fontSize: 40,
@@ -69,7 +69,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     name: "outsideBottomTextValues",
     isOutside: true,
     isCurrent: false,
-    isVisible: true,
+    isVisible: false,
     hover: false,
     text: "",
     fontSize: 40,
@@ -123,7 +123,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
     height: 70,
-    top: outsideText.top ? outsideText.height : 0,
+    top: 0,
+    // top: outsideTopTextValues.isVisible ? outsideText.height : 0,
     left: 0,
     bottom: null,
     startTop: 0,
@@ -157,7 +158,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     height: 70,
     top: null,
     left: 0,
-    bottom: outsideText.bottom ? outsideText.height : 0,
+    bottom: 0,
+    // bottom: outsideBottomTextValues.isVisible ? outsideText.height : 0,
     startTop: 0,
     startLeft: 0,
     isMoving: false,
@@ -169,12 +171,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const canvasHeight = useMemo(() => { // изменение высоты canvas в зависимости от текста внутри мема или снаружи
     if (imageSizes) {
-      if (outsideText.top && outsideText.bottom) return imageSizes.height + outsideText.height * 2;
-      if (outsideText.top || outsideText.bottom) return imageSizes.height + outsideText.height;
+      if (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) return imageSizes.height + outsideText.height * 2;
+      if (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) return imageSizes.height + outsideText.height;
       return imageSizes.height;
       };
     return null;
-  }, [imageSizes, outsideText]);
+  }, [imageSizes, outsideTopTextValues, outsideBottomTextValues, outsideText]);
 
   const createMeme = () => {
     let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
@@ -203,7 +205,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     let imageInitialY = 0;
     
-    if(outsideText.top) { // верхнее пространство для текста снаружи
+    if(outsideTopTextValues.isVisible) { // верхнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, imageSizes.width, outsideText.height);
       imageInitialY = outsideText.height;
@@ -211,9 +213,9 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     
     ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height); // картинка мема
 
-    if(outsideText.bottom) { // нижнее пространство для текста снаружи
+    if(outsideBottomTextValues.isVisible) { // нижнее пространство для текста снаружи
       ctx.fillStyle = "white";
-      ctx.fillRect(0, outsideText.top? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
+      ctx.fillRect(0, outsideTopTextValues.isVisible? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
     };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
@@ -420,11 +422,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: (outsideText.top && outsideText.bottom) ? 81 + imageSizes.offsetY - outsideText.height
-                : (outsideText.top || outsideText.bottom) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
+              // top: 81 + imageSizes.offsetY,
+              top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY
+                : outsideTopTextValues.isVisible ? 81 + imageSizes.offsetY + 0.5 * outsideText.height 
+                : outsideBottomTextValues.isVisible ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
                 : 81 + imageSizes.offsetY,
+              // top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - outsideText.height
+              //   : (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
+              //   : 81 + imageSizes.offsetY,
               left: imageSizes.offsetX,
-              height: canvasHeight,
+              height: imageSizes.height,
               width: imageSizes.width,
             }}
           >
@@ -432,12 +439,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__fieldset"
             onMouseMove={(e) => (currentTextarea === "topTextValues") ? move(e, topTextValues, setTopTextValues) : move(e, bottomTextValues, setBottomTextValues)}
             >
-              <TextareaCanvas 
+              {/* <TextareaCanvas 
                 textValues={outsideTopTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setOutsideTopTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-              />
+              /> */}
               <TextareaCanvas 
                 textValues={topTextValues}
                 imageSizes={imageSizes}
@@ -450,15 +457,18 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 setTextValues={setBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
               />
-              <TextareaCanvas 
+              {/* <TextareaCanvas 
                 textValues={outsideBottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setOutsideBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-              />
+              /> */}
             </fieldset>
           </form>
-          <EditorButtonsList />
+          <EditorButtonsList 
+            setOutsideTopVisible={setOutsideTopTextValues}
+            setOutsideBottomVisible={setOutsideBottomTextValues}
+          />
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
       </section>

@@ -6,13 +6,23 @@ import { ReactComponent as AddImageImage } from "../../images/editor/add-image-m
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 
 
-const EditorButtonsList = () => {
+const EditorButtonsList = ({ setOutsideTopVisible, setOutsideBottomVisible }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
+  const bthList = useRef(null);
+
+  const openOutsideText = (e, top, bottom) => {
+    if (top) {
+      setOutsideTopVisible((prev) => ({ ...prev, isVisible: true}));
+    };
+    if (bottom) {
+      setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
+    };
+  };
 
   useEffect(() => {
-      const hideList = (e) => {
-      if (!outsizeTextList.current.contains(e.target)) {
+    const hideList = (e) => {
+      if (!outsizeTextList.current.contains(e.target) || bthList.current.contains(e.target)) {
         setListIsVisible(false);
       };
     };
@@ -35,10 +45,19 @@ const EditorButtonsList = () => {
           <OutsideTextImage className="buttons__svg-outside" />
           <p className="buttons__bth-text">текст снаружи</p>
           {listIsVisible && (
-            <ul className="buttons__bth-list">
-              <li className="buttons__bth-list-element">верхнее поле</li>
-              <li className="buttons__bth-list-element">нижнее поле</li>
-              <li className="buttons__bth-list-element">оба поля</li>
+            <ul className="buttons__bth-list" ref={bthList}>
+              <li
+                onClick={e => openOutsideText(e, true, false)}
+                className="buttons__bth-list-element"
+              >верхнее поле</li>
+              <li
+                onClick={e => openOutsideText(e, false, true)}
+                className="buttons__bth-list-element"
+              >нижнее поле</li>
+              <li 
+                onClick={e => openOutsideText(e, true, true)}
+                className="buttons__bth-list-element"
+              >оба поля</li>
             </ul>
           )}
         </button>

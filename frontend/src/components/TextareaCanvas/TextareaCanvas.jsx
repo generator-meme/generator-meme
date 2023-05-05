@@ -120,7 +120,7 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
             type="text"
             value={textValues.text}
             onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
-            placeholder="Введите свой текст"
+            placeholder="Введите текст"
             onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
             style={{
               width: textValues.width || imageSizes?.width,
