@@ -2,7 +2,7 @@ asgiref==3.6.0
 Django==4.1.7
 django-filter==22.1
 djangorestframework==3.14.0
-djangorestframework-simplejwt==4.8.0
+djangorestframework-simplejwt==5.0.0
 djoser==2.2.0
 drf-base64==2.0
 wheel==0.38.4
