@@ -4,11 +4,11 @@ import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
+import { hexToRgb } from "../../utils/functionsForCanvas.js";
 
 function Panel ({
     textValues,
     setTextValues,
-    setBackColor,
     setOpacity,
   }) {
 
@@ -95,6 +95,17 @@ function Panel ({
 
   const setStrokeTextColor = (color) => {
     setTextValues((prev) => ({ ...prev, strokeTextColor: color}));
+  };
+
+  const setBackColor = (color) => {
+    if (color !== "transparent") {
+      setTextValues((prev) => ({
+        ...prev,
+        backColor: `rgba(${hexToRgb(color)}, ${textValues.opacity})`,
+      }));
+    } else {
+      setTextValues((prev) => ({ ...prev, backColor: color }));
+    };
   };
 
   const setOpacityLevel = (level) => {

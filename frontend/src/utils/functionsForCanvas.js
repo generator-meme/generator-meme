@@ -177,7 +177,7 @@ export const changeOpacity = (opacity, setValues, values) => {
 };
 
 // замена кодировки цвета
-const hexToRgb = (hex) => {
+export const hexToRgb = (hex) => {
   // проверяем хекс ли это
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   // если хекс то возвращаем значение в формате RGB строка вида: "0-255,0-255,0-255" если нет, то возвращаем аргумент без изменений
@@ -187,19 +187,6 @@ const hexToRgb = (hex) => {
         16
       )}`
     : hex;
-};
-
-// изменение цвета фона текста
-export const changeBackColor = (color, setValues, values) => {
-  if (color !== "transparent") {
-    setValues((prev) => ({
-      ...prev,
-      backColor: `rgba(${hexToRgb(color)}, ${values.opacity})`,
-    }));
-    return;
-  }
-  setValues((prev) => ({ ...prev, backColor: color }));
-  return;
 };
 
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)

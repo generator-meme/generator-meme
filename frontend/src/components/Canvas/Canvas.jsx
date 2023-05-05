@@ -10,7 +10,6 @@ import {
   calculateMarginX,
   wrapText,
   changeOpacity,
-  changeBackColor,
   drawText,
   move,
 } from "../../utils/functionsForCanvas.js";
@@ -194,18 +193,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
   };
 
-  // изменение цвета и прозрачности сверху
-  const changeTopBackColor = (color) => {
-    changeBackColor(color, setTopTextValues, topTextValues);
-  }
-
   const changeTopOpacity = (opacity) => {
     changeOpacity(opacity, setTopTextValues, topTextValues);
-  };
-
-  // изменение цвета и прозрачности снизу
-  const changeBottomBackColor = (color) => {
-    changeBackColor(color, setBottomTextValues, bottomTextValues);
   };
 
   const changeBottomOpacity = (opacity) => {
@@ -402,7 +391,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-                setBackColor={changeTopBackColor}
                 setOpacity={changeTopOpacity}
               />
               <TextareaCanvas 
@@ -410,7 +398,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
-                setBackColor={changeBottomBackColor}
                 setOpacity={changeBottomOpacity}
               />
             </fieldset>
