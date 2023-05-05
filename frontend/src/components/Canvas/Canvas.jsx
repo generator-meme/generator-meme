@@ -26,14 +26,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   }, [image]);
 
   const [outsideText, setOutsideText] = useState({
-    top: false,
+    top: true,
     bottom: false,
     height: 80,
   });
 
   const [outsideTopTextValues, setOutsideTopTextValues] = useState({
     name: "outsideTopTextValues",
-    isOutsideTop: true,
+    isOutside: true,
     isCurrent: false,
     isVisible: true,
     hover: false,
@@ -54,22 +54,22 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
-    height: 70,
+    height: 80,
     top: 0,
     left: 0,
     bottom: null,
-    // startTop: 0,
-    // startLeft: 0,
-    // isMoving: false,
-    // oldX: null,
-    // oldY: null,
+    startTop: 0,
+    startLeft: 0,
+    isMoving: false,
+    oldX: null,
+    oldY: null,
   });
 
   const [outsideBottomTextValues, setOutsideBottomTextValues] = useState({
     name: "outsideBottomTextValues",
-    isOutsideBottom: true,
+    isOutside: true,
     isCurrent: false,
-    isVisible: true,
+    isVisible: false,
     hover: false,
     text: "",
     fontSize: 40,
@@ -88,19 +88,20 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     width: imageSizes?.width,
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
-    height: 70,
+    height: 80,
     top: 0,
     left: 0,
     bottom: null,
-    // startTop: 0,
-    // startLeft: 0,
-    // isMoving: false,
-    // oldX: null,
-    // oldY: null,
+    startTop: 0,
+    startLeft: 0,
+    isMoving: false,
+    oldX: null,
+    oldY: null,
   });
 
   const [topTextValues, setTopTextValues] = useState({
     name: "topTextValues",
+    isOutside: false,
     isCurrent: false,
     isVisible: true,
     hover: false,
@@ -134,6 +135,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
 
   const [bottomTextValues, setBottomTextValues] = useState({
     name: "bottomTextValues",
+    isOutside: false,
     isCurrent: false,
     isVisible: true,
     text: "",
@@ -231,6 +233,33 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const textMarginYTop = 58; //50
     const textMarginYBottom = 20;//20
 
+    if (outsideTopTextValues.isVisible) {
+      const outsideTopOffsetY = outsideTopTextValues.top;
+      const outsideTopOffsetX = outsideTopTextValues.left;
+
+      ctx.font = `${outsideTopTextValues.fontStyle ? "italic" : ""}
+                  ${outsideTopTextValues.fontWeight ? "bold" : ""}
+                  ${outsideTopTextValues.fontSize}px ${outsideTopTextValues.fontFamily}`;
+      ctx.textAlign = outsideTopTextValues.fontPosition;
+  
+      const outsideTopMarginX = calculateMarginX(outsideTopTextValues.width, outsideTopTextValues.fontPosition, textMarginX, outsideTopOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const outsideTopTextWrap = wrapText(ctx, outsideTopTextValues.text, outsideTopTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+  
+        // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      outsideTopTextWrap.split('\n').forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        true,
+        canvasHeight,
+        outsideTopOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        outsideTopMarginX,
+        outsideTopTextValues,
+      ));
+    };
+
     if (topTextValues.isVisible) { // верхний текст основные характеристики
       const topOffsetY = topTextValues.top;
       const topOffsetX = topTextValues.left;
@@ -284,7 +313,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       ));
     };
 
-  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText]);
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideText, outsideTopTextValues]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -377,6 +406,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__fieldset"
             onMouseMove={(e) => (currentTextarea === "topTextValues") ? move(e, topTextValues, setTopTextValues) : move(e, bottomTextValues, setBottomTextValues)}
             >
+              <TextareaCanvas 
+                textValues={outsideTopTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setOutsideTopTextValues}
+                setCurrentTextarea={setCurrentTextarea}
+              />
               <TextareaCanvas 
                 textValues={topTextValues}
                 imageSizes={imageSizes}

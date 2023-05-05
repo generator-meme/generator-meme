@@ -17,8 +17,7 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
-  // для выбора fontFamily
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false); // для выбора fontFamily
 
   const extraWindow = useRef();
 

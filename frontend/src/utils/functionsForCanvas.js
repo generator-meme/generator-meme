@@ -199,12 +199,8 @@ export const drawText = (
   offsetY,
   textMarginYBottom,
   textMarginYTop,
-  // lineTop,
-  // lineBottom,
   marginX,
-  // textWidth,
   textValues
-  // canvasTextVisible
 ) => {
   if (t[0] === " ") {
     // если первый символ - пробел - убрать его из строки

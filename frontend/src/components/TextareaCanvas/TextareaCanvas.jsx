@@ -3,21 +3,11 @@ import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 
-const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTextarea, setBackColor, setOpacity }) => {
+const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTextarea }) => {
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
-
-  useEffect(() => { // подписка на изменение размера области textarea
-    if (text.current !== null) {
-      new ResizeObserver(
-        () => {
-        setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
-      }
-      ).observe(text.current);
-    };
-  }, [text.current]);
 
   // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
@@ -126,7 +116,6 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
     if (e.target === deleteTextButton.current) {
       setTextValues((prev) => ({ ...prev, isVisible: false }));
     };
-    // setTextValues((prev) => ({ ...prev, isVisible: false }));
   };
 
   useEffect(() => {
@@ -135,15 +124,22 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
     
-    window.addEventListener("mouseup", drop);
-    window.addEventListener("touchend", drop, {passive: true});
-    window.addEventListener("click", removeCurrentPosition);
+    if (textValues.isOutside) {
+      window.addEventListener("click", removeCurrentPosition);
+      return () => {
+        window.removeEventListener("click", removeCurrentPosition);
+      };
+    } else {
+      window.addEventListener("mouseup", drop);
+      window.addEventListener("touchend", drop, {passive: true});
+      window.addEventListener("click", removeCurrentPosition);
 
-    return () => {
-      window.removeEventListener("mouseup", drop);
-      window.removeEventListener("touchend", drop, {passive: true});
-      window.removeEventListener("click", removeCurrentPosition);
-    };
+      return () => {
+        window.removeEventListener("mouseup", drop);
+        window.removeEventListener("touchend", drop, {passive: true});
+        window.removeEventListener("click", removeCurrentPosition);
+      };
+    }
   }, []);
 
   if (!textValues.isVisible) return null;
@@ -151,7 +147,7 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
   return (
     <>
       <div
-        className="textarea__moving"
+        className={`textarea__box ${textValues.isOutside? "textarea__box_type_ungrabbing" : "textarea__box_type_grabbing"}`}
         ref={textMoving}
         style={{
           top: textValues.top,
@@ -177,7 +173,13 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
                 onClick={e => deleteText(e)}
               >
               </button>
-              <div className="textarea__resizer"></div>
+              <div
+                className="textarea__resizer"
+                style={{
+                  display: textValues.isOutside ? "none" : "block",
+                }}
+              >
+              </div>
           </>
           )}
           <TextareaAutosize
@@ -201,10 +203,10 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
               fontSize: textValues.fontSize,
               lineHeight: 1.12,
               textAlign: textValues.fontPosition,
-              // color: textValues.fillTextColor,
-              paddingLeft: 30,
-              paddingRight: 30,
+              paddingLeft: textValues.isOutside ? 28 : 29,
+              paddingRight: textValues.isOutside ? 28 : 29,
               paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
+              resize: textValues.isOutside ? "none" : "horizontal",
             }}
             autocorrect="off"
             spellcheck="false"
@@ -216,14 +218,12 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
           ref={panel}
           className="textarea__panel"
           style={{
-            top: - imageSizes.offsetY - 36 - 23,
+            top: - 36 - 30,
           }}
         >
           <Panel
             textValues={textValues}
             setTextValues={setTextValues}
-            setBackColor={setBackColor}
-            setOpacity={setOpacity}
           />
         </div>
       )}
