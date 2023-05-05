@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'drf_yasg',
-    # 'social_django',
+    'social_django',
     'django_filters',
     'api',
     'memes',
@@ -63,8 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'social_django.context_processors.backends',
-                # 'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -147,23 +147,41 @@ DJOSER = {
         "user": "users.serializers.UsersSerializer",
         "current_user": "users.serializers.UsersSerializer",
     },
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "ACTIVATION_URL": "auth/users/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_NAME = "Generator-meme"
+DOMAIN = os.getenv('DOMAIN')
 
 # SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.vk.VKOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+#    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
+    'social_core.backends.telegram.TelegramAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
 # SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 
+
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+SOCIAL_AUTH_TELEGRAM_BOT_TOKEN = os.getenv('SOCIAL_AUTH_TELEGRAM_BOT_TOKEN')
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_KEY')
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_SECRET')
+YANDEX_OAUTH2_API_URL = 'https://api-yaru.yandex.ru/me/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.associate_by_email',
+)
+
