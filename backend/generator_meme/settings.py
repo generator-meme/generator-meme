@@ -156,7 +156,7 @@ DJOSER = {
 SITE_NAME = "Generator-meme"
 DOMAIN = os.getenv('DOMAIN')
 
-# SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 AUTHENTICATION_BACKENDS = (
     #   'social_core.backends.vk.VKOAuth2',
