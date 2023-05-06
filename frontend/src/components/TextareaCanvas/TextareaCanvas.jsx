@@ -156,7 +156,9 @@ const TextareaCanvas = ({
           ref={panel}
           className="textarea__panel"
           style={{
-            top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
+            top: outsideTopTextValues.isVisible? - 36 - 30 - 80 : - 36 - 30,
+            // top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
+            left: (imageSizes.width < 609) ? - ((609 - imageSizes.width) / 2) : 0,
           }}
         >
           <Panel
