@@ -25,12 +25,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     return null;
   }, [image]);
 
-  // const [outsideText, setOutsideText] = useState({
-  //   // top: true,
-  //   // bottom: true,
-  //   height: 80,
-  // });
-
   const outsideTextHeight = 80;
 
   const [outsideTopTextValues, setOutsideTopTextValues] = useState({
@@ -57,15 +51,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     maxWidth: imageSizes?.width - 4,
     textAreaWidth: 0,
     height: outsideTextHeight,
-    // height: 80,
-    top: 0,
+    top: -80,
     left: 0,
     bottom: null,
-    startTop: 0,
-    startLeft: 0,
-    isMoving: false,
-    oldX: null,
-    oldY: null,
+    canvasTop: 0,
+    canvasLeft: 0,
+    canvasBottom: null,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
   });
 
   const [outsideBottomTextValues, setOutsideBottomTextValues] = useState({
@@ -92,15 +88,17 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     maxWidth: imageSizes?.width - 4,
     textAreaWidth: 0,
     height: outsideTextHeight,
-    // height: 80,
     top: null,
     left: 0,
-    bottom: 0,
-    startTop: 0,
-    startLeft: 0,
-    isMoving: false,
-    oldX: null,
-    oldY: null,
+    bottom: -80,
+    canvasTop: null,
+    canvasLeft: 0,
+    canvasBottom: 0,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
   });
 
   const [topTextValues, setTopTextValues] = useState({
@@ -127,9 +125,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
     height: 70,
-    // top: 0,
-    top: outsideTopTextValues.isVisible ? outsideTextHeight : 0,
-    // top: outsideTopTextValues.isVisible ? outsideText.height : 0,
+    top: 0,
     left: 0,
     bottom: null,
     startTop: 0,
@@ -163,9 +159,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     height: 70,
     top: null,
     left: 0,
-    // bottom: 0,
-    bottom: outsideBottomTextValues.isVisible ? outsideTextHeight : 0,
-    // bottom: outsideBottomTextValues.isVisible ? outsideText.height : 0,
+    bottom: 0,
     startTop: 0,
     startLeft: 0,
     isMoving: false,
@@ -179,8 +173,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     if (imageSizes) {
       if (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) return imageSizes.height + outsideTextHeight * 2;
       if (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) return imageSizes.height + outsideTextHeight;
-      // if (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) return imageSizes.height + outsideText.height * 2;
-      // if (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) return imageSizes.height + outsideText.height;
       return imageSizes.height;
       };
     return null;
@@ -217,8 +209,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, imageSizes.width, outsideTextHeight);
       imageInitialY = outsideTextHeight;
-      // ctx.fillRect(0, 0, imageSizes.width, outsideText.height);
-      // imageInitialY = outsideText.height;
     };
     
     ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height); // картинка мема
@@ -226,7 +216,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     if(outsideBottomTextValues.isVisible) { // нижнее пространство для текста снаружи
       ctx.fillStyle = "white";
       ctx.fillRect(0, outsideTopTextValues.isVisible? imageSizes.height + outsideTextHeight : imageSizes.height, imageSizes.width, outsideTextHeight);
-      // ctx.fillRect(0, outsideTopTextValues.isVisible? imageSizes.height + outsideText.height : imageSizes.height, imageSizes.width, outsideText.height);
     };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
@@ -247,8 +236,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     const textMarginYBottom = 20;//20
 
     if (outsideTopTextValues.isVisible) {
-      const outsideTopOffsetY = outsideTopTextValues.top;
-      const outsideTopOffsetX = outsideTopTextValues.left;
+      const outsideTopOffsetY = outsideTopTextValues.canvasTop;
+      const outsideTopOffsetX = outsideTopTextValues.canvasLeft;
 
       ctx.font = `${outsideTopTextValues.fontStyle ? "italic" : ""}
                   ${outsideTopTextValues.fontWeight ? "bold" : ""}
@@ -274,7 +263,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
 
     if (topTextValues.isVisible) { // верхний текст основные характеристики
-      const topOffsetY = topTextValues.top;
+      const topOffsetY = topTextValues.top + outsideTopTextValues.isVisible ? outsideTextHeight : 0 ;
       const topOffsetX = topTextValues.left;
 
       ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
@@ -301,7 +290,7 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
 
     if (bottomTextValues.isVisible) { // нижний текст основные характеристики
-      const bottomOffsetY = bottomTextValues.bottom;
+      const bottomOffsetY = bottomTextValues.bottom + outsideBottomTextValues.isVisible ? outsideTextHeight : 0;
       const bottomOffsetX = bottomTextValues.left;
       ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
                   ${bottomTextValues.fontWeight ? "bold" : ""}
@@ -327,8 +316,8 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     };
 
     if (outsideBottomTextValues.isVisible) { // нижний текст основные характеристики
-      const outsideBottomOffsetY = outsideBottomTextValues.bottom;
-      const outsideBottomOffsetX = outsideBottomTextValues.left;
+      const outsideBottomOffsetY = outsideBottomTextValues.canvasBottom;
+      const outsideBottomOffsetX = outsideBottomTextValues.canvasLeft;
       ctx.font = `${outsideBottomTextValues.fontStyle ? "italic" : ""}
                   ${outsideBottomTextValues.fontWeight ? "bold" : ""}
                   ${outsideBottomTextValues.fontSize}px ${outsideBottomTextValues.fontFamily}`;
@@ -433,19 +422,12 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             className="editor__text-form"
             style={{
               position: "absolute",
-              // top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY
-              //   : outsideTopTextValues.isVisible ? 81 + imageSizes.offsetY + 0.5 * outsideText.height 
-              //   : outsideBottomTextValues.isVisible ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
-              //   : 81 + imageSizes.offsetY,
-// текущее, только со стейном, а на просто переменной
-              // top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - outsideText.height
-              //   : (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - 0.5 * outsideText.height 
-              //   : 81 + imageSizes.offsetY,
-              top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - outsideTextHeight
-                : (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY - 0.5 * outsideTextHeight 
+              top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY
+                : outsideTopTextValues.isVisible ? 81 + imageSizes.offsetY + 0.5 * outsideTextHeight
+                : outsideBottomTextValues.isVisible ? 81 + imageSizes.offsetY - 0.5 * outsideTextHeight
                 : 81 + imageSizes.offsetY,
               left: imageSizes.offsetX,
-              height: canvasHeight,
+              height: imageSizes.height,
               width: imageSizes.width,
             }}
           >
@@ -483,10 +465,6 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
             setOutsideTopVisible={setOutsideTopTextValues}
             setOutsideBottomVisible={setOutsideBottomTextValues}
             topTextValues={topTextValues}
-            setTopTextValues={setTopTextValues}
-            bottomTextValues={bottomTextValues}
-            setBottomTextValues={setBottomTextValues}
-            outsideTextHeight={outsideTextHeight}
           />
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>

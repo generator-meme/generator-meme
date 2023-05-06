@@ -8,11 +8,6 @@ import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 const EditorButtonsList = ({
   setOutsideTopVisible,
   setOutsideBottomVisible,
-  topTextValues,
-  setTopTextValues,
-  bottomTextValues,
-  setBottomTextValues,
-  outsideTextHeight,
 }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
@@ -21,11 +16,9 @@ const EditorButtonsList = ({
   const openOutsideText = (e, top, bottom) => {
     if (top) {
       setOutsideTopVisible((prev) => ({ ...prev, isVisible: true}));
-      setTopTextValues((prev) => ({ ...prev, top: topTextValues.top + outsideTextHeight}))
     };
     if (bottom) {
       setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
-      setBottomTextValues((prev) => ({ ...prev, bottom: bottomTextValues.bottom + outsideTextHeight}))
     };
   };
 
