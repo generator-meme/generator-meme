@@ -84,6 +84,11 @@ jobs:
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
             echo SOCIAL_AUTH_YANDEX_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_YANDEX_OAUTH2_KEY }} >> .env
             echo SOCIAL_AUTH_YANDEX_OAUTH2_SECRET=${{ secrets.SOCIAL_AUTH_YANDEX_OAUTH2_SECRET }} >> .env
+            echo SOCIAL_AUTH_TELEGRAM_BOT_TOKEN=${{ secrets.SOCIAL_AUTH_TELEGRAM_BOT_TOKEN }} >> .env
+            echo SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} >> .env
+            echo SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }} >> .env
+            echo SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY }} >> .env
+            echo SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=${{ secrets.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET }} >> .env            
             docker compose up -d --build
             sudo docker compose exec -T testbackend python manage.py migrate
             sudo docker compose exec -T testbackend python manage.py collectstatic --no-input
