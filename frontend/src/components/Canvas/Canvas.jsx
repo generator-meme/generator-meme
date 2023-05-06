@@ -440,24 +440,28 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
                 imageSizes={imageSizes}
                 setTextValues={setOutsideTopTextValues}
                 setCurrentTextarea={setCurrentTextarea}
+                outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas 
                 textValues={topTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
                 setCurrentTextarea={setCurrentTextarea}
+                outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas 
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
+                outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas 
                 textValues={outsideBottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setOutsideBottomTextValues}
                 setCurrentTextarea={setCurrentTextarea}
+                outsideTopTextValues={outsideTopTextValues}
               />
             </fieldset>
           </form>

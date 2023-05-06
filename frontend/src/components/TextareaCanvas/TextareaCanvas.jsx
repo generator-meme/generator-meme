@@ -3,7 +3,14 @@ import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 
-const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTextarea }) => {
+const TextareaCanvas = ({
+    textValues,
+    imageSizes,
+    setTextValues,
+    setCurrentTextarea,
+    outsideTopTextValues
+  }) => {
+
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
@@ -149,7 +156,7 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
           ref={panel}
           className="textarea__panel"
           style={{
-            top: - 36 - 30,
+            top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
           }}
         >
           <Panel
