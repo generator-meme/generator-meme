@@ -1,3 +1,5 @@
+# import requests
+
 from django.db.models import Case, Exists, OuterRef, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -8,6 +10,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import SAFE_METHODS
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
 
 from .filters import TagSearchFilter
 from .permissions import AdminOrReadOnly
@@ -86,3 +90,14 @@ class TagViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrReadOnly]
     filter_backends = (TagSearchFilter,)
     search_fields = ('^name',)
+
+
+# class ActivateUserEmail(APIView):
+#    def get (self, request, uid, token):
+#        protocol = 'https://' if request.is_secure() else 'http://'
+#        web_url = protocol + request.get_host()
+#        post_url = web_url + "/api/auth/users/activation/"
+#        post_data = {'uid': uid, 'token': token}
+#        result = requests.post(post_url, data=post_data)
+#        message = result.text
+#        return Response(message)

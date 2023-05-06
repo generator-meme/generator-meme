@@ -149,14 +149,14 @@ DJOSER = {
         "user": "users.serializers.UsersSerializer",
         "current_user": "users.serializers.UsersSerializer",
     },
-    "ACTIVATION_URL": "auth/users/activate/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
 
 SITE_NAME = "Generator-meme"
 DOMAIN = os.getenv('DOMAIN')
 
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
+# SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 AUTHENTICATION_BACKENDS = (
     #   'social_core.backends.vk.VKOAuth2',
@@ -177,11 +177,11 @@ SOCIAL_AUTH_TELEGRAM_BOT_TOKEN = os.getenv('SOCIAL_AUTH_TELEGRAM_BOT_TOKEN')
 
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_KEY')
 SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_SECRET')
-YANDEX_OAUTH2_API_URL = 'https://api-yaru.yandex.ru/me/'
+# YANDEX_OAUTH2_API_URL = 'https://api-yaru.yandex.ru/me/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.associate_by_email',
-)
+# SOCIAL_AUTH_PIPELINE = (
+#     'social_core.pipeline.social_auth.associate_by_email',
+# )
