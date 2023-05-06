@@ -417,15 +417,21 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
           >
           </canvas>
         </div>
-        <div className="editor__box">
+        <div 
+          className="editor__box"
+          style={{
+            height: canvasHeight,
+          }}
+        >
           <form 
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY
-                : outsideTopTextValues.isVisible ? 81 + imageSizes.offsetY + 0.5 * outsideTextHeight
-                : outsideBottomTextValues.isVisible ? 81 + imageSizes.offsetY - 0.5 * outsideTextHeight
-                : 81 + imageSizes.offsetY,
+              top: outsideTopTextValues.isVisible ? 81 + outsideTextHeight : 81,
+              // top: (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) ? 81 + imageSizes.offsetY
+              //   : outsideTopTextValues.isVisible ? 81 + imageSizes.offsetY + 0.5 * outsideTextHeight
+              //   : outsideBottomTextValues.isVisible ? 81 + imageSizes.offsetY - 0.5 * outsideTextHeight
+              //   : 81 + imageSizes.offsetY,
               left: imageSizes.offsetX,
               height: imageSizes.height,
               width: imageSizes.width,
