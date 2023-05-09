@@ -82,3 +82,4 @@ jobs:
             sudo docker compose exec -T testbackend python manage.py migrate
             sudo docker compose exec -T testbackend python manage.py collectstatic --no-input
             sudo docker restart proxy-proxy-1
+            sudo docker images prune --force
