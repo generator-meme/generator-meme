@@ -46,6 +46,22 @@ const TextareaCanvas = ({
     };
   };
 
+  // useEffect(() => { // подписка на изменение размера области textarea
+  //   if (text.current !== null) {
+  //     new ResizeObserver(
+  //       () => {
+  //       console.log(text.current?.offsetHeight);
+  //       if (textValues.isOutside && text.current?.offsetHeight > 80) {  // автоматическое уменьшение размера текста (работает неправильно из-за рассинхронизации курсора на маленьких размерах шрифта)
+  //         setTextValues((prev) => ({ ...prev, height: 80, fontSize: textValues.fontSize * 0.62}));
+  //       } else {
+  //         setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
+  //       }
+  //     }
+  //     ).observe(text.current);
+  //   };
+
+  // }, [text.current]);
+
   useEffect(() => { // подписка на изменение размера области textarea
     if (text.current !== null) {
       new ResizeObserver(
@@ -94,6 +110,7 @@ const TextareaCanvas = ({
           maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
+          // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
           backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
           borderColor: (textValues.isCurrent || textValues.hover) ? "#EBFF00" : 'transparent',
@@ -121,6 +138,7 @@ const TextareaCanvas = ({
           </>
           )}
           <TextareaAutosize
+            // wrap={`${textValues.isOutside ? "off" : "hard"}`}
             wrap="hard"
             ref={text}
             className="textarea__text"
@@ -135,6 +153,7 @@ const TextareaCanvas = ({
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,
+              // maxHeight: textValues.isOutside ? 70 : imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
               fontWeight: textValues.fontWeight ? 700 : 400,
