@@ -78,6 +78,9 @@ jobs:
             echo DOMAIN=${{ secrets.DOMAIN }} >> .env
             echo EMAIL=${{ secrets.EMAIL }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+            echo PGADMIN_DEFAULT_EMAIL=${{ secrets.PGADMIN_DEFAULT_EMAIL }} >> .env
+            echo PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }} >> .env
             docker compose up -d --build
             sudo docker compose exec -T backend python manage.py migrate
             sudo docker compose exec -T backend python manage.py collectstatic --no-input
+            sudo docker restart proxy-proxy-1

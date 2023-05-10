@@ -23,7 +23,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True, max_length=254)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['username', ]
 
     models.UniqueConstraint(fields=['username', 'email'],
                             name='unique_username_email')

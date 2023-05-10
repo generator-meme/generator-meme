@@ -12,12 +12,22 @@ services:
 
   postgres:
     image: postgres:14.4-alpine
+    restart: always
     volumes:
       - meme_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
     ports:
       - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin
+    restart: always
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    env_file:
+      - ./.env
 
   backend:
     build:
@@ -38,6 +48,7 @@ services:
 
   nginx:
     image: nginx:1.19.3
+    restart: always
     ports:
       - "80:80"
     volumes:
@@ -53,3 +64,4 @@ volumes:
   static_value:
   media_value:
   meme_data:
+  pgadmin_data:
