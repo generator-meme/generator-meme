@@ -1,21 +1,24 @@
-.textarea__moving {
+.textarea__box {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: grab;
     border-style: double dashed dashed;
     border-width: 10px 1px 1px;
-    border-color: transparent;
+    /* padding: 0 30px 0; */
 }
 
-.textarea__moving:hover {
-    outline-style: double dashed dashed;
-    outline-width: 10px 1px 1px;
-    outline-color: transparent;
+.textarea__box_type_ungrabbing {
+    border-style: dashed;
+    border-width: 2px;
+    padding-top: 8px;
 }
 
-.textarea__moving:active {
+.textarea__box_type_grabbing {
+    cursor: grab;
+}
+
+.textarea__box_type_grabbing:active {
     cursor: grabbing;
 }
 
@@ -26,10 +29,12 @@
     box-sizing: border-box;
     overflow: hidden;
     line-height: 1.2;
-    resize: horizontal;
+    /* resize: horizontal; */
     text-align: center;
     padding-top: 12px;
     -webkit-text-fill-color: transparent;
+    /* resize: ; */
+    /* padding: 0 30px 0; */
 }
 
 .textarea__text:focus {
@@ -75,7 +80,7 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    left: 0;
+    /* left: 0; */
 }
 
 .textarea__container {
