@@ -9,6 +9,7 @@ services:
 
   testdb:
     image: postgres:14.4-alpine
+    restart: always
     volumes:
       - ./pg-data-test:/var/lib/postgresql/data/
     env_file:
@@ -31,6 +32,7 @@ services:
 
   testnginx:
     image: nginx:1.19.3
+    restart: always
     expose:
       - "80"
       - "443"
@@ -48,6 +50,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    restart: always
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
