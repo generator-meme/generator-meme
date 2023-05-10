@@ -380,6 +380,16 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
       setBottomTextValues(bottomText);
     };
 
+    if (!isNewMeme && localStorage.getItem("outsideTopText") !== null) {
+      const outsideTopText = JSON.parse(localStorage.getItem("outsideTopText"));
+      setOutsideTopTextValues(outsideTopText);
+    };
+
+    if (!isNewMeme && localStorage.getItem("outsideBottomText") !== null) {
+      const outsideBottomText = JSON.parse(localStorage.getItem("outsideBottomText"));
+      setOutsideBottomTextValues(outsideBottomText);
+    };
+
     // личные изображения не созраняются в localstorage,
     // если это личное изображение - навешиваем слушатель на закрытие вкладки,
     // чтобы предупредить пользователя о том, что изменения не сохранятся
@@ -399,6 +409,14 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
   useEffect(() => {
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
+
+  useEffect(() => {
+    localStorage.setItem("outsideTopText", JSON.stringify(outsideTopTextValues));
+  }, [outsideTopTextValues]);
+
+  useEffect(() => {
+    localStorage.setItem("outsideBottomText", JSON.stringify(outsideBottomTextValues));
+  }, [outsideBottomTextValues]);
 
   if (!image) {
     return null;

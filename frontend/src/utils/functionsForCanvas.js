@@ -158,37 +158,6 @@ export const wrapText = (ctx, text, maxWidth) => {
   return lineArray.join("");
 };
 
-// изменение opacity
-export const changeOpacity = (opacity, setValues, values) => {
-  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-  const regExpFromLastCommaToLastRoundBracket =
-    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setValues((prev) => ({ ...prev, opacity: opacity }));
-  if (values.backColor !== "transparent") {
-    // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = values.backColor.replace(
-      regExpFromLastCommaToLastRoundBracket,
-      `,${opacity})`
-    );
-    setValues((prev) => ({ ...prev, backColor: replacedColor }));
-    return;
-  }
-  return;
-};
-
-// замена кодировки цвета
-export const hexToRgb = (hex) => {
-  // проверяем хекс ли это
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  // если хекс то возвращаем значение в формате RGB строка вида: "0-255,0-255,0-255" если нет, то возвращаем аргумент без изменений
-  return result
-    ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(
-        result[3],
-        16
-      )}`
-    : hex;
-};
-
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
 export const drawText = (
   t,
@@ -231,12 +200,6 @@ export const drawText = (
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
   ctx.fillStyle = textValues.fillTextColor;
-
-  // if (canvasTextVisible) { // если будем отправлять текст в канвас перед генерацией мема
-  //   ctx.fillStyle = textValues.fillTextColor;
-  // } else {
-  //   ctx.fillStyle = "transparent";
-  // }
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура

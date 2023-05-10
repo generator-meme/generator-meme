@@ -2,9 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
-import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
-import { hexToRgb, changeOpacity } from "../../utils/functionsForCanvas.js";
+import { hexToRgb, changeOpacity, updateTextValues } from "../../utils/textPanelFunctions.js";
 
 function Panel ({
     textValues,
@@ -116,22 +115,7 @@ function Panel ({
   
   const resetForm = (e) => {
     e.preventDefault();
-    setOpacity(1);
-    setBackColor('transparent');
-    setTextValues((prev) => ({
-      ...prev,
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      opacityLevel: 100
-    }));
+    updateTextValues(setTextValues, textValues, false);
     form.current.reset();
   };
 

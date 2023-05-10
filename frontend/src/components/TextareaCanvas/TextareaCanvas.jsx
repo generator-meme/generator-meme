@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
+import { updateTextValues } from "../../utils/textPanelFunctions.js";
 
 const TextareaCanvas = ({
     textValues,
@@ -42,7 +43,7 @@ const TextareaCanvas = ({
   const deleteText = (e) => {
     e.preventDefault();
     if (e.target === deleteTextButton.current) {
-      setTextValues((prev) => ({ ...prev, isVisible: false }));
+      updateTextValues(setTextValues, textValues, true);
     };
   };
 
