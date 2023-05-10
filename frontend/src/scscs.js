@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
@@ -13,8 +13,7 @@ import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 
 const App = () => {
   const storeApp = {
-    initMemes: [],
-    tempMemes: [],
+    memes: [],
     currentMeme: null,
     newMeme: null,
     isNewMeme: false,
@@ -22,7 +21,7 @@ const App = () => {
     tags: [],
   };
   const [store, setStore] = useState(storeApp);
-  const [isSearchQuery, setIsSearchQuery] = useState(false);
+  console.log(storeApp);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -39,9 +38,9 @@ const App = () => {
 
   const handleDownloadNewMeme = () => {
     api
-      .downloadNewMem(store.newMeme.id)
+      .downloadNewMem(storeApp.newMeme.id)
       .then((res) => {
-        console.log(res, store.newMeme.id);
+        console.log(res, storeApp.newMeme.id);
       })
       .catch((err) => {
         console.log(err);
@@ -57,15 +56,12 @@ const App = () => {
   const setImageNotFoundOpen = (data) => {
     setStore({ ...store, imageNotFoundOpen: data });
   };
-  const setFilteredMemes = (data) => {
-    setStore({ ...store, tempMemes: [...data] });
-  };
 
   useEffect(() => {
     api
       .getTemplates()
       .then((memes) => {
-        setStore({ ...store, initMemes: [...memes] });
+        setStore({ ...store, memes });
       })
       .catch((err) => {
         console.log(err);
@@ -76,17 +72,11 @@ const App = () => {
     api
       .getTags()
       .then((tags) => {
-        setStore({ ...store, tags: [...tags] });
+        setStore({ ...store, tags });
       })
       .catch((err) => console.log(err));
   }, []);
-  const currMemes = useMemo(() => {
-    return isSearchQuery ? store.tempMemes : store.initMemes;
-  }, [store.tempMemes, isSearchQuery, store.initMemes]);
-  console.log(currMemes);
 
-  console.log(store);
-  console.log(isSearchQuery);
   return (
     <div className="page">
       <Header />
@@ -96,12 +86,9 @@ const App = () => {
           path="/"
           element={
             <Main
-              initMemes={store.initMemes}
-              memes={currMemes}
+              memes={storeApp.memes}
               setCurrentMeme={setCurrentMeme}
               setIsNewMeme={setIsNewMeme}
-              setFilteredMemes={setFilteredMemes}
-              toogleSearchFlag={setIsSearchQuery}
             />
           }
         />
@@ -109,11 +96,11 @@ const App = () => {
           path="/:id"
           element={
             <Canvas
-              currentMeme={store.currentMeme}
+              currentMeme={storeApp.currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
-              isNewMeme={store.isNewMeme}
-              memes={currMemes}
+              isNewMeme={storeApp.isNewMeme}
+              memes={storeApp.memes}
               setImageNotFoundOpen={setImageNotFoundOpen}
             />
           }
@@ -122,8 +109,8 @@ const App = () => {
           path="/saved"
           element={
             <SavedMeme
-              currentMeme={store.currentMeme}
-              newMeme={store.newMeme}
+              currentMeme={storeApp.currentMeme}
+              newMeme={storeApp.newMeme}
               handleDownloadMeme={handleDownloadNewMeme}
             />
           }

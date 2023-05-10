@@ -18,6 +18,13 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
+  getTags() {
+    return fetch(`${this._baseUrl}/tags/`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
 
   createNewMem(memeUrl, memeId) {
     return fetch(`${this._baseUrl}/memes/`, {
