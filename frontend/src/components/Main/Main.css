@@ -7,7 +7,7 @@
   row-gap: 38px;
   align-items: center;
   position: relative;
-  color: #1E1D1D;
+  color: #1e1d1d;
   z-index: 2;
 }
 
@@ -56,12 +56,12 @@
 }
 
 .main__label:hover {
-  color: #1083DD;
+  color: #1083dd;
   opacity: 0.51;
 }
 
 .main__label:hover:active {
-  color: #125A93;
+  color: #125a93;
   opacity: 1;
 }
 
@@ -73,9 +73,9 @@
   clip-path: inset(0 0 0 0);
   opacity: 0;
 }
-
-
-
+.search {
+  padding-bottom: 20px;
+}
 
 /* .main__future-input {
   text-decoration: underline;

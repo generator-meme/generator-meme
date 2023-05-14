@@ -12,7 +12,7 @@ const MemesBox = ({
   setNumberOfVisibleMems,
   setIsNewMeme,
 }) => {
-  console.log(memes);
+  // console.log(memes);
   const [scrollTop, setScrollTop] = useState(null);
 
   const fullHeight = Math.max(
@@ -23,12 +23,12 @@ const MemesBox = ({
     document.body.clientHeight,
     document.documentElement.clientHeight
   );
-
+  // console.log(scrollTop);
   const addMemes = () => {
     setNumberOfVisibleMems(numberOfVisibleMems + 21);
   };
-
-  const handleScroll = (event) => {
+  const handleScroll = (e) => {
+    // e.preventDefault();
     setScrollTop(window.scrollY);
   };
 

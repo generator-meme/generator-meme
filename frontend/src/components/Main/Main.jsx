@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import cat from "../../images/cat.png";
 // import help from '../../images/help.png'
 import "./Main.css";
@@ -8,17 +8,15 @@ import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
 
-const Main = ({
-  memes,
-  setCurrentMeme,
-  setIsNewMeme,
-  setFilteredMemes,
-  initMemes,
-  toogleSearchFlag,
-}) => {
+const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
+  const [filterMemes, setFilterMemes] = useState(memes);
+
+  useEffect(() => {
+    setFilterMemes(memes);
+  }, [memes]);
 
   const onChange = (event) => {
     if (event.target.files[0].size > 400000) {
@@ -67,17 +65,16 @@ const Main = ({
           </form>
         </div>
       </section>
-      <section>
+      <section className="search">
         <SearchPanel
-          initMemes={initMemes}
-          memes={memes}
-          setFilteredMemes={setFilteredMemes}
-          toogleSearchFlag={toogleSearchFlag}
+          tags={tags}
+          setFilterMemes={setFilterMemes}
+          initMemes={memes}
         ></SearchPanel>
       </section>
 
       <MemesBox
-        memes={memes}
+        memes={filterMemes}
         setCurrentMeme={setCurrentMeme}
         numberOfVisibleMems={numberOfVisibleMems}
         setNumberOfVisibleMems={setNumberOfVisibleMems}

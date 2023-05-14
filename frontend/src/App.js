@@ -12,81 +12,57 @@ import { optionsList } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 
 const App = () => {
-  const storeApp = {
-    initMemes: [],
-    tempMemes: [],
-    currentMeme: null,
-    newMeme: null,
-    isNewMeme: false,
-    imageNotFoundOpen: false,
-    tags: [],
-  };
-  const [store, setStore] = useState(storeApp);
-  const [isSearchQuery, setIsSearchQuery] = useState(false);
+  const [memes, setMemes] = useState([]);
+  const [currentMeme, setCurrentMeme] = useState(null);
+  const [newMeme, setNewMeme] = useState(null);
+  const [isNewMeme, setIsNewMeme] = useState(false);
+  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  const [tags, setTags] = useState([]);
+  // const []
 
-  const handleCreateNewMeme = (memeUrl, memeId) => {
+  function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
-      .then((newMeme) => {
-        console.log(memeUrl, memeId);
-        setStore({ ...store, newMeme });
-        localStorage.setItem("createdMeme", JSON.stringify(newMeme));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleDownloadNewMeme = () => {
-    api
-      .downloadNewMem(store.newMeme.id)
       .then((res) => {
-        console.log(res, store.newMeme.id);
+        // console.log(memeUrl, memeId);
+        setNewMeme(res);
+        localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  }
 
-  const setCurrentMeme = (data) => {
-    setStore({ ...store, currentMeme: data });
-  };
-  const setIsNewMeme = (data) => {
-    setStore({ ...store, isNewMeme: data });
-  };
-  const setImageNotFoundOpen = (data) => {
-    setStore({ ...store, imageNotFoundOpen: data });
-  };
-  const setFilteredMemes = (data) => {
-    setStore({ ...store, tempMemes: [...data] });
-  };
+  function handleDownloadNewMeme() {
+    api
+      .downloadNewMem(newMeme.id)
+      .then((res) => {
+        console.log(res, newMeme.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     api
       .getTemplates()
-      .then((memes) => {
-        setStore({ ...store, initMemes: [...memes] });
+      .then((res) => {
+        setMemes(res);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
   useEffect(() => {
     api
       .getTags()
-      .then((tags) => {
-        setStore({ ...store, tags: [...tags] });
+      .then((data) => {
+        setTags(data);
       })
       .catch((err) => console.log(err));
   }, []);
-  const currMemes = useMemo(() => {
-    return isSearchQuery ? store.tempMemes : store.initMemes;
-  }, [store.tempMemes, isSearchQuery, store.initMemes]);
-  console.log(currMemes);
 
-  console.log(store);
-  console.log(isSearchQuery);
   return (
     <div className="page">
       <Header />
@@ -96,12 +72,10 @@ const App = () => {
           path="/"
           element={
             <Main
-              initMemes={store.initMemes}
-              memes={currMemes}
+              memes={memes}
               setCurrentMeme={setCurrentMeme}
               setIsNewMeme={setIsNewMeme}
-              setFilteredMemes={setFilteredMemes}
-              toogleSearchFlag={setIsSearchQuery}
+              tags={tags}
             />
           }
         />
@@ -109,11 +83,11 @@ const App = () => {
           path="/:id"
           element={
             <Canvas
-              currentMeme={store.currentMeme}
+              currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
-              isNewMeme={store.isNewMeme}
-              memes={currMemes}
+              isNewMeme={isNewMeme}
+              memes={memes}
               setImageNotFoundOpen={setImageNotFoundOpen}
             />
           }
@@ -122,8 +96,8 @@ const App = () => {
           path="/saved"
           element={
             <SavedMeme
-              currentMeme={store.currentMeme}
-              newMeme={store.newMeme}
+              currentMeme={currentMeme}
+              newMeme={newMeme}
               handleDownloadMeme={handleDownloadNewMeme}
             />
           }
@@ -131,7 +105,7 @@ const App = () => {
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
       <Footer />
-      {storeApp.imageNotFoundOpen && (
+      {imageNotFoundOpen && (
         <InfoTooltip
           title="Личные изображения не сохраняется при перезагрузке, пожалуйста, вернитесь к выбору изображения"
           onClose={setImageNotFoundOpen}

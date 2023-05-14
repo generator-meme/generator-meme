@@ -1,22 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
-import TextareaAutosize from 'react-textarea-autosize';
-import Panel from '../Panel/Panel';
+import TextareaAutosize from "react-textarea-autosize";
+import Panel from "../Panel/Panel";
 
-const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTextarea, setBackColor, setOpacity }) => {
+const TextareaCanvas = ({
+  textValues,
+  imageSizes,
+  setTextValues,
+  setCurrentTextarea,
+  setBackColor,
+  setOpacity,
+}) => {
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
 
-  useEffect(() => { // подписка на изменение размера области textarea
+  useEffect(() => {
+    // подписка на изменение размера области textarea
     if (text.current !== null) {
-      new ResizeObserver(
-        () => {
-        setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
-      }
-      ).observe(text.current);
-    };
+      new ResizeObserver(() => {
+        setTextValues((prev) => ({
+          ...prev,
+          width: text.current?.offsetWidth,
+          height: text.current?.offsetHeight,
+        }));
+      }).observe(text.current);
+    }
   }, [text.current]);
 
   // второй вариант перемещения текста (все переменные в textValues)
@@ -24,13 +34,17 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
     setCurrentTextarea(textValues.name);
 
     if (!(e.target === textMoving.current)) return;
-    setTextValues((prev) => ({ ...prev, isMoving: true }))
+    setTextValues((prev) => ({ ...prev, isMoving: true }));
 
     if (e.clientX) {
-      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY }));
     } else {
-      setTextValues((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
-    };
+      setTextValues((prev) => ({
+        ...prev,
+        oldX: e.touches[0].clientX,
+        oldY: e.touches[0].clientY,
+      }));
+    }
   };
 
   // const move = (e) => { // теперь в dunctionForCanvas
@@ -62,11 +76,10 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
     setTextValues((prev) => ({
       ...prev,
       isMoving: false,
-      startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-      startLeft: prev.left
-    }))
+      startTop: prev.bottom === null ? prev.top : -prev.bottom,
+      startLeft: prev.left,
+    }));
   };
-
 
   // первый вариант перемещения с внутренним стейтом
   // const [textArea, setTextArea] = useState({
@@ -122,26 +135,30 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
 
   const deleteText = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    // console.log(e.target);
     if (e.target === deleteTextButton.current) {
       setTextValues((prev) => ({ ...prev, isVisible: false }));
-    };
+    }
     // setTextValues((prev) => ({ ...prev, isVisible: false }));
   };
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
-      if (textMoving.current?.contains(e.target) || panel.current?.contains(e.target)) return;
+      if (
+        textMoving.current?.contains(e.target) ||
+        panel.current?.contains(e.target)
+      )
+        return;
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
-    
+
     window.addEventListener("mouseup", drop);
-    window.addEventListener("touchend", drop, {passive: true});
+    window.addEventListener("touchend", drop, { passive: true });
     window.addEventListener("click", removeCurrentPosition);
 
     return () => {
       window.removeEventListener("mouseup", drop);
-      window.removeEventListener("touchend", drop, {passive: true});
+      window.removeEventListener("touchend", drop, { passive: true });
       window.removeEventListener("click", removeCurrentPosition);
     };
   }, []);
@@ -161,12 +178,20 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
           minHeight: 70,
           height: textValues.height,
           maxHeight: imageSizes?.height,
-          backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
-          borderColor: (textValues.isCurrent || textValues.hover) ? "#EBFF00" : 'transparent',
+          backgroundColor:
+            textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
+          borderColor:
+            textValues.isCurrent || textValues.hover
+              ? "#EBFF00"
+              : "transparent",
         }}
         onMouseDown={pickup}
-        onMouseEnter={e => setTextValues((prev) => ({ ...prev, hover: true }))}
-        onMouseLeave={e => setTextValues((prev) => ({ ...prev, hover: false }))}
+        onMouseEnter={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: true }))
+        }
+        onMouseLeave={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: false }))
+        }
       >
         <div className="textarea__container">
           {(textValues.isCurrent || textValues.hover) && (
@@ -174,11 +199,10 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
               <button
                 ref={deleteTextButton}
                 className="textarea__delete-text"
-                onClick={e => deleteText(e)}
-              >
-              </button>
+                onClick={(e) => deleteText(e)}
+              ></button>
               <div className="textarea__resizer"></div>
-          </>
+            </>
           )}
           <TextareaAutosize
             wrap="hard"
@@ -186,9 +210,13 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
             className="textarea__text"
             type="text"
             value={textValues.text}
-            onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
+            onChange={(e) =>
+              setTextValues((prev) => ({ ...prev, text: e.target.value }))
+            }
             placeholder="Введите свой текст"
-            onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
+            onClick={(e) =>
+              setTextValues((prev) => ({ ...prev, isCurrent: true }))
+            }
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: textValues.maxWidth,
@@ -204,7 +232,10 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
               // color: textValues.fillTextColor,
               paddingLeft: 30,
               paddingRight: 30,
-              paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
+              paddingBottom:
+                textValues.name === "bottomTextValues" && textValues.height > 80
+                  ? 12
+                  : 0,
             }}
             autocorrect="off"
             spellcheck="false"
@@ -212,11 +243,11 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
         </div>
       </div>
       {textValues.isCurrent && (
-        <div 
+        <div
           ref={panel}
           className="textarea__panel"
           style={{
-            top: - imageSizes.offsetY - 36 - 23,
+            top: -imageSizes.offsetY - 36 - 23,
           }}
         >
           <Panel
@@ -228,7 +259,7 @@ const TextareaCanvas = ({ textValues, imageSizes, setTextValues, setCurrentTexta
         </div>
       )}
     </>
-  )
+  );
 };
 
 export default TextareaCanvas;
