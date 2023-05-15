@@ -16,7 +16,6 @@ import {
   calculateMarginX,
   wrapText,
   drawText,
-  move,
 } from "../../utils/functionsForCanvas.js";
 
 const Canvas = ({
@@ -179,8 +178,6 @@ const Canvas = ({
     oldX: null,
     oldY: null,
   });
-
-  const [currentTextarea, setCurrentTextarea] = useState("");
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -502,38 +499,29 @@ const Canvas = ({
           >
             <fieldset
               className="editor__fieldset"
-              onMouseMove={(e) =>
-                currentTextarea === "topTextValues"
-                  ? move(e, topTextValues, setTopTextValues)
-                  : move(e, bottomTextValues, setBottomTextValues)
-              }
             >
               <TextareaCanvas 
                 textValues={outsideTopTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setOutsideTopTextValues}
-                setCurrentTextarea={setCurrentTextarea}
                 outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas 
                 textValues={topTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setTopTextValues}
-                setCurrentTextarea={setCurrentTextarea}
                 outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setBottomTextValues}
-                setCurrentTextarea={setCurrentTextarea}
                 outsideTopTextValues={outsideTopTextValues}
               />
               <TextareaCanvas 
                 textValues={outsideBottomTextValues}
                 imageSizes={imageSizes}
                 setTextValues={setOutsideBottomTextValues}
-                setCurrentTextarea={setCurrentTextarea}
                 outsideTopTextValues={outsideTopTextValues}
               />
             </fieldset>

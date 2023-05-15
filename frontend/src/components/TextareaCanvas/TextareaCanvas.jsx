@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
+import { move } from "../../utils/functionsForCanvas.js";
+
 
 const TextareaCanvas = ({
     textValues,
     imageSizes,
     setTextValues,
-    setCurrentTextarea,
     outsideTopTextValues
   }) => {
 
@@ -19,20 +20,24 @@ const TextareaCanvas = ({
 
   // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
-    setCurrentTextarea(textValues.name);
-
     if (!(e.target === textMoving.current)) return;
-    setTextValues((prev) => ({ ...prev, isMoving: true }));
 
     if (e.clientX) {
-      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY }));
+      setTextValues((prev) => ({ ...prev, isMoving: true, oldX: e.clientX, oldY: e.clientY }));
     } else {
       setTextValues((prev) => ({
         ...prev,
+        isMoving: true,
         oldX: e.touches[0].clientX,
         oldY: e.touches[0].clientY,
       }));
-    }
+    };
+  };
+
+  const onMove = (e) => {
+    if (textValues.isMoving) {
+      move(e, textValues, setTextValues);
+    };
   };
 
   const drop = (e) => {
@@ -67,7 +72,7 @@ const TextareaCanvas = ({
 
   // }, [text.current]);
 
-  useEffect(() => { // подписка на изменение размера области textarea
+    useEffect(() => { // подписка на изменение размера области textarea
     if (text.current !== null) {
       new ResizeObserver(
         () => {
@@ -76,6 +81,16 @@ const TextareaCanvas = ({
       ).observe(text.current);
     };
   }, [text.current]);
+
+  useEffect(() => {
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("touchmove", onMove, {passive: true});
+
+      return () => {
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("touchmove", onMove, {passive: true});
+      };
+  }, [textValues.isMoving]);
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
@@ -95,11 +110,13 @@ const TextareaCanvas = ({
     } else {
       window.addEventListener("mouseup", drop);
       window.addEventListener("touchend", drop, {passive: true});
+
       window.addEventListener("click", removeCurrentPosition);
 
       return () => {
         window.removeEventListener("mouseup", drop);
         window.removeEventListener("touchend", drop, {passive: true});
+
         window.removeEventListener("click", removeCurrentPosition);
       };
     }
@@ -129,6 +146,7 @@ const TextareaCanvas = ({
               : "transparent",
         }}
         onMouseDown={pickup}
+        onTouchStart={pickup}
         onMouseEnter={(e) =>
           setTextValues((prev) => ({ ...prev, hover: true }))
         }

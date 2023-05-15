@@ -307,7 +307,6 @@ export const drawText = (
 // };
 
 export const move = (e, textValues, setTextValues) => {
-  if (textValues === "") return;
   if (!textValues.isMoving) return;
 
   let distX;
