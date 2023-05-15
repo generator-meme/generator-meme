@@ -65,13 +65,13 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
           </form>
         </div>
       </section>
-      <section className="search">
+      {/* <section className="search">
         <SearchPanel
           tags={tags}
           setFilterMemes={setFilterMemes}
           initMemes={memes}
         ></SearchPanel>
-      </section>
+      </section> */}
 
       <MemesBox
         memes={filterMemes}
