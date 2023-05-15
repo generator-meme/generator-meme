@@ -158,50 +158,6 @@ export const wrapText = (ctx, text, maxWidth) => {
   return lineArray.join("");
 };
 
-// изменение opacity
-export const changeOpacity = (opacity, setValues, values) => {
-  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-  const regExpFromLastCommaToLastRoundBracket =
-    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setValues((prev) => ({ ...prev, opacity: opacity }));
-  if (values.backColor !== "transparent") {
-    // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = values.backColor.replace(
-      regExpFromLastCommaToLastRoundBracket,
-      `,${opacity})`
-    );
-    setValues((prev) => ({ ...prev, backColor: replacedColor }));
-    return;
-  }
-  return;
-};
-
-// замена кодировки цвета
-const hexToRgb = (hex) => {
-  // проверяем хекс ли это
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  // если хекс то возвращаем значение в формате RGB строка вида: "0-255,0-255,0-255" если нет, то возвращаем аргумент без изменений
-  return result
-    ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(
-        result[3],
-        16
-      )}`
-    : hex;
-};
-
-// изменение цвета фона текста
-export const changeBackColor = (color, setValues, values) => {
-  if (color !== "transparent") {
-    setValues((prev) => ({
-      ...prev,
-      backColor: `rgba(${hexToRgb(color)}, ${values.opacity})`,
-    }));
-    return;
-  }
-  setValues((prev) => ({ ...prev, backColor: color }));
-  return;
-};
-
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
 export const drawText = (
   t,
@@ -212,12 +168,8 @@ export const drawText = (
   offsetY,
   textMarginYBottom,
   textMarginYTop,
-  // lineTop,
-  // lineBottom,
   marginX,
-  // textWidth,
   textValues
-  // canvasTextVisible
 ) => {
   if (t[0] === " ") {
     // если первый символ - пробел - убрать его из строки
@@ -248,12 +200,6 @@ export const drawText = (
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
   ctx.fillStyle = textValues.fillTextColor;
-
-  // if (canvasTextVisible) { // если будем отправлять текст в канвас перед генерацией мема
-  //   ctx.fillStyle = textValues.fillTextColor;
-  // } else {
-  //   ctx.fillStyle = "transparent";
-  // }
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура
@@ -385,3 +331,57 @@ export const move = (e, textValues, setTextValues) => {
     bottom: prev.bottom !== null ? -newY : null,
   }));
 };
+
+// функции из textarea - пока там все не работает
+
+// первый вариант перемещения с внутренним стейтом
+// const [textArea, setTextArea] = useState({
+//   isMoving: false,
+//   oldX: null,
+//   oldY: null,
+// });
+
+// const pickup = (e) => {
+//   if (!(e.target === textMoving.current)) return;
+//   setTextArea((prev) => ({ ...prev, isMoving: true }))
+
+//   if (e.clientX) {
+//     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+//   } else {
+//     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
+//   };
+// };
+
+// const move = (e) => {
+//   if (!textArea.isMoving) return;
+
+//   let distX;
+//   let distY;
+
+//   if (e.clientX) {
+//     distX = e.clientX - textArea.oldX;
+//     distY = e.clientY - textArea.oldY;
+//   } else {
+//     distX = e.touches[0].clientX - textArea.oldX;
+//     distY = e.touches[0].clientY - textArea.oldY;
+//   }
+
+//   const newY = textValues.startTop + distY;
+//   const newX = textValues.startLeft + distX;
+
+//   setTextValues((prev) => ({
+//     ...prev,
+//     top: (prev.top !== null) ? newY : null,
+//     left: newX,
+//     bottom: (prev.bottom !== null) ? - newY : null,
+//   }))
+// };
+
+// const drop = (e) => {
+//   setTextArea((prev) => ({ ...prev, isMoving: false }))
+//   setTextValues((prev) => ({
+//     ...prev,
+//     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
+//     startLeft: prev.left
+//   }))
+// };

@@ -30,12 +30,12 @@
   cursor: pointer;
   width: 87px;
   caret-color: transparent;
+  height: 40px;
 }
 
 .opacity-panel__input-range::-webkit-media-controls-volume-slider {
   -webkit-appearance: none;
   background-color: #868484;
-  height: 1px;
 }
 
 /* Targets the track in Chrome, Safari, and Edge Chromium. */

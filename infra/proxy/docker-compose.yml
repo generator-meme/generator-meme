@@ -2,6 +2,7 @@ version: '3.3'
 services:
   proxy:
     image: nginx:1.19.3
+    restart: always
     volumes:
       - ./proxy-nginx.conf:/etc/nginx/conf.d/default.conf
       - /root/data/certbot/conf:/etc/letsencrypt
