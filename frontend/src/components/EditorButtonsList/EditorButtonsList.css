@@ -25,6 +25,24 @@
     max-width: 160px;
     row-gap: 15px;
     cursor: pointer;
+
+    position: relative;
+}
+
+.buttons__prompt {
+    position: absolute;
+    bottom: 35px;
+    right: -30px;
+    background-color: #ffffff;
+    border-radius: 0 20px 20px 20px;
+    border: 1px solid #D1D1D1;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    display: none;
+    margin: 0;
+    padding: 10px 5px 10px;
+    font-size: 9px;
+    line-height: 11px;
+    color: #000000;
 }
 
 .buttons__bth_type_outside-text {
@@ -74,25 +92,44 @@
     z-index: 2;
 }
 
-.buttons__bth:hover {
+/* .buttons__bth:hover {
     color: #AD27DC;
+} */
+
+.buttons__bth_type_outside-text:hover {
+    color: #AD27DC;
+}
+
+.buttons__bth_type_add-text:hover,
+.buttons__bth_type_add-image:hover {
+    color: rgba(155, 155, 155, 0.5);
+}
+
+.buttons__bth:hover .buttons__prompt {
+    display: block;
 }
 
 /*изменение цвета svg при наведении*/
 .buttons__bth:hover .buttons__svg-outside path:nth-of-type(2n - 1),
-.buttons__bth:hover .buttons__svg-outside path:nth-of-type(6),
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(6) {
+    stroke: #AD27DC;
+}
+
 .buttons__bth:hover .buttons__svg-plus circle,
 .buttons__bth:hover .buttons__svg-plus path,
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(1),
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(2) {
-    stroke: #AD27DC;
+    stroke: rgba(155, 155, 155, 0.5);
 }
 
 .buttons__bth:hover .buttons__svg-outside path:nth-of-type(2),
-.buttons__bth:hover .buttons__svg-outside path:nth-of-type(4),
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(4) {
+    fill: #AD27DC;
+}
+
 .buttons__bth:hover .buttons__svg-add-text path,
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(3) {
-    fill: #AD27DC;
+    fill: rgba(155, 155, 155, 0.5);
 }
 
 .buttons__bth-text {
