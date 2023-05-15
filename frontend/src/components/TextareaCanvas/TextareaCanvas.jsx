@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
+import { move } from "../../utils/functionsForCanvas.js";
+
 
 const TextareaCanvas = ({
     textValues,
     imageSizes,
     setTextValues,
-    setCurrentTextarea,
     outsideTopTextValues
   }) => {
 
@@ -19,15 +20,23 @@ const TextareaCanvas = ({
 
   // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
-    setCurrentTextarea(textValues.name);
-
     if (!(e.target === textMoving.current)) return;
-    setTextValues((prev) => ({ ...prev, isMoving: true }))
 
     if (e.clientX) {
-      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+      setTextValues((prev) => ({ ...prev, isMoving: true, oldX: e.clientX, oldY: e.clientY }));
     } else {
-      setTextValues((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
+      setTextValues((prev) => ({
+        ...prev,
+        isMoving: true,
+        oldX: e.touches[0].clientX,
+        oldY: e.touches[0].clientY,
+      }));
+    };
+  };
+
+  const onMove = (e) => {
+    if (textValues.isMoving) {
+      move(e, textValues, setTextValues);
     };
   };
 
@@ -35,9 +44,9 @@ const TextareaCanvas = ({
     setTextValues((prev) => ({
       ...prev,
       isMoving: false,
-      startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-      startLeft: prev.left
-    }))
+      startTop: prev.bottom === null ? prev.top : -prev.bottom,
+      startLeft: prev.left,
+    }));
   };
 
   const deleteText = (e) => {
@@ -63,7 +72,7 @@ const TextareaCanvas = ({
 
   // }, [text.current]);
 
-  useEffect(() => { // подписка на изменение размера области textarea
+    useEffect(() => { // подписка на изменение размера области textarea
     if (text.current !== null) {
       new ResizeObserver(
         () => {
@@ -74,8 +83,22 @@ const TextareaCanvas = ({
   }, [text.current]);
 
   useEffect(() => {
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("touchmove", onMove, {passive: true});
+
+      return () => {
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("touchmove", onMove, {passive: true});
+      };
+  }, [textValues.isMoving]);
+
+  useEffect(() => {
     const removeCurrentPosition = (e) => {
-      if (textMoving.current?.contains(e.target) || panel.current?.contains(e.target)) return;
+      if (
+        textMoving.current?.contains(e.target) ||
+        panel.current?.contains(e.target)
+      )
+        return;
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
 
@@ -87,11 +110,13 @@ const TextareaCanvas = ({
     } else {
       window.addEventListener("mouseup", drop);
       window.addEventListener("touchend", drop, {passive: true});
+
       window.addEventListener("click", removeCurrentPosition);
 
       return () => {
         window.removeEventListener("mouseup", drop);
         window.removeEventListener("touchend", drop, {passive: true});
+
         window.removeEventListener("click", removeCurrentPosition);
       };
     }
@@ -113,12 +138,21 @@ const TextareaCanvas = ({
           height: textValues.height,
           // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
-          backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
-          borderColor: (textValues.isCurrent || textValues.hover) ? "#EBFF00" : 'transparent',
+          backgroundColor:
+            textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
+          borderColor:
+            textValues.isCurrent || textValues.hover
+              ? "#EBFF00"
+              : "transparent",
         }}
         onMouseDown={pickup}
-        onMouseEnter={e => setTextValues((prev) => ({ ...prev, hover: true }))}
-        onMouseLeave={e => setTextValues((prev) => ({ ...prev, hover: false }))}
+        onTouchStart={pickup}
+        onMouseEnter={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: true }))
+        }
+        onMouseLeave={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: false }))
+        }
       >
         <div className="textarea__container">
           {(textValues.isCurrent || textValues.hover) && (
@@ -172,7 +206,7 @@ const TextareaCanvas = ({
         </div>
       </div>
       {textValues.isCurrent && (
-        <div 
+        <div
           ref={panel}
           className="textarea__panel"
           style={{
@@ -188,7 +222,7 @@ const TextareaCanvas = ({
         </div>
       )}
     </>
-  )
+  );
 };
 
 export default TextareaCanvas;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
@@ -17,6 +17,7 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  const [tags, setTags] = useState([]);
   // const []
 
   function handleCreateNewMeme(memeUrl, memeId) {
@@ -53,6 +54,14 @@ const App = () => {
         console.log(err);
       });
   }, []);
+  useEffect(() => {
+    api
+      .getTags()
+      .then((data) => {
+        setTags(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="page">
@@ -66,6 +75,7 @@ const App = () => {
               memes={memes}
               setCurrentMeme={setCurrentMeme}
               setIsNewMeme={setIsNewMeme}
+              tags={tags}
             />
           }
         />
