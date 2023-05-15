@@ -65,21 +65,29 @@ const EditorButtonsList = ({
         </button>
       </li>
       <li>
-        <button className="buttons__bth buttons__bth_type_add-text">
+        <button 
+          className="buttons__bth buttons__bth_type_add-text"
+          onClick={e => e.preventDefault()}
+          >
           <div className="buttons__bth-img">
             <AddTextImage className="buttons__svg-add-text" />
             <Plus className="buttons__svg-plus" />
           </div>
           <p className="buttons__bth-text">добавить текст</p>
+          <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
         </button>
       </li>
       <li>
-        <button className="buttons__bth buttons__bth_type_add-image">
+        <button 
+          className="buttons__bth buttons__bth_type_add-image"
+          onClick={e => e.preventDefault()}
+        >
           <div className="buttons__bth-img">
             <AddImageImage className="buttons__svg-add-image" />
             <Plus className="buttons__svg-plus" />
           </div>
           <p className="buttons__bth-text">добавить изображение</p>
+          <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
         </button>
       </li>
           </ul>
