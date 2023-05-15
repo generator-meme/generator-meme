@@ -279,7 +279,7 @@ const Canvas = ({
     };
 
     if (topTextValues.isVisible) { // верхний текст основные характеристики
-      const topOffsetY = topTextValues.top + outsideTopTextValues.isVisible ? outsideTextHeight : 0 ;
+      const topOffsetY = topTextValues.top + (outsideTopTextValues.isVisible ? outsideTextHeight : 0);
       const topOffsetX = topTextValues.left;
 
       ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
@@ -319,7 +319,7 @@ const Canvas = ({
     }
 
     if (bottomTextValues.isVisible) { // нижний текст основные характеристики
-      const bottomOffsetY = bottomTextValues.bottom + outsideBottomTextValues.isVisible ? outsideTextHeight : 0;
+      const bottomOffsetY = bottomTextValues.bottom + (outsideBottomTextValues.isVisible ? outsideTextHeight : 0);
       const bottomOffsetX = bottomTextValues.left;
       ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
                   ${bottomTextValues.fontWeight ? "bold" : ""}
