@@ -1,4 +1,4 @@
-name: Django-app workflow
+name: test workflow
 
 on:
   push:
