@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
@@ -22,22 +22,26 @@ const TextareaCanvas = ({
     setCurrentTextarea(textValues.name);
 
     if (!(e.target === textMoving.current)) return;
-    setTextValues((prev) => ({ ...prev, isMoving: true }))
+    setTextValues((prev) => ({ ...prev, isMoving: true }));
 
     if (e.clientX) {
-      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+      setTextValues((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY }));
     } else {
-      setTextValues((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
-    };
+      setTextValues((prev) => ({
+        ...prev,
+        oldX: e.touches[0].clientX,
+        oldY: e.touches[0].clientY,
+      }));
+    }
   };
 
   const drop = (e) => {
     setTextValues((prev) => ({
       ...prev,
       isMoving: false,
-      startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-      startLeft: prev.left
-    }))
+      startTop: prev.bottom === null ? prev.top : -prev.bottom,
+      startLeft: prev.left,
+    }));
   };
 
   const deleteText = (e) => {
@@ -75,7 +79,11 @@ const TextareaCanvas = ({
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
-      if (textMoving.current?.contains(e.target) || panel.current?.contains(e.target)) return;
+      if (
+        textMoving.current?.contains(e.target) ||
+        panel.current?.contains(e.target)
+      )
+        return;
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
 
@@ -113,12 +121,20 @@ const TextareaCanvas = ({
           height: textValues.height,
           // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
-          backgroundColor: (textValues.text === "") ? "rgba(29, 27, 27, 0.5)" : "transparent",
-          borderColor: (textValues.isCurrent || textValues.hover) ? "#EBFF00" : 'transparent',
+          backgroundColor:
+            textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
+          borderColor:
+            textValues.isCurrent || textValues.hover
+              ? "#EBFF00"
+              : "transparent",
         }}
         onMouseDown={pickup}
-        onMouseEnter={e => setTextValues((prev) => ({ ...prev, hover: true }))}
-        onMouseLeave={e => setTextValues((prev) => ({ ...prev, hover: false }))}
+        onMouseEnter={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: true }))
+        }
+        onMouseLeave={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: false }))
+        }
       >
         <div className="textarea__container">
           {(textValues.isCurrent || textValues.hover) && (
@@ -172,7 +188,7 @@ const TextareaCanvas = ({
         </div>
       </div>
       {textValues.isCurrent && (
-        <div 
+        <div
           ref={panel}
           className="textarea__panel"
           style={{
@@ -188,7 +204,7 @@ const TextareaCanvas = ({
         </div>
       )}
     </>
-  )
+  );
 };
 
 export default TextareaCanvas;
