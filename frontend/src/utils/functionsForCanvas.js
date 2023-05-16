@@ -111,8 +111,14 @@ export const lineHeight = (fontSize) => {
 
 // функция добавления "/n" к строкам, если они не вмещаются в допустимую ширину
 export const wrapText = (ctx, text, maxWidth) => {
+  let textArr = text.split("\n"); // добавление пробела после каждого знака переноса
+  for (let i = 0; i < textArr.length - 1; i++) {
+    textArr[i] += "\n ";
+  }
+  let textWithSpace = textArr.join("");
+
   // First, start by splitting all of our text into words, but splitting it into an array split by spaces
-  let words = text.split(" ");
+  let words = textWithSpace.split(" ");
   let line = ""; // This will store the text of the current line
   let testLine = ""; // This will store the text when we add a word, to test if it's too long
   let lineArray = []; // This is an array of lines, which the function will return
@@ -123,6 +129,7 @@ export const wrapText = (ctx, text, maxWidth) => {
     testLine += `${words[n]} `;
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
+
     // If the width of this test line is more than the max width
     if (testWidth > maxWidth && n > 0) {
       // Then the line is finished, add to line '\n' and push the current line into "lineArray"
@@ -131,10 +138,17 @@ export const wrapText = (ctx, text, maxWidth) => {
       // Update line and test line to use this word as the first word on the next line
       line = `${words[n]} `;
       testLine = `${words[n]} `;
+    } else if (words[n].includes("\n")) {
+      // проверка на наличие переноса в слове, обнуление line и testLine в этом случае
+      line += `${words[n]} `;
+      lineArray.push(line);
+      line = "";
+      testLine = "";
     } else {
       // If the test line is still less than the max width, then add the word to the current line
       line += `${words[n]} `;
     }
+
     // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
     if (n === words.length - 1) {
       lineArray.push(line);
@@ -142,50 +156,6 @@ export const wrapText = (ctx, text, maxWidth) => {
   }
   // Return the new string
   return lineArray.join("");
-};
-
-// изменение opacity
-export const changeOpacity = (opacity, setValues, values) => {
-  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-  const regExpFromLastCommaToLastRoundBracket =
-    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setValues((prev) => ({ ...prev, opacity: opacity }));
-  if (values.backColor !== "transparent") {
-    // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = values.backColor.replace(
-      regExpFromLastCommaToLastRoundBracket,
-      `,${opacity})`
-    );
-    setValues((prev) => ({ ...prev, backColor: replacedColor }));
-    return;
-  }
-  return;
-};
-
-// замена кодировки цвета
-const hexToRgb = (hex) => {
-  // проверяем хекс ли это
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  // если хекс то возвращаем значение в формате RGB строка вида: "0-255,0-255,0-255" если нет, то возвращаем аргумент без изменений
-  return result
-    ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(
-        result[3],
-        16
-      )}`
-    : hex;
-};
-
-// изменение цвета фона текста
-export const changeBackColor = (color, setValues, values) => {
-  if (color !== "transparent") {
-    setValues((prev) => ({
-      ...prev,
-      backColor: `rgba(${hexToRgb(color)}, ${values.opacity})`,
-    }));
-    return;
-  }
-  setValues((prev) => ({ ...prev, backColor: color }));
-  return;
 };
 
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
@@ -198,16 +168,20 @@ export const drawText = (
   offsetY,
   textMarginYBottom,
   textMarginYTop,
-  // lineTop,
-  // lineBottom,
   marginX,
-  // textWidth,
   textValues
 ) => {
+  if (t[0] === " ") {
+    // если первый символ - пробел - убрать его из строки
+    t = t.slice(1);
+  }
+
   if (t[t.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
     t = t.slice(0, t.length - 1);
   }
+
+  // t += "\n";
 
   let marginY;
   if (top) {
@@ -333,7 +307,6 @@ export const drawText = (
 // };
 
 export const move = (e, textValues, setTextValues) => {
-  if (textValues === "") return;
   if (!textValues.isMoving) return;
 
   let distX;
@@ -357,3 +330,57 @@ export const move = (e, textValues, setTextValues) => {
     bottom: prev.bottom !== null ? -newY : null,
   }));
 };
+
+// функции из textarea - пока там все не работает
+
+// первый вариант перемещения с внутренним стейтом
+// const [textArea, setTextArea] = useState({
+//   isMoving: false,
+//   oldX: null,
+//   oldY: null,
+// });
+
+// const pickup = (e) => {
+//   if (!(e.target === textMoving.current)) return;
+//   setTextArea((prev) => ({ ...prev, isMoving: true }))
+
+//   if (e.clientX) {
+//     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+//   } else {
+//     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
+//   };
+// };
+
+// const move = (e) => {
+//   if (!textArea.isMoving) return;
+
+//   let distX;
+//   let distY;
+
+//   if (e.clientX) {
+//     distX = e.clientX - textArea.oldX;
+//     distY = e.clientY - textArea.oldY;
+//   } else {
+//     distX = e.touches[0].clientX - textArea.oldX;
+//     distY = e.touches[0].clientY - textArea.oldY;
+//   }
+
+//   const newY = textValues.startTop + distY;
+//   const newX = textValues.startLeft + distX;
+
+//   setTextValues((prev) => ({
+//     ...prev,
+//     top: (prev.top !== null) ? newY : null,
+//     left: newX,
+//     bottom: (prev.bottom !== null) ? - newY : null,
+//   }))
+// };
+
+// const drop = (e) => {
+//   setTextArea((prev) => ({ ...prev, isMoving: false }))
+//   setTextValues((prev) => ({
+//     ...prev,
+//     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
+//     startLeft: prev.left
+//   }))
+// };

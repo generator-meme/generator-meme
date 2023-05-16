@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.db import models
+from django.db.models import Case, Exists, OuterRef, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
-from .models import Meme, Tag, Template
+from .models import Meme, Tag, Template, TemplateUsedTimes
 
 
 @admin.register(Meme)
@@ -30,19 +31,17 @@ class TemplateAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Image'
 
     formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
+        models.CharField: {'widget': TextInput(attrs={'size': '30'})},
     }
+    fields = ('name', 'image', 'is_published', 'tag', 'used_times')
+    readonly_fields = ('used_times', )
+    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
+    list_editable = ('name', 'is_published',)
 
-    list_display = ('image_tag', 'is_published',
-                    # при создании миграций комментировать строку tag
-                    'tag',
-                    'name')
-    list_editable = ('name', 'is_published',
-                     # при создании миграций комментировать строку tag
-                     'tag',
-                     )
     list_filter = ('is_published', 'tag')
     filter_horizontal = ('tag', )
+    search_fields = ('=id',)
+    search_help_text = ('Поиск по идентификатору шаблона (точное совпадение)')
     list_per_page = 10
     actions = ['publish', 'hide']
     actions_on_bottom = True
@@ -57,6 +56,27 @@ class TemplateAdmin(admin.ModelAdmin):
         '''Отменяет публикацию выбранных шаблонов мемов'''
         queryset.update(is_published=False)
 
+    def get_queryset(self, request):
+        return Template.objects.annotate(
+            used_times=Case(
+                When(Exists(
+                    TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    )
+                ), then=TemplateUsedTimes.objects.filter(
+                    template=OuterRef('pk')
+                ).values('used_times')),
+                default=Value(0)
+            )
+        )
+
+    @admin.display(
+        ordering='used_times',
+        description='Использовано раз',
+    )
+    def used_times(self, obj):
+        return obj.used_times
+
     class Media:
         css = {
             'all': ('admin/css/resize_widget.css',),
@@ -67,5 +87,8 @@ class TemplateAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
     list_display = ('name', 'slug')
-    list_filter = ('name',)
+    list_per_page = 50
+    search_fields = ('name',)
+    search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {'slug': ('name',)}
+    actions_on_bottom = True

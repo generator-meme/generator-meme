@@ -2,11 +2,12 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (ModelSerializer,
-                                        PrimaryKeyRelatedField, UUIDField,
+from rest_framework.serializers import (IntegerField, ModelSerializer,
+                                        PrimaryKeyRelatedField,
+                                        SerializerMethodField, UUIDField,
                                         ValidationError)
 
-from memes.models import Favorite, Meme, Tag, Template
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 from users.serializers import UserSerializer
 
 
@@ -21,6 +22,7 @@ class TemplateReadSerializer(ModelSerializer):
     '''Сериализатор модели Template для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
+    used_times = IntegerField()
 
     class Meta:
         model = Template
@@ -48,11 +50,19 @@ class MemeReadSerializer(ModelSerializer):
     '''Сериализатор модели Meme для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     author = UserSerializer(read_only=True)
-    template = TemplateReadSerializer(read_only=True)
+    template = SerializerMethodField()
 
     class Meta:
         model = Meme
         fields = '__all__'
+
+    def get_template(self, obj):
+        template = obj.template
+        template.used_times = TemplateUsedTimes.objects.get(
+            template=template
+        ).used_times
+        serializer = TemplateReadSerializer(template)
+        return serializer.data
 
 
 class MemeWriteSerializer(ModelSerializer):
@@ -75,6 +85,10 @@ class MemeWriteSerializer(ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         '''Проверяет на авторизацию, добавляет автора мема'''
+        template = validated_data['template']
+        obj, _ = TemplateUsedTimes.objects.get_or_create(template=template)
+        obj.used_times += 1
+        obj.save()
         request = self.context.get('request')
         if request.user.is_authenticated:
             return Meme.objects.create(
