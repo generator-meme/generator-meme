@@ -4,10 +4,14 @@ import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-
 import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
+import { createExtraText } from '../../utils/constants';
 
 const EditorButtonsList = ({
   setOutsideTopVisible,
   setOutsideBottomVisible,
+  extraTexts,
+  setExtraTexts,
+  imageSizes
 }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
@@ -20,6 +24,17 @@ const EditorButtonsList = ({
     if (bottom) {
       setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
     };
+  };
+
+  const addExtraText = () => {
+    if (extraTexts.length > 9) {
+      console.log("Вы не можете создавать более 10 дополнительных текстов")
+      return; //вывести сообщение пользователю?
+    };
+
+    const newExtraText = createExtraText(imageSizes);
+    console.log(newExtraText);
+    setExtraTexts([...extraTexts, newExtraText]);
   };
 
   useEffect(() => {

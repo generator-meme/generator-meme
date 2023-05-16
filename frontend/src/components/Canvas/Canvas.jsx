@@ -179,6 +179,8 @@ const Canvas = ({
     oldY: null,
   });
 
+  const [extraTexts, setExtraTexts] = useState([]);
+
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
     if (imageSizes) {
@@ -512,6 +514,22 @@ const Canvas = ({
                 setTextValues={setTopTextValues}
                 outsideTopTextValues={outsideTopTextValues}
               />
+              {/* {extraTexts.map((extraText, index) => {
+                return (
+                  <TextareaCanvas 
+                    key={index}
+                    textValues={extraText}
+                    imageSizes={imageSizes}
+                    setTextValues={(newExtraText) => {
+                      const newExtraTexts = [...extraTexts];
+                      newExtraTexts[index] = newExtraText;
+                      setExtraTexts(newExtraTexts)
+                    }}
+                    // setTextValues={setExtraTexts([...extraTexts, extraText])}
+                    outsideTopTextValues={outsideTopTextValues}
+                  />
+                );
+              })} */}
               <TextareaCanvas
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}
@@ -530,6 +548,9 @@ const Canvas = ({
             setOutsideTopVisible={setOutsideTopTextValues}
             setOutsideBottomVisible={setOutsideBottomTextValues}
             topTextValues={topTextValues}
+            extraTexts={extraTexts}
+            setExtraTexts={setExtraTexts}
+            imageSizes={imageSizes}
           />
           <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
