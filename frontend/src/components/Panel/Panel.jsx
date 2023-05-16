@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./Panel.css";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
-import { hexToRgb, changeOpacity, updateTextValues } from "../../utils/textPanelFunctions.js";
+import { hexToRgb, updateTextValues } from "../../utils/textPanelFunctions.js";
 
 function Panel ({
     textValues,
@@ -104,14 +104,6 @@ function Panel ({
       setTextValues((prev) => ({ ...prev, backColor: color }));
     };
   };
-
-  const setOpacity = (opacity) => {
-    changeOpacity(opacity, setTextValues, textValues);
-  };
-
-  const setOpacityLevel = (level) => {
-    setTextValues((prev) => ({ ...prev, opacityLevel: level}));
-  };
   
   const resetForm = (e) => {
     e.preventDefault();
@@ -145,7 +137,7 @@ function Panel ({
     <form ref={form} className="panel" noValidate>
       <fieldset className="panel__section">
         <FontFamilyOptions
-          selectedOption={textValues.selectedOption}
+          textValues={textValues}
           setTextValues={setTextValues}
           isOptionsOpen={isOptionsOpen}
           setIsOptionsOpen={setIsOptionsOpen}
@@ -159,7 +151,7 @@ function Panel ({
             checked={textValues.fontWeight}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, fontWeight: !textValues.fontWeight}))}
+            onChange={e => setTextValues({ ...textValues, fontWeight: !textValues.fontWeight})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_bold">
           </span>
@@ -169,7 +161,7 @@ function Panel ({
             checked={textValues.fontStyle}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, fontStyle: !textValues.fontStyle}))}
+            onChange={e => setTextValues({ ...textValues, fontStyle: !textValues.fontStyle})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_italic">
           </span>
@@ -179,7 +171,7 @@ function Panel ({
             checked={textValues.underline}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, underline: !textValues.underline}))}
+            onChange={e => setTextValues({ ...textValues, underline: !textValues.underline})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_underline">
           </span>
@@ -189,7 +181,7 @@ function Panel ({
             checked={textValues.lineThrough}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, lineThrough: !textValues.lineThrough}))}
+            onChange={e => setTextValues({ ...textValues, lineThrough: !textValues.lineThrough})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_line-through">
           </span>
@@ -213,7 +205,12 @@ function Panel ({
         </button>
         <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           {isOpenOpacity && (
-            <OpacityPanel setOpacity={setOpacity} opacityLevel={textValues.opacityLevel} setOpacityLevel={setOpacityLevel} closePalette={closeAllSmallWindows} />
+            <OpacityPanel
+              opacityLevel={textValues.opacityLevel}
+              textValues={textValues}
+              setTextValues={setTextValues}
+              closePalette={closeAllSmallWindows}
+            />
           )}
         </button>
       </fieldset>
@@ -223,7 +220,7 @@ function Panel ({
             checked={(textValues.fontPosition === "start")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: 'start'}))}
+            onChange={e => setTextValues({ ...textValues, fontPosition: 'start'})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_start">
           </span>
@@ -233,7 +230,7 @@ function Panel ({
             checked={(textValues.fontPosition === "center")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: "center"}))}
+            onChange={e => setTextValues({ ...textValues, fontPosition: "center"})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_center">
           </span>
@@ -243,7 +240,7 @@ function Panel ({
             checked={(textValues.fontPosition === "end")? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues((prev) => ({ ...prev, fontPosition: "end"}))}
+            onChange={e => setTextValues({ ...textValues, fontPosition: "end"})}
           ></input>
           <span className="panel__pseudo-input panel__pseudo-input_type_end">
           </span>

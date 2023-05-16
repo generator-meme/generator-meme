@@ -57,3 +57,6 @@ export const createExtraText = (imageSizes) => {
     oldY: null,
   };
 };
+
+export const regExpFromLastCommaToLastRoundBracket =
+  /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
