@@ -22,12 +22,12 @@ function Panel ({
 
   const increaseSize = (e) => {
     e.preventDefault();
-    setTextValues((prev) => ({ ...prev, fontSize: textValues.fontSize + 1}));
+    setTextValues({ ...textValues, fontSize: textValues.fontSize + 1});
   };
 
   const decreaseSize = (e) => {
     e.preventDefault();
-    setTextValues((prev) => ({ ...prev, fontSize: textValues.fontSize - 1}));
+    setTextValues({ ...textValues, fontSize: textValues.fontSize - 1});
   };
 
   const openTextColor = (e) => {
@@ -87,21 +87,21 @@ function Panel ({
   };
 
   const setTextColor = (color) => {
-    setTextValues((prev) => ({ ...prev, fillTextColor: color}));
+    setTextValues({ ...textValues, fillTextColor: color});
   };
 
   const setStrokeTextColor = (color) => {
-    setTextValues((prev) => ({ ...prev, strokeTextColor: color}));
+    setTextValues({ ...textValues, strokeTextColor: color});
   };
 
   const setBackColor = (color) => {
     if (color !== "transparent") {
-      setTextValues((prev) => ({
-        ...prev,
+      setTextValues({
+        ...textValues,
         backColor: `rgba(${hexToRgb(color)}, ${textValues.opacity})`,
-      }));
+      });
     } else {
-      setTextValues((prev) => ({ ...prev, backColor: color }));
+      setTextValues({ ...textValues, backColor: color });
     };
   };
   
