@@ -206,10 +206,8 @@ function Panel ({
         <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
           {isOpenOpacity && (
             <OpacityPanel
-              opacityLevel={textValues.opacityLevel}
               textValues={textValues}
               setTextValues={setTextValues}
-              closePalette={closeAllSmallWindows}
             />
           )}
         </button>

@@ -3,7 +3,6 @@ import "./OpacityPanel.css";
 import { regExpFromLastCommaToLastRoundBracket } from '../../utils/constants';
 
 function OpacityPanel ({
-    opacityLevel,
     textValues,
     setTextValues,
   }) {
@@ -57,9 +56,9 @@ function OpacityPanel ({
   return(
     <nav className="opacity-panel">
       <label class="opacity-panel__label">Прозрачность:</label>
-      <input className="opacity-panel__input-range" type="range" value={opacityLevel} name="opacity" onChange={(e) => changeOpacity(e)}/>
+      <input className="opacity-panel__input-range" type="range" value={textValues.opacityLevel} name="opacity" onChange={(e) => changeOpacity(e)}/>
       <div class="opacity-panel__input-number_wrapper">
-        <input className="opacity-panel__input-number" type="number" value={opacityLevel} name="opacity" min="0" max="100" onChange={(e) => changeOpacity(e)}/> 
+        <input className="opacity-panel__input-number" type="number" value={textValues.opacityLevel} name="opacity" min="0" max="100" onChange={(e) => changeOpacity(e)}/> 
         <button class="opacity-panel__input-number-upBtn" onClick={(e) => increaseOpacity(e)}></button>
         <button class="opacity-panel__input-number-downBtn" onClick={(e) => decreaseOpacity(e)}></button>
       </div>
