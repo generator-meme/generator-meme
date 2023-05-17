@@ -83,44 +83,34 @@ const TextareaCanvas = ({
   }, [text.current]);
 
   useEffect(() => {
+    if (!textValues.isOutside) {
       window.addEventListener("mousemove", onMove);
       window.addEventListener("touchmove", onMove, {passive: true});
+      window.addEventListener("mouseup", drop);
+      window.addEventListener("touchend", drop, {passive: true});
 
       return () => {
         window.removeEventListener("mousemove", onMove);
         window.removeEventListener("touchmove", onMove, {passive: true});
+        window.removeEventListener("mouseup", drop);
+        window.removeEventListener("touchend", drop, {passive: true});
       };
+    }
   }, [textValues.isMoving]);
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
-      if (
-        textMoving.current?.contains(e.target) ||
-        panel.current?.contains(e.target)
-      )
-        return;
-      setTextValues((prev) => ({ ...prev, isCurrent: false }));
+      if (!textMoving.current?.contains(e.target) && !panel.current?.contains(e.target) && (textValues.isCurrent || textValues.hover)) {
+        console.log(textValues.name, "remove current")
+        setTextValues({ ...textValues, isCurrent: false, hover: false });
+      }
+    };
+    window.addEventListener("click", removeCurrentPosition);
+    return () => {
+      window.removeEventListener("click", removeCurrentPosition);
     };
 
-    if (textValues.isOutside) {
-      window.addEventListener("click", removeCurrentPosition);
-      return () => {
-        window.removeEventListener("click", removeCurrentPosition);
-      };
-    } else {
-      window.addEventListener("mouseup", drop);
-      window.addEventListener("touchend", drop, {passive: true});
-
-      window.addEventListener("click", removeCurrentPosition);
-
-      return () => {
-        window.removeEventListener("mouseup", drop);
-        window.removeEventListener("touchend", drop, {passive: true});
-
-        window.removeEventListener("click", removeCurrentPosition);
-      };
-    }
-  }, []);
+  }, [textValues, setTextValues]);
 
   if (!textValues.isVisible) return null;
 
@@ -148,10 +138,10 @@ const TextareaCanvas = ({
         onMouseDown={pickup}
         onTouchStart={pickup}
         onMouseEnter={(e) =>
-          setTextValues((prev) => ({ ...prev, hover: true }))
+          setTextValues({ ...textValues, hover: true })
         }
         onMouseLeave={(e) =>
-          setTextValues((prev) => ({ ...prev, hover: false }))
+          setTextValues({ ...textValues, hover: false })
         }
       >
         <div className="textarea__container">
@@ -179,9 +169,9 @@ const TextareaCanvas = ({
             className="textarea__text"
             type="text"
             value={textValues.text}
-            onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
+            onChange={e => setTextValues({ ...textValues, text: e.target.value})}
             placeholder="Введите текст"
-            onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
+            onClick={e => setTextValues({ ...textValues, isCurrent: true })}
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: textValues.maxWidth,
