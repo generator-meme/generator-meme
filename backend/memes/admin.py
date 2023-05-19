@@ -4,7 +4,7 @@ from django.db.models import Case, Exists, OuterRef, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
-from .models import Meme, Tag, Template, TemplateUsedTimes
+from memes.models import Meme, Tag, Template, TemplateUsedTimes
 
 
 @admin.register(Meme)
