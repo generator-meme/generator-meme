@@ -86,7 +86,7 @@ class TemplateAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
-    list_display = ('name', 'slug')
+    list_display = ('id', 'name', 'slug')
     list_per_page = 50
     search_fields = ('name',)
     search_help_text = ('Поиск по имени тега')
