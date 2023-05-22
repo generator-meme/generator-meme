@@ -9,12 +9,12 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import SAFE_METHODS
 
-from .filters import TagSearchFilter
-from .permissions import AdminOrReadOnly
-from .serializers import (FavoriteSerializer, MemeReadSerializer,
-                          MemeWriteSerializer, TagSerializer,
-                          TemplateReadSerializer, TemplateWriteSerializer)
-from .services import create_delete_relation
+from api.filters import TagSearchFilter, TemplateFilter
+from api.permissions import AdminOrReadOnly
+from api.serializers import (FavoriteSerializer, MemeReadSerializer,
+                             MemeWriteSerializer, TagSerializer,
+                             TemplateReadSerializer, TemplateWriteSerializer)
+from api.services import create_delete_relation
 from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
@@ -50,7 +50,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     """Представление для модели Meme"""
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ('tag',)
+    filterset_class = TemplateFilter
     ordering_fields = ['created_at']
 
     def get_queryset(self):
