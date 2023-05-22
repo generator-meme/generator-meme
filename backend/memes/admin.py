@@ -9,9 +9,15 @@ from .models import Meme, Tag, Template, TemplateUsedTimes
 
 @admin.register(Meme)
 class MemeAdmin(admin.ModelAdmin):
-    '''Админ-панель модели Meme с фильтрацией по тегам'''
-    list_display = ('image', 'author', 'template')
-    list_filter = ('template',)
+    """Админ-панель модели Meme с фильтрацией по тегам."""
+
+    def image_tag(self, obj):
+        """Форматирование картинки мема для вывода в общем списке."""
+        return format_html(
+            '<img src="{}" width="430" height="380" />'.format(obj.image.url))
+    
+    list_display = ('image_tag', 'author', 'template', 'created_at')
+    list_filter = ('author',)
 
 
 @admin.register(Template)

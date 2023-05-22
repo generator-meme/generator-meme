@@ -21,13 +21,15 @@ from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 class MemeViewSet(viewsets.ModelViewSet):
     '''Представление для модели готового мема'''
     queryset = Meme.objects.all()
+    filter_backends = [DjangoFilterBackend,]
+    filterset_fields = ('author',)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
             return MemeReadSerializer
         return MemeWriteSerializer
 
-    @method_decorator(cache_page(60))  # добавим кеширование
+    @method_decorator(cache_page(60))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
