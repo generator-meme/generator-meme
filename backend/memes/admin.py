@@ -15,7 +15,7 @@ class MemeAdmin(admin.ModelAdmin):
         """Форматирование картинки мема для вывода в общем списке."""
         return format_html(
             '<img src="{}" width="430" height="380" />'.format(obj.image.url))
-    
+
     list_display = ('image_tag', 'author', 'template', 'created_at')
     list_filter = ('author',)
 
