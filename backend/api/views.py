@@ -52,7 +52,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_queryset(self):
-        return Template.objects.filter(
+        queryset = Template.objects.filter(
             is_published=True).annotate(
             used_times=Case(
                 When(Exists(
@@ -65,6 +65,14 @@ class TemplateViewSet(viewsets.ModelViewSet):
                 default=Value(0)
             )
         ).order_by('-used_times')
+        user = self.request.user
+        if user.is_authenticated:
+            return queryset.annotate(
+                is_favorited=Exists(
+                    Favorite.objects.filter(user=user, template=OuterRef('pk'))
+                ))
+
+        return queryset.annotate(is_favorited=Value(False))
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
