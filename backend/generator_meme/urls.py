@@ -27,3 +27,7 @@ urlpatterns += [
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0),
             name='schema-redoc'),
 ]
+
+admin.site.site_header = 'Панель адмеместратора'
+admin.site.site_title = 'ilovememes'
+admin.site.index_title = 'Админка'

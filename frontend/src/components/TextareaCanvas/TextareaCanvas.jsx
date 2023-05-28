@@ -1,33 +1,21 @@
 import React, { useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
-import TextareaAutosize from "react-textarea-autosize";
-import Panel from "../Panel/Panel";
+import TextareaAutosize from 'react-textarea-autosize';
+import Panel from '../Panel/Panel';
+import { updateTextValues } from "../../utils/textPanelFunctions.js";
 
 const TextareaCanvas = ({
-  textValues,
-  imageSizes,
-  setTextValues,
-  setCurrentTextarea,
-  setBackColor,
-  setOpacity,
-}) => {
+    textValues,
+    imageSizes,
+    setTextValues,
+    setCurrentTextarea,
+    outsideTopTextValues
+  }) => {
+
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
-
-  useEffect(() => {
-    // подписка на изменение размера области textarea
-    if (text.current !== null) {
-      new ResizeObserver(() => {
-        setTextValues((prev) => ({
-          ...prev,
-          width: text.current?.offsetWidth,
-          height: text.current?.offsetHeight,
-        }));
-      }).observe(text.current);
-    }
-  }, [text.current]);
 
   // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
@@ -47,31 +35,6 @@ const TextareaCanvas = ({
     }
   };
 
-  // const move = (e) => { // теперь в dunctionForCanvas
-  //   if (!textValues.isMoving) return;
-
-  //   let distX;
-  //   let distY;
-
-  //   if (e.clientX) {
-  //     distX = e.clientX - textValues.oldX;
-  //     distY = e.clientY - textValues.oldY;
-  //   } else {
-  //     distX = e.touches[0].clientX - textValues.oldX;
-  //     distY = e.touches[0].clientY - textValues.oldY;
-  //   }
-
-  //   const newY = textValues.startTop + distY;
-  //   const newX = textValues.startLeft + distX;
-
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     top: (prev.top !== null) ? newY : null,
-  //     left: newX,
-  //     bottom: (prev.bottom !== null) ? - newY : null,
-  //   }))
-  // };
-
   const drop = (e) => {
     setTextValues((prev) => ({
       ...prev,
@@ -81,66 +44,38 @@ const TextareaCanvas = ({
     }));
   };
 
-  // первый вариант перемещения с внутренним стейтом
-  // const [textArea, setTextArea] = useState({
-  //   isMoving: false,
-  //   oldX: null,
-  //   oldY: null,
-  // });
-
-  // const pickup = (e) => {
-  //   if (!(e.target === textMoving.current)) return;
-  //   setTextArea((prev) => ({ ...prev, isMoving: true }))
-
-  //   if (e.clientX) {
-  //     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
-  //   } else {
-  //     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
-  //   };
-  // };
-
-  // const move = (e) => {
-  //   if (!textArea.isMoving) return;
-
-  //   let distX;
-  //   let distY;
-
-  //   if (e.clientX) {
-  //     distX = e.clientX - textArea.oldX;
-  //     distY = e.clientY - textArea.oldY;
-  //   } else {
-  //     distX = e.touches[0].clientX - textArea.oldX;
-  //     distY = e.touches[0].clientY - textArea.oldY;
-  //   }
-
-  //   const newY = textValues.startTop + distY;
-  //   const newX = textValues.startLeft + distX;
-
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     top: (prev.top !== null) ? newY : null,
-  //     left: newX,
-  //     bottom: (prev.bottom !== null) ? - newY : null,
-  //   }))
-  // };
-
-  // const drop = (e) => {
-  //   setTextArea((prev) => ({ ...prev, isMoving: false }))
-  //   setTextValues((prev) => ({
-  //     ...prev,
-  //     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-  //     startLeft: prev.left
-  //   }))
-  // };
-
   const deleteText = (e) => {
     e.preventDefault();
-    // console.log(e.target);
     if (e.target === deleteTextButton.current) {
-      setTextValues((prev) => ({ ...prev, isVisible: false }));
-    }
-    // setTextValues((prev) => ({ ...prev, isVisible: false }));
+      updateTextValues(setTextValues, textValues, true);
+    };
   };
+
+  // useEffect(() => { // подписка на изменение размера области textarea
+  //   if (text.current !== null) {
+  //     new ResizeObserver(
+  //       () => {
+  //       console.log(text.current?.offsetHeight);
+  //       if (textValues.isOutside && text.current?.offsetHeight > 80) {  // автоматическое уменьшение размера текста (работает неправильно из-за рассинхронизации курсора на маленьких размерах шрифта)
+  //         setTextValues((prev) => ({ ...prev, height: 80, fontSize: textValues.fontSize * 0.62}));
+  //       } else {
+  //         setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
+  //       }
+  //     }
+  //     ).observe(text.current);
+  //   };
+
+  // }, [text.current]);
+
+  useEffect(() => { // подписка на изменение размера области textarea
+    if (text.current !== null) {
+      new ResizeObserver(
+        () => {
+        setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
+      }
+      ).observe(text.current);
+    };
+  }, [text.current]);
 
   useEffect(() => {
     const removeCurrentPosition = (e) => {
@@ -152,15 +87,22 @@ const TextareaCanvas = ({
       setTextValues((prev) => ({ ...prev, isCurrent: false }));
     };
 
-    window.addEventListener("mouseup", drop);
-    window.addEventListener("touchend", drop, { passive: true });
-    window.addEventListener("click", removeCurrentPosition);
+    if (textValues.isOutside) {
+      window.addEventListener("click", removeCurrentPosition);
+      return () => {
+        window.removeEventListener("click", removeCurrentPosition);
+      };
+    } else {
+      window.addEventListener("mouseup", drop);
+      window.addEventListener("touchend", drop, {passive: true});
+      window.addEventListener("click", removeCurrentPosition);
 
-    return () => {
-      window.removeEventListener("mouseup", drop);
-      window.removeEventListener("touchend", drop, { passive: true });
-      window.removeEventListener("click", removeCurrentPosition);
-    };
+      return () => {
+        window.removeEventListener("mouseup", drop);
+        window.removeEventListener("touchend", drop, {passive: true});
+        window.removeEventListener("click", removeCurrentPosition);
+      };
+    }
   }, []);
 
   if (!textValues.isVisible) return null;
@@ -168,7 +110,7 @@ const TextareaCanvas = ({
   return (
     <>
       <div
-        className="textarea__moving"
+        className={`textarea__box ${textValues.isOutside? "textarea__box_type_ungrabbing" : "textarea__box_type_grabbing"}`}
         ref={textMoving}
         style={{
           top: textValues.top,
@@ -177,6 +119,7 @@ const TextareaCanvas = ({
           maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
+          // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
             textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
@@ -199,43 +142,45 @@ const TextareaCanvas = ({
               <button
                 ref={deleteTextButton}
                 className="textarea__delete-text"
-                onClick={(e) => deleteText(e)}
-              ></button>
-              <div className="textarea__resizer"></div>
-            </>
+                onClick={e => deleteText(e)}
+              >
+              </button>
+              <div
+                className="textarea__resizer"
+                style={{
+                  display: textValues.isOutside ? "none" : "block",
+                }}
+              >
+              </div>
+          </>
           )}
           <TextareaAutosize
+            // wrap={`${textValues.isOutside ? "off" : "hard"}`}
             wrap="hard"
             ref={text}
             className="textarea__text"
             type="text"
             value={textValues.text}
-            onChange={(e) =>
-              setTextValues((prev) => ({ ...prev, text: e.target.value }))
-            }
-            placeholder="Введите свой текст"
-            onClick={(e) =>
-              setTextValues((prev) => ({ ...prev, isCurrent: true }))
-            }
+            onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
+            placeholder="Введите текст"
+            onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: textValues.maxWidth,
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,
+              // maxHeight: textValues.isOutside ? 70 : imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
               fontWeight: textValues.fontWeight ? 700 : 400,
               fontSize: textValues.fontSize,
               lineHeight: 1.12,
               textAlign: textValues.fontPosition,
-              // color: textValues.fillTextColor,
-              paddingLeft: 30,
-              paddingRight: 30,
-              paddingBottom:
-                textValues.name === "bottomTextValues" && textValues.height > 80
-                  ? 12
-                  : 0,
+              paddingLeft: textValues.isOutside ? 28 : 30,
+              paddingRight: textValues.isOutside ? 28 : 30,
+              paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
+              resize: textValues.isOutside ? "none" : "horizontal",
             }}
             autocorrect="off"
             spellcheck="false"
@@ -247,14 +192,14 @@ const TextareaCanvas = ({
           ref={panel}
           className="textarea__panel"
           style={{
-            top: -imageSizes.offsetY - 36 - 23,
+            top: outsideTopTextValues.isVisible? - 36 - 30 - 80 : - 36 - 30,
+            // top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
+            left: (imageSizes.width < 609) ? - ((609 - imageSizes.width) / 2) : 0,
           }}
         >
           <Panel
             textValues={textValues}
             setTextValues={setTextValues}
-            setBackColor={setBackColor}
-            setOpacity={setOpacity}
           />
         </div>
       )}

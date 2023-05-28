@@ -1,0 +1,102 @@
+.buttons__container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    max-width: 442px;
+    padding: 0;
+    margin: 0;
+}
+
+.buttons__bth {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Rubik";
+    font-size: 24px;
+    line-height: 25px;
+    text-align: center;
+    color: #000;
+    background-color: transparent;
+    border: none;
+    max-width: 160px;
+    row-gap: 15px;
+    cursor: pointer;
+}
+
+.buttons__bth_type_outside-text {
+    position: relative;
+}
+
+.buttons__bth-list {
+    font-size: 24px;
+    position: absolute;
+    list-style: none;
+    width: 245px;
+    height: 95px;
+    border-radius: 20px 10px 10px 0;
+    border: solid 1px #AD27DC;
+    background-color: #FFFCED;
+    right: -210px;
+    bottom: 67px;
+    padding: 7px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 3;
+    color: #000;
+}
+
+.buttons__bth-list-element:hover {
+    font-weight: 500;
+}
+
+.buttons__bth-img {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 60px;
+}
+
+.buttons__bth-main-image {
+    border-radius: 10px;
+}
+
+.buttons__svg-plus {
+    position: absolute;
+    bottom: -9px;
+    right: 0px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.buttons__bth:hover {
+    color: #AD27DC;
+}
+
+/*изменение цвета svg при наведении*/
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(2n - 1),
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(6),
+.buttons__bth:hover .buttons__svg-plus circle,
+.buttons__bth:hover .buttons__svg-plus path,
+.buttons__bth:hover .buttons__svg-add-image path:nth-of-type(1),
+.buttons__bth:hover .buttons__svg-add-image path:nth-of-type(2) {
+    stroke: #AD27DC;
+}
+
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(2),
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(4),
+.buttons__bth:hover .buttons__svg-add-text path,
+.buttons__bth:hover .buttons__svg-add-image path:nth-of-type(4),
+.buttons__bth:hover .buttons__svg-add-image path:nth-of-type(5) {
+    fill: #AD27DC;
+}
+
+.buttons__bth-text {
+    margin: 0;
+    padding: 0;
+}
