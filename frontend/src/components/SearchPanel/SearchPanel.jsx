@@ -1,50 +1,86 @@
 import styles from "./SearchPanel.module.css";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import api from "../../utils/api";
-import { useLocation } from "react-router-dom";
+import Chip from "@mui/material/Chip";
+import { Tag } from "../Tag/Tag";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
   const [isToggleSuggestPanelColor, setIsToggleSuggestPanelColor] =
-    useState(false);
+    useState(true);
+  const [tagArray, setTagArray] = useState([]);
+  console.log(searchValue, tagArray);
+
+  const handleSpace = (e) => {
+    if (searchValue.trim() !== "" && e.keyCode === 32) {
+      const tempTagArray = [...tagArray, searchValue.trim()];
+      setTagArray(tempTagArray);
+      setSearchValue("");
+    }
+  };
+
   const onChangeInputValue = (e) => {
     e.preventDefault();
     setIsToggleSuggestPanelColor(true);
-    setSearchValue(e.target.value);
+    setSearchValue(e.target.value.trim());
   };
+
   const yellowColorOfSuggestPanel = {
     backgroundColor: "rgba(253, 255, 161, 0.77)",
+    overflowY: "hidden",
   };
   const whiteColorOfSuggestPanel = {
     backgroundColor: "#fff",
   };
+  const stringToSearch = useMemo(() => {
+    const tempTags = tags;
+    const tagIdArray = tempTags.filter((tag) => {
+      let tempTag;
+      console.log(tempTag);
+      for (let i = 0; i < tagArray.length; i++) {
+        if (tag.name === tagArray[i]) {
+          tempTag = tagArray[i];
+        }
+      }
+
+      return tempTag ? true : false;
+    });
+    return tagIdArray
+      .map((item) => {
+        return item.id;
+      })
+      .join(",");
+  }, [tagArray]);
+
+  console.log(stringToSearch);
 
   const submitToSearch = async (e) => {
+    console.log("in submit");
     e.preventDefault();
     e.stopPropagation();
-    const tempTags = tags;
-    const tagId = tempTags.filter((tag) => {
-      return tag.name === searchValue;
-    })[0]?.id;
+
     try {
-      if (!searchValue) {
+      if (tagArray.length === 0) {
+        console.log("zero");
         setFilterMemes(initMemes);
         return;
-      } else if (tagId) {
-        const filteredMem = await api.getfilteredTemplates(tagId);
+      } else if (stringToSearch) {
+        const filteredMem = await api.getfilteredTemplates(stringToSearch);
         setFilterMemes(filteredMem);
       } else {
         setFilterMemes([]);
       }
-      setSearchValue("");
     } catch {
       console.log("err");
     }
   };
   // console.log(tags);
   const clickHandle = (tag) => {
-    setSearchValue(tag);
     setIsToggleSuggestPanelColor(false);
+    setTagArray(() => {
+      return [...tagArray, tag];
+    });
+    setSearchValue("");
   };
   const filteredTags = useMemo(() => {
     return tags.filter((item) => {
@@ -57,31 +93,67 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
       );
     });
   }, [tags, searchValue]);
-  // console.log(filteredTags);
+
+  const onDelete = (id) => {
+    console.log(id, tagArray);
+    const tempTagArray = tagArray;
+    const newTagArray = tempTagArray.filter((item) => {
+      return item !== id;
+    });
+    setTagArray(newTagArray);
+  };
 
   return (
-    <div className={styles.wrap_search_panel}>
-      <form className={styles.form_search_panel} onSubmit={submitToSearch}>
-        <input
-          value={searchValue}
-          onChange={onChangeInputValue}
-          type="text"
-          placeholder="Поиск по шаблонам"
-          className={styles.search_input}
-        />
-        <button className={styles.icon_wrap}> </button>
-      </form>
+    <div className={styles.wrap_content}>
       <div
-        className={styles.suggestions_wrap}
+        className={styles.wrap_background_form}
         style={
           isToggleSuggestPanelColor && !(filteredTags.length === 0)
             ? whiteColorOfSuggestPanel
             : yellowColorOfSuggestPanel
         }
       >
-        {filteredTags.slice(0, 3).map((tag) => {
-          return <div onClick={() => clickHandle(tag.name)}>{tag.name}</div>;
-        })}
+        <div className={styles.wrap_search_panel}>
+          <form className={styles.form_search_panel}>
+            {tagArray.map((tag, id) => {
+              return (
+                <div className={styles.tag_wrap}>
+                  <Tag
+                    id={id}
+                    onClose={() => {
+                      onDelete(tag);
+                    }}
+                    name={tag}
+                  ></Tag>
+                </div>
+              );
+            })}
+
+            <input
+              value={searchValue}
+              onFocus={(e) => (e.target.placeholder = "")}
+              onKeyDown={handleSpace}
+              onChange={onChangeInputValue}
+              onBlur={(e) => (e.target.placeholder = "Поиск по шаблонам")}
+              type="text"
+              placeholder="Поиск по шаблонам"
+              className={styles.search_input}
+            />
+          </form>
+          <button
+            className={styles.button_form}
+            onClick={submitToSearch}
+          ></button>
+        </div>
+        <div className={styles.suggestions_wrap}>
+          {filteredTags.map((tag) => {
+            return (
+              <div key={tag.id} onClick={() => clickHandle(tag.name)}>
+                <p>{tag.name}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
