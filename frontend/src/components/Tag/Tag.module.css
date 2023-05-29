@@ -1,0 +1,28 @@
+.wrap_tag {
+  border-radius: 20px;
+  height: 47px;
+  background-color: #d3aae7;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.wrap_tag > p {
+  font-size: 23px;
+  padding: 10px;
+}
+.wrap {
+  background-color: #fff;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 20px;
+  position: relative;
+}
+.close_icon {
+  position: absolute;
+  top: 6px;
+  right: 0px;
+}
