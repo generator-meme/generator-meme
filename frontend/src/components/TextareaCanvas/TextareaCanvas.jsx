@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
@@ -17,6 +17,7 @@ const TextareaCanvas = ({
   const textMoving = useRef(null);
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
+  const [placeholderText, setPlaceholderText] = useState("Введите текст");
 
   // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
@@ -170,7 +171,9 @@ const TextareaCanvas = ({
             type="text"
             value={textValues.text}
             onChange={e => setTextValues({ ...textValues, text: e.target.value})}
-            placeholder="Введите текст"
+            placeholder={placeholderText}
+            onFocus={e => setPlaceholderText("")}
+            onBlur={e => setPlaceholderText("Введите текст")}
             onClick={e => setTextValues({ ...textValues, isCurrent: true })}
             style={{
               width: textValues.width || imageSizes?.width,
