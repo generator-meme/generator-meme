@@ -385,7 +385,49 @@ const Canvas = ({
       ));
     };
 
-  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideTextHeight, outsideTopTextValues, outsideBottomTextValues]);
+    extraTexts.forEach((element)=> {
+      if (element.isVisible) { // дополнительный текст основные характеристики
+      const elementOffsetY = element.top + (outsideTopTextValues.isVisible ? outsideTextHeight : 0);
+      const elementOffsetX = element.left;
+
+      ctx.font = `${element.fontStyle ? "italic" : ""}
+                  ${element.fontWeight ? "bold" : ""}
+                  ${element.fontSize}px ${element.fontFamily}`;
+      ctx.textAlign = element.fontPosition;
+
+      const elementMarginX = calculateMarginX(
+        element.width,
+        element.fontPosition,
+        textMarginX,
+        elementOffsetX
+      ); // вычисление отступа по оси X в зависимости от расположения текста
+      const elementTextWrap = wrapText(
+        ctx,
+        element.text,
+        element.width
+      ); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      elementTextWrap
+        .split("\n")
+        .forEach((t, i) =>
+          drawText(
+            t,
+            i,
+            ctx,
+            true,
+            canvasHeight,
+            elementOffsetY,
+            textMarginYBottom,
+            textMarginYTop,
+            elementMarginX,
+            element
+          )
+        );
+    }
+    })
+
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideTextHeight, outsideTopTextValues, outsideBottomTextValues, extraTexts]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
@@ -514,7 +556,7 @@ const Canvas = ({
                 setTextValues={setTopTextValues}
                 outsideTopTextValues={outsideTopTextValues}
               />
-              {/* {extraTexts.map((extraText, index) => {
+              {extraTexts.map((extraText, index) => {
                 return (
                   <TextareaCanvas 
                     key={index}
@@ -525,11 +567,10 @@ const Canvas = ({
                       newExtraTexts[index] = newExtraText;
                       setExtraTexts(newExtraTexts)
                     }}
-                    // setTextValues={setExtraTexts([...extraTexts, extraText])}
                     outsideTopTextValues={outsideTopTextValues}
                   />
                 );
-              })} */}
+              })}
               <TextareaCanvas
                 textValues={bottomTextValues}
                 imageSizes={imageSizes}

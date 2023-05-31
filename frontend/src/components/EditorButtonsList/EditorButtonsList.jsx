@@ -27,6 +27,8 @@ const EditorButtonsList = ({
   };
 
   const addExtraText = () => {
+    console.log("addExtraText");
+
     if (extraTexts.length > 9) {
       console.log("Вы не можете создавать более 10 дополнительных текстов")
       return; //вывести сообщение пользователю?
@@ -82,14 +84,15 @@ const EditorButtonsList = ({
       <li>
         <button 
           className="buttons__bth buttons__bth_type_add-text"
-          onClick={e => e.preventDefault()}
+          // onClick={e => e.preventDefault()}
+          onClick={e => addExtraText(e)}
           >
           <div className="buttons__bth-img">
             <AddTextImage className="buttons__svg-add-text" />
-            <Plus className="buttons__svg-plus" />
+            <Plus className="buttons__svg-plus buttons__svg-plus-text" />
           </div>
           <p className="buttons__bth-text">добавить текст</p>
-          <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
+          {/* <p className="buttons__prompt">В РАЗРАБОТКЕ</p> */}
         </button>
       </li>
       <li>
@@ -99,7 +102,7 @@ const EditorButtonsList = ({
         >
           <div className="buttons__bth-img">
             <AddImageImage className="buttons__svg-add-image" />
-            <Plus className="buttons__svg-plus" />
+            <Plus className="buttons__svg-plus buttons__svg-plus-image" />
           </div>
           <p className="buttons__bth-text">добавить изображение</p>
           <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
