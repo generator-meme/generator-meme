@@ -10,7 +10,15 @@ SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '82.146.61.116', 'ilovememes.ru', 'host.docker.internal']
+ALLOWED_HOSTS = [
+    'localhost',
+    '82.146.61.116',
+    'ilovememes.ru',
+    'host.docker.internal',
+    'testmemes.ddns.net',
+]
+
+CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru', 'https://testmemes.ddns.net']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,8 +30,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    # 'social_django',
-
+    'drf_yasg',
+    'social_django',
     'django_filters',
     'api',
     'memes',
@@ -42,10 +50,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'generator_meme.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -53,8 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'social_django.context_processors.backends',
-                # 'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -72,7 +82,6 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT')
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -119,13 +128,16 @@ REST_FRAMEWORK = {
     ],
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
+
 
 DJOSER = {
     "HIDE_USER": True,
@@ -137,19 +149,42 @@ DJOSER = {
         "user": "users.serializers.UsersSerializer",
         "current_user": "users.serializers.UsersSerializer",
     },
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SITE_NAME = "Generator-meme"
+DOMAIN = os.getenv('DOMAIN')
 
 # SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.vk.VKOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.telegram.TelegramAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
-# SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
-# SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_KEY')
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_TELEGRAM_BOT_TOKEN = os.getenv('SOCIAL_AUTH_TELEGRAM_BOT_TOKEN')
+
+# Setup support for proxy headers
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# SOCIAL_AUTH_PIPELINE = (
+#     'social_core.pipeline.social_auth.associate_by_email',
+# )

@@ -1,8 +1,8 @@
-name: Django-app workflow
+name: main workflow
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main" ]
 
 
 jobs:
@@ -62,10 +62,11 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            cd infra/site
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/generator-meme
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-generator-meme
-            docker-compose stop
-            docker-compose rm backend
+            docker compose stop
+            docker compose rm backend
             rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -77,6 +78,21 @@ jobs:
             echo DOMAIN=${{ secrets.DOMAIN }} >> .env
             echo EMAIL=${{ secrets.EMAIL }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
-            docker-compose up -d --build
-            sudo docker-compose exec -T backend python manage.py migrate
-            sudo docker-compose exec -T backend python manage.py collectstatic --no-input
+            echo PGADMIN_DEFAULT_EMAIL=${{ secrets.PGADMIN_DEFAULT_EMAIL }} >> .env
+            echo PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }} >> .env
+            echo DEFAULT_FROM_EMAIL=${{ secrets.SITE_DEFAULT_FROM_EMAIL }} >> .env
+            echo EMAIL_HOST=${{ secrets.SITE_EMAIL_HOST }} >> .env
+            echo EMAIL_HOST_USER=${{ secrets.SITE_EMAIL_HOST_USER }} >> .env
+            echo EMAIL_HOST_PASSWORD=${{ secrets.SITE_EMAIL_HOST_PASSWORD }} >> .env
+            echo SOCIAL_AUTH_YANDEX_OAUTH2_KEY=${{ secrets.SITE_SOCIAL_AUTH_YANDEX_OAUTH2_KEY }} >> .env
+            echo SOCIAL_AUTH_YANDEX_OAUTH2_SECRET=${{ secrets.SITE_SOCIAL_AUTH_YANDEX_OAUTH2_SECRET }} >> .env
+            echo SOCIAL_AUTH_TELEGRAM_BOT_TOKEN=${{ secrets.SITE_SOCIAL_AUTH_TELEGRAM_BOT_TOKEN }} >> .env
+            echo SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SITE_SOCIAL_AUTH_VK_OAUTH2_KEY }} >> .env
+            echo SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.SITE_SOCIAL_AUTH_VK_OAUTH2_SECRET }} >> .env
+            echo SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=${{ secrets.SITE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY }} >> .env
+            echo SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=${{ secrets.SITE_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET }} >> .env
+            docker compose up -d --build
+            sudo docker compose exec -T backend python manage.py migrate
+            sudo docker compose exec -T backend python manage.py collectstatic --no-input
+            sudo docker restart proxy-proxy-1
+            sudo docker image prune --force

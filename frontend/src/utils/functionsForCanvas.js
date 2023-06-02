@@ -33,15 +33,25 @@ export const contain = fit(true);
 export const cover = fit(false);
 
 // расчет координаты по оси X текста
-export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
+export const calculateMarginX = (width, fontPosition, textMargin, offsetX) => {
   if (fontPosition === "start") {
     return textMargin + offsetX;
   } else if (fontPosition === "end") {
-    return canvas.width - offsetX - textMargin;
+    return width - textMargin + offsetX;
   } else {
-    return canvas.width / 2;
+    return width / 2 + offsetX;
   }
 };
+
+// export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
+//   if (fontPosition === "start") {
+//     return textMargin + offsetX;
+//   } else if (fontPosition === "end") {
+//     return canvas.width - offsetX - textMargin;
+//   } else {
+//     return canvas.width / 2;
+//   }
+// };
 
 // отрисовка подчеркивания или зачеркивания
 export const addLineToText = (ctx, text, x, y, fontSize) => {
@@ -101,8 +111,14 @@ export const lineHeight = (fontSize) => {
 
 // функция добавления "/n" к строкам, если они не вмещаются в допустимую ширину
 export const wrapText = (ctx, text, maxWidth) => {
+  let textArr = text.split("\n"); // добавление пробела после каждого знака переноса
+  for (let i = 0; i < textArr.length - 1; i++) {
+    textArr[i] += "\n ";
+  }
+  let textWithSpace = textArr.join("");
+
   // First, start by splitting all of our text into words, but splitting it into an array split by spaces
-  let words = text.split(" ");
+  let words = textWithSpace.split(" ");
   let line = ""; // This will store the text of the current line
   let testLine = ""; // This will store the text when we add a word, to test if it's too long
   let lineArray = []; // This is an array of lines, which the function will return
@@ -113,6 +129,7 @@ export const wrapText = (ctx, text, maxWidth) => {
     testLine += `${words[n]} `;
     let metrics = ctx.measureText(testLine);
     let testWidth = metrics.width;
+
     // If the width of this test line is more than the max width
     if (testWidth > maxWidth && n > 0) {
       // Then the line is finished, add to line '\n' and push the current line into "lineArray"
@@ -121,10 +138,17 @@ export const wrapText = (ctx, text, maxWidth) => {
       // Update line and test line to use this word as the first word on the next line
       line = `${words[n]} `;
       testLine = `${words[n]} `;
+    } else if (words[n].includes("\n")) {
+      // проверка на наличие переноса в слове, обнуление line и testLine в этом случае
+      line += `${words[n]} `;
+      lineArray.push(line);
+      line = "";
+      testLine = "";
     } else {
       // If the test line is still less than the max width, then add the word to the current line
       line += `${words[n]} `;
     }
+
     // If we never reach the full max width, then there is only one line.. so push it into the lineArray so we return something
     if (n === words.length - 1) {
       lineArray.push(line);
@@ -134,111 +158,54 @@ export const wrapText = (ctx, text, maxWidth) => {
   return lineArray.join("");
 };
 
-// изменение opacity
-export const changeOpacity = (opacity, setValues, values) => {
-  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-  const regExpFromLastCommaToLastRoundBracket =
-    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setValues((prev) => ({ ...prev, opacity: opacity }));
-  if (values.backColor !== "transparent") {
-    // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = values.backColor.replace(
-      regExpFromLastCommaToLastRoundBracket,
-      `,${opacity})`
-    );
-    setValues((prev) => ({ ...prev, backColor: replacedColor }));
-    return;
-  }
-  return;
-};
-
-// замена кодировки цвета
-const hexToRgb = (hex) => {
-  // проверяем хекс ли это
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  // если хекс то возвращаем значение в формате RGB строка вида: "0-255,0-255,0-255" если нет, то возвращаем аргумент без изменений
-  return result
-    ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(
-        result[3],
-        16
-      )}`
-    : hex;
-};
-
-// изменение цвета фона текста
-export const changeBackColor = (color, setValues, values) => {
-  if (color !== "transparent") {
-    setValues((prev) => ({
-      ...prev,
-      backColor: `rgba(${hexToRgb(color)}, ${values.opacity})`,
-    }));
-    return;
-  }
-  setValues((prev) => ({ ...prev, backColor: color }));
-  return;
-};
-
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
 export const drawText = (
   t,
   i,
   ctx,
   top,
-  canvas,
+  canvasHeight,
   offsetY,
   textMarginYBottom,
   textMarginYTop,
-  lineTop,
-  lineBottom,
   marginX,
-  textWidth,
   textValues
 ) => {
+  if (t[0] === " ") {
+    // если первый символ - пробел - убрать его из строки
+    t = t.slice(1);
+  }
+
   if (t[t.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
     t = t.slice(0, t.length - 1);
   }
+
+  // t += "\n";
 
   let marginY;
   if (top) {
     marginY = offsetY + i * lineHeight(textValues.fontSize) + textMarginYTop;
   } else {
     marginY =
-      canvas.height -
+      canvasHeight -
       offsetY -
       i * lineHeight(textValues.fontSize) -
       textMarginYBottom;
   }
 
-  if (
-    (top && (marginY > lineBottom || marginY < lineTop)) ||
-    (!top && (marginY < lineTop || marginY > lineBottom))
-  ) {
-    // ограничение видимости нижних заливки и контура до верхнего края
-    ctx.fillStyle = "transparent";
-    ctx.strokeStyle = "transparent";
-  } else {
-    ctx.fillStyle = textValues.backColor;
-    ctx.strokeStyle = textValues.strokeTextColor;
-  }
+  ctx.fillStyle = textValues.backColor;
+  ctx.strokeStyle = textValues.strokeTextColor;
 
   addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
 
-  if (
-    (top && (marginY > lineBottom || marginY < lineTop)) ||
-    (!top && (marginY < lineTop || marginY > lineBottom))
-  ) {
-    // ограничение видимости нижнего текста до верхнего края
-    ctx.fillStyle = "transparent";
-  } else {
-    ctx.fillStyle = textValues.fillTextColor; // переключение цвета с заливки на текст
-  }
+  ctx.fillStyle = textValues.fillTextColor;
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
   ctx.strokeText(t, marginX, marginY); // добавление контура
   ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
 
-  ctx.fillText(t, marginX, marginY, textWidth); // добавление текста построчно
+  ctx.fillText(t, marginX, marginY, textValues.width); // добавление текста построчно
 
   if (textValues.underline) {
     addLineToText(
@@ -260,3 +227,160 @@ export const drawText = (
     ); // отрисовка зачеркивания
   }
 };
+
+// export const moveTextarea = (e) => {
+//   const textMoving = document.getElementById("textMoving");
+//   if (!e.target.contains(textMoving)) return;
+//   let target = e.target;
+
+//   target.moving = true;
+
+//   if (e.clientX) {
+//     target.oldX = e.clientX;
+//     target.oldY = e.clientY;
+//   } else {
+//     target.oldX = e.touches[0].clientX;
+//     target.oldY = e.touches[0].clientY;
+//   }
+
+//   target.oldLeft =
+//     window.getComputedStyle(target).getPropertyValue("left").split("px")[0] * 1;
+//   target.oldTop =
+//     window.getComputedStyle(target).getPropertyValue("top").split("px")[0] * 1;
+
+//   const dr = (event) => {
+//     event.preventDefault();
+//     if (!target.moving) {
+//       return;
+//     }
+//     if (event.clientX) {
+//       target.distX = event.clientX - target.oldX;
+//       target.distY = event.clientY - target.oldY;
+//     } else {
+//       target.distX = event.touches[0].clientX - target.oldX;
+//       target.distY = event.touches[0].clientY - target.oldY;
+//     }
+
+//     target.style.left = target.oldLeft + target.distX + "px";
+//     target.style.top = target.oldTop + target.distY + "px";
+//   };
+
+//   target.onmousemove = dr;
+//   target.ontouchmove = dr;
+
+//   const endDrag = () => {
+//     target.moving = false;
+//   };
+//   target.onmouseup = endDrag;
+//   target.ontouchend = endDrag;
+// };
+
+// export const pickup = (e, offset, setIsDown) => {
+//   setIsDown(true);
+//   if (e.clientX) {
+//     offset = [e.target.offsetLeft - e.clientX, e.target.offsetTop - e.clientY];
+//   } else if (e.touches) {
+//     // for touch devices, use 1st touch only
+//     offset = [
+//       e.target.offsetLeft - e.touches[0].pageX,
+//       e.target.offsetTop - e.touches[0].pageY,
+//     ];
+//   }
+// };
+
+// export const move = (e, offset, isDown, position) => {
+//   if (isDown) {
+//     if (e.clientX) {
+//       position = { x: e.clientX, y: e.clientY };
+//     } else if (e.touches) {
+//       position = { x: e.touches[0].pageX, y: e.touches[0].pageY };
+//     }
+//     e.target.style.left = position.x + offset[0] + "px";
+//     e.target.style.top = position.y + offset[1] + "px";
+//   }
+// };
+
+// export const drop = (e, offset, setIsDown, position) => {
+//   setIsDown(false);
+//   e.target.style.left = position.x + offset[0] + "px";
+//   e.target.style.top = position.y + offset[1] + "px";
+// };
+
+export const move = (e, textValues, setTextValues) => {
+  if (!textValues.isMoving) return;
+
+  let distX;
+  let distY;
+
+  if (e.clientX) {
+    distX = e.clientX - textValues.oldX;
+    distY = e.clientY - textValues.oldY;
+  } else {
+    distX = e.touches[0].clientX - textValues.oldX;
+    distY = e.touches[0].clientY - textValues.oldY;
+  }
+
+  const newY = textValues.startTop + distY;
+  const newX = textValues.startLeft + distX;
+
+  setTextValues((prev) => ({
+    ...prev,
+    top: prev.top !== null ? newY : null,
+    left: newX,
+    bottom: prev.bottom !== null ? -newY : null,
+  }));
+};
+
+// функции из textarea - пока там все не работает
+
+// первый вариант перемещения с внутренним стейтом
+// const [textArea, setTextArea] = useState({
+//   isMoving: false,
+//   oldX: null,
+//   oldY: null,
+// });
+
+// const pickup = (e) => {
+//   if (!(e.target === textMoving.current)) return;
+//   setTextArea((prev) => ({ ...prev, isMoving: true }))
+
+//   if (e.clientX) {
+//     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
+//   } else {
+//     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
+//   };
+// };
+
+// const move = (e) => {
+//   if (!textArea.isMoving) return;
+
+//   let distX;
+//   let distY;
+
+//   if (e.clientX) {
+//     distX = e.clientX - textArea.oldX;
+//     distY = e.clientY - textArea.oldY;
+//   } else {
+//     distX = e.touches[0].clientX - textArea.oldX;
+//     distY = e.touches[0].clientY - textArea.oldY;
+//   }
+
+//   const newY = textValues.startTop + distY;
+//   const newX = textValues.startLeft + distX;
+
+//   setTextValues((prev) => ({
+//     ...prev,
+//     top: (prev.top !== null) ? newY : null,
+//     left: newX,
+//     bottom: (prev.bottom !== null) ? - newY : null,
+//   }))
+// };
+
+// const drop = (e) => {
+//   setTextArea((prev) => ({ ...prev, isMoving: false }))
+//   setTextValues((prev) => ({
+//     ...prev,
+//     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
+//     startLeft: prev.left
+//   }))
+// };

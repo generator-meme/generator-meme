@@ -1,10 +1,10 @@
 .meme {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
-  row-gap: 30px;
+  row-gap: 10px;
 }
 
 .meme__image {
@@ -35,6 +35,10 @@
 }
 
 .meme:hover>.meme__create-btn {
+  background-color: #FCFF70;
+}
+
+.meme__create-btn:active {
   background-color: #F8FD22;
 }
 
@@ -50,7 +54,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  background-color: #fdffa1;
+  background-color: #FDFFA1;
   width: 184px;
   height: 54px;
   border: none;
@@ -65,15 +69,22 @@
 .meme__create-btn:hover {
   background-color: #F8FD22;
 }
-.meme__create-btn:hover ~ .meme__image-hover {
+
+.meme__create-btn:hover~.meme__image-hover {
   opacity: 1;
 }
 
-.meme__hashtags {
+.meme__tags-container {
+  height: 96px;
+  position: relative;
+  width: 100%;
+}
+
+.meme__tags {
   list-style: none;
   display: flex;
   justify-content: flex-start;
-  column-gap: 25px;
+  column-gap: 5px;
   align-items: flex-start;
   flex-wrap: wrap;
   font-weight: 400;
@@ -82,12 +93,27 @@
   color: #000000;
   align-self: flex-start;
   padding: 0;
-  max-height: 50px;
+  max-height: 48px;
   overflow: hidden;
+  width: 100%;
 }
 
-.meme__hashtags_more {
-  max-height: 80px;
+.meme__tags_more {
+  max-height: 96px;
   position: absolute;
-  top: 390px;
+  top: 0;
+}
+
+.meme__bth-see-more {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #1E1D1D;
+  cursor: pointer;
 }

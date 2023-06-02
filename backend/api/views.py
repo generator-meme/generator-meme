@@ -1,31 +1,35 @@
+from django.db.models import Case, Exists, OuterRef, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import SAFE_METHODS
 
-from .filters import TagSearchFilter
-from .permissions import AdminOrReadOnly
-from .serializers import (FavoriteSerializer, MemeReadSerializer,
-                          MemeWriteSerializer, TagSerializer,
-                          TemplateReadSerializer, TemplateWriteSerializer)
-from .services import create_delete_relation
-from memes.models import Favorite, Meme, Tag, Template
+from api.filters import TagSearchFilter, TemplateFilter
+from api.permissions import AdminOrReadOnly
+from api.serializers import (FavoriteSerializer, MemeReadSerializer,
+                             MemeWriteSerializer, TagSerializer,
+                             TemplateReadSerializer, TemplateWriteSerializer)
+from api.services import create_delete_relation
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
     '''Представление для модели готового мема'''
     queryset = Meme.objects.all()
+    filter_backends = [DjangoFilterBackend,]
+    filterset_fields = ('author',)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
             return MemeReadSerializer
         return MemeWriteSerializer
 
-    @method_decorator(cache_page(60))  # добавим кеширование
+    @method_decorator(cache_page(60))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -44,11 +48,33 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 class TemplateViewSet(viewsets.ModelViewSet):
     """Представление для модели Meme"""
-    queryset = Template.objects.with_rating().filter(
-        is_published=True).order_by('-rating')
     permission_classes = [AdminOrReadOnly]
-    filter_backends = [OrderingFilter]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = TemplateFilter
     ordering_fields = ['created_at']
+
+    def get_queryset(self):
+        queryset = Template.objects.filter(
+            is_published=True).annotate(
+            used_times=Case(
+                When(Exists(
+                    TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    )
+                ), then=TemplateUsedTimes.objects.filter(
+                    template=OuterRef('pk')
+                ).values('used_times')),
+                default=Value(0)
+            )
+        ).order_by('-used_times')
+        user = self.request.user
+        if user.is_authenticated:
+            return queryset.annotate(
+                is_favorited=Exists(
+                    Favorite.objects.filter(user=user, template=OuterRef('pk'))
+                ))
+
+        return queryset.annotate(is_favorited=Value(False))
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:

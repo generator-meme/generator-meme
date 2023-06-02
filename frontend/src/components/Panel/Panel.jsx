@@ -2,14 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
-import { fontFamilyOptions } from "../../utils/constants";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
+import { hexToRgb, changeOpacity, updateTextValues } from "../../utils/textPanelFunctions.js";
 
 function Panel ({
     textValues,
     setTextValues,
-    setBackColor,
-    setOpacity,
   }) {
 
   const form = useRef();
@@ -18,8 +16,7 @@ function Panel ({
   const [isOpenStrokeColor, setIsOpenStrokeColor] = useState(false);
   const [isOpenBackgroundColor, setIsOpenBackgroundColor] = useState(false);
   const [isOpenOpacity, setIsOpenOpacity] = useState(false);
-  // для выбора fontFamily
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false); // для выбора fontFamily
 
   const extraWindow = useRef();
 
@@ -97,28 +94,28 @@ function Panel ({
     setTextValues((prev) => ({ ...prev, strokeTextColor: color}));
   };
 
+  const setBackColor = (color) => {
+    if (color !== "transparent") {
+      setTextValues((prev) => ({
+        ...prev,
+        backColor: `rgba(${hexToRgb(color)}, ${textValues.opacity})`,
+      }));
+    } else {
+      setTextValues((prev) => ({ ...prev, backColor: color }));
+    };
+  };
+
+  const setOpacity = (opacity) => {
+    changeOpacity(opacity, setTextValues, textValues);
+  };
+
   const setOpacityLevel = (level) => {
     setTextValues((prev) => ({ ...prev, opacityLevel: level}));
   };
   
   const resetForm = (e) => {
     e.preventDefault();
-    setOpacity(1);
-    setBackColor('transparent');
-    setTextValues((prev) => ({
-      ...prev,
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      opacityLevel: 100
-    }));
+    updateTextValues(setTextValues, textValues, false);
     form.current.reset();
   };
 

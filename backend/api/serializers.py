@@ -2,25 +2,29 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (ModelSerializer,
-                                        PrimaryKeyRelatedField, UUIDField,
+from rest_framework.serializers import (BooleanField, IntegerField,
+                                        ModelSerializer,
+                                        PrimaryKeyRelatedField,
+                                        SerializerMethodField, UUIDField,
                                         ValidationError)
 
-from memes.models import Favorite, Meme, Tag, Template
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 from users.serializers import UserSerializer
 
 
 class TagSerializer(ModelSerializer):
     '''Сериализатор модели Tag'''
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'name', 'slug')
         model = Tag
 
 
 class TemplateReadSerializer(ModelSerializer):
-    '''Сериализатор модели Temlate для чтения объекта'''
+    '''Сериализатор модели Template для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
-    tags = TagSerializer(many=True, read_only=True)
+    tag = TagSerializer(many=True, read_only=True)
+    used_times = IntegerField()
+    is_favorited = BooleanField(read_only=True)
 
     class Meta:
         model = Template
@@ -39,7 +43,6 @@ class TemplateWriteSerializer(ModelSerializer):
         many=True
     )
 
-
     class Meta:
         model = Template
         fields = '__all__'
@@ -49,11 +52,19 @@ class MemeReadSerializer(ModelSerializer):
     '''Сериализатор модели Meme для чтения объекта'''
     id = UUIDField(read_only=True, default=uuid4)
     author = UserSerializer(read_only=True)
-    template = TemplateReadSerializer(read_only=True)
+    template = SerializerMethodField()
 
     class Meta:
         model = Meme
         fields = '__all__'
+
+    def get_template(self, obj):
+        template = obj.template
+        template.used_times = TemplateUsedTimes.objects.get(
+            template=template
+        ).used_times
+        serializer = TemplateReadSerializer(template)
+        return serializer.data
 
 
 class MemeWriteSerializer(ModelSerializer):
@@ -76,6 +87,10 @@ class MemeWriteSerializer(ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         '''Проверяет на авторизацию, добавляет автора мема'''
+        template = validated_data['template']
+        obj, _ = TemplateUsedTimes.objects.get_or_create(template=template)
+        obj.used_times += 1
+        obj.save()
         request = self.context.get('request')
         if request.user.is_authenticated:
             return Meme.objects.create(

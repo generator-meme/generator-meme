@@ -1,36 +1,24 @@
 .memesbox {
     margin: 0;
-    padding: 0 0 107px;
-    /* padding: 0 30px 107px; */
+    padding: 0 0 95px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    row-gap: 86px;
+    row-gap: 40px;
     align-items: center;
     position: relative;
-    /* background-image: url(../../images/lines.svg);
-    background-repeat: repeat-y;
-    background-size: 100% 980px;
-    background-position: top; */
-    /* background-size: cover; */
 }
 
 .memesbox__container {
     margin: 0;
     padding: 0 30px 0;
-    /* padding: 0; */
     width: 100%;
     display: grid;
     justify-content: space-between;
     z-index: 2;
     grid-template-columns: repeat(auto-fit, minmax(423px, 453px));
-    grid-template-rows: repeat(auto-fit, minmax(auto, 440px));
     column-gap: 30px;
-    row-gap: 50px;
-    /* background-image: url(../../images/lines.svg);
-    background-repeat: repeat-y;
-    background-size: 100% 980px;
-    background-position: top; */
+    row-gap: 25px;
     box-sizing: border-box;
 }
 
@@ -52,12 +40,20 @@
     position: fixed;
     bottom: 50px;
     right: 30px;
-    background-image: url(../../images/circle.svg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: #FCFDB5;
+    border-radius: 50%;
+    border: 2px solid #9D0095;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     width: 101px;
     height: 101px;
+}
+
+.memesbox__up:hover {
+    background-color: #FDFF9B;
+}
+
+.memesbox__up:active {
+    background-color: #FCFF5E;
 }
 
 .memesbox__up_type_fixed {

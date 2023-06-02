@@ -1,34 +1,50 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
-import './Canvas.css'
-import Panel from '../Panel/Panel';
+import './Canvas.css';
+import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
+import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from '../../utils/constants';
 import {
   contain,
   calculateMarginX,
   wrapText,
-  changeOpacity,
-  changeBackColor,
-  drawText
+  drawText,
 } from "../../utils/functionsForCanvas.js";
 
-const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, memes, setImageNotFoundOpen }) => {
+const Canvas = ({
+  currentMeme,
+  handleCreateNewMeme,
+  setIsNewMeme,
+  isNewMeme,
+  memes,
+  setImageNotFoundOpen,
+}) => {
+  const canvas = useRef(null);
   const navigate = useNavigate();
+  const [image, setImage] = useState(null);
 
-  const image = useMemo(() => {
-    const img = new Image();
-    if (currentMeme) {
-      img.src = currentMeme.image;
-    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
-      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
-    };
-    return img;
-  }, [currentMeme]);
+  const imageSizes = useMemo(() => {
+    if (image) {
+      return contain(675, 556, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
+    }
+    return null;
+  }, [image]);
 
-  const canvas = useRef()
+  const outsideTextHeight = 80;
 
-  const [topTextValues, setTopTextValues] = useState({
+  const [outsideTopTextValues, setOutsideTopTextValues] = useState({
+    name: "outsideTopTextValues",
+    isOutside: true,
+    isCurrent: false,
+    isVisible: false,
+    hover: false,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -42,10 +58,100 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     lineThrough: false,
     backColor: "transparent",
     opacity: 1,
-    opacityLevel: 100
+    opacityLevel: 100,
+    width: imageSizes?.width - 4,
+    maxWidth: imageSizes?.width - 4,
+    textAreaWidth: 0,
+    height: outsideTextHeight,
+    top: -80,
+    left: 0,
+    bottom: null,
+    canvasTop: 0,
+    canvasLeft: 0,
+    canvasBottom: null,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
+  });
+
+  const [outsideBottomTextValues, setOutsideBottomTextValues] = useState({
+    name: "outsideBottomTextValues",
+    isOutside: true,
+    isCurrent: false,
+    isVisible: false,
+    hover: false,
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100,
+    width: imageSizes?.width - 4,
+    maxWidth: imageSizes?.width - 4,
+    textAreaWidth: 0,
+    height: outsideTextHeight,
+    top: null,
+    left: 0,
+    bottom: -80,
+    canvasTop: null,
+    canvasLeft: 0,
+    canvasBottom: 0,
+    // startTop: 0,
+    // startLeft: 0,
+    // isMoving: false,
+    // oldX: null,
+    // oldY: null,
+  });
+
+  const [topTextValues, setTopTextValues] = useState({
+    name: "topTextValues",
+    isOutside: false,
+    isCurrent: false,
+    isVisible: true,
+    hover: false,
+    text: "",
+    fontSize: 40,
+    fontFamily: fontFamilyOptions.roboto,
+    selectedOption: 0,
+    fontPosition: "center",
+    fontWeight: false,
+    fontStyle: false,
+    fillTextColor: "black",
+    strokeTextColor: "transparent",
+    underline: false,
+    lineThrough: false,
+    backColor: "transparent",
+    opacity: 1,
+    opacityLevel: 100,
+    width: imageSizes?.width,
+    maxWidth: imageSizes?.width,
+    textAreaWidth: 0,
+    height: 70,
+    top: 0,
+    left: 0,
+    bottom: null,
+    startTop: 0,
+    startLeft: 0,
+    isMoving: false,
+    oldX: null,
+    oldY: null,
   });
 
   const [bottomTextValues, setBottomTextValues] = useState({
+    name: "bottomTextValues",
+    isOutside: false,
+    isCurrent: false,
+    isVisible: true,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
@@ -59,164 +165,283 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     lineThrough: false,
     backColor: "transparent",
     opacity: 1,
-    opacityLevel: 100
-});
+    opacityLevel: 100,
+    width: imageSizes?.width,
+    maxWidth: imageSizes?.width,
+    height: 70,
+    top: null,
+    left: 0,
+    bottom: 0,
+    startTop: 0,
+    startLeft: 0,
+    isMoving: false,
+    oldX: null,
+    oldY: null,
+  });
 
-  const [firstPanelIsOpen, setFirstPanelIsOpen] = useState(false);
-  const [secondPanelIsOpen, setSecondPanelIsOpen] = useState(false);
+  const canvasHeight = useMemo(() => {
+    // изменение высоты canvas в зависимости от текста внутри мема или снаружи
+    if (imageSizes) {
+      if (outsideTopTextValues.isVisible && outsideBottomTextValues.isVisible) return imageSizes.height + outsideTextHeight * 2;
+      if (outsideTopTextValues.isVisible || outsideBottomTextValues.isVisible) return imageSizes.height + outsideTextHeight;
+      return imageSizes.height;
+    }
+    return null;
+  }, [imageSizes, outsideTopTextValues, outsideBottomTextValues, outsideTextHeight]);
 
   const createMeme = () => {
-    let id = currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    let id =
+      currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
     const template = memes.some((item) => {
       return item.id === id;
     });
     if (template) {
-      handleCreateNewMeme(canvas.current.toDataURL(), id)
-        .finally(()=> {
-          navigate('/saved')
-        });
+      handleCreateNewMeme(
+        canvas.current.toDataURL("image/jpeg", 0.92),
+        id
+      ).finally(() => {
+        navigate("/saved");
+      });
     } else {
-      handleCreateNewMeme(canvas.current.toDataURL())
-        .finally(()=> {
-          navigate('/saved')
-        });
-    };
-  };
-
-  // изменение цвета и прозрачности сверху
-  const changeTopBackColor = (color) => {
-    changeBackColor(color, setTopTextValues, topTextValues);
-  }
-
-  const changeTopOpacity = (opacity) => {
-    changeOpacity(opacity, setTopTextValues, topTextValues);
-  };
-
-  // изменение цвета и прозрачности снизу
-  const changeBottomBackColor = (color) => {
-    changeBackColor(color, setBottomTextValues, bottomTextValues);
-  };
-
-  const changeBottomOpacity = (opacity) => {
-    changeOpacity(opacity, setBottomTextValues, bottomTextValues);
-  };
-  
-  // открытие/закрытие панелей
-  const openMyPanel = (e, setMyPanelIsOpen, setOtherPanelIsOpen) => {
-    e.preventDefault();
-    setMyPanelIsOpen(true);
-    setOtherPanelIsOpen(false);
+      handleCreateNewMeme(canvas.current.toDataURL()).finally(() => {
+        navigate("/saved");
+      });
+    }
   };
 
   useEffect(() => { // отрисовка канвас
-    const ctx = canvas.current.getContext('2d') // создание canvas с картинкой на фоне
-    const {
-      offsetX, 
-      offsetY, 
-      width, 
-      height
-    } = contain(canvas.current.width, canvas.current.height, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса
-    ctx.drawImage(image, offsetX, offsetY, width, height);
+    if (!image) {
+      return;
+    }
+
+    const ctx = canvas.current.getContext("2d"); // создание canvas с картинкой на фоне
+
+    let imageInitialY = 0;
+    
+    if(outsideTopTextValues.isVisible) { // верхнее пространство для текста снаружи
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, imageSizes.width, outsideTextHeight);
+      imageInitialY = outsideTextHeight;
+    };
+    
+    ctx.drawImage(image, 0, imageInitialY, imageSizes.width, imageSizes.height); // картинка мема
+
+    if(outsideBottomTextValues.isVisible) { // нижнее пространство для текста снаружи
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, outsideTopTextValues.isVisible? imageSizes.height + outsideTextHeight : imageSizes.height, imageSizes.width, outsideTextHeight);
+    };
 
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
-    ctx.lineJoin = 'round'; // настройка сглаживания контура для strokeText
+    ctx.lineJoin = "round"; // настройка сглаживания контура для strokeText
+
+    // watermark
+    ctx.font = "bold 12px Inter";
+    ctx.textAlign = "end";
+    ctx.strokeStyle = "#737270";
+    ctx.lineWidth = 2;
+    ctx.strokeText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10);
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "#EBDFDF";
+    ctx.fillText("ilovememes.ru", imageSizes.width - 10, canvasHeight - 10, 86);
+
     const textMarginX = 30; // значение бокового отступа текста
-    const textWidth = width - textMarginX * 2; // значение ширины, где текст отображается
-    const textMarginYTop = 50;
-    const textMarginYBottom = 20;
+    const textMarginYTop = 58; //50
+    const textMarginYBottom = 20; //20
 
-    // вычисление границ для текста
-    const lineTop = offsetY + textMarginYTop;
-    const lineBottom = canvas.current.height - offsetY - textMarginYBottom;
+    if (outsideTopTextValues.isVisible) {
+      const outsideTopOffsetY = outsideTopTextValues.canvasTop;
+      const outsideTopOffsetX = outsideTopTextValues.canvasLeft;
 
-    // нижний текст основные характеристики
-    ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""} ${bottomTextValues.fontWeight ? "bold" : ""} ${bottomTextValues.fontSize}px ${bottomTextValues.fontFamily}`;
-    ctx.textAlign = bottomTextValues.fontPosition;
-    
-    const bottomMarginX = calculateMarginX(canvas.current, bottomTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const bottomTextWrap = wrapText(ctx, bottomTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
-    
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    bottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      false,
-      canvas.current,
-      offsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      lineTop,
-      lineBottom,
-      bottomMarginX,
-      textWidth,
-      bottomTextValues
-    ));
+      ctx.font = `${outsideTopTextValues.fontStyle ? "italic" : ""}
+                  ${outsideTopTextValues.fontWeight ? "bold" : ""}
+                  ${outsideTopTextValues.fontSize}px ${outsideTopTextValues.fontFamily}`;
+      ctx.textAlign = outsideTopTextValues.fontPosition;
+  
+      const outsideTopMarginX = calculateMarginX(outsideTopTextValues.width, outsideTopTextValues.fontPosition, textMarginX, outsideTopOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const outsideTopTextWrap = wrapText(ctx, outsideTopTextValues.text, outsideTopTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+  
+        // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      outsideTopTextWrap.split('\n').forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        true,
+        canvasHeight,
+        outsideTopOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        outsideTopMarginX,
+        outsideTopTextValues,
+      ));
+    };
 
-    // верхний текст основные характеристики
-    ctx.font = `${topTextValues.fontStyle ? "italic" : ""} ${topTextValues.fontWeight ? "bold" : ""} ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
-    ctx.textAlign = topTextValues.fontPosition;
-    
-    const topMarginX = calculateMarginX(canvas.current, topTextValues.fontPosition, offsetX, textMarginX); // вычисление отступа по оси X в зависимости от расположения текста
-    const topTextWrap = wrapText(ctx, topTextValues.text, textWidth); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+    if (topTextValues.isVisible) { // верхний текст основные характеристики
+      const topOffsetY = topTextValues.top + (outsideTopTextValues.isVisible ? outsideTextHeight : 0);
+      const topOffsetX = topTextValues.left;
 
-    // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
-    topTextWrap.split('\n').forEach((t, i) => drawText(
-      t,
-      i,
-      ctx,
-      true,
-      canvas.current,
-      offsetY,
-      textMarginYBottom,
-      textMarginYTop,
-      lineTop,
-      lineBottom,
-      topMarginX,
-      textWidth,
-      topTextValues
-    ));
+      ctx.font = `${topTextValues.fontStyle ? "italic" : ""}
+                  ${topTextValues.fontWeight ? "bold" : ""}
+                  ${topTextValues.fontSize}px ${topTextValues.fontFamily}`;
+      ctx.textAlign = topTextValues.fontPosition;
 
-  }, [image, bottomTextValues, topTextValues]);
+      const topMarginX = calculateMarginX(
+        topTextValues.width,
+        topTextValues.fontPosition,
+        textMarginX,
+        topOffsetX
+      ); // вычисление отступа по оси X в зависимости от расположения текста
+      const topTextWrap = wrapText(
+        ctx,
+        topTextValues.text,
+        topTextValues.width
+      ); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      topTextWrap
+        .split("\n")
+        .forEach((t, i) =>
+          drawText(
+            t,
+            i,
+            ctx,
+            true,
+            canvasHeight,
+            topOffsetY,
+            textMarginYBottom,
+            textMarginYTop,
+            topMarginX,
+            topTextValues
+          )
+        );
+    }
+
+    if (bottomTextValues.isVisible) { // нижний текст основные характеристики
+      const bottomOffsetY = bottomTextValues.bottom + (outsideBottomTextValues.isVisible ? outsideTextHeight : 0);
+      const bottomOffsetX = bottomTextValues.left;
+      ctx.font = `${bottomTextValues.fontStyle ? "italic" : ""}
+                  ${bottomTextValues.fontWeight ? "bold" : ""}
+                  ${bottomTextValues.fontSize}px ${
+        bottomTextValues.fontFamily
+      }`;
+      ctx.textAlign = bottomTextValues.fontPosition;
+
+      const bottomMarginX = calculateMarginX(
+        bottomTextValues.width,
+        bottomTextValues.fontPosition,
+        textMarginX,
+        bottomOffsetX
+      ); // вычисление отступа по оси X в зависимости от расположения текста
+      const bottomTextWrap = wrapText(
+        ctx,
+        bottomTextValues.text,
+        bottomTextValues.width
+      ); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      bottomTextWrap
+        .split("\n")
+        .reverse()
+        .forEach((t, i) =>
+          drawText(
+            t,
+            i,
+            ctx,
+            false,
+            canvasHeight,
+            bottomOffsetY,
+            textMarginYBottom,
+            textMarginYTop,
+            bottomMarginX,
+            bottomTextValues
+          )
+        );
+    };
+
+    if (outsideBottomTextValues.isVisible) { // нижний текст основные характеристики
+      const outsideBottomOffsetY = outsideBottomTextValues.canvasBottom;
+      const outsideBottomOffsetX = outsideBottomTextValues.canvasLeft;
+      ctx.font = `${outsideBottomTextValues.fontStyle ? "italic" : ""}
+                  ${outsideBottomTextValues.fontWeight ? "bold" : ""}
+                  ${outsideBottomTextValues.fontSize}px ${outsideBottomTextValues.fontFamily}`;
+      ctx.textAlign = outsideBottomTextValues.fontPosition;
+      
+      const outsideBottomMarginX = calculateMarginX(outsideBottomTextValues.width, outsideBottomTextValues.fontPosition, textMarginX, outsideBottomOffsetX); // вычисление отступа по оси X в зависимости от расположения текста
+      const outsideBottomTextWrap = wrapText(ctx, outsideBottomTextValues.text, outsideBottomTextValues.width); // проверка текста на соответсвие длине зоны расположения текста, добавление "\n" для автоматического переноса срок
+
+      // добавление текста с возможностью переноса строк при нажатии на enter (t - текст, i - номер строки)
+      outsideBottomTextWrap.split('\n').reverse().forEach((t, i) => drawText(
+        t,
+        i,
+        ctx,
+        false,
+        canvasHeight,
+        outsideBottomOffsetY,
+        textMarginYBottom,
+        textMarginYTop,
+        outsideBottomMarginX,
+        outsideBottomTextValues,
+      ));
+    };
+
+  }, [image, imageSizes, canvasHeight, bottomTextValues, topTextValues, outsideTextHeight, outsideTopTextValues, outsideBottomTextValues]);
 
   const handleOnBeforeUnload = (event) => {
     event.preventDefault();
-    return event.returnValue = '';
+    return (event.returnValue = "");
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
     // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
     if (!currentMeme && localStorage.getItem("currentMeme") === null) {
       setImageNotFoundOpen(true);
       navigate("/");
       return;
-    };
+    }
 
-    setIsNewMeme(false);
+    setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
-    
+
+    const img = new Image(); // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте
+    if (currentMeme) {
+      img.src = currentMeme.image;
+    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
+      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
+    }
+    img.addEventListener("load", () => {
+      setImage(img);
+    });
+
     if (!isNewMeme && localStorage.getItem("topText") !== null) {
       const topText = JSON.parse(localStorage.getItem("topText"));
       setTopTextValues(topText);
-    };
+    }
 
     if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
       const bottomText = JSON.parse(localStorage.getItem("bottomText"));
       setBottomTextValues(bottomText);
+    }
+
+    if (!isNewMeme && localStorage.getItem("outsideTopText") !== null) {
+      const outsideTopText = JSON.parse(localStorage.getItem("outsideTopText"));
+      setOutsideTopTextValues(outsideTopText);
+    };
+
+    if (!isNewMeme && localStorage.getItem("outsideBottomText") !== null) {
+      const outsideBottomText = JSON.parse(localStorage.getItem("outsideBottomText"));
+      setOutsideBottomTextValues(outsideBottomText);
     };
 
     // личные изображения не созраняются в localstorage,
     // если это личное изображение - навешиваем слушатель на закрытие вкладки,
     // чтобы предупредить пользователя о том, что изменения не сохранятся
     if (localStorage.getItem("currentMeme") === null) {
-      window.addEventListener('beforeunload', handleOnBeforeUnload);
+      window.addEventListener("beforeunload", handleOnBeforeUnload);
 
       return () => {
-        window.removeEventListener('beforeunload', handleOnBeforeUnload);
+        window.removeEventListener("beforeunload", handleOnBeforeUnload);
       };
     };
-    
   }, []);
 
   useEffect(() => {
@@ -227,96 +452,90 @@ const Canvas = ({ currentMeme, handleCreateNewMeme, setIsNewMeme, isNewMeme, mem
     localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
   }, [bottomTextValues]);
 
+  useEffect(() => {
+    localStorage.setItem("outsideTopText", JSON.stringify(outsideTopTextValues));
+  }, [outsideTopTextValues]);
 
+  useEffect(() => {
+    localStorage.setItem("outsideBottomText", JSON.stringify(outsideBottomTextValues));
+  }, [outsideBottomTextValues]);
 
-
-
-
-
-  
-
-
-
-  const canvasWrapper = useRef();
-  console.log(canvasWrapper)
-  const onMouseMoveCaptureHandler = () => {
-    console.log("onMouseMoveCapture Event!");
-  };
-
-
-
-  const formTop = {top:0, right:0}
+  if (!image) {
+    return null;
+  }
 
   return (
-    <main className='main-editor'>
-      <Navigation isSavedMeme={false} id={currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id} />
+    <main className="main-editor">
+      <Navigation
+        isSavedMeme={false}
+        id={
+          currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id
+        }
+      />
       <section className="editor" aria-label="Editor">
-        {firstPanelIsOpen && (
-          <div className="editor__panel_type_top" onMouseMoveCapture={onMouseMoveCaptureHandler}>
-            <Panel
-              textValues={topTextValues}
-              setTextValues={setTopTextValues}
-              setBackColor={changeTopBackColor}
-              setOpacity={changeTopOpacity}
-            />
-        </div>
-        )}
-        {secondPanelIsOpen && (
-          <div className="editor__panel_type_bottom">
-            <Panel
-              textValues={bottomTextValues}
-              setTextValues={setBottomTextValues}
-              setBackColor={changeBottomBackColor}
-              setOpacity={changeBottomOpacity}
-            />
-        </div>
-        )}
-
-
-
-
-
-
-        <div className='editor-canvas_wrapper' ref={canvasWrapper}>
-        <textarea
-                style={formTop}
-                className="editor__text"
-                type="text"
-                value={topTextValues.text}
-                onChange={(e) => setTopTextValues({ ...topTextValues, text: e.target.value})}
-                placeholder="Текст сверху"
-                onClick={e => openMyPanel(e, setFirstPanelIsOpen, setSecondPanelIsOpen)}
-              />
-        <canvas
+        <div className="editor__canvas">
+          <canvas
             className="editor__image"
             ref={canvas}
-            width={675}
-            height={556}
-        >
-          
-        </canvas>
+            width={imageSizes.width}
+            height={canvasHeight}
+          ></canvas>
         </div>
-
-
-
-
-        <div className="editor__box">
-          <form className="editor__text-form">
-              
-              <textarea
-                className="editor__text"
-                type="text"
-                value={bottomTextValues.text}
-                onChange={(e) => setBottomTextValues({ ...bottomTextValues, text: e.target.value})}
-                placeholder="Текст снизу"
-                onClick={e => openMyPanel(e, setSecondPanelIsOpen, setFirstPanelIsOpen)}
+        <div 
+          className="editor__box"
+          style={{
+            height: canvasHeight,
+          }}
+        >
+          <form 
+            className="editor__text-form"
+            style={{
+              position: "absolute",
+              top: outsideTopTextValues.isVisible ? 81 + outsideTextHeight : 81,
+              left: imageSizes.offsetX,
+              height: imageSizes.height,
+              width: imageSizes.width,
+            }}
+          >
+            <fieldset
+              className="editor__fieldset"
+            >
+              <TextareaCanvas 
+                textValues={outsideTopTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setOutsideTopTextValues}
+                outsideTopTextValues={outsideTopTextValues}
               />
+              <TextareaCanvas 
+                textValues={topTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setTopTextValues}
+                outsideTopTextValues={outsideTopTextValues}
+              />
+              <TextareaCanvas
+                textValues={bottomTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setBottomTextValues}
+                outsideTopTextValues={outsideTopTextValues}
+              />
+              <TextareaCanvas 
+                textValues={outsideBottomTextValues}
+                imageSizes={imageSizes}
+                setTextValues={setOutsideBottomTextValues}
+                outsideTopTextValues={outsideTopTextValues}
+              />
+            </fieldset>
           </form>
-          <button onClick={createMeme} className="btn editor__btn">сгенерить мем</button>
+          <EditorButtonsList 
+            setOutsideTopVisible={setOutsideTopTextValues}
+            setOutsideBottomVisible={setOutsideBottomTextValues}
+            topTextValues={topTextValues}
+          />
+          <button onClick={createMeme} className="btn editor__btn_type_create-mem">сгенерить мем</button>
         </div>
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default Canvas
+export default Canvas;
