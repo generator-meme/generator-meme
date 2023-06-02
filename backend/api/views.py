@@ -21,7 +21,7 @@ from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 class MemeViewSet(viewsets.ModelViewSet):
     '''Представление для модели готового мема'''
     queryset = Meme.objects.all()
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ('author',)
 
     def get_serializer_class(self):
