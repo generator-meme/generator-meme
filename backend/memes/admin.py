@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from django.db.models import Case, Exists, OuterRef, Value, When
+from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
@@ -92,9 +92,24 @@ class TemplateAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     '''Админ-панель модели Tag с фильтрацией по названию'''
-    list_display = ('id', 'name', 'slug')
+    list_display = ('id', 'name', 'slug', 'templates_use_this')
     list_per_page = 50
     search_fields = ('name',)
     search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {'slug': ('name',)}
     actions_on_bottom = True
+
+    def get_queryset(self, request):
+        """Получить кверисет. Аннотируется количеством опубликованных
+        шаблонов использующих этот тег."""
+        tags = Tag.objects.all()
+        return tags.annotate(templates_use_this=Count(
+            'memes',
+            filter=Q(memes__is_published=True)
+            )).order_by('-templates_use_this')
+
+    @admin.display(
+        description='Используется в шаблонах',
+    )
+    def templates_use_this(self, obj):
+        return obj.templates_use_this

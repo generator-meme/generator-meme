@@ -1,4 +1,4 @@
-from django.db.models import Case, Exists, OuterRef, Value, When
+from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -19,9 +19,9 @@ from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
-    '''Представление для модели готового мема'''
+    '''Представление для модели готового мема.'''
     queryset = Meme.objects.all()
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ('author',)
 
     def get_serializer_class(self):
@@ -96,3 +96,12 @@ class TagViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminOrReadOnly]
     filter_backends = (TagSearchFilter,)
     search_fields = ('^name',)
+
+    def get_queryset(self):
+        """Получить кверисет. Аннотируется количеством опубликованных
+        шаблонов использующих этот тег."""
+        tags = Tag.objects.all()
+        return tags.annotate(templates_use_this=Count(
+            'memes',
+            filter=Q(memes__is_published=True)
+            )).order_by('-templates_use_this')
