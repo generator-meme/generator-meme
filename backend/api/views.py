@@ -6,7 +6,7 @@ from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
@@ -90,18 +90,19 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
-    '''Представление для модели Tag'''
+    """Представление для модели Tag."""
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [AdminOrReadOnly]
-    filter_backends = (TagSearchFilter,)
-    search_fields = ('^name',)
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filterset_class = TagSearchFilter
 
     def get_queryset(self):
         """Получить кверисет. Аннотируется количеством опубликованных
-        шаблонов использующих этот тег."""
+        шаблонов использующих этот тег и сортирует по нему по убывающей,
+        потом лексикографически."""
         tags = Tag.objects.all()
         return tags.annotate(templates_use_this=Count(
             'memes',
             filter=Q(memes__is_published=True)
-            )).order_by('-templates_use_this')
+            )).order_by('-templates_use_this', 'name')
