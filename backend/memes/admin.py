@@ -101,12 +101,12 @@ class TagAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Получить кверисет. Аннотируется количеством опубликованных
-        шаблонов использующих этот тег."""
+        шаблонов использующих этот тег и сортирует по нему по убывающей."""
         tags = Tag.objects.all()
         return tags.annotate(templates_use_this=Count(
             'memes',
             filter=Q(memes__is_published=True)
-            )).order_by('-templates_use_this')
+            ))
 
     @admin.display(
         description='Используется в шаблонах',
