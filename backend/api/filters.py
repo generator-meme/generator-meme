@@ -1,7 +1,6 @@
 from django_filters import rest_framework as filters
-from rest_framework.filters import SearchFilter
 
-from memes.models import Template
+from memes.models import Tag, Template
 
 
 class MultiValueCharFilter(filters.BaseCSVFilter, filters.CharFilter):
@@ -29,6 +28,11 @@ class TemplateFilter(filters.FilterSet):
         ]
 
 
-class TagSearchFilter(SearchFilter):
+class TagSearchFilter(filters.FilterSet):
     """Поиск тегов по имени"""
-    search_param = 'name'
+
+    name = filters.CharFilter(lookup_expr='istartswith')
+
+    class Meta:
+        model = Tag
+        fields = ('name',)
