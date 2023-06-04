@@ -106,7 +106,7 @@ class TagAdmin(admin.ModelAdmin):
         return tags.annotate(templates_use_this=Count(
             'memes',
             filter=Q(memes__is_published=True)
-            ))
+        ))
 
     @admin.display(
         description='Используется в шаблонах',
