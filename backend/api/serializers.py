@@ -14,14 +14,9 @@ from users.serializers import UserSerializer
 
 class TagSerializer(ModelSerializer):
     '''Сериализатор модели Tag'''
-    used_times = SerializerMethodField()
-
     class Meta:
-        fields = ('id', 'name', 'slug', 'used_times')
+        fields = ('id', 'name', 'slug')
         model = Tag
-
-    def get_used_times(self, obj):
-        return Template.objects.filter(tag=obj).count()
 
 
 class TemplateReadSerializer(ModelSerializer):
