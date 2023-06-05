@@ -21,7 +21,7 @@ const TextareaCanvas = ({
   const deleteTextButton = useRef(null);
   const [placeholderText, setPlaceholderText] = useState("Введите текст");
 
-  const pickup = useCallback((e) => {
+  const pickup = (e) => {
     if (!(e.target === textMoving.current)) return;
     // if (textValues.isMoving) return;
     if (latestTextValues.current.isMoving) return;
@@ -37,16 +37,16 @@ const TextareaCanvas = ({
       });
     };
     console.log("pick up")
-  }, [setTextValues]);
+  };
 
-  const onMove = useCallback((e) => {
+  const onMove = (e) => {
   if (latestTextValues.current.isMoving) {
       move(e, latestTextValues.current, setTextValues);
     console.log("move")
     };
-  }, [setTextValues]);//textValues.top, textValues.bottom, 
+  };
 
-  const drop = useCallback((e) => {
+  const drop = (e) => {
     if (latestTextValues.current.isMoving) {
       setTextValues({
         ...latestTextValues.current,
@@ -56,7 +56,7 @@ const TextareaCanvas = ({
       });
       console.log("drop")
     }
-  }, [setTextValues]);//textValues.isMoving, textValues.bottom, textValues.top, textValues.left,
+  };
 
   const deleteText = useCallback((e) => {
     e.preventDefault();
@@ -65,7 +65,7 @@ const TextareaCanvas = ({
       updateTextValues(setTextValues, latestTextValues.current, true);
       // setTextValues({ ...textValues, isVisible: false });
     };
-  }, [setTextValues]); //, textValues.isVisible
+  }, [setTextValues, latestTextValues]);
 
   useEffect(() => { // подписка на изменение размера области textarea
     if (text.current !== null) {
@@ -115,7 +115,7 @@ const TextareaCanvas = ({
   //   };
   // }, []);
 
-  if (!latestTextValues.current.isVisible) return null;
+  if (!textValues.isVisible) return null;
 
   return (
     <>
@@ -142,10 +142,10 @@ const TextareaCanvas = ({
         onMouseDown={pickup}
         onTouchStart={pickup}
         onMouseEnter={(e) =>
-          setTextValues({ ...latestTextValues.current, hover: true })
+          setTextValues({ ...textValues, hover: true })
         }
         onMouseLeave={(e) =>
-          setTextValues({ ...latestTextValues.current, hover: false })
+          setTextValues({ ...textValues, hover: false })
         }
       >
         <div className="textarea__container">
@@ -173,11 +173,11 @@ const TextareaCanvas = ({
             className="textarea__text"
             type="text"
             value={textValues.text}
-            onChange={e => setTextValues({ ...latestTextValues.current, text: e.target.value})}
+            onChange={e => setTextValues({ ...textValues, text: e.target.value})}
             placeholder={placeholderText}
             onFocus={e => setPlaceholderText("")}
             onBlur={e => setPlaceholderText("Введите текст")}
-            // onClick={e => setTextValues({ ...latestTextValues.current, isCurrent: true })}
+            // onClick={e => setTextValues({ ...textValues, isCurrent: true })}
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: textValues.maxWidth,
@@ -212,7 +212,7 @@ const TextareaCanvas = ({
           }}
         >
           <Panel
-            textValues={latestTextValues.current}
+            textValues={textValues}
             setTextValues={setTextValues}
           />
         </div>

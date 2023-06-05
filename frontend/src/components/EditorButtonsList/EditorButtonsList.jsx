@@ -9,8 +9,9 @@ import { createExtraText } from '../../utils/constants';
 const EditorButtonsList = ({
   setOutsideTopVisible,
   setOutsideBottomVisible,
-  extraTexts,
-  setExtraTexts,
+  setOutsideTextsVisible,
+  textsValues,
+  setTextsValues,
   imageSizes
 }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
@@ -18,10 +19,11 @@ const EditorButtonsList = ({
   const bthList = useRef(null);
 
   const openOutsideText = (e, top, bottom) => {
-    if (top) {
+    if (top && bottom) {
+      setOutsideTextsVisible();
+    } else if (top) {
       setOutsideTopVisible();
-    };
-    if (bottom) {
+    } else {
       setOutsideBottomVisible();
     };
   };
@@ -29,14 +31,14 @@ const EditorButtonsList = ({
   const addExtraText = () => {
     console.log("addExtraText");
 
-    if (extraTexts.length > 13) {
+    if (textsValues.length > 13) {
       console.log("Вы не можете создавать более 10 дополнительных текстов")
       return; //вывести сообщение пользователю?
     };
 
     const newExtraText = createExtraText(imageSizes);
     console.log(newExtraText);
-    setExtraTexts([...extraTexts, newExtraText]);
+    setTextsValues([...textsValues, newExtraText]);
   };
 
   useEffect(() => {
