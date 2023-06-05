@@ -147,7 +147,7 @@ class TagAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Получить кверисет. Аннотируется количеством опубликованных
-        шаблонов использующих этот тег и сортирует по нему по убывающей."""
+        шаблонов использующих этот тег."""
         tags = Tag.objects.all()
         return tags.annotate(templates_use_this=Count(
             'memes',
@@ -168,6 +168,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
+        'templates_use_this',
         )
     list_per_page = 20
     search_fields = (
@@ -175,3 +176,18 @@ class CategoryAdmin(admin.ModelAdmin):
         )
     search_help_text = ('Поиск по названию категории')
     actions_on_bottom = True
+
+    def get_queryset(self, request):
+        """Получить кверисет. Аннотируется количеством опубликованных
+        шаблонов использующих эту категорию."""
+        categories = Category.objects.all()
+        return categories.annotate(templates_use_this=Count(
+            'templates',
+            filter=Q(templates__is_published=True)
+        ))
+
+    @admin.display(
+        description='Используется в шаблонах',
+    )
+    def templates_use_this(self, obj):
+        return obj.templates_use_this
