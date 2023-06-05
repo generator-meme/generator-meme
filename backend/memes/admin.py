@@ -4,7 +4,7 @@ from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
-from memes.models import Meme, Tag, Template, TemplateUsedTimes
+from memes.models import Category, Meme, Tag, Template, TemplateUsedTimes
 
 
 @admin.register(Meme)
@@ -16,13 +16,20 @@ class MemeAdmin(admin.ModelAdmin):
         return format_html(
             '<img src="{}" width="430" height="380" />'.format(obj.image.url))
 
-    list_display = ('image_tag', 'author', 'template', 'created_at')
-    list_filter = ('author',)
+    list_display = (
+        'image_tag',
+        'author',
+        'template',
+        'created_at',
+        )
+    list_filter = (
+        'author',
+        )
 
 
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
-    '''Админ-панель модели Meme с фильтрацией по тегам'''
+    """Админ-панель модели Template."""
 
     def image_tag(self, obj):
         """Форматирование картинки шаблона для вывода в общем списке."""
@@ -39,17 +46,46 @@ class TemplateAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.CharField: {'widget': TextInput(attrs={'size': '30'})},
     }
-    fields = ('name', 'image', 'is_published', 'tag', 'used_times')
-    readonly_fields = ('used_times', )
-    list_display = ('image_tag', 'is_published', 'get_tags', 'name')
-    list_editable = ('name', 'is_published',)
-
-    list_filter = ('is_published', 'tag')
-    filter_horizontal = ('tag', )
-    search_fields = ('=id',)
+    fields = (
+        'name',
+        'image',
+        'category',
+        'is_published',
+        'tag',
+        'used_times',
+        )
+    readonly_fields = (
+        'used_times',
+        )
+    list_display = (
+        'image_tag',
+        'is_published',
+        'category',
+        'get_tags',
+        'name',
+        )
+    list_editable = (
+        'name',
+        'category',
+        'is_published',
+        )
+    list_filter = (
+        'is_published',
+        'category',
+        'tag',
+        )
+    filter_horizontal = (
+        'tag',
+        )
+    search_fields = (
+        '=id',
+        )
     search_help_text = ('Поиск по идентификатору шаблона (точное совпадение)')
     list_per_page = 10
-    actions = ['publish', 'hide']
+    actions = [
+        'publish',
+        'hide',
+        ]
     actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
@@ -91,12 +127,22 @@ class TemplateAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    '''Админ-панель модели Tag с фильтрацией по названию'''
-    list_display = ('id', 'name', 'slug', 'templates_use_this')
+    """Админ-панель модели Tag с фильтрацией по названию."""
+
+    list_display = (
+        'id',
+        'name',
+        'slug',
+        'templates_use_this',
+        )
     list_per_page = 50
-    search_fields = ('name',)
+    search_fields = (
+        'name',
+        )
     search_help_text = ('Поиск по имени тега')
-    prepopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {
+        'slug': ('name',)
+        }
     actions_on_bottom = True
 
     def get_queryset(self, request):
@@ -113,3 +159,19 @@ class TagAdmin(admin.ModelAdmin):
     )
     def templates_use_this(self, obj):
         return obj.templates_use_this
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    """Админ-панель модели Category."""
+
+    list_display = (
+        'id',
+        'name',
+        )
+    list_per_page = 20
+    search_fields = (
+        'name',
+        )
+    search_help_text = ('Поиск по названию категории')
+    actions_on_bottom = True
