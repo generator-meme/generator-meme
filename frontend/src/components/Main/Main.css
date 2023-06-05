@@ -56,12 +56,12 @@
 }
 
 .main__label:hover {
-  color: #1083dd;
+  color: #AC52D1;
   opacity: 0.51;
 }
 
 .main__label:hover:active {
-  color: #125a93;
+  color: #7657CD;
   opacity: 1;
 }
 

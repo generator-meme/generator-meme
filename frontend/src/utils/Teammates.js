@@ -25,7 +25,7 @@ const Teammates = [
           {
             desc: "с 16.01.23 по 19.03.23 (9 спринтов) – ",
             name: "Анна Король",
-            link: "",
+            link: "https://hh.ru/resume/4a2227c3ff0b2949250039ed1f4b6869323349",
           },
         ],
     },
