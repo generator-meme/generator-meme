@@ -24,7 +24,8 @@ class TemplateFilter(filters.FilterSet):
     class Meta:
         model = Template
         fields = [
-            'tag'
+            'tag',
+            'category',
         ]
 
 
