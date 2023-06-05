@@ -19,17 +19,17 @@ const EditorButtonsList = ({
 
   const openOutsideText = (e, top, bottom) => {
     if (top) {
-      setOutsideTopVisible((prev) => ({ ...prev, isVisible: true}));
+      setOutsideTopVisible();
     };
     if (bottom) {
-      setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
+      setOutsideBottomVisible();
     };
   };
 
   const addExtraText = () => {
     console.log("addExtraText");
 
-    if (extraTexts.length > 9) {
+    if (extraTexts.length > 13) {
       console.log("Вы не можете создавать более 10 дополнительных текстов")
       return; //вывести сообщение пользователю?
     };
