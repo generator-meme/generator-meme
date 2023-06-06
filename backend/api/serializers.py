@@ -4,8 +4,7 @@ from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import (BooleanField, IntegerField,
                                         ModelSerializer,
-                                        PrimaryKeyRelatedField,
-                                        SerializerMethodField, UUIDField,
+                                        PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
 
 from memes.models import (Category, Favorite, Meme, Tag, Template,
@@ -90,7 +89,6 @@ class MemeReadSerializer(ModelSerializer):
     class Meta:
         model = Meme
         fields = '__all__'
-
 
 
 class MemeWriteSerializer(ModelSerializer):
