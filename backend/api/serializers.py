@@ -4,8 +4,7 @@ from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.serializers import (BooleanField, IntegerField,
                                         ModelSerializer,
-                                        PrimaryKeyRelatedField,
-                                        SerializerMethodField, UUIDField,
+                                        PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
 
 from memes.models import (Category, Favorite, Meme, Tag, Template,
@@ -86,19 +85,10 @@ class MemeReadSerializer(ModelSerializer):
 
     id = UUIDField(read_only=True, default=uuid4)
     author = UserSerializer(read_only=True)
-    template = SerializerMethodField()
 
     class Meta:
         model = Meme
         fields = '__all__'
-
-    def get_template(self, obj):
-        template = obj.template
-        template.used_times = TemplateUsedTimes.objects.get(
-            template=template
-        ).used_times
-        serializer = TemplateReadSerializer(template)
-        return serializer.data
 
 
 class MemeWriteSerializer(ModelSerializer):
@@ -122,10 +112,11 @@ class MemeWriteSerializer(ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         """Проверяет на авторизацию, добавляет автора мема."""
-        template = validated_data['template']
-        obj, _ = TemplateUsedTimes.objects.get_or_create(template=template)
-        obj.used_times += 1
-        obj.save()
+        if validated_data.get('template'):
+            template = validated_data['template']
+            obj, _ = TemplateUsedTimes.objects.get_or_create(template=template)
+            obj.used_times += 1
+            obj.save()
         request = self.context.get('request')
         if request.user.is_authenticated:
             return Meme.objects.create(
