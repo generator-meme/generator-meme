@@ -94,7 +94,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
         )
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ListRetriveViewSet):
     """Представление для модели Tag."""
 
     serializer_class = TagSerializer
