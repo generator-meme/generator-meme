@@ -1,4 +1,4 @@
-from django.db.models import Case, Exists, OuterRef, Value, When
+from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -11,17 +11,21 @@ from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
 from api.permissions import AdminOrReadOnly
-from api.serializers import (FavoriteSerializer, MemeReadSerializer,
-                             MemeWriteSerializer, TagSerializer,
-                             TemplateReadSerializer, TemplateWriteSerializer)
+from api.serializers import (CategorySerializer, FavoriteSerializer,
+                             MemeReadSerializer, MemeWriteSerializer,
+                             TagSerializer, TemplateReadSerializer,
+                             TemplateWriteSerializer)
 from api.services import create_delete_relation
-from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
+from api.viewsets import ListRetriveViewSet
+from memes.models import (Category, Favorite, Meme, Tag, Template,
+                          TemplateUsedTimes)
 
 
 class MemeViewSet(viewsets.ModelViewSet):
-    '''Представление для модели готового мема'''
+    """Представление для модели готового мема."""
+
     queryset = Meme.objects.all()
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ('author',)
 
     def get_serializer_class(self):
@@ -47,7 +51,8 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    """Представление для модели Meme"""
+    """Представление для модели Meme."""
+
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
@@ -90,9 +95,26 @@ class TemplateViewSet(viewsets.ModelViewSet):
 
 
 class TagViewSet(viewsets.ModelViewSet):
-    '''Представление для модели Tag'''
-    queryset = Tag.objects.all()
+    """Представление для модели Tag."""
+
     serializer_class = TagSerializer
     permission_classes = [AdminOrReadOnly]
-    filter_backends = (TagSearchFilter,)
-    search_fields = ('^name',)
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = TagSearchFilter
+
+    def get_queryset(self):
+        """Получить кверисет. Аннотируется количеством опубликованных
+        шаблонов использующих этот тег и сортирует по нему по убывающей,
+        потом лексикографически."""
+        tags = Tag.objects.all()
+        return tags.annotate(templates_use_this=Count(
+            'memes',
+            filter=Q(memes__is_published=True)
+        )).order_by('-templates_use_this', 'name')
+
+
+class CategoryViewSet(ListRetriveViewSet):
+    """Представление для модели Category."""
+
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer

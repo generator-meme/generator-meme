@@ -8,31 +8,61 @@ from rest_framework.serializers import (BooleanField, IntegerField,
                                         SerializerMethodField, UUIDField,
                                         ValidationError)
 
-from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
+from memes.models import (Category, Favorite, Meme, Tag, Template,
+                          TemplateUsedTimes)
 from users.serializers import UserSerializer
 
 
 class TagSerializer(ModelSerializer):
-    '''Сериализатор модели Tag'''
+    """Сериализатор модели Tag."""
+
     class Meta:
-        fields = ('id', 'name', 'slug')
+        fields = (
+            'id',
+            'name',
+            'slug',
+        )
         model = Tag
 
 
+class CategorySerializer(ModelSerializer):
+    """Сериализатор модели Category."""
+
+    class Meta:
+        fields = (
+            'id',
+            'name',
+        )
+        model = Category
+
+
 class TemplateReadSerializer(ModelSerializer):
-    '''Сериализатор модели Template для чтения объекта'''
+    """Сериализатор модели Template для чтения объекта."""
+
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
     used_times = IntegerField()
     is_favorited = BooleanField(read_only=True)
+    category = CategorySerializer(read_only=True,)
 
     class Meta:
         model = Template
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'image',
+            'category',
+            'tag',
+            'created_at',
+            'is_published',
+            'is_favorited',
+            'used_times',
+        )
 
 
 class TemplateWriteSerializer(ModelSerializer):
-    '''Сериализатор модели Meme для записи объекта'''
+    """Сериализатор модели Template для записи объекта."""
+
     id = UUIDField(read_only=True, default=uuid4)
     image = Base64ImageField(
         use_url=True,
@@ -42,6 +72,9 @@ class TemplateWriteSerializer(ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
+    category = PrimaryKeyRelatedField(
+        queryset=Category.objects.all(),
+    )
 
     class Meta:
         model = Template
@@ -49,7 +82,8 @@ class TemplateWriteSerializer(ModelSerializer):
 
 
 class MemeReadSerializer(ModelSerializer):
-    '''Сериализатор модели Meme для чтения объекта'''
+    """Сериализатор модели Meme для чтения объекта."""
+
     id = UUIDField(read_only=True, default=uuid4)
     author = UserSerializer(read_only=True)
     template = SerializerMethodField()
@@ -68,7 +102,8 @@ class MemeReadSerializer(ModelSerializer):
 
 
 class MemeWriteSerializer(ModelSerializer):
-    '''Сериализатор модели Meme для записи объекта'''
+    """Сериализатор модели Meme для записи объекта."""
+
     id = UUIDField(read_only=True, default=uuid4)
     image = Base64ImageField(
         use_url=True,
@@ -86,7 +121,7 @@ class MemeWriteSerializer(ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        '''Проверяет на авторизацию, добавляет автора мема'''
+        """Проверяет на авторизацию, добавляет автора мема."""
         template = validated_data['template']
         obj, _ = TemplateUsedTimes.objects.get_or_create(template=template)
         obj.used_times += 1
@@ -111,7 +146,8 @@ class MemeWriteSerializer(ModelSerializer):
 
 
 class FavoriteSerializer(ModelSerializer):
-    '''Сериализатор модели Favorite'''
+    """Сериализатор модели Favorite."""
+
     id = UUIDField(read_only=True, default=uuid4)
 
     class Meta:
@@ -119,7 +155,7 @@ class FavoriteSerializer(ModelSerializer):
         model = Favorite
 
     def validate(self, data):
-        '''Валидирует на наличие шаблона в избранных'''
+        """Валидирует на наличие шаблона в избранных."""
         request = self.context['request']
         if not request or request.user.is_anonymous:
             return False

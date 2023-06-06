@@ -8,15 +8,11 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=False) == 'True'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '82.146.61.116',
-    'ilovememes.ru',
-    'host.docker.internal',
-    'testmemes.ddns.net',
-]
+DEVELOPE = os.getenv('DEVELOPE', default=False) == 'True'
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split(',')
 
 CSRF_TRUSTED_ORIGINS = ['https://ilovememes.ru', 'https://testmemes.ddns.net']
 

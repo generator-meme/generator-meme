@@ -1,15 +1,16 @@
 import os
-import requests
+from datetime import datetime
 
+import requests
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from dotenv import load_dotenv
-from datetime import datetime
 
 DOMAIN = os.environ.get('DOMAIN')
 
 load_dotenv()
 
-if DOMAIN == 'host.docker.internal':
+if settings.DEVELOPE:
     AUTH_URL = f'http://{DOMAIN}/api/auth/token/login'
     TEMPLATE_URL = f'http://{DOMAIN}/api/templates/'
 else:
@@ -39,7 +40,7 @@ class Command(BaseCommand):
         return data.content.decode('utf-8')[15:-2]
 
     def upload_images(self, token):
-        if DOMAIN == 'host.docker.internal':
+        if settings.DEVELOPE:
             file = 'memes.csv'
         else:
             file = f'{datetime.now().date()}_memes.csv'
