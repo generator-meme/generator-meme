@@ -21,7 +21,7 @@ class TagSerializer(ModelSerializer):
             'id',
             'name',
             'slug',
-            )
+        )
         model = Tag
 
 
@@ -32,7 +32,7 @@ class CategorySerializer(ModelSerializer):
         fields = (
             'id',
             'name',
-            )
+        )
         model = Category
 
 

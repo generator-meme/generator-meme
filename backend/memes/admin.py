@@ -21,10 +21,10 @@ class MemeAdmin(admin.ModelAdmin):
         'author',
         'template',
         'created_at',
-        )
+    )
     list_filter = (
         'author',
-        )
+    )
 
 
 @admin.register(Template)
@@ -53,39 +53,39 @@ class TemplateAdmin(admin.ModelAdmin):
         'is_published',
         'tag',
         'used_times',
-        )
+    )
     readonly_fields = (
         'used_times',
-        )
+    )
     list_display = (
         'image_tag',
         'is_published',
         'category',
         'get_tags',
         'name',
-        )
+    )
     list_editable = (
         'name',
         'category',
         'is_published',
-        )
+    )
     list_filter = (
         'is_published',
         'category',
         'tag',
-        )
+    )
     filter_horizontal = (
         'tag',
-        )
+    )
     search_fields = (
         '=id',
-        )
+    )
     search_help_text = ('Поиск по идентификатору шаблона (точное совпадение)')
     list_per_page = 10
     actions = [
         'publish',
         'hide',
-        ]
+    ]
     actions_on_bottom = True
 
     @admin.action(description='Добавить на сайт выбранные шаблоны')
@@ -134,15 +134,15 @@ class TagAdmin(admin.ModelAdmin):
         'name',
         'slug',
         'templates_use_this',
-        )
+    )
     list_per_page = 50
     search_fields = (
         'name',
-        )
+    )
     search_help_text = ('Поиск по имени тега')
     prepopulated_fields = {
         'slug': ('name',)
-        }
+    }
     actions_on_bottom = True
 
     def get_queryset(self, request):
@@ -169,11 +169,11 @@ class CategoryAdmin(admin.ModelAdmin):
         'id',
         'name',
         'templates_use_this',
-        )
+    )
     list_per_page = 20
     search_fields = (
         'name',
-        )
+    )
     search_help_text = ('Поиск по названию категории')
     actions_on_bottom = True
 
