@@ -98,7 +98,6 @@ class TagViewSet(ListRetriveViewSet):
     """Представление для модели Tag."""
 
     serializer_class = TagSerializer
-    permission_classes = [AdminOrReadOnly]
     filter_backends = (DjangoFilterBackend, )
     filterset_class = TagSearchFilter
 
