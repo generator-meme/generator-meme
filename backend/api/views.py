@@ -10,6 +10,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
+from api.paginators import TemplatePagination
 from api.permissions import AdminOrReadOnly
 from api.serializers import (CategorySerializer, FavoriteSerializer,
                              MemeReadSerializer, MemeWriteSerializer,
@@ -54,6 +55,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     """Представление для модели Meme."""
 
     permission_classes = [AdminOrReadOnly]
+    pagination_class = TemplatePagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
     ordering_fields = ['created_at']
