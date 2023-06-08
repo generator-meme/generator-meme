@@ -15,15 +15,14 @@ class TeammateInline(admin.TabularInline):
 class GroupAdmin(admin.ModelAdmin):
     """Админ-панель модели Group."""
 
+    @admin.display(description="Участники")
     def get_teammates(self, obj):
         """Получить строку с участниками гуппы."""
         return ",  " . join([x.__str__() for x in obj.teammates.all()])
 
+    @admin.display(description="Редактировать")
     def show_firm_url(self, obj):
         return format_html("<a href='{url}'>Редактировать</a>", url=obj.id)
-
-    show_firm_url.short_description = 'Редактировать'
-    get_teammates.short_description = 'Участники'
 
     fields = (
         'name',
@@ -53,14 +52,12 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 @admin.register(Teammate)
-@admin.display(description="Firm URL")
 class TeammateAdmin(admin.ModelAdmin):
     """Админ-панель модели Teammate."""
 
+    @admin.display(description="Редактировать")
     def show_firm_url(self, obj):
         return format_html("<a href='{url}'>Редактировать</a>", url=obj.id)
-
-    show_firm_url.short_description = 'Редактировать'
 
     fields = (
         'name',
