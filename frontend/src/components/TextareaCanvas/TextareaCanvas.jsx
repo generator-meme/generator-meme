@@ -4,14 +4,17 @@ import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
+import { fontFamilyOptions } from "../../utils/constants";
 import { move } from "../../utils/functionsForCanvas.js";
 
 
 const TextareaCanvas = ({
+    index,
     textValues,
     imageSizes,
     setTextValues,
     outsideTopTextValues,
+    deleteTextFromArray,
   }) => {
 
   const latestTextValues = useLatest(textValues);
@@ -20,10 +23,10 @@ const TextareaCanvas = ({
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
   const [placeholderText, setPlaceholderText] = useState("Введите текст");
+  const [isHover, setIsHover] = useState(false);
 
   const pickup = (e) => {
     if (!(e.target === textMoving.current)) return;
-    // if (textValues.isMoving) return;
     if (latestTextValues.current.isMoving) return;
 
     if (e.clientX) {
@@ -58,19 +61,41 @@ const TextareaCanvas = ({
     }
   };
 
-  const deleteText = useCallback((e) => {
+  const deleteText = (e) => {
     e.preventDefault();
     if (e.target === deleteTextButton.current) {
-      console.log("delete")
-      updateTextValues(setTextValues, latestTextValues.current, true);
-      // setTextValues({ ...textValues, isVisible: false });
+      // updateTextValues(setTextValues, latestTextValues.current, true);
+      // if (textValues.isOutside) {
+        setTextValues({
+          ...latestTextValues.current,
+          fontSize: 40,
+          fontFamily: fontFamilyOptions.roboto,
+          selectedOption: 0,
+          fontPosition: "center",
+          fontWeight: false,
+          fontStyle: false,
+          fillTextColor: "black",
+          strokeTextColor: "transparent",
+          underline: false,
+          lineThrough: false,
+          opacityLevel: 100,
+          backColor: "transparent",
+          opacity: 1,
+          isVisible: false,
+          text: "",
+        });
+      //  if (!textValues.isOutside) {
+      //   deleteTextFromArray(index);
+      //   console.log("delete")
+      // };
     };
-  }, [setTextValues, latestTextValues]);
+  };
 
   useEffect(() => { // подписка на изменение размера области textarea
     if (text.current !== null) {
       const observer = new ResizeObserver(
         () => {
+          if (!latestTextValues.current.isVisible) return;
           setTextValues({ ...latestTextValues.current, width: text.current?.offsetWidth, height: text.current?.offsetHeight});
           console.log("observer")
         }
@@ -102,8 +127,8 @@ const TextareaCanvas = ({
   //       setTextValues({ ...latestTextValues.current, isCurrent: true });
   //     } else if (panel.current?.contains(e.target)) {
   //       return;
-  //     } else if ((!textMoving.current?.contains(e.target) && (latestTextValues.current.isCurrent || latestTextValues.current.hover))) {
-  //       setTextValues({ ...latestTextValues.current, isCurrent: false, hover: false});
+  //     } else if ((!textMoving.current?.contains(e.target) && (latestTextValues.current.isCurrent))) { // удалено: || latestTextValues.current.hover
+  //       setTextValues({ ...latestTextValues.current, isCurrent: false}); // удалено: , hover: false
   //     }
   //   };
     
@@ -129,27 +154,22 @@ const TextareaCanvas = ({
           maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
-          // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
             textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
           borderColor:
-            textValues.isCurrent || textValues.hover
+            textValues.isCurrent || isHover
               ? "#EBFF00"
               : "transparent",
           zIndex: textValues.isCurrent? 3 : 0,
         }}
         onMouseDown={pickup}
         onTouchStart={pickup}
-        onMouseEnter={(e) =>
-          setTextValues({ ...textValues, hover: true })
-        }
-        onMouseLeave={(e) =>
-          setTextValues({ ...textValues, hover: false })
-        }
+        onMouseEnter={(e) => setIsHover(true)}
+        onMouseLeave={(e) => setIsHover(false)}
       >
         <div className="textarea__container">
-          {(textValues.isCurrent || textValues.hover) && (
+          {(textValues.isCurrent || isHover) && (
             <>
               <button
                 ref={deleteTextButton}
@@ -167,7 +187,6 @@ const TextareaCanvas = ({
           </>
           )}
           <TextareaAutosize
-            // wrap={`${textValues.isOutside ? "off" : "hard"}`}
             wrap="hard"
             ref={text}
             className="textarea__text"
@@ -184,7 +203,6 @@ const TextareaCanvas = ({
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,
-              // maxHeight: textValues.isOutside ? 70 : imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
               fontWeight: textValues.fontWeight ? 700 : 400,
@@ -207,7 +225,6 @@ const TextareaCanvas = ({
           className="textarea__panel"
           style={{
             top: outsideTopTextValues[0].isVisible? - 36 - 30 - 80 : - 36 - 30,
-            // top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
             left: (imageSizes.width < 609) ? - ((609 - imageSizes.width) / 2) : 0,
           }}
         >

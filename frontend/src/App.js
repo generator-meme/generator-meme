@@ -4,6 +4,7 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
 import Canvas from "./components/Canvas/Canvas";
+import CanvasImagePreloader from "./components/CanvasImagePreloader/CanvasImagePreloader";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
 import api from "./utils/api";
 import "./App.css";
@@ -18,13 +19,12 @@ const App = () => {
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
   const [tags, setTags] = useState([]);
-  // const []
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
-        // console.log(memeUrl, memeId);
+        console.log(memeUrl, memeId);
         setNewMeme(res);
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
@@ -82,7 +82,7 @@ const App = () => {
         <Route
           path="/:id"
           element={
-            <Canvas
+            <CanvasImagePreloader
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}

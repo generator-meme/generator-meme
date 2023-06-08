@@ -4,11 +4,9 @@ import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-
 import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
-import { createExtraText } from '../../utils/constants';
+import { createExtraText, updateOutideText } from '../../utils/constants';
 
 const EditorButtonsList = ({
-  setOutsideTopVisible,
-  setOutsideBottomVisible,
   setOutsideTextsVisible,
   textsValues,
   setTextsValues,
@@ -19,12 +17,15 @@ const EditorButtonsList = ({
   const bthList = useRef(null);
 
   const openOutsideText = (e, top, bottom) => {
-    if (top && bottom) {
-      setOutsideTextsVisible();
-    } else if (top) {
-      setOutsideTopVisible();
-    } else {
-      setOutsideBottomVisible();
+    let indexesArrey = [];
+    if (top && !textsValues[0].isVisible) {
+      indexesArrey.push(0);
+    };
+    if (bottom && !textsValues[1].isVisible) {
+      indexesArrey.push(1);
+    };
+    if (indexesArrey.length > 0) {
+      setOutsideTextsVisible(indexesArrey);
     };
   };
 

@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useRef,
   useMemo,
-  useCallback,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
@@ -12,7 +11,6 @@ import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from '../../utils/constants';
 import {
-  contain,
   calculateMarginX,
   wrapText,
   drawText,
@@ -25,18 +23,11 @@ const Canvas = ({
   isNewMeme,
   memes,
   setImageNotFoundOpen,
+  imageSizes,
+  image,
 }) => {
   const canvas = useRef(null);
   const navigate = useNavigate();
-  const [image, setImage] = useState(null);
-
-  const imageSizes = useMemo(() => {
-    if (image) {
-      return contain(675, 556, image.naturalWidth, image.naturalHeight); // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
-    }
-    return null;
-  }, [image]);
-
   const outsideTextHeight = 80;
 
   const [textsValues, setTextsValues] = useState([
@@ -45,7 +36,6 @@ const Canvas = ({
       isOutside: true,
       isCurrent: false,
       isVisible: false,
-      hover: false,
       text: "",
       fontSize: 40,
       fontFamily: fontFamilyOptions.roboto,
@@ -63,7 +53,7 @@ const Canvas = ({
       width: imageSizes?.width - 4,
       maxWidth: imageSizes?.width - 4,
       textAreaWidth: 0,
-      height: outsideTextHeight,
+      height: 70,
       top: -80,
       left: 0,
       bottom: null,
@@ -75,8 +65,7 @@ const Canvas = ({
       name: "outsideBottomTextValues",
       isOutside: true,
       isCurrent: false,
-      isVisible: false,
-      hover: false,
+      isVisible: true,
       text: "",
       fontSize: 40,
       fontFamily: fontFamilyOptions.roboto,
@@ -94,7 +83,7 @@ const Canvas = ({
       width: imageSizes?.width - 4,
       maxWidth: imageSizes?.width - 4,
       textAreaWidth: 0,
-      height: outsideTextHeight,
+      height: 70,
       top: null,
       left: 0,
       bottom: -80,
@@ -107,7 +96,6 @@ const Canvas = ({
       isOutside: false,
       isCurrent: false,
       isVisible: true,
-      hover: false,
       text: "",
       fontSize: 40,
       fontFamily: fontFamilyOptions.roboto,
@@ -185,6 +173,7 @@ const Canvas = ({
       return item.id === id;
     });
     if (template) {
+      console.log("it is meme from array")
       handleCreateNewMeme(
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
@@ -192,7 +181,8 @@ const Canvas = ({
         navigate("/saved");
       });
     } else {
-      handleCreateNewMeme(canvas.current.toDataURL()).finally(() => {
+      console.log("it is my image")
+      handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(() => {
         navigate("/saved");
       });
     }
@@ -242,13 +232,21 @@ const Canvas = ({
           if (element.canvasTop !== null) return element.canvasTop;
           if (element.canvasBottom !== null) return element.canvasBottom;
         } else {
+          // let pointOY;
+          // if (element.top !== null) pointOY = element.top;
+          // if (element.bottom !== null) pointOY = element.bottom;
+          // return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
           let pointOY;
-          if (element.top !== null) pointOY = element.top;
-          if (element.bottom !== null) pointOY = element.bottom;
-          return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
+          if (element.top !== null) {
+            pointOY = element.top;
+            return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
+          } else {
+            pointOY = element.bottom;
+            return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
+          };
         }
     };
-    console.log(textsValues[0], textsValues[1]);
+    // console.log(textsValues[0], textsValues[1]);
     textsValues.forEach((element) => {
       if (!element.isVisible) return; // текст основные характеристики
       const elementOffsetY = getOffsetY(element);
@@ -282,7 +280,7 @@ const Canvas = ({
           element.width
         ).split("\n").reverse();
       }
-      
+
       elementTextWrap.forEach((t, i) =>
         drawText(
           t,
@@ -305,8 +303,6 @@ const Canvas = ({
     return (event.returnValue = "");
   };
 
-  console.log("texts", textsValues);
-
   useEffect(() => {
     // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
     // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
@@ -318,16 +314,6 @@ const Canvas = ({
 
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
-
-    const img = new Image(); // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте // создаем мзображеиние только при первом рендере, затем оно будет храниться в стейте
-    if (currentMeme) {
-      img.src = currentMeme.image;
-    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
-      img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
-    }
-    img.addEventListener("load", () => {
-      setImage(img);
-    });
 
     // if (!isNewMeme && localStorage.getItem("topText") !== null) {
     //   const topText = JSON.parse(localStorage.getItem("topText"));
@@ -351,7 +337,7 @@ const Canvas = ({
 
     // личные изображения не созраняются в localstorage,
     // если это личное изображение - навешиваем слушатель на закрытие вкладки,
-    // чтобы предупредить пользователя о том, что изменения не сохранятся
+    // // чтобы предупредить пользователя о том, что изменения не сохранятся
     if (localStorage.getItem("currentMeme") === null) {
       window.addEventListener("beforeunload", handleOnBeforeUnload);
 
@@ -376,10 +362,6 @@ const Canvas = ({
   // useEffect(() => {
   //   localStorage.setItem("outsideBottomText", JSON.stringify(outsideBottomTextValues));
   // }, [outsideBottomTextValues]);
-
-  if (!image) {
-    return null;
-  }
 
   return (
     <main className="main-editor">
@@ -417,17 +399,26 @@ const Canvas = ({
             <fieldset
               className="editor__fieldset"
             >
-              {textsValues.map((extraText, index) => {
+              {textsValues.map((text, index) => {
                 return (
                   <TextareaCanvas
                     key={index}
-                    textValues={extraText}
+                    index={index}
+                    textValues={text}
                     imageSizes={imageSizes}
-                    setTextValues={(newExtraText) => {
+                    setTextValues={(newText) => {
                       setTextsValues((textsValues) => {
-                        const newExtraTexts = [...textsValues];
-                        newExtraTexts[index] = newExtraText;
-                        return newExtraTexts;
+                        const newTexts = [...textsValues];
+                        newTexts[index] = newText;
+                        return newTexts;
+                      })
+                    }}
+                    deleteTextFromArray={(index) => {
+                      setTextsValues((textsValues) => {
+                        const newTexts = [...textsValues];
+                        newTexts.splice(index, 1);
+                        console.log(newTexts.length);
+                        return newTexts;
                       })
                     }}
                     outsideTopTextValues={textsValues}
@@ -437,28 +428,15 @@ const Canvas = ({
             </fieldset>
           </form>
           <EditorButtonsList
-            setOutsideTopVisible={() => {//проверить
-                      setTextsValues((textsValues) => {
-                        const newExtraTexts = [...textsValues];
-                        newExtraTexts[0].isVisible = true;
-                        return newExtraTexts;
-                      })
-                    }}
-            setOutsideBottomVisible={() => {
-                      setTextsValues((textsValues) => {
-                        const newExtraTexts = [...textsValues];
-                        newExtraTexts[1].isVisible = true;
-                        return newExtraTexts;
-                      })
-                    }}
-            setOutsideTextsVisible={() => {
-                      setTextsValues((textsValues) => {
-                        const newExtraTexts = [...textsValues];
-                        newExtraTexts[0].isVisible = true;
-                        newExtraTexts[1].isVisible = true;
-                        return newExtraTexts;
-                      })
-                    }}
+            setOutsideTextsVisible={(indexes) => {
+              setTextsValues((textsValues) => {
+                const newExtraTexts = [...textsValues];
+                indexes.forEach((index) => {
+                  return newExtraTexts[index].isVisible = true;
+                })
+                return newExtraTexts;
+                })
+            }}
             textsValues={textsValues}
             setTextsValues={setTextsValues}
             imageSizes={imageSizes}
