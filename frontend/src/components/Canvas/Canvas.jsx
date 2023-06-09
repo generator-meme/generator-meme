@@ -347,6 +347,10 @@ const Canvas = ({
     };
   }, []);
 
+  useEffect(() => {
+    console.log(textsValues)
+  }, [textsValues.length]);
+
   // useEffect(() => {
   //   localStorage.setItem("topText", JSON.stringify(topTextValues));
   // }, [topTextValues]);
@@ -417,7 +421,7 @@ const Canvas = ({
                       setTextsValues((textsValues) => {
                         const newTexts = [...textsValues];
                         newTexts.splice(index, 1);
-                        console.log(newTexts.length);
+                        console.log(newTexts);
                         return newTexts;
                       })
                     }}

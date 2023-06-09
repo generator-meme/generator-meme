@@ -4,7 +4,6 @@ import "./TextareaCanvas.css";
 import TextareaAutosize from 'react-textarea-autosize';
 import Panel from '../Panel/Panel';
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
-import { fontFamilyOptions } from "../../utils/constants";
 import { move } from "../../utils/functionsForCanvas.js";
 
 
@@ -64,45 +63,29 @@ const TextareaCanvas = ({
   const deleteText = (e) => {
     e.preventDefault();
     if (e.target === deleteTextButton.current) {
-      // updateTextValues(setTextValues, latestTextValues.current, true);
-      // if (textValues.isOutside) {
-        setTextValues({
-          ...latestTextValues.current,
-          fontSize: 40,
-          fontFamily: fontFamilyOptions.roboto,
-          selectedOption: 0,
-          fontPosition: "center",
-          fontWeight: false,
-          fontStyle: false,
-          fillTextColor: "black",
-          strokeTextColor: "transparent",
-          underline: false,
-          lineThrough: false,
-          opacityLevel: 100,
-          backColor: "transparent",
-          opacity: 1,
-          isVisible: false,
-          text: "",
-        });
-      //  if (!textValues.isOutside) {
-      //   deleteTextFromArray(index);
-      //   console.log("delete")
-      // };
+      if (textValues.isOutside) {
+        updateTextValues(setTextValues, latestTextValues.current, true)
+      } else {
+        deleteTextFromArray(index);
+      }
     };
   };
 
   useEffect(() => { // подписка на изменение размера области textarea
-    if (text.current !== null) {
+    if (text.current !== null && textValues.isVisible) {
+      const textObserved = text.current;
       const observer = new ResizeObserver(
         () => {
-          if (!latestTextValues.current.isVisible) return;
           setTextValues({ ...latestTextValues.current, width: text.current?.offsetWidth, height: text.current?.offsetHeight});
           console.log("observer")
         }
       );
-      observer.observe(text.current);
+      observer.observe(textObserved);
+      return () => {
+        observer.unobserve(textObserved);
+      }
     };
-  }, []);
+  }, [textValues.isVisible]);
 
   useEffect(() => {
     if (!latestTextValues.current.isOutside && latestTextValues.current.isVisible) {
@@ -140,7 +123,7 @@ const TextareaCanvas = ({
   //   };
   // }, []);
 
-  if (!textValues.isVisible) return null;
+  if (!textValues.isVisible || !textValues) return null;
 
   return (
     <>

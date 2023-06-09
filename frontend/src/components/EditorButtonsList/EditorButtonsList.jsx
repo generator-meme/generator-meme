@@ -4,7 +4,7 @@ import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-
 import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
-import { createExtraText, updateOutideText } from '../../utils/constants';
+import { createExtraText } from '../../utils/constants';
 
 const EditorButtonsList = ({
   setOutsideTextsVisible,
@@ -30,15 +30,12 @@ const EditorButtonsList = ({
   };
 
   const addExtraText = () => {
-    console.log("addExtraText");
-
     if (textsValues.length > 13) {
-      console.log("Вы не можете создавать более 10 дополнительных текстов")
-      return; //вывести сообщение пользователю?
+      alert("На данный момент создание более 10 дополнительных текстов не предусмотрено")
+      return;
     };
 
     const newExtraText = createExtraText(imageSizes);
-    console.log(newExtraText);
     setTextsValues([...textsValues, newExtraText]);
   };
 
@@ -87,7 +84,6 @@ const EditorButtonsList = ({
       <li>
         <button 
           className="buttons__bth buttons__bth_type_add-text"
-          // onClick={e => e.preventDefault()}
           onClick={e => addExtraText(e)}
           >
           <div className="buttons__bth-img">
@@ -95,7 +91,6 @@ const EditorButtonsList = ({
             <Plus className="buttons__svg-plus buttons__svg-plus-text" />
           </div>
           <p className="buttons__bth-text">добавить текст</p>
-          {/* <p className="buttons__prompt">В РАЗРАБОТКЕ</p> */}
         </button>
       </li>
       <li>

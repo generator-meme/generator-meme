@@ -64,7 +64,6 @@ export const updateOutideText = (top, imageSizes) => {
     isOutside: true,
     isCurrent: false,
     isVisible: true,
-    // hover: false,
     text: "",
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
