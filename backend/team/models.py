@@ -49,7 +49,7 @@ class TeamGroup(models.Model):
 
     teammates = models.ManyToManyField(
         Teammate,
-        verbose_name="Ингредиенты",
+        verbose_name="Участники",
         through='GroupTeammate',
         related_name='teammates',
     )
