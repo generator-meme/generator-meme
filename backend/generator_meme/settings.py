@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'django_filters',
     'api',
     'memes',
-    'users'
+    'users',
+    'team',
 ]
 
 MIDDLEWARE = [
