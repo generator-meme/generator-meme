@@ -9,7 +9,7 @@ from rest_framework.serializers import (BooleanField, IntegerField,
 
 from memes.models import (Category, Favorite, Meme, Tag, Template,
                           TemplateUsedTimes)
-from team.models import Teammate, TeamGroup
+from team.models import TeamGroup, Teammate
 from users.serializers import UserSerializer
 
 
