@@ -11,15 +11,14 @@ from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
 from api.permissions import AdminOrReadOnly
-from api.serializers import (CategorySerializer, FavoriteSerializer,
-                             MemeReadSerializer, MemeWriteSerializer,
-                             TagSerializer, TeamGroupSerializer,
-                             TemplateReadSerializer, TemplateWriteSerializer)
+from api.serializers_memes import (Category, CategorySerializer,
+                                   FavoriteSerializer, MemeReadSerializer,
+                                   MemeWriteSerializer, TagSerializer,
+                                   TemplateReadSerializer,
+                                   TemplateWriteSerializer)
 from api.services import create_delete_relation
 from api.viewsets import ListRetriveViewSet
-from memes.models import (Category, Favorite, Meme, Tag, Template,
-                          TemplateUsedTimes)
-from team.models import TeamGroup
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -118,10 +117,3 @@ class CategoryViewSet(ListRetriveViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
-
-class TeamGroupViewSet(ListRetriveViewSet):
-    """Команда проекта."""
-
-    queryset = TeamGroup.objects.all()
-    serializer_class = TeamGroupSerializer
