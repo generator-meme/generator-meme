@@ -85,13 +85,23 @@ class GroupRoleAdmin(admin.ModelAdmin):
 
     fields = (
         'name',
+        'is_admin',
+        'is_moderator',
     )
     list_display = (
         'id',
         'name',
+        'is_admin',
+        'is_moderator',
         'show_firm_url',
     )
+    list_editable = (
+        'is_admin',
+        'is_moderator',
+    )
     list_filter = (
+        'is_admin',
+        'is_moderator',
         'name',
     )
     search_fields = (

@@ -108,6 +108,16 @@ class GroupRole(models.Model):
         unique=True,
     )
 
+    is_admin = models.BooleanField(
+        verbose_name='Уровень администратора',
+        default=False,
+    )
+
+    is_moderator = models.BooleanField(
+        verbose_name='Уровень модератора',
+        default=False,
+    )
+
     class Meta:
         verbose_name = 'Роль в группе'
         verbose_name_plural = 'Роли в группе'
