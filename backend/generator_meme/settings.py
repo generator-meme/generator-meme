@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'memes',
     'users',
     'team',
+    'groups',
 ]
 
 MIDDLEWARE = [
