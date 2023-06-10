@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import (CategoryViewSet, MemeViewSet, TagViewSet, TeamGroupViewSet,
-                    TemplateViewSet)
+from api.views import CategoryViewSet, MemeViewSet, TagViewSet, TemplateViewSet
+from api.views_team import TeamGroupViewSet
 
 router = routers.DefaultRouter()
 router.register('memes', MemeViewSet, basename='memes')
