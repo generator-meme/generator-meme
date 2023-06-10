@@ -7,9 +7,9 @@ from rest_framework.serializers import (BooleanField, IntegerField,
                                         PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
 
+from api.serializers_users import UsersSerializer
 from memes.models import (Category, Favorite, Meme, Tag, Template,
                           TemplateUsedTimes)
-from users.serializers import UserSerializer
 
 
 class TagSerializer(ModelSerializer):
@@ -84,7 +84,7 @@ class MemeReadSerializer(ModelSerializer):
     """Сериализатор модели Meme для чтения объекта."""
 
     id = UUIDField(read_only=True, default=uuid4)
-    author = UserSerializer(read_only=True)
+    author = UsersSerializer(read_only=True)
 
     class Meta:
         model = Meme
@@ -99,7 +99,7 @@ class MemeWriteSerializer(ModelSerializer):
         use_url=True,
         max_length=None
     )
-    author = UserSerializer(read_only=True)
+    author = UsersSerializer(read_only=True)
     template = PrimaryKeyRelatedField(
         queryset=Template.objects.all(),
         required=False
