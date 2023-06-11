@@ -1,7 +1,6 @@
 import styles from "./SearchPanel.module.css";
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../utils/api";
-import Chip from "@mui/material/Chip";
 import { Tag } from "../Tag/Tag";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
@@ -9,7 +8,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [isToggleSuggestPanelColor, setIsToggleSuggestPanelColor] =
     useState(true);
   const [tagArray, setTagArray] = useState([]);
-  console.log(searchValue, tagArray);
+  const [isUnknownFlag, setIsUnknownFlag] = useState(false);
 
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
@@ -34,37 +33,34 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   };
   const stringToSearch = useMemo(() => {
     const tempTags = tags;
-    const tagIdArray = tempTags.filter((tag) => {
+    const tagIdArray = tagArray.map((tagName) => {
       let tempTag;
-      console.log(tempTag);
-      for (let i = 0; i < tagArray.length; i++) {
-        if (tag.name === tagArray[i]) {
-          tempTag = tagArray[i];
-        }
+      tempTag = tempTags.find((tag) => {
+        return tag.name === tagName;
+      });
+      if (!tempTag) {
+        return "unknownTag";
       }
-
-      return tempTag ? true : false;
+      return tempTag.id;
     });
-    return tagIdArray
-      .map((item) => {
-        return item.id;
-      })
-      .join(",");
+    return tagIdArray.join(",");
   }, [tagArray]);
 
-  console.log(stringToSearch);
+  useEffect(() => {
+    if (stringToSearch && stringToSearch.indexOf("unknownTag") !== -1) {
+      setIsUnknownFlag(true);
+    } else setIsUnknownFlag(false);
+  }, [stringToSearch]);
 
   const submitToSearch = async (e) => {
-    console.log("in submit");
     e.preventDefault();
     e.stopPropagation();
 
     try {
       if (tagArray.length === 0) {
-        console.log("zero");
         setFilterMemes(initMemes);
         return;
-      } else if (stringToSearch) {
+      } else if (stringToSearch && !isUnknownFlag) {
         const filteredMem = await api.getfilteredTemplates(stringToSearch);
         setFilterMemes(filteredMem);
       } else {
@@ -95,7 +91,6 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   }, [tags, searchValue]);
 
   const onDelete = (id) => {
-    console.log(id, tagArray);
     const tempTagArray = tagArray;
     const newTagArray = tempTagArray.filter((item) => {
       return item !== id;

@@ -5,7 +5,9 @@
   margin: 0 auto;
   box-sizing: border-box;
   position: relative;
+  overflow: none;
 }
+
 .wrap_background_form {
   width: 100%;
   background-color: #ffff;
@@ -14,9 +16,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 20px;
+  overflow: hidden;
 }
 .wrap_search_panel {
-  width: 98%;
+  box-sizing: border-box;
+  width: 100%;
   background-color: #fff;
   position: relative;
   display: flex;
@@ -31,8 +35,9 @@
   flex: auto;
   overflow: auto;
   flex-wrap: wrap;
-  width: 98%;
-  max-width: 98%;
+
+  overflow-x: none;
+  max-width: 100%;
   position: relative;
   display: flex;
   z-index: 3;
@@ -41,17 +46,18 @@
   border: none;
 }
 .search_input {
+  font-family: "Rubic", sans-serif;
+  font-size: 20px;
   height: 78px;
   border: none;
   border-radius: 20px;
-  font-size: 36px;
-  padding: 0 10px;
+  padding: 0 20px;
   flex-grow: 1;
   outline: none;
   z-index: 3;
 }
 .button_form {
-  width: 82px;
+  min-width: 82px;
   height: 78px;
   border: none;
   border-radius: 19px;
@@ -100,7 +106,7 @@
 .suggestions_wrap > div {
   height: 31px;
   padding: 5px 20px;
-  font-size: 30px;
+  font-size: 20px;
   width: 80%;
 }
 .suggestions_wrap > div:hover {
