@@ -59,7 +59,7 @@
     pointer-events: none;
 }
 
-.textarea__text:focus .textarea__text::-webkit-input-placeholder,
+.textarea__text::-webkit-input-placeholder,
 .textarea__text::-moz-placeholder,
 .textarea__text::-ms-input-placeholder,
 .textarea__text::placeholder {
