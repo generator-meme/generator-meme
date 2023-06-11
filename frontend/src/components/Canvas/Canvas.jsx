@@ -60,7 +60,7 @@ const Canvas = ({
     {
       name: "outsideBottomTextValues",
       isOutside: true,
-      isVisible: false,
+      isVisible: true,
       text: "",
       fontSize: 40,
       fontFamily: fontFamilyOptions.roboto,
