@@ -168,7 +168,7 @@ const Canvas = ({
       return item.id === id;
     });
     if (template) {
-      console.log("it is meme from array");
+      console.log("it's a meme from array");
       handleCreateNewMeme(
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
@@ -176,7 +176,7 @@ const Canvas = ({
         navigate("/saved");
       });
     } else {
-      console.log("it is my image");
+      console.log("it's my image");
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
           navigate("/saved");
@@ -311,29 +311,14 @@ const Canvas = ({
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
-    // if (!isNewMeme && localStorage.getItem("topText") !== null) {
-    //   const topText = JSON.parse(localStorage.getItem("topText"));
-    //   setTopTextValues(topText);
-    // }
-
-    // if (!isNewMeme && localStorage.getItem("bottomText") !== null) {
-    //   const bottomText = JSON.parse(localStorage.getItem("bottomText"));
-    //   setBottomTextValues(bottomText);
-    // }
-
-    // if (!isNewMeme && localStorage.getItem("outsideTopText") !== null) {
-    //   const outsideTopText = JSON.parse(localStorage.getItem("outsideTopText"));
-    //   setOutsideTopTextValues(outsideTopText);
-    // };
-
-    // if (!isNewMeme && localStorage.getItem("outsideBottomText") !== null) {
-    //   const outsideBottomText = JSON.parse(localStorage.getItem("outsideBottomText"));
-    //   setOutsideBottomTextValues(outsideBottomText);
-    // };
+    if (!isNewMeme && localStorage.getItem("textsValues") !== null) {
+      const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
+      setTextsValues(oldTextsValues);
+    }
 
     // личные изображения не созраняются в localstorage,
     // если это личное изображение - навешиваем слушатель на закрытие вкладки,
-    // // чтобы предупредить пользователя о том, что изменения не сохранятся
+    // чтобы предупредить пользователя о том, что изменения не сохранятся
     const handleOnBeforeUnload = (event) => {
       event.preventDefault();
       console.log("handleOnBeforeUnload");
@@ -349,21 +334,9 @@ const Canvas = ({
     }
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("topText", JSON.stringify(topTextValues));
-  // }, [topTextValues]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("bottomText", JSON.stringify(bottomTextValues));
-  // }, [bottomTextValues]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("outsideTopText", JSON.stringify(outsideTopTextValues));
-  // }, [outsideTopTextValues]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("outsideBottomText", JSON.stringify(outsideBottomTextValues));
-  // }, [outsideBottomTextValues]);
+  useEffect(() => {
+    localStorage.setItem("textsValues", JSON.stringify(textsValues));
+  }, [textsValues]);
 
   return (
     <main className="main-editor">

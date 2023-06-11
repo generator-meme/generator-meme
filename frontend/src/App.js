@@ -24,7 +24,7 @@ const App = () => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
-        console.log(memeUrl, memeId);
+        // console.log(memeUrl, memeId);
         setNewMeme(res);
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
