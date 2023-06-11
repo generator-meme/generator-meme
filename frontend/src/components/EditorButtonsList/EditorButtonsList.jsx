@@ -4,39 +4,22 @@ import { ReactComponent as OutsideTextImage } from "../../images/editor/outside-
 import { ReactComponent as AddTextImage } from "../../images/editor/add-text-main-part.svg";
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
-import { createExtraText } from '../../utils/constants';
 
 const EditorButtonsList = ({
-  setOutsideTextsVisible,
-  textsValues,
-  setTextsValues,
-  imageSizes
+  setOutsideTopVisible,
+  setOutsideBottomVisible,
 }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
   const bthList = useRef(null);
 
   const openOutsideText = (e, top, bottom) => {
-    let indexesArrey = [];
-    if (top && !textsValues[0].isVisible) {
-      indexesArrey.push(0);
+    if (top) {
+      setOutsideTopVisible((prev) => ({ ...prev, isVisible: true}));
     };
-    if (bottom && !textsValues[1].isVisible) {
-      indexesArrey.push(1);
+    if (bottom) {
+      setOutsideBottomVisible((prev) => ({ ...prev, isVisible: true}));
     };
-    if (indexesArrey.length > 0) {
-      setOutsideTextsVisible(indexesArrey);
-    };
-  };
-
-  const addExtraText = () => {
-    if (textsValues.length > 13) {
-      alert("На данный момент создание более 10 дополнительных текстов не предусмотрено")
-      return;
-    };
-
-    const newExtraText = createExtraText(imageSizes);
-    setTextsValues([...textsValues, newExtraText]);
   };
 
   useEffect(() => {
@@ -84,11 +67,11 @@ const EditorButtonsList = ({
       <li>
         <button 
           className="buttons__bth buttons__bth_type_add-text"
-          onClick={e => addExtraText(e)}
+          onClick={e => e.preventDefault()}
           >
           <div className="buttons__bth-img">
             <AddTextImage className="buttons__svg-add-text" />
-            <Plus className="buttons__svg-plus buttons__svg-plus-text" />
+            <Plus className="buttons__svg-plus" />
           </div>
           <p className="buttons__bth-text">добавить текст</p>
           <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
@@ -101,7 +84,7 @@ const EditorButtonsList = ({
         >
           <div className="buttons__bth-img">
             <AddImageImage className="buttons__svg-add-image" />
-            <Plus className="buttons__svg-plus buttons__svg-plus-image" />
+            <Plus className="buttons__svg-plus" />
           </div>
           <p className="buttons__bth-text">добавить изображение</p>
           <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
