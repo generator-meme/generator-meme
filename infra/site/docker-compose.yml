@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   frontend:
-    image: artkeyplex/frontend-generator-meme:latest
+    image: ilovememes/frontend-generator-meme:latest
     volumes:
       - ./data/frontend/:/app/result_build/
     depends_on:
@@ -26,7 +26,7 @@ services:
       - nginx
 
   backend:
-    image: artkeyplex/generator-meme:latest
+    image: ilovememes/generator-meme:latest
     restart: always
     volumes:
       - ./data/static/:/app/backend-static/

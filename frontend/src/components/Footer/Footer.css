@@ -1,4 +1,21 @@
 .footer {
   min-height: 110px;
   background-color: #FFFFDA;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 28px 60px;
+}
+.footer__link-team {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  color: #000000;
+}
+.footer__link-team--active {
+  color: #AC52D1;
+}
+.footer__link-team:hover{
+  color: #1083DD;
 }

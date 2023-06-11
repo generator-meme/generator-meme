@@ -91,6 +91,7 @@ const EditorButtonsList = ({
             <Plus className="buttons__svg-plus buttons__svg-plus-text" />
           </div>
           <p className="buttons__bth-text">добавить текст</p>
+          <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
         </button>
       </li>
       <li>
