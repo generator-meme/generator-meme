@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   testfrontend:
-    image: artkeyplex/frontend-generator-meme:test
+    image: ilovememes/frontend-generator-meme:test
     volumes:
       - ./test-data/frontend/:/app/result_build/
     depends_on:
@@ -19,7 +19,7 @@ services:
     command: -p 5433
 
   testbackend:
-    image: artkeyplex/generator-meme:test
+    image: ilovememes/generator-meme:test
     restart: always
     volumes:
       - ./test-data/static/:/app/backend-static/

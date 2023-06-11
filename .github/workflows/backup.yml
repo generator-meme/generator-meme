@@ -1,4 +1,4 @@
-name: Backup
+name: backup
 
 on:
   schedule:
@@ -19,7 +19,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd backup/
-            docker exec -t site-postgres-1 pg_dumpall -c -U Admin123User456 > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+            docker exec -t site-postgres-1 pg_dumpall -c -U ${{ secrets.POSTGRES_USER }} > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
       - name: Upload backup
         uses: actions/upload-artifact@v2
         with:

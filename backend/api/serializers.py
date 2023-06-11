@@ -2,7 +2,8 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (IntegerField, ModelSerializer,
+from rest_framework.serializers import (BooleanField, IntegerField,
+                                        ModelSerializer,
                                         PrimaryKeyRelatedField,
                                         SerializerMethodField, UUIDField,
                                         ValidationError)
@@ -23,6 +24,7 @@ class TemplateReadSerializer(ModelSerializer):
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
     used_times = IntegerField()
+    is_favorited = BooleanField(read_only=True)
 
     class Meta:
         model = Template

@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import Canvas from "./components/Canvas/Canvas";
 import CanvasImagePreloader from "./components/CanvasImagePreloader/CanvasImagePreloader";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
+import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
@@ -77,6 +78,12 @@ const App = () => {
               setIsNewMeme={setIsNewMeme}
               tags={tags}
             />
+          }
+        />
+        <Route
+          path="/team"
+          element={
+            <Team/>
           }
         />
         <Route

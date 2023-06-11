@@ -44,8 +44,8 @@ services:
       - ./nginx-dev-alex.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
-      - /mnt/c/Dev/generator-meme/backend/backend-static/:/var/html/backend-static/
-      - /mnt/c/Dev/generator-meme/backend/backend-media/:/var/html/backend-media/
+      - ../backend/backend-static/:/var/html/backend-static/
+      - ../backend/backend-media/:/var/html/backend-media/
 #    depends_on:
 #      - backend
 

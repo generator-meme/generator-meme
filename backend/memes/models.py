@@ -54,6 +54,9 @@ class Template(models.Model):
         verbose_name='Опубликован'
     )
 
+    def __str__(self) -> str:
+        return f'{self.id}'
+
     class Meta:
         verbose_name = 'Шаблон мема'
         verbose_name_plural = 'Шаблоны мемов'
@@ -87,6 +90,7 @@ class Meme(models.Model):
     class Meta:
         verbose_name = 'Готовый мем'
         verbose_name_plural = 'Готовые мемы'
+        ordering = ('-created_at',)
 
 
 class Favorite(models.Model):
