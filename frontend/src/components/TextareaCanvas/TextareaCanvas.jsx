@@ -1,147 +1,133 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useLatest } from "react-use";
+import React, { useCallback, useEffect, useRef } from "react";
 import "./TextareaCanvas.css";
-import TextareaAutosize from "react-textarea-autosize";
-import Panel from "../Panel/Panel";
+import TextareaAutosize from 'react-textarea-autosize';
+import Panel from '../Panel/Panel';
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
 import { move } from "../../utils/functionsForCanvas.js";
 
+
 const TextareaCanvas = ({
-  index,
-  textValues,
-  imageSizes,
-  setTextValues,
-  outsideTopTextValues,
-  deleteTextFromArray,
-  isCurrentTextIndex,
-  setIsCurrentTextIndex,
-}) => {
-  const latestTextValues = useLatest(textValues);
+    textValues,
+    imageSizes,
+    setTextValues,
+    outsideTopTextValues
+  }) => {
+
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
   const deleteTextButton = useRef(null);
-  const [placeholderText, setPlaceholderText] = useState("Введите текст");
-  const [isHover, setIsHover] = useState(false);
 
+  // второй вариант перемещения текста (все переменные в textValues)
   const pickup = (e) => {
     if (!(e.target === textMoving.current)) return;
-    if (latestTextValues.current.isMoving) return;
 
     if (e.clientX) {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: true,
-        oldX: e.clientX,
-        oldY: e.clientY,
-      });
+      setTextValues((prev) => ({ ...prev, isMoving: true, oldX: e.clientX, oldY: e.clientY }));
     } else {
-      setTextValues({
-        ...latestTextValues.current,
+      setTextValues((prev) => ({
+        ...prev,
         isMoving: true,
         oldX: e.touches[0].clientX,
         oldY: e.touches[0].clientY,
-      });
-    }
-    console.log("pick up");
+      }));
+    };
   };
 
   const onMove = (e) => {
-    if (latestTextValues.current.isMoving) {
-      move(e, latestTextValues.current, setTextValues);
-      console.log("move");
-    }
+    if (textValues.isMoving) {
+      move(e, textValues, setTextValues);
+    };
   };
 
   const drop = (e) => {
-    if (latestTextValues.current.isMoving) {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: false,
-        startTop:
-          latestTextValues.current.bottom === null
-            ? latestTextValues.current.top
-            : -latestTextValues.current.bottom,
-        startLeft: latestTextValues.current.left,
-      });
-      console.log("drop");
-    }
+    setTextValues((prev) => ({
+      ...prev,
+      isMoving: false,
+      startTop: prev.bottom === null ? prev.top : -prev.bottom,
+      startLeft: prev.left,
+    }));
   };
 
   const deleteText = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    console.log("delete");
     if (e.target === deleteTextButton.current) {
-      if (textValues.isOutside) {
-        updateTextValues(setTextValues, latestTextValues.current, true);
-      } else {
-        deleteTextFromArray(index);
+      updateTextValues(setTextValues, textValues, true);
+    };
+  };
+
+  // useEffect(() => { // подписка на изменение размера области textarea
+  //   if (text.current !== null) {
+  //     new ResizeObserver(
+  //       () => {
+  //       console.log(text.current?.offsetHeight);
+  //       if (textValues.isOutside && text.current?.offsetHeight > 80) {  // автоматическое уменьшение размера текста (работает неправильно из-за рассинхронизации курсора на маленьких размерах шрифта)
+  //         setTextValues((prev) => ({ ...prev, height: 80, fontSize: textValues.fontSize * 0.62}));
+  //       } else {
+  //         setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
+  //       }
+  //     }
+  //     ).observe(text.current);
+  //   };
+
+  // }, [text.current]);
+
+    useEffect(() => { // подписка на изменение размера области textarea
+    if (text.current !== null) {
+      new ResizeObserver(
+        () => {
+        setTextValues((prev) => ({ ...prev, width: text.current?.offsetWidth, height: text.current?.offsetHeight}));
       }
-    }
-  };
-
-  const onTexteareaBoxClick = (e) => {
-    e.stopPropagation();
-    if (isCurrentTextIndex !== index) {
-      setIsCurrentTextIndex();
-    }
-  };
+      ).observe(text.current);
+    };
+  }, [text.current]);
 
   useEffect(() => {
-    // подписка на изменение размера области textarea
-    if (text.current !== null && textValues.isVisible) {
-      const textObserved = text.current;
-      const observer = new ResizeObserver(() => {
-        setTextValues({
-          ...latestTextValues.current,
-          width: text.current?.offsetWidth,
-          height: text.current?.offsetHeight,
-        });
-        console.log("observer", textValues.name);
-      });
-      observer.observe(textObserved);
-      return () => {
-        observer.unobserve(textObserved);
-      };
-    }
-  }, [textValues.isVisible]);
-
-  useEffect(() => {
-    if (
-      !latestTextValues.current.isOutside &&
-      latestTextValues.current.isVisible
-    ) {
       window.addEventListener("mousemove", onMove);
-      window.addEventListener("touchmove", onMove, { passive: true });
-      window.addEventListener("mouseup", drop);
-      window.addEventListener("touchend", drop, { passive: true });
+      window.addEventListener("touchmove", onMove, {passive: true});
 
       return () => {
         window.removeEventListener("mousemove", onMove);
-        window.removeEventListener("touchmove", onMove, { passive: true });
+        window.removeEventListener("touchmove", onMove, {passive: true});
+      };
+  }, [textValues.isMoving]);
+
+  useEffect(() => {
+    const removeCurrentPosition = (e) => {
+      if (
+        textMoving.current?.contains(e.target) ||
+        panel.current?.contains(e.target)
+      )
+        return;
+      setTextValues((prev) => ({ ...prev, isCurrent: false }));
+    };
+
+    if (textValues.isOutside) {
+      window.addEventListener("click", removeCurrentPosition);
+      return () => {
+        window.removeEventListener("click", removeCurrentPosition);
+      };
+    } else {
+      window.addEventListener("mouseup", drop);
+      window.addEventListener("touchend", drop, {passive: true});
+
+      window.addEventListener("click", removeCurrentPosition);
+
+      return () => {
         window.removeEventListener("mouseup", drop);
-        window.removeEventListener("touchend", drop, { passive: true });
+        window.removeEventListener("touchend", drop, {passive: true});
+
+        window.removeEventListener("click", removeCurrentPosition);
       };
     }
   }, []);
 
-  if (!textValues.isVisible || !textValues) return null;
+  if (!textValues.isVisible) return null;
 
   return (
     <>
       <div
-        className={`textarea__box ${
-          textValues.isOutside
-            ? "textarea__box_type_ungrabbing"
-            : "textarea__box_type_grabbing"
-        }`}
+        className={`textarea__box ${textValues.isOutside? "textarea__box_type_ungrabbing" : "textarea__box_type_grabbing"}`}
         ref={textMoving}
         style={{
           top: textValues.top,
@@ -150,53 +136,59 @@ const TextareaCanvas = ({
           maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
+          // maxHeight: textValues.isOutside ? 80 : imageSizes?.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
             textValues.text === "" ? "rgba(29, 27, 27, 0.5)" : "transparent",
           borderColor:
-            isCurrentTextIndex === index || isHover ? "#EBFF00" : "transparent",
-          zIndex: isCurrentTextIndex === index ? 3 : 0,
+            textValues.isCurrent || textValues.hover
+              ? "#EBFF00"
+              : "transparent",
         }}
-        onMouseDown={(e) => pickup(e)}
-        onTouchStart={(e) => pickup(e)}
-        onMouseEnter={(e) => setIsHover(true)}
-        onMouseLeave={(e) => setIsHover(false)}
-        onClick={(e) => onTexteareaBoxClick(e)}
+        onMouseDown={pickup}
+        onTouchStart={pickup}
+        onMouseEnter={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: true }))
+        }
+        onMouseLeave={(e) =>
+          setTextValues((prev) => ({ ...prev, hover: false }))
+        }
       >
         <div className="textarea__container">
-          {(isCurrentTextIndex === index || isHover) && (
+          {(textValues.isCurrent || textValues.hover) && (
             <>
               <button
                 ref={deleteTextButton}
                 className="textarea__delete-text"
-                onClick={(e) => deleteText(e)}
-              ></button>
+                onClick={e => deleteText(e)}
+              >
+              </button>
               <div
                 className="textarea__resizer"
                 style={{
                   display: textValues.isOutside ? "none" : "block",
                 }}
-              ></div>
-            </>
+              >
+              </div>
+          </>
           )}
           <TextareaAutosize
+            // wrap={`${textValues.isOutside ? "off" : "hard"}`}
             wrap="hard"
             ref={text}
             className="textarea__text"
             type="text"
             value={textValues.text}
-            onChange={(e) =>
-              setTextValues({ ...textValues, text: e.target.value })
-            }
-            placeholder={placeholderText}
-            onFocus={(e) => setPlaceholderText("")}
-            onBlur={(e) => setPlaceholderText("Введите текст")}
+            onChange={e => setTextValues((prev) => ({ ...prev, text: e.target.value}))}
+            placeholder="Введите текст"
+            onClick={e => setTextValues((prev) => ({ ...prev, isCurrent: true }))}
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: textValues.maxWidth,
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,
+              // maxHeight: textValues.isOutside ? 70 : imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
               fontWeight: textValues.fontWeight ? 700 : 400,
@@ -205,10 +197,7 @@ const TextareaCanvas = ({
               textAlign: textValues.fontPosition,
               paddingLeft: textValues.isOutside ? 28 : 30,
               paddingRight: textValues.isOutside ? 28 : 30,
-              paddingBottom:
-                textValues.name === "bottomTextValues" && textValues.height > 80
-                  ? 12
-                  : 0,
+              paddingBottom: (textValues.name === "bottomTextValues" && textValues.height > 80) ? 12 : 0,
               resize: textValues.isOutside ? "none" : "horizontal",
             }}
             autocorrect="off"
@@ -216,17 +205,20 @@ const TextareaCanvas = ({
           />
         </div>
       </div>
-      {isCurrentTextIndex === index && (
+      {textValues.isCurrent && (
         <div
           ref={panel}
           className="textarea__panel"
-          onClick={(e) => e.stopPropagation()}
           style={{
-            top: outsideTopTextValues[0].isVisible ? -36 - 30 - 80 : -36 - 30,
-            left: imageSizes.width < 609 ? -((609 - imageSizes.width) / 2) : 0,
+            top: outsideTopTextValues.isVisible? - 36 - 30 - 80 : - 36 - 30,
+            // top: outsideTopTextValues.isVisible? - 36 - 30 - outsideTopTextValues.height : - 36 - 30,
+            left: (imageSizes.width < 609) ? - ((609 - imageSizes.width) / 2) : 0,
           }}
         >
-          <Panel textValues={textValues} setTextValues={setTextValues} />
+          <Panel
+            textValues={textValues}
+            setTextValues={setTextValues}
+          />
         </div>
       )}
     </>

@@ -323,19 +323,12 @@ export const move = (e, textValues, setTextValues) => {
   const newY = textValues.startTop + distY;
   const newX = textValues.startLeft + distX;
 
-  setTextValues({
-    ...textValues,
-    top: textValues.top !== null ? newY : null,
+  setTextValues((prev) => ({
+    ...prev,
+    top: prev.top !== null ? newY : null,
     left: newX,
-    bottom: textValues.bottom !== null ? -newY : null,
-  });
-
-  // setTextValues((prev) => ({
-  //   ...prev,
-  //   top: prev.top !== null ? newY : null,
-  //   left: newX,
-  //   bottom: prev.bottom !== null ? -newY : null,
-  // }));
+    bottom: prev.bottom !== null ? -newY : null,
+  }));
 };
 
 // функции из textarea - пока там все не работает
