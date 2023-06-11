@@ -5,11 +5,7 @@ import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 import { hexToRgb, updateTextValues } from "../../utils/textPanelFunctions.js";
 
-function Panel ({
-    textValues,
-    setTextValues,
-  }) {
-
+function Panel({ textValues, setTextValues }) {
   const form = useRef();
 
   const [isOpenTextColor, setIsOpenTextColor] = useState(false);
@@ -22,12 +18,12 @@ function Panel ({
 
   const increaseSize = (e) => {
     e.preventDefault();
-    setTextValues({ ...textValues, fontSize: textValues.fontSize + 1});
+    setTextValues({ ...textValues, fontSize: textValues.fontSize + 1 });
   };
 
   const decreaseSize = (e) => {
     e.preventDefault();
-    setTextValues({ ...textValues, fontSize: textValues.fontSize - 1});
+    setTextValues({ ...textValues, fontSize: textValues.fontSize - 1 });
   };
 
   const openTextColor = (e) => {
@@ -42,7 +38,7 @@ function Panel ({
     }
   };
 
-    const openStrokeColor = (e) => {
+  const openStrokeColor = (e) => {
     e.preventDefault();
     if (!isOpenStrokeColor) {
       setIsOpenStrokeColor(true);
@@ -61,10 +57,10 @@ function Panel ({
       setIsOpenStrokeColor(false);
       setIsOpenTextColor(false);
       setIsOpenBackgroundColor(false);
-    } else if(e.target.classList.contains("panel__button_opacity")){
-       setIsOpenOpacity(false);
-      }
-  }
+    } else if (e.target.classList.contains("panel__button_opacity")) {
+      setIsOpenOpacity(false);
+    }
+  };
 
   const openBackgroundColor = (e) => {
     e.preventDefault();
@@ -87,11 +83,11 @@ function Panel ({
   };
 
   const setTextColor = (color) => {
-    setTextValues({ ...textValues, fillTextColor: color});
+    setTextValues({ ...textValues, fillTextColor: color });
   };
 
   const setStrokeTextColor = (color) => {
-    setTextValues({ ...textValues, strokeTextColor: color});
+    setTextValues({ ...textValues, strokeTextColor: color });
   };
 
   const setBackColor = (color) => {
@@ -102,9 +98,9 @@ function Panel ({
       });
     } else {
       setTextValues({ ...textValues, backColor: color });
-    };
+    }
   };
-  
+
   const resetForm = (e) => {
     e.preventDefault();
     updateTextValues(setTextValues, textValues, false);
@@ -112,17 +108,23 @@ function Panel ({
   };
 
   useEffect(() => {
-    if (isOpenTextColor || isOpenStrokeColor || isOpenBackgroundColor || isOpenOpacity || isOptionsOpen) {
+    if (
+      isOpenTextColor ||
+      isOpenStrokeColor ||
+      isOpenBackgroundColor ||
+      isOpenOpacity ||
+      isOptionsOpen
+    ) {
       function closeExtraWindows(event) {
         if (!event.target.closest("#smallWindow")) {
           closeAllSmallWindows();
         }
-      };
-      document.addEventListener('click', closeExtraWindows);
+      }
+      document.addEventListener("click", closeExtraWindows);
 
       return () => {
-        document.removeEventListener('click', closeExtraWindows)
-      }
+        document.removeEventListener("click", closeExtraWindows);
+      };
     }
   }, [
     isOpenTextColor,
@@ -130,7 +132,7 @@ function Panel ({
     isOpenBackgroundColor,
     isOpenOpacity,
     isOptionsOpen,
-    extraWindow
+    extraWindow,
   ]);
 
   return (
@@ -142,8 +144,14 @@ function Panel ({
           isOptionsOpen={isOptionsOpen}
           setIsOptionsOpen={setIsOptionsOpen}
         />
-        <button className="panel__button panel__button_type_in-size" onClick={e => increaseSize(e)} />
-        <button className="panel__button panel__button_type_dec-size" onClick={e => decreaseSize(e)} />
+        <button
+          className="panel__button panel__button_type_in-size"
+          onClick={(e) => increaseSize(e)}
+        />
+        <button
+          className="panel__button panel__button_type_dec-size"
+          onClick={(e) => decreaseSize(e)}
+        />
       </fieldset>
       <fieldset className="panel__section">
         <label className="panel__container">
@@ -151,59 +159,102 @@ function Panel ({
             checked={textValues.fontWeight}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, fontWeight: !textValues.fontWeight})}
+            onChange={(e) =>
+              setTextValues({
+                ...textValues,
+                fontWeight: !textValues.fontWeight,
+              })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_bold">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_bold"></span>
         </label>
-         <label className="panel__container">
+        <label className="panel__container">
           <input
             checked={textValues.fontStyle}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, fontStyle: !textValues.fontStyle})}
+            onChange={(e) =>
+              setTextValues({ ...textValues, fontStyle: !textValues.fontStyle })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_italic">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_italic"></span>
         </label>
-         <label className="panel__container">
+        <label className="panel__container">
           <input
             checked={textValues.underline}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, underline: !textValues.underline})}
+            onChange={(e) =>
+              setTextValues({ ...textValues, underline: !textValues.underline })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_underline">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_underline"></span>
         </label>
-         <label className="panel__container">
+        <label className="panel__container">
           <input
             checked={textValues.lineThrough}
             type="checkbox"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, lineThrough: !textValues.lineThrough})}
+            onChange={(e) =>
+              setTextValues({
+                ...textValues,
+                lineThrough: !textValues.lineThrough,
+              })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_line-through">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_line-through"></span>
         </label>
       </fieldset>
       <fieldset className="panel__section">
-        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_text-color ${isOpenTextColor ? "panel__button_type_pressed" : ""}`} onClick={e => openTextColor(e)}>
+        <button
+          id="smallWindow"
+          className={`panel__button panel___button_type_color panel___button_type_text-color ${
+            isOpenTextColor ? "panel__button_type_pressed" : ""
+          }`}
+          onClick={(e) => openTextColor(e)}
+        >
           {isOpenTextColor && (
-            <Palette selectedColor={setTextColor} closePalette={closeAllSmallWindows} />
+            <Palette
+              selectedColor={setTextColor}
+              closePalette={closeAllSmallWindows}
+            />
           )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_stroke-color ${isOpenStrokeColor ? "panel__button_type_pressed" : ""}`} onClick={e => openStrokeColor(e)}>
+        <button
+          id="smallWindow"
+          className={`panel__button panel___button_type_color panel___button_type_stroke-color ${
+            isOpenStrokeColor ? "panel__button_type_pressed" : ""
+          }`}
+          onClick={(e) => openStrokeColor(e)}
+        >
           {isOpenStrokeColor && (
-            <Palette selectedColor={setStrokeTextColor} closePalette={closeAllSmallWindows} />
+            <Palette
+              selectedColor={setStrokeTextColor}
+              closePalette={closeAllSmallWindows}
+            />
           )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___button_type_color panel___button_type_back-color ${isOpenBackgroundColor ? "panel__button_type_pressed" : ""}`} onClick={e => openBackgroundColor(e)}>
+        <button
+          id="smallWindow"
+          className={`panel__button panel___button_type_color panel___button_type_back-color ${
+            isOpenBackgroundColor ? "panel__button_type_pressed" : ""
+          }`}
+          onClick={(e) => openBackgroundColor(e)}
+        >
           {isOpenBackgroundColor && (
-            <Palette selectedColor={setBackColor} closePalette={closeAllSmallWindows} />
+            <Palette
+              selectedColor={setBackColor}
+              closePalette={closeAllSmallWindows}
+            />
           )}
         </button>
-        <button id="smallWindow" className={`panel__button panel___button_type_opacity ${isOpenOpacity ? "panel__button_type_pressed" : ""}`} onClick={e => toggleOpacityPanel(e)}>
+        <button
+          id="smallWindow"
+          className={`panel__button panel___button_type_opacity ${
+            isOpenOpacity ? "panel__button_type_pressed" : ""
+          }`}
+          onClick={(e) => toggleOpacityPanel(e)}
+        >
           {isOpenOpacity && (
             <OpacityPanel
               textValues={textValues}
@@ -215,40 +266,46 @@ function Panel ({
       <fieldset className="panel__section">
         <label className="panel__container">
           <input
-            checked={(textValues.fontPosition === "start")? true : false}
+            checked={textValues.fontPosition === "start" ? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, fontPosition: 'start'})}
+            onChange={(e) =>
+              setTextValues({ ...textValues, fontPosition: "start" })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_start">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_start"></span>
         </label>
         <label className="panel__container">
           <input
-            checked={(textValues.fontPosition === "center")? true : false}
+            checked={textValues.fontPosition === "center" ? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, fontPosition: "center"})}
+            onChange={(e) =>
+              setTextValues({ ...textValues, fontPosition: "center" })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_center">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_center"></span>
         </label>
         <label className="panel__container">
           <input
-            checked={(textValues.fontPosition === "end")? true : false}
+            checked={textValues.fontPosition === "end" ? true : false}
             type="radio"
             className="panel__invisible-input"
-            onChange={e => setTextValues({ ...textValues, fontPosition: "end"})}
+            onChange={(e) =>
+              setTextValues({ ...textValues, fontPosition: "end" })
+            }
           ></input>
-          <span className="panel__pseudo-input panel__pseudo-input_type_end">
-          </span>
+          <span className="panel__pseudo-input panel__pseudo-input_type_end"></span>
         </label>
       </fieldset>
-      <button type="reset" className="panel__button panel__button_type_reset" onClick={e => resetForm(e)}>
-      </button>
+      <button
+        type="reset"
+        className="panel__button panel__button_type_reset"
+        onClick={(e) => resetForm(e)}
+      ></button>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
     </form>
-  )
-};
+  );
+}
 
 export default Panel;
