@@ -96,11 +96,11 @@
     color: #AD27DC;
 } */
 
-.buttons__bth_type_outside-text:hover {
+.buttons__bth_type_outside-text:hover,
+.buttons__bth_type_add-text:hover {
     color: #AD27DC;
 }
 
-.buttons__bth_type_add-text:hover,
 .buttons__bth_type_add-image:hover {
     color: rgba(155, 155, 155, 0.5);
 }
@@ -111,23 +111,26 @@
 
 /*изменение цвета svg при наведении*/
 .buttons__bth:hover .buttons__svg-outside path:nth-of-type(2n - 1),
-.buttons__bth:hover .buttons__svg-outside path:nth-of-type(6) {
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(6),
+.buttons__bth:hover .buttons__svg-plus-text circle,
+.buttons__bth:hover .buttons__svg-plus-text path {
     stroke: #AD27DC;
 }
 
-.buttons__bth:hover .buttons__svg-plus circle,
-.buttons__bth:hover .buttons__svg-plus path,
+.buttons__bth:hover .buttons__svg-plus-image circle,
+.buttons__bth:hover .buttons__svg-plus-image path,
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(1),
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(2) {
     stroke: rgba(155, 155, 155, 0.5);
 }
 
 .buttons__bth:hover .buttons__svg-outside path:nth-of-type(2),
-.buttons__bth:hover .buttons__svg-outside path:nth-of-type(4) {
+.buttons__bth:hover .buttons__svg-outside path:nth-of-type(4),
+.buttons__bth:hover .buttons__svg-add-text path {
     fill: #AD27DC;
 }
 
-.buttons__bth:hover .buttons__svg-add-text path,
+/* .buttons__bth:hover .buttons__svg-add-text path, */
 .buttons__bth:hover .buttons__svg-add-image path:nth-of-type(3) {
     fill: rgba(155, 155, 155, 0.5);
 }
