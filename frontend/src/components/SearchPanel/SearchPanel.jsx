@@ -5,22 +5,47 @@ import { Tag } from "../Tag/Tag";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [isToggleSuggestPanelColor, setIsToggleSuggestPanelColor] =
-    useState(true);
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
+  const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
+  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
+  const [isBlur, setIsBlur] = useState(false);
+
+  useEffect(() => {
+    const getTagsOnInputChange = async (name) => {
+      try {
+        const tagsArray = await api.getTagsWithQueryName(name);
+
+        setTagsBasedOnInputValue(tagsArray);
+      } catch {
+        console.log("err");
+      }
+    };
+    getTagsOnInputChange(searchValue);
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      return;
+    } else if (isBlur) {
+      setIsFocusSearchPanel(true);
+    }
+    setIsFocusSearchPanel(true);
+    setIsBlur(false);
+  }, [searchValue]);
 
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
       const tempTagArray = [...tagArray, searchValue.trim()];
       setTagArray(tempTagArray);
-      setSearchValue("");
+      setIsFocusSearchPanel(false);
+      setSearchValue(" ");
     }
   };
 
   const onChangeInputValue = (e) => {
     e.preventDefault();
-    setIsToggleSuggestPanelColor(true);
+
     setSearchValue(e.target.value.trim());
   };
 
@@ -55,10 +80,11 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const submitToSearch = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+    setIsFocusSearchPanel(false);
     try {
       if (tagArray.length === 0) {
         setFilterMemes(initMemes);
+
         return;
       } else if (stringToSearch && !isUnknownFlag) {
         const filteredMem = await api.getfilteredTemplates(stringToSearch);
@@ -72,23 +98,12 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   };
   // console.log(tags);
   const clickHandle = (tag) => {
-    setIsToggleSuggestPanelColor(false);
     setTagArray(() => {
       return [...tagArray, tag];
     });
+
     setSearchValue("");
   };
-  const filteredTags = useMemo(() => {
-    return tags.filter((item) => {
-      const searchString = searchValue.toLowerCase();
-      const tagString = item.name.toLowerCase();
-      return (
-        searchString &&
-        tagString.startsWith(searchString) &&
-        searchString !== tagString
-      );
-    });
-  }, [tags, searchValue]);
 
   const onDelete = (id) => {
     const tempTagArray = tagArray;
@@ -103,7 +118,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
       <div
         className={styles.wrap_background_form}
         style={
-          isToggleSuggestPanelColor && !(filteredTags.length === 0)
+          isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
             ? whiteColorOfSuggestPanel
             : yellowColorOfSuggestPanel
         }
@@ -126,10 +141,16 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
 
             <input
               value={searchValue}
-              onFocus={(e) => (e.target.placeholder = "")}
+              onFocus={(e) => {
+                e.target.placeholder = "";
+                setIsFocusSearchPanel(true);
+              }}
+              onBlur={(e) => {
+                e.target.placeholder = "Поиск по шаблонам";
+                setIsBlur(true);
+              }}
               onKeyDown={handleSpace}
               onChange={onChangeInputValue}
-              onBlur={(e) => (e.target.placeholder = "Поиск по шаблонам")}
               type="text"
               placeholder="Поиск по шаблонам"
               className={styles.search_input}
@@ -140,11 +161,22 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
             onClick={submitToSearch}
           ></button>
         </div>
-        <div className={styles.suggestions_wrap}>
-          {filteredTags.map((tag) => {
+
+        <div
+          className={styles.suggestions_wrap}
+          style={{ visibility: isFocusSearchPanel ? "visible" : "hidden" }}
+        >
+          {tagsBasedOnInputValue.map((tag) => {
             return (
-              <div key={tag.id} onClick={() => clickHandle(tag.name)}>
-                <p>{tag.name}</p>
+              <div key={tag.id}>
+                <p
+                  onClick={() => {
+                    clickHandle(tag.name);
+                    setIsFocusSearchPanel(false);
+                  }}
+                >
+                  {tag.name}
+                </p>
               </div>
             );
           })}

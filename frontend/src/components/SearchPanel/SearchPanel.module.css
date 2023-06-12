@@ -108,6 +108,7 @@
   padding: 5px 20px;
   font-size: 20px;
   width: 80%;
+  z-index: 30;
 }
 .suggestions_wrap > div:hover {
   color: #ac52d1;
