@@ -1,9 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
+from api.views_groups import GroupViewSet
 from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
                              TemplateViewSet)
 from api.views_team import TeamGroupViewSet
+
 
 router = routers.DefaultRouter()
 router.register('memes', MemeViewSet, basename='memes')
@@ -11,6 +13,7 @@ router.register('templates', TemplateViewSet, basename='templates')
 router.register('tags', TagViewSet, basename='tags')
 router.register('categories', CategoryViewSet, basename='categories')
 router.register('team', TeamGroupViewSet, basename='team')
+router.register('groups', GroupViewSet, basename='group')
 
 urlpatterns = [
     path('', include(router.urls)),
