@@ -13,27 +13,9 @@ export const hexToRgb = (hex) => {
     : hex;
 };
 
-// изменение opacity
-export const changeOpacity = (opacity, setValues, values) => {
-  // регулярное выражение которое возвращает все между последней запятой и последней скобкой включительно
-  const regExpFromLastCommaToLastRoundBracket =
-    /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
-  setValues((prev) => ({ ...prev, opacity: opacity }));
-  if (values.backColor !== "transparent") {
-    // меняем значение opacity (последнее значение в rgba)
-    let replacedColor = values.backColor.replace(
-      regExpFromLastCommaToLastRoundBracket,
-      `,${opacity})`
-    );
-    setValues((prev) => ({ ...prev, backColor: replacedColor }));
-    return;
-  }
-  return;
-};
-
 export const updateTextValues = (setTextValues, textValues, isDeteted) => {
-  setTextValues((prev) => ({
-    ...prev,
+  setTextValues({
+    ...textValues,
     fontSize: 40,
     fontFamily: fontFamilyOptions.roboto,
     selectedOption: 0,
@@ -49,5 +31,5 @@ export const updateTextValues = (setTextValues, textValues, isDeteted) => {
     opacity: 1,
     isVisible: isDeteted ? false : true,
     text: isDeteted ? "" : textValues.text,
-  }));
+  });
 };

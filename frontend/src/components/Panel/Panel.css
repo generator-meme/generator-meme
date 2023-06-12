@@ -10,6 +10,7 @@
     height: 36px;
     width: 609px;
     position: relative;
+    z-index: 4;
 }
 
 .panel__section {
