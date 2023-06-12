@@ -91,6 +91,9 @@ jobs:
             echo SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.SITE_SOCIAL_AUTH_VK_OAUTH2_SECRET }} >> .env
             echo SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=${{ secrets.SITE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY }} >> .env
             echo SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=${{ secrets.SITE_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET }} >> .env
+            echo DEBUG=${{ secrets.DEBUG_MAIN }} >> .env
+            echo DEVELOPE=${{ secrets.DEVELOPE_MAIN }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
             docker compose up -d --build
             sudo docker compose exec -T backend python manage.py migrate
             sudo docker compose exec -T backend python manage.py collectstatic --no-input

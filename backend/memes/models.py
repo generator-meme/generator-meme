@@ -27,6 +27,23 @@ class Tag(models.Model):
         return self.name
 
 
+class Category(models.Model):
+    """Модель категорий шаблонов."""
+    name = models.CharField(
+        verbose_name='Название категории',
+        max_length=300,
+        unique=True
+    )
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+        ordering = ('id',)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Template(models.Model):
     """Модель шаблона"""
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -39,6 +56,13 @@ class Template(models.Model):
     image = models.ImageField(
         verbose_name='Изображение',
         upload_to='meme/template_images'
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        related_name='templates',
+        null=True,
+        blank=True
     )
     tag = models.ManyToManyField(
         Tag,
