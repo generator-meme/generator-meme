@@ -8,14 +8,12 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
-  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
-  const [isBlur, setIsBlur] = useState(false);
+  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
 
   useEffect(() => {
     const getTagsOnInputChange = async (name) => {
       try {
         const tagsArray = await api.getTagsWithQueryName(name);
-
         setTagsBasedOnInputValue(tagsArray);
       } catch {
         console.log("err");
@@ -25,13 +23,13 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   }, [searchValue]);
 
   useEffect(() => {
-    if (!searchValue) {
-      return;
-    } else if (isBlur) {
+    if (searchValue) {
       setIsFocusSearchPanel(true);
+      return;
+    } else if (!searchValue && isFocusSearchPanel) {
+      setIsFocusSearchPanel(false);
+      return;
     }
-    setIsFocusSearchPanel(true);
-    setIsBlur(false);
   }, [searchValue]);
 
   const handleSpace = (e) => {
@@ -50,7 +48,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   };
 
   const yellowColorOfSuggestPanel = {
-    backgroundColor: "rgba(253, 255, 161, 0.77)",
+    backgroundColor: "#FCFDB5",
     overflowY: "hidden",
   };
   const whiteColorOfSuggestPanel = {
@@ -124,42 +122,43 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
         }
       >
         <div className={styles.wrap_search_panel}>
-          <form className={styles.form_search_panel}>
-            {tagArray.map((tag, id) => {
-              return (
-                <div className={styles.tag_wrap}>
-                  <Tag
-                    id={id}
-                    onClose={() => {
-                      onDelete(tag);
-                    }}
-                    name={tag}
-                  ></Tag>
-                </div>
-              );
-            })}
+          <form className={styles.form_search_panel} onSubmit={submitToSearch}>
+            <div className={styles.wrap_input}>
+              {tagArray.map((tag, id) => {
+                return (
+                  <div className={styles.tag_wrap}>
+                    <Tag
+                      id={id}
+                      onClose={() => {
+                        onDelete(tag);
+                      }}
+                      name={tag}
+                    ></Tag>
+                  </div>
+                );
+              })}
 
-            <input
-              value={searchValue}
-              onFocus={(e) => {
-                e.target.placeholder = "";
-                setIsFocusSearchPanel(true);
-              }}
-              onBlur={(e) => {
-                e.target.placeholder = "Поиск по шаблонам";
-                setIsBlur(true);
-              }}
-              onKeyDown={handleSpace}
-              onChange={onChangeInputValue}
-              type="text"
-              placeholder="Поиск по шаблонам"
-              className={styles.search_input}
-            />
+              <input
+                value={searchValue}
+                onFocus={(e) => {
+                  e.target.placeholder = "";
+                  setIsFocusSearchPanel(true);
+                }}
+                onBlur={(e) => {
+                  setTimeout(() => {
+                    e.target.placeholder = "Поиск по шаблонам";
+                    setIsFocusSearchPanel(false);
+                  }, 150);
+                }}
+                onKeyDown={handleSpace}
+                onChange={onChangeInputValue}
+                type="text"
+                placeholder="Поиск по шаблонам"
+                className={styles.search_input}
+              />
+            </div>
+            <button className={styles.button_form}></button>
           </form>
-          <button
-            className={styles.button_form}
-            onClick={submitToSearch}
-          ></button>
         </div>
 
         <div
@@ -172,7 +171,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
                 <p
                   onClick={() => {
                     clickHandle(tag.name);
-                    setIsFocusSearchPanel(false);
+                    // setIsFocusSearchPanel(false);
                   }}
                 >
                   {tag.name}
