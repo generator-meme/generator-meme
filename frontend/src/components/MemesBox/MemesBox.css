@@ -24,6 +24,10 @@
 
 .memesbox__btn-show-more {
   width: 457px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #1E1D1D;
 }
 
 .memesbox__up {
@@ -62,7 +66,7 @@
 
 .memesbox__up_type_absolute {
   position: absolute;
-  bottom: 92px;
+  bottom: 75px;
   right: 30px;
 }
 
@@ -74,9 +78,10 @@
 
 .memesbox__up-text {
   margin: 0;
+  margin-top: 7px;
   padding: 0;
   font-weight: 500;
-  font-size: 22px;
-  line-height: 26px;
+  font-size: 20px;
+  line-height: 1.4px;
   color: #1e1d1d;
 }

@@ -64,6 +64,10 @@
   flex-grow: 1;
   outline: none;
   z-index: 3;
+  color: #1E1D1D;
+}
+.search_input::placeholder {
+  color: #C0C0C0;
 }
 .button_form {
   min-width: 82px;

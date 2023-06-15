@@ -122,4 +122,7 @@
 
 .editor__btn_type_create-mem {
   width: 500px;
+  color: #1E1D1D;
+  font-size: 20px;
+  line-height: 1.2;
 }

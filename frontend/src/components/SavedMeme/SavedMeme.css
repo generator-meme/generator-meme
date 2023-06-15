@@ -28,4 +28,7 @@
 .saved-meme__btn-save {
     width: 500px;
     /* margin-top: 50px; */
+    color: #1E1D1D;
+    font-size: 20px;
+    line-height: 1.2;
 }
