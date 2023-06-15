@@ -32,10 +32,19 @@
 
 .form_search_panel {
   background-color: #fff;
+  width: 100%;
+  position: relative;
+  display: flex;
+  z-index: 3;
+  flex-direction: row;
+  border-radius: 20px;
+  border: none;
+}
+.wrap_input {
+  background-color: #fff;
   flex: auto;
   overflow: auto;
   flex-wrap: wrap;
-
   overflow-x: none;
   max-width: 100%;
   position: relative;
@@ -55,6 +64,10 @@
   flex-grow: 1;
   outline: none;
   z-index: 3;
+  color: #1E1D1D;
+}
+.search_input::placeholder {
+  color: #C0C0C0;
 }
 .button_form {
   min-width: 82px;
@@ -64,6 +77,7 @@
   outline: none;
   top: 0;
   right: 0;
+  display: fixed;
   background-image: linear-gradient(#ce8ec0 100%, #c28be4b0 69%, #c28be4a1 63%);
   cursor: pointer;
   z-index: 3;
