@@ -9,6 +9,7 @@ from rest_framework.serializers import (BooleanField, IntegerField,
 
 from memes.models import (Category, Favorite, Meme, Tag, Template,
                           TemplateUsedTimes)
+from team.models import TeamGroup, Teammate
 from users.serializers import UserSerializer
 
 
@@ -163,3 +164,29 @@ class FavoriteSerializer(ModelSerializer):
             instance.template,
             context={'request': self.context['request']}
         ).data
+
+
+class TeammateSerializer(ModelSerializer):
+    """Сериализатор модели Teammate приложения Team."""
+
+    class Meta:
+        fields = (
+            'name',
+            'description',
+            'link',
+        )
+        model = Teammate
+
+
+class TeamGroupSerializer(ModelSerializer):
+    """Сериализатор модели Group приложения Team."""
+
+    teammates = TeammateSerializer(many=True, read_only=True)
+
+    class Meta:
+        fields = (
+            'id',
+            'name',
+            'teammates',
+        )
+        model = TeamGroup

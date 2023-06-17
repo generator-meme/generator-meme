@@ -13,16 +13,17 @@ from api.filters import TagSearchFilter, TemplateFilter
 from api.permissions import AdminOrReadOnly
 from api.serializers import (CategorySerializer, FavoriteSerializer,
                              MemeReadSerializer, MemeWriteSerializer,
-                             TagSerializer, TemplateReadSerializer,
-                             TemplateWriteSerializer)
+                             TagSerializer, TeamGroupSerializer,
+                             TemplateReadSerializer, TemplateWriteSerializer)
 from api.services import create_delete_relation
 from api.viewsets import ListRetriveViewSet
 from memes.models import (Category, Favorite, Meme, Tag, Template,
                           TemplateUsedTimes)
+from team.models import TeamGroup
 
 
 class MemeViewSet(viewsets.ModelViewSet):
-    """Представление для модели готового мема."""
+    """Готовые мемы."""
 
     queryset = Meme.objects.all()
     filter_backends = [DjangoFilterBackend, ]
@@ -51,7 +52,7 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    """Представление для модели Meme."""
+    """Шаблоны мемов."""
 
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -94,11 +95,10 @@ class TemplateViewSet(viewsets.ModelViewSet):
         )
 
 
-class TagViewSet(viewsets.ModelViewSet):
-    """Представление для модели Tag."""
+class TagViewSet(ListRetriveViewSet):
+    """Теги шаблонов."""
 
     serializer_class = TagSerializer
-    permission_classes = [AdminOrReadOnly]
     filter_backends = (DjangoFilterBackend, )
     filterset_class = TagSearchFilter
 
@@ -114,7 +114,14 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(ListRetriveViewSet):
-    """Представление для модели Category."""
+    """Категории шаблонов."""
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class TeamGroupViewSet(ListRetriveViewSet):
+    """Команда проекта."""
+
+    queryset = TeamGroup.objects.all()
+    serializer_class = TeamGroupSerializer
