@@ -103,3 +103,25 @@
 .main__btn:hover+.main__btn_help {
   opacity: 1;
 } */
+@media (max-width: 1480px) and (min-width: 1081px) {
+  .main__title {max-width:420px; max-height: 45px;}
+  .main__text-box {padding-top: 40px;}
+  .main__text-advice {font-size: 30px;}
+ }
+ @media (max-width: 1080px)and (min-width: 521px) {
+  .main__text-box {padding-top: 125px;}
+  .main__title {max-width:420px; max-height: 40px;}
+  .main__text-advice{font-size: 25px;}
+}
+@media (max-width: 520px) and (min-width: 376px) {
+  .main__text-box {padding-top: 30px;}
+  .main__cat{display: none;}
+  .main__title {max-width:256px; max-height: 27px;}
+  .main__text-advice{font-size: 20px;}
+}
+@media (max-width: 375px) {
+  .main__text-box {padding-top: 30px;}
+  .main__cat{display: none;}
+  .main__title {max-width:252px; max-height: 27px;}
+  .main__text-advice{font-size: 20px;}
+}
