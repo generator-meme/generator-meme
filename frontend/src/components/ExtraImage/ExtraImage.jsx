@@ -6,6 +6,7 @@ const ExtraImage = ({ image, imageSizes, images, setImages }) => {
   const latestImageValues = useLatest(image);
   const [isCurrent, setIsCurrent] = useState(true);
   const picture = useRef(null);
+  const deleteImageButton = useRef(null);
 
   useEffect(() => {
     if (picture.current !== null) {
@@ -37,14 +38,34 @@ const ExtraImage = ({ image, imageSizes, images, setImages }) => {
         maxHeight: imageSizes.height / 1.7,
         maxWidth: imageSizes.width / 1.7,
         backgroundImage: `url(${image.image.currentSrc})`,
-        backgroundPosition: "center",
+        backgroundPosition: "top left",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         boxShadow: isCurrent
           ? "2px 2px yellow, 2px -2px yellow, -2px 2px yellow, -2px -2px yellow"
           : "none",
       }}
     >
+      {isCurrent && (
+        <>
+          <button
+            ref={deleteImageButton}
+            className="image__delete-text"
+            style={{
+              top: 2,
+              left: image.width - 21,
+            }}
+            // onClick={(e) => deleteText(e)}
+          ></button>
+          <div
+            className="image__resizer"
+            style={{
+              top: image.height - 27 - 21,
+              left: image.width - 27,
+            }}
+          ></div>
+        </>
+      )}
       {/* <img
         //   className="extra-image"
         src={image.image.currentSrc}
