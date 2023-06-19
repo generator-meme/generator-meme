@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
-import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
+// import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from "../../utils/constants";
 import {
@@ -26,6 +26,7 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [outsideTextHeight, setOusideTextHeight] = useState(80);
+  const [images, setImages] = useState([]);
 
   const [textsValues, setTextsValues] = useState([
     {
@@ -375,6 +376,8 @@ const Canvas = ({
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}
+              images={images}
+              setImages={setImages}
             />
           </form>
           <EditorButtonsList
@@ -390,6 +393,8 @@ const Canvas = ({
             textsValues={textsValues}
             setTextsValues={setTextsValues}
             imageSizes={imageSizes}
+            images={images}
+            setImages={setImages}
           />
           <button
             onClick={createMeme}

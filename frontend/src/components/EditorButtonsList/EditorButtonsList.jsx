@@ -5,16 +5,22 @@ import { ReactComponent as AddTextImage } from "../../images/editor/add-text-mai
 import { ReactComponent as AddImageImage } from "../../images/editor/add-image-main-part.svg";
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 import { createExtraText } from "../../utils/constants";
+import { v4 as uuidv4 } from "uuid";
+import { contain } from "../../utils/functionsForCanvas.js";
 
 const EditorButtonsList = ({
   setOutsideTextsVisible,
   textsValues,
   setTextsValues,
   imageSizes,
+  images,
+  setImages,
 }) => {
   const [listIsVisible, setListIsVisible] = useState(false);
   const outsizeTextList = useRef(null);
   const bthList = useRef(null);
+  const [imageValues, setImageValues] = useState(null);
+  const [image, setImage] = useState(null);
 
   const openOutsideText = (e, top, bottom) => {
     let indexesArrey = [];
@@ -31,15 +37,76 @@ const EditorButtonsList = ({
 
   const addExtraText = () => {
     if (textsValues.length > 13) {
-      alert(
-        "На данный момент создание более 10 дополнительных текстов не предусмотрено"
-      );
+      alert("Cоздание более 10 дополнительных текстов не предусмотрено");
       return;
     }
 
     const newExtraText = createExtraText(imageSizes);
     setTextsValues([...textsValues, newExtraText]);
   };
+
+  const checkImagesArrey = (e) => {
+    if (images.length > 9) {
+      alert("Добавление более 10 изображений не предусмотрено");
+      return;
+    }
+  };
+
+  const addImage = (event) => {
+    if (event.target.files[0].size > 400000) {
+      alert("Вес изображения не должен превышать 400 КБ");
+      return;
+    }
+
+    const currentImage = event.target.files[0];
+
+    if (event.target.closest("form").checkValidity()) {
+      const newCurrentImage = {
+        id: uuidv4(),
+        image: URL.createObjectURL(currentImage),
+      };
+      setImageValues(newCurrentImage);
+    }
+  };
+
+  useEffect(() => {
+    const img = new Image();
+    if (imageValues) {
+      img.src = imageValues.image;
+    }
+    img.addEventListener("load", () => {
+      setImage(img);
+    });
+  }, [imageValues]);
+
+  useEffect(() => {
+    let imgSizes;
+    if (image) {
+      imgSizes = contain(
+        imageSizes.width / 3,
+        imageSizes.height / 3,
+        image.naturalWidth,
+        image.naturalHeight
+      );
+
+      const newImage = {
+        image: image,
+        id: imageValues.id,
+        width: imgSizes.width,
+        height: imgSizes.height,
+        top: imageSizes.height / 2 - imgSizes.height / 2,
+        left: imageSizes.width / 2 - imgSizes.width / 2,
+        startTop: 0,
+        startLeft: 0,
+        isMoving: false,
+        oldX: null,
+        oldY: null,
+      };
+
+      setImages([...images, newImage]);
+      setImageValues(null);
+    }
+  }, [image]);
 
   useEffect(() => {
     const hideList = (e) => {
@@ -105,17 +172,26 @@ const EditorButtonsList = ({
         </button>
       </li>
       <li>
-        <button
-          className="buttons__bth buttons__bth_type_add-image"
-          onClick={(e) => e.preventDefault()}
-        >
-          <div className="buttons__bth-img">
-            <AddImageImage className="buttons__svg-add-image" />
-            <Plus className="buttons__svg-plus buttons__svg-plus-image" />
-          </div>
-          <p className="buttons__bth-text">добавить изображение</p>
-          <p className="buttons__prompt">В РАЗРАБОТКЕ</p>
-        </button>
+        <form>
+          <label
+            className="buttons__bth buttons__bth_type_add-image"
+            onClick={(e) => checkImagesArrey(e)}
+          >
+            <div className="buttons__bth-img">
+              <AddImageImage className="buttons__svg-add-image" />
+              <Plus className="buttons__svg-plus buttons__svg-plus-image" />
+            </div>
+            <p className="buttons__bth-text">добавить изображение</p>
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/gif"
+              name="image"
+              onChange={(e) => addImage(e)}
+              className="buttons__invisible-input"
+              disabled={images.length > 9 ? true : false}
+            />
+          </label>
+        </form>
       </li>
     </ul>
   );
