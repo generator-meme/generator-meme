@@ -1,0 +1,5 @@
+.extra-image__box {
+    position: absolute;
+    resize: both;
+    overflow: auto;
+}

@@ -59,28 +59,22 @@ const TextFieldset = ({
             key={image.id}
             image={image}
             images={images}
-            setImages={setImages}
+            setImages={(newImage) => {
+              setImages((images) => {
+                const newImages = [...images];
+                newImages[index] = newImage;
+                return newImages;
+              });
+            }}
             imageSizes={imageSizes}
+            // setTextValues={(newText) => {
+            //   setTextsValues((textsValues) => {
+            //     const newTexts = [...textsValues];
+            //     newTexts[index] = newText;
+            //     return newTexts;
+            //   });
+            // }}
           />
-          // <div
-          //   key={image.id}
-          //   style={{
-          //     height: image.height,
-          //     width: image.width,
-          //     position: "absolute",
-          //     top: 0,
-          //     left: 0,
-          //   }}
-          // >
-          //   <img
-          //     src={image.image.currentSrc}
-          //     alt="Дополнительное изображение."
-          //     style={{
-          //       height: image.height,
-          //       width: image.width,
-          //     }}
-          //   />
-          // </div>
         );
       })}
     </fieldset>

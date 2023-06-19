@@ -83,8 +83,8 @@ const EditorButtonsList = ({
     let imgSizes;
     if (image) {
       imgSizes = contain(
-        imageSizes.width / 3,
-        imageSizes.height / 3,
+        imageSizes.width / 1.7, // 1.7 - квардратный корень из трех (площадь изображения дб не более 1/3 площади мема)
+        imageSizes.height / 1.7,
         image.naturalWidth,
         image.naturalHeight
       );
