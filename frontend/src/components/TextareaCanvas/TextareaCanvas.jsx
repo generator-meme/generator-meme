@@ -77,7 +77,7 @@ const TextareaCanvas = ({
   const deleteText = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("delete");
+    console.log("delete text");
     if (e.target === deleteTextButton.current) {
       if (textValues.isOutside) {
         updateTextValues(setTextValues, latestTextValues.current, true);

@@ -38,7 +38,7 @@ const TextFieldset = ({
                 return newTexts;
               });
             }}
-            deleteTextFromArray={(index) => {
+            deleteTextFromArray={() => {
               setTextsValues((textsValues) => {
                 const newTexts = [...textsValues];
                 newTexts.splice(index, 1);
@@ -67,13 +67,13 @@ const TextFieldset = ({
               });
             }}
             imageSizes={imageSizes}
-            // setTextValues={(newText) => {
-            //   setTextsValues((textsValues) => {
-            //     const newTexts = [...textsValues];
-            //     newTexts[index] = newText;
-            //     return newTexts;
-            //   });
-            // }}
+            deleteImageFromArray={() => {
+              setImages((images) => {
+                const newImages = [...images];
+                newImages.splice(index, 1);
+                return newImages;
+              });
+            }}
           />
         );
       })}

@@ -2,11 +2,26 @@ import React, { useEffect, useState, useRef } from "react";
 import "./ExtraImage.css";
 import { useLatest } from "react-use";
 
-const ExtraImage = ({ image, imageSizes, images, setImages }) => {
+const ExtraImage = ({
+  image,
+  imageSizes,
+  images,
+  setImages,
+  deleteImageFromArray,
+}) => {
   const latestImageValues = useLatest(image);
   const [isCurrent, setIsCurrent] = useState(true);
   const picture = useRef(null);
   const deleteImageButton = useRef(null);
+
+  const deleteImage = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("delete image");
+    if (e.target === deleteImageButton.current) {
+      deleteImageFromArray();
+    }
+  };
 
   useEffect(() => {
     if (picture.current !== null) {
@@ -52,7 +67,7 @@ const ExtraImage = ({ image, imageSizes, images, setImages }) => {
               top: 2,
               left: image.width - 21,
             }}
-            // onClick={(e) => deleteText(e)}
+            onClick={(e) => deleteImage(e)}
           ></button>
           <div
             className="image__resizer"
