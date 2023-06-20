@@ -67,6 +67,8 @@ const EditorButtonsList = ({
       };
       setImageValues(newCurrentImage);
     }
+
+    event.target.value = null;
   };
 
   useEffect(() => {
@@ -91,8 +93,7 @@ const EditorButtonsList = ({
 
       const widthToHeightRayio = image.naturalWidth / image.naturalHeight;
       const heightToWidthRayio = image.naturalHeight / image.naturalWidth;
-      console.log(widthToHeightRayio, heightToWidthRayio);
-      console.log(image.naturalWidth, image.naturalHeight);
+
       const newImage = {
         image: image,
         id: imageValues.id,
@@ -100,8 +101,8 @@ const EditorButtonsList = ({
         height: imgSizes.height,
         top: imageSizes.height / 2 - imgSizes.height / 2,
         left: imageSizes.width / 2 - imgSizes.width / 2,
-        startTop: 0,
-        startLeft: 0,
+        startTop: imageSizes.height / 2 - imgSizes.height / 2,
+        startLeft: imageSizes.width / 2 - imgSizes.width / 2,
         isMoving: false,
         oldX: null,
         oldY: null,
