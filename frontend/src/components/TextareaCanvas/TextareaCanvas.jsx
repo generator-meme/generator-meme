@@ -21,6 +21,7 @@ const TextareaCanvas = ({
   deleteTextFromArray,
   isCurrentTextIndex,
   setIsCurrentTextIndex,
+  deleteCurrentImage,
 }) => {
   const latestTextValues = useLatest(textValues);
   const text = useRef(null);
@@ -49,13 +50,13 @@ const TextareaCanvas = ({
         oldY: e.touches[0].clientY,
       });
     }
-    console.log("pick up");
+    console.log("pick up text");
   };
 
   const onMove = (e) => {
     if (latestTextValues.current.isMoving) {
       move(e, latestTextValues.current, setTextValues);
-      console.log("move");
+      console.log("move text");
     }
   };
 
@@ -70,7 +71,7 @@ const TextareaCanvas = ({
             : -latestTextValues.current.bottom,
         startLeft: latestTextValues.current.left,
       });
-      console.log("drop");
+      console.log("drop text");
     }
   };
 
@@ -82,13 +83,14 @@ const TextareaCanvas = ({
       if (textValues.isOutside) {
         updateTextValues(setTextValues, latestTextValues.current, true);
       } else {
-        deleteTextFromArray(index);
+        deleteTextFromArray();
       }
     }
   };
 
   const onTexteareaBoxClick = (e) => {
     e.stopPropagation();
+    deleteCurrentImage();
     if (isCurrentTextIndex !== index) {
       setIsCurrentTextIndex();
     }

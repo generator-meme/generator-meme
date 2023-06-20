@@ -10,10 +10,12 @@ const TextFieldset = ({
   setImages,
 }) => {
   const [isCurrentTextIndex, setIsCurrentTextIndex] = useState(null);
+  const [isCurrentImageIndex, setIsCurrentImageIndex] = useState(null);
 
   useEffect(() => {
     const checkCurrentText = (e) => {
       setIsCurrentTextIndex(null);
+      setIsCurrentImageIndex(null);
     };
 
     window.addEventListener("click", checkCurrentText);
@@ -50,6 +52,7 @@ const TextFieldset = ({
             setIsCurrentTextIndex={() => {
               setIsCurrentTextIndex(index);
             }}
+            deleteCurrentImage={(e) => setIsCurrentTextIndex(null)}
           />
         );
       })}
@@ -57,6 +60,7 @@ const TextFieldset = ({
         return (
           <ExtraImage
             key={image.id}
+            index={index}
             image={image}
             images={images}
             setImages={(newImage) => {
@@ -74,6 +78,11 @@ const TextFieldset = ({
                 return newImages;
               });
             }}
+            isCurrentImageIndex={isCurrentImageIndex}
+            setIsCurrentImageIndex={() => {
+              setIsCurrentImageIndex(index);
+            }}
+            deleteCurrentText={(e) => setIsCurrentTextIndex(false)}
           />
         );
       })}

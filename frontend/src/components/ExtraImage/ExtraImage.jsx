@@ -3,14 +3,18 @@ import "./ExtraImage.css";
 import { useLatest } from "react-use";
 
 const ExtraImage = ({
+  index,
   image,
   imageSizes,
   images,
   setImages,
   deleteImageFromArray,
+  isCurrentImageIndex,
+  setIsCurrentImageIndex,
+  deleteCurrentText,
 }) => {
   const latestImageValues = useLatest(image);
-  const [isCurrent, setIsCurrent] = useState(true);
+  const [isHover, setIsHover] = useState(false);
   const picture = useRef(null);
   const deleteImageButton = useRef(null);
 
@@ -20,6 +24,14 @@ const ExtraImage = ({
     console.log("delete image");
     if (e.target === deleteImageButton.current) {
       deleteImageFromArray();
+    }
+  };
+
+  const onImageClick = (e) => {
+    e.stopPropagation();
+    deleteCurrentText();
+    if (isCurrentImageIndex !== index) {
+      setIsCurrentImageIndex();
     }
   };
 
@@ -53,12 +65,17 @@ const ExtraImage = ({
         maxHeight: (imageSizes.width / 1.7) * image.heightToWidthRayio,
         maxWidth: imageSizes.width / 1.7,
         backgroundImage: `url(${image.image.currentSrc})`,
-        boxShadow: isCurrent
-          ? "2px 2px yellow, 2px -2px yellow, -2px 2px yellow, -2px -2px yellow"
-          : "none",
+        boxShadow:
+          isCurrentImageIndex === index || isHover
+            ? "2px 2px yellow, 2px -2px yellow, -2px 2px yellow, -2px -2px yellow"
+            : "none",
+        zIndex: isCurrentImageIndex === index ? 3 : 0,
       }}
+      onClick={(e) => onImageClick(e)}
+      onMouseEnter={(e) => setIsHover(true)}
+      onMouseLeave={(e) => setIsHover(false)}
     >
-      {isCurrent && (
+      {(isCurrentImageIndex === index || isHover) && (
         <>
           <button
             ref={deleteImageButton}
