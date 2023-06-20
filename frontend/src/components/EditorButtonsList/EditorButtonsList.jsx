@@ -89,6 +89,10 @@ const EditorButtonsList = ({
         image.naturalHeight
       );
 
+      const widthToHeightRayio = image.naturalWidth / image.naturalHeight;
+      const heightToWidthRayio = image.naturalHeight / image.naturalWidth;
+      console.log(widthToHeightRayio, heightToWidthRayio);
+      console.log(image.naturalWidth, image.naturalHeight);
       const newImage = {
         image: image,
         id: imageValues.id,
@@ -101,6 +105,8 @@ const EditorButtonsList = ({
         isMoving: false,
         oldX: null,
         oldY: null,
+        widthToHeightRayio: widthToHeightRayio,
+        heightToWidthRayio: heightToWidthRayio,
       };
 
       setImages([...images, newImage]);

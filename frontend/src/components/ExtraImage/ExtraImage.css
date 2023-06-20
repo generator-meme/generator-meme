@@ -1,7 +1,10 @@
 .extra-image__box {
     position: absolute;
-    resize: both;
+    resize: horizontal;
     overflow: hidden;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .image__resizer {

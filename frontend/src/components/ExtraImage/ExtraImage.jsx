@@ -31,16 +31,13 @@ const ExtraImage = ({ image, imageSizes, images, setImages }) => {
       ref={picture}
       className="extra-image__box"
       style={{
-        height: image.height,
+        height: image.heightToWidthRayio * image.width,
         width: image.width,
         top: image.top,
         left: image.left,
-        maxHeight: imageSizes.height / 1.7,
+        maxHeight: (imageSizes.width / 1.7) * image.heightToWidthRayio,
         maxWidth: imageSizes.width / 1.7,
         backgroundImage: `url(${image.image.currentSrc})`,
-        backgroundPosition: "top left",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain",
         boxShadow: isCurrent
           ? "2px 2px yellow, 2px -2px yellow, -2px 2px yellow, -2px -2px yellow"
           : "none",
