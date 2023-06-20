@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./ExtraImage.css";
 import { useLatest } from "react-use";
+import { move } from "../../utils/functionsForCanvas.js";
 
 const ExtraImage = ({
   index,
   image,
   imageSizes,
-  images,
   setImages,
   deleteImageFromArray,
   isCurrentImageIndex,
@@ -17,6 +17,7 @@ const ExtraImage = ({
   const [isHover, setIsHover] = useState(false);
   const picture = useRef(null);
   const deleteImageButton = useRef(null);
+  const resizingButton = useRef(null);
 
   const deleteImage = (e) => {
     e.preventDefault();
@@ -34,6 +35,62 @@ const ExtraImage = ({
       setIsCurrentImageIndex();
     }
   };
+
+  const pickup = (e) => {
+    if (!(e.target === picture.current)) return;
+    if (latestImageValues.current.isMoving) return;
+    if (e.nativeEvent.offsetX > latestImageValues.current.width - 27) return;
+
+    if (e.clientX) {
+      setImages({
+        ...latestImageValues.current,
+        isMoving: true,
+        oldX: e.clientX,
+        oldY: e.clientY,
+      });
+    } else {
+      setImages({
+        ...latestImageValues.current,
+        isMoving: true,
+        oldX: e.touches[0].clientX,
+        oldY: e.touches[0].clientY,
+      });
+    }
+    console.log("pick up image");
+  };
+
+  const onMove = (e) => {
+    if (latestImageValues.current.isMoving) {
+      move(e, latestImageValues.current, setImages);
+      console.log("move image");
+    }
+  };
+
+  const drop = (e) => {
+    if (latestImageValues.current.isMoving) {
+      setImages({
+        ...latestImageValues.current,
+        isMoving: false,
+        startTop: latestImageValues.current.top,
+        startLeft: latestImageValues.current.left,
+      });
+      console.log("drop image");
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("mouseup", drop);
+    window.addEventListener("touchend", drop, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("touchmove", onMove, { passive: true });
+      window.removeEventListener("mouseup", drop);
+      window.removeEventListener("touchend", drop, { passive: true });
+    };
+  }, []);
 
   useEffect(() => {
     if (picture.current !== null) {
@@ -71,45 +128,28 @@ const ExtraImage = ({
             : "none",
         zIndex: isCurrentImageIndex === index ? 3 : 0,
       }}
+      onMouseDown={(e) => pickup(e)}
+      onTouchStart={(e) => pickup(e)}
       onClick={(e) => onImageClick(e)}
       onMouseEnter={(e) => setIsHover(true)}
       onMouseLeave={(e) => setIsHover(false)}
     >
       {(isCurrentImageIndex === index || isHover) && (
-        <>
+        <div
+          className="image__button-box"
+          style={{
+            top: 0,
+            left: image.width - 27,
+          }}
+        >
           <button
             ref={deleteImageButton}
             className="image__delete-text"
-            style={{
-              top: 2,
-              left: image.width - 21,
-            }}
             onClick={(e) => deleteImage(e)}
           ></button>
-          <div
-            className="image__resizer"
-            style={{
-              top: image.height - 27 - 21,
-              left: image.width - 27,
-            }}
-          ></div>
-        </>
+          <div ref={resizingButton} className="image__resizer"></div>
+        </div>
       )}
-      {/* <img
-        //   className="extra-image"
-        src={image.image.currentSrc}
-        alt="Дополнительное изображение."
-        height={image.height}
-        width={image.width}
-        style={{
-          //   height: image.height,
-          //   width: image.width,
-          maxHeight: imageSizes.height / 3,
-          maxWidth: imageSizes.width / 3,
-          //   top: image.top,
-          //   left: image.left,
-        }}
-      /> */}
     </div>
   );
 };

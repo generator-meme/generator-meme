@@ -43,16 +43,6 @@ export const calculateMarginX = (width, fontPosition, textMargin, offsetX) => {
   }
 };
 
-// export const calculateMarginX = (canvas, fontPosition, offsetX, textMargin) => {
-//   if (fontPosition === "start") {
-//     return textMargin + offsetX;
-//   } else if (fontPosition === "end") {
-//     return canvas.width - offsetX - textMargin;
-//   } else {
-//     return canvas.width / 2;
-//   }
-// };
-
 // отрисовка подчеркивания или зачеркивания
 export const addLineToText = (ctx, text, x, y, fontSize) => {
   let metrics = ctx.measureText(text); // вычисление метрик текста (нас интересует ширина)
@@ -228,84 +218,6 @@ export const drawText = (
   }
 };
 
-// export const moveTextarea = (e) => {
-//   const textMoving = document.getElementById("textMoving");
-//   if (!e.target.contains(textMoving)) return;
-//   let target = e.target;
-
-//   target.moving = true;
-
-//   if (e.clientX) {
-//     target.oldX = e.clientX;
-//     target.oldY = e.clientY;
-//   } else {
-//     target.oldX = e.touches[0].clientX;
-//     target.oldY = e.touches[0].clientY;
-//   }
-
-//   target.oldLeft =
-//     window.getComputedStyle(target).getPropertyValue("left").split("px")[0] * 1;
-//   target.oldTop =
-//     window.getComputedStyle(target).getPropertyValue("top").split("px")[0] * 1;
-
-//   const dr = (event) => {
-//     event.preventDefault();
-//     if (!target.moving) {
-//       return;
-//     }
-//     if (event.clientX) {
-//       target.distX = event.clientX - target.oldX;
-//       target.distY = event.clientY - target.oldY;
-//     } else {
-//       target.distX = event.touches[0].clientX - target.oldX;
-//       target.distY = event.touches[0].clientY - target.oldY;
-//     }
-
-//     target.style.left = target.oldLeft + target.distX + "px";
-//     target.style.top = target.oldTop + target.distY + "px";
-//   };
-
-//   target.onmousemove = dr;
-//   target.ontouchmove = dr;
-
-//   const endDrag = () => {
-//     target.moving = false;
-//   };
-//   target.onmouseup = endDrag;
-//   target.ontouchend = endDrag;
-// };
-
-// export const pickup = (e, offset, setIsDown) => {
-//   setIsDown(true);
-//   if (e.clientX) {
-//     offset = [e.target.offsetLeft - e.clientX, e.target.offsetTop - e.clientY];
-//   } else if (e.touches) {
-//     // for touch devices, use 1st touch only
-//     offset = [
-//       e.target.offsetLeft - e.touches[0].pageX,
-//       e.target.offsetTop - e.touches[0].pageY,
-//     ];
-//   }
-// };
-
-// export const move = (e, offset, isDown, position) => {
-//   if (isDown) {
-//     if (e.clientX) {
-//       position = { x: e.clientX, y: e.clientY };
-//     } else if (e.touches) {
-//       position = { x: e.touches[0].pageX, y: e.touches[0].pageY };
-//     }
-//     e.target.style.left = position.x + offset[0] + "px";
-//     e.target.style.top = position.y + offset[1] + "px";
-//   }
-// };
-
-// export const drop = (e, offset, setIsDown, position) => {
-//   setIsDown(false);
-//   e.target.style.left = position.x + offset[0] + "px";
-//   e.target.style.top = position.y + offset[1] + "px";
-// };
-
 export const move = (e, textValues, setTextValues) => {
   if (!textValues.isMoving) return;
 
@@ -329,65 +241,4 @@ export const move = (e, textValues, setTextValues) => {
     left: newX,
     bottom: textValues.bottom !== null ? -newY : null,
   });
-
-  // setTextValues((prev) => ({
-  //   ...prev,
-  //   top: prev.top !== null ? newY : null,
-  //   left: newX,
-  //   bottom: prev.bottom !== null ? -newY : null,
-  // }));
 };
-
-// функции из textarea - пока там все не работает
-
-// первый вариант перемещения с внутренним стейтом
-// const [textArea, setTextArea] = useState({
-//   isMoving: false,
-//   oldX: null,
-//   oldY: null,
-// });
-
-// const pickup = (e) => {
-//   if (!(e.target === textMoving.current)) return;
-//   setTextArea((prev) => ({ ...prev, isMoving: true }))
-
-//   if (e.clientX) {
-//     setTextArea((prev) => ({ ...prev, oldX: e.clientX, oldY: e.clientY}))
-//   } else {
-//     setTextArea((prev) => ({ ...prev, oldX: e.touches[0].clientX, oldY: e.touches[0].clientY}))
-//   };
-// };
-
-// const move = (e) => {
-//   if (!textArea.isMoving) return;
-
-//   let distX;
-//   let distY;
-
-//   if (e.clientX) {
-//     distX = e.clientX - textArea.oldX;
-//     distY = e.clientY - textArea.oldY;
-//   } else {
-//     distX = e.touches[0].clientX - textArea.oldX;
-//     distY = e.touches[0].clientY - textArea.oldY;
-//   }
-
-//   const newY = textValues.startTop + distY;
-//   const newX = textValues.startLeft + distX;
-
-//   setTextValues((prev) => ({
-//     ...prev,
-//     top: (prev.top !== null) ? newY : null,
-//     left: newX,
-//     bottom: (prev.bottom !== null) ? - newY : null,
-//   }))
-// };
-
-// const drop = (e) => {
-//   setTextArea((prev) => ({ ...prev, isMoving: false }))
-//   setTextValues((prev) => ({
-//     ...prev,
-//     startTop: (prev.bottom === null) ? prev.top : - prev.bottom,
-//     startLeft: prev.left
-//   }))
-// };

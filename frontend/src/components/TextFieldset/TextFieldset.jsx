@@ -62,7 +62,7 @@ const TextFieldset = ({
             key={image.id}
             index={index}
             image={image}
-            images={images}
+            // images={images}
             setImages={(newImage) => {
               setImages((images) => {
                 const newImages = [...images];
