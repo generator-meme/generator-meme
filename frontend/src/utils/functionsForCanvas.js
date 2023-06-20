@@ -218,6 +218,29 @@ export const drawText = (
   }
 };
 
+export const pickup = (e, movingElement, values, setValues) => {
+  if (!(e.target === movingElement)) return;
+  if (values.isMoving) return;
+  if (e.nativeEvent.offsetX > values.width - 27) return;
+
+  if (e.clientX) {
+    setValues({
+      ...values,
+      isMoving: true,
+      oldX: e.clientX,
+      oldY: e.clientY,
+    });
+  } else {
+    setValues({
+      ...values,
+      isMoving: true,
+      oldX: e.touches[0].clientX,
+      oldY: e.touches[0].clientY,
+    });
+  }
+  console.log(`pick up ${values.name ? "text" : "image"}`);
+};
+
 export const move = (e, textValues, setTextValues) => {
   if (!textValues.isMoving) return;
 

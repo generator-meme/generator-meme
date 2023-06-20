@@ -10,7 +10,7 @@ import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";
 import Panel from "../Panel/Panel";
 import { updateTextValues } from "../../utils/textPanelFunctions.js";
-import { move } from "../../utils/functionsForCanvas.js";
+import { move, pickup } from "../../utils/functionsForCanvas.js";
 
 const TextareaCanvas = ({
   index,
@@ -30,28 +30,6 @@ const TextareaCanvas = ({
   const deleteTextButton = useRef(null);
   const [placeholderText, setPlaceholderText] = useState("Введите текст");
   const [isHover, setIsHover] = useState(false);
-
-  const pickup = (e) => {
-    if (!(e.target === textMoving.current)) return;
-    if (latestTextValues.current.isMoving) return;
-
-    if (e.clientX) {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: true,
-        oldX: e.clientX,
-        oldY: e.clientY,
-      });
-    } else {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: true,
-        oldX: e.touches[0].clientX,
-        oldY: e.touches[0].clientY,
-      });
-    }
-    console.log("pick up text");
-  };
 
   const onMove = (e) => {
     if (latestTextValues.current.isMoving) {
@@ -159,8 +137,12 @@ const TextareaCanvas = ({
             isCurrentTextIndex === index || isHover ? "#EBFF00" : "transparent",
           zIndex: isCurrentTextIndex === index ? 3 : 0,
         }}
-        onMouseDown={(e) => pickup(e)}
-        onTouchStart={(e) => pickup(e)}
+        onMouseDown={(e) =>
+          pickup(e, textMoving.current, textValues, setTextValues)
+        }
+        onTouchStart={(e) =>
+          pickup(e, textMoving.current, textValues, setTextValues)
+        }
         onMouseEnter={(e) => setIsHover(true)}
         onMouseLeave={(e) => setIsHover(false)}
         onClick={(e) => onTexteareaBoxClick(e)}

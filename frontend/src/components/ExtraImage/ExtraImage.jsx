@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./ExtraImage.css";
 import { useLatest } from "react-use";
-import { move } from "../../utils/functionsForCanvas.js";
+import { move, pickup } from "../../utils/functionsForCanvas.js";
 
 const ExtraImage = ({
   index,
@@ -34,29 +34,6 @@ const ExtraImage = ({
     if (isCurrentImageIndex !== index) {
       setIsCurrentImageIndex();
     }
-  };
-
-  const pickup = (e) => {
-    if (!(e.target === picture.current)) return;
-    if (latestImageValues.current.isMoving) return;
-    if (e.nativeEvent.offsetX > latestImageValues.current.width - 27) return;
-
-    if (e.clientX) {
-      setImages({
-        ...latestImageValues.current,
-        isMoving: true,
-        oldX: e.clientX,
-        oldY: e.clientY,
-      });
-    } else {
-      setImages({
-        ...latestImageValues.current,
-        isMoving: true,
-        oldX: e.touches[0].clientX,
-        oldY: e.touches[0].clientY,
-      });
-    }
-    console.log("pick up image");
   };
 
   const onMove = (e) => {
@@ -128,8 +105,8 @@ const ExtraImage = ({
             : "none",
         zIndex: isCurrentImageIndex === index ? 3 : 0,
       }}
-      onMouseDown={(e) => pickup(e)}
-      onTouchStart={(e) => pickup(e)}
+      onMouseDown={(e) => pickup(e, picture.current, image, setImages)}
+      onTouchStart={(e) => pickup(e, picture.current, image, setImages)}
       onClick={(e) => onImageClick(e)}
       onMouseEnter={(e) => setIsHover(true)}
       onMouseLeave={(e) => setIsHover(false)}
