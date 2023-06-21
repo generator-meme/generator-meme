@@ -219,7 +219,6 @@ const Canvas = ({
     }
 
     images.forEach((element) => {
-      console.log(element.image, "canvas image");
       ctx.drawImage(
         element.image,
         element.left,
