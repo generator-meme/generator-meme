@@ -6,7 +6,7 @@ import { ReactComponent as AddImageImage } from "../../images/editor/add-image-m
 import { ReactComponent as Plus } from "../../images/editor/add-something.svg";
 import { createExtraText } from "../../utils/constants";
 import { v4 as uuidv4 } from "uuid";
-import { contain } from "../../utils/functionsForCanvas.js";
+import { contain } from "../../utils/imagesFunctions";
 
 const EditorButtonsList = ({
   setOutsideTextsVisible,
