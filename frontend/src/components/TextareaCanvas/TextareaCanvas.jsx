@@ -1,16 +1,13 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLatest } from "react-use";
 import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";
 import Panel from "../Panel/Panel";
-import { updateTextValues } from "../../utils/textPanelFunctions.js";
-import { move } from "../../utils/functionsForCanvas.js";
+import {
+  updateTextValues,
+  move,
+  pickup,
+} from "../../utils/canvasElementsFunctions";
 
 const TextareaCanvas = ({
   index,
@@ -21,6 +18,7 @@ const TextareaCanvas = ({
   deleteTextFromArray,
   isCurrentTextIndex,
   setIsCurrentTextIndex,
+  deleteCurrentImage,
 }) => {
   const latestTextValues = useLatest(textValues);
   const text = useRef(null);
@@ -30,32 +28,10 @@ const TextareaCanvas = ({
   const [placeholderText, setPlaceholderText] = useState("Введите текст");
   const [isHover, setIsHover] = useState(false);
 
-  const pickup = (e) => {
-    if (!(e.target === textMoving.current)) return;
-    if (latestTextValues.current.isMoving) return;
-
-    if (e.clientX) {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: true,
-        oldX: e.clientX,
-        oldY: e.clientY,
-      });
-    } else {
-      setTextValues({
-        ...latestTextValues.current,
-        isMoving: true,
-        oldX: e.touches[0].clientX,
-        oldY: e.touches[0].clientY,
-      });
-    }
-    console.log("pick up");
-  };
-
   const onMove = (e) => {
     if (latestTextValues.current.isMoving) {
       move(e, latestTextValues.current, setTextValues);
-      console.log("move");
+      console.log("move text");
     }
   };
 
@@ -70,25 +46,26 @@ const TextareaCanvas = ({
             : -latestTextValues.current.bottom,
         startLeft: latestTextValues.current.left,
       });
-      console.log("drop");
+      console.log("drop text");
     }
   };
 
   const deleteText = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("delete");
+    console.log("delete text");
     if (e.target === deleteTextButton.current) {
       if (textValues.isOutside) {
         updateTextValues(setTextValues, latestTextValues.current, true);
       } else {
-        deleteTextFromArray(index);
+        deleteTextFromArray();
       }
     }
   };
 
   const onTexteareaBoxClick = (e) => {
     e.stopPropagation();
+    deleteCurrentImage();
     if (isCurrentTextIndex !== index) {
       setIsCurrentTextIndex();
     }
@@ -157,8 +134,12 @@ const TextareaCanvas = ({
             isCurrentTextIndex === index || isHover ? "#EBFF00" : "transparent",
           zIndex: isCurrentTextIndex === index ? 3 : 0,
         }}
-        onMouseDown={(e) => pickup(e)}
-        onTouchStart={(e) => pickup(e)}
+        onMouseDown={(e) =>
+          pickup(e, textMoving.current, textValues, setTextValues)
+        }
+        onTouchStart={(e) =>
+          pickup(e, textMoving.current, textValues, setTextValues)
+        }
         onMouseEnter={(e) => setIsHover(true)}
         onMouseLeave={(e) => setIsHover(false)}
         onClick={(e) => onTexteareaBoxClick(e)}
