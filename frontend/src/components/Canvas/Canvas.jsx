@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
-// import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from "../../utils/constants";
 import {
@@ -10,7 +9,7 @@ import {
   calculateMarginX,
   wrapText,
   drawText,
-} from "../../utils/functionsForCanvas.js";
+} from "./canvasFunctions";
 
 import TextFieldset from "../TextFieldset/TextFieldset";
 
