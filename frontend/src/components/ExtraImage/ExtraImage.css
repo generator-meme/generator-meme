@@ -5,6 +5,11 @@
     background-position: top left;
     background-repeat: no-repeat;
     background-size: contain;
+    cursor: grab;
+}
+
+.extra-image__box:active {
+    cursor: grabbing;
 }
 
 .image__button-box {
