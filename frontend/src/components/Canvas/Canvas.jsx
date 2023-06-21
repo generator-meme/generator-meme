@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
-import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from "../../utils/constants";
 import {
+  getOffsetY,
   calculateMarginX,
   wrapText,
   drawText,
-} from "../../utils/functionsForCanvas.js";
+} from "./canvasFunctions";
 
 import TextFieldset from "../TextFieldset/TextFieldset";
 
@@ -26,6 +26,7 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [outsideTextHeight, setOusideTextHeight] = useState(80);
+  const [images, setImages] = useState([]);
 
   const [textsValues, setTextsValues] = useState([
     {
@@ -217,6 +218,16 @@ const Canvas = ({
       );
     }
 
+    images.forEach((element) => {
+      ctx.drawImage(
+        element.image,
+        element.left,
+        element.top,
+        element.width,
+        element.heightToWidthRayio * element.width
+      );
+    });
+
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = "round"; // настройка сглаживания контура для strokeText
 
@@ -234,25 +245,13 @@ const Canvas = ({
     const textMarginYTop = 58; //50
     const textMarginYBottom = 20; //20
 
-    const getOffsetY = (element) => {
-      if (element.isOutside) {
-        if (element.canvasTop !== null) return element.canvasTop;
-        if (element.canvasBottom !== null) return element.canvasBottom;
-      } else {
-        let pointOY;
-        if (element.top !== null) {
-          pointOY = element.top;
-          return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
-        } else {
-          pointOY = element.bottom;
-          return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
-        }
-      }
-    };
-
     textsValues.forEach((element) => {
       if (!element.isVisible) return; // текст основные характеристики
-      const elementOffsetY = getOffsetY(element);
+      const elementOffsetY = getOffsetY(
+        element,
+        textsValues,
+        outsideTextHeight
+      );
 
       const elementOffsetX = element.isOutside
         ? element.canvasLeft
@@ -297,7 +296,26 @@ const Canvas = ({
         )
       );
     });
-  }, [image, imageSizes, canvasHeight, textsValues, outsideTextHeight]);
+  }, [image, images, imageSizes, canvasHeight, textsValues, outsideTextHeight]);
+
+  useEffect(() => {
+    // личные изображения не созраняются в localstorage,
+    // если это личное изображение - навешиваем слушатель на закрытие вкладки,
+    // чтобы предупредить пользователя о том, что изменения не сохранятся
+    const handleOnBeforeUnload = (event) => {
+      event.preventDefault();
+      console.log("handleOnBeforeUnload");
+      return (event.returnValue = "");
+    };
+
+    if (localStorage.getItem("currentMeme") === null || images.length > 0) {
+      window.addEventListener("beforeunload", handleOnBeforeUnload);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleOnBeforeUnload);
+      };
+    }
+  }, [images]);
 
   useEffect(() => {
     // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
@@ -314,23 +332,6 @@ const Canvas = ({
     if (!isNewMeme && localStorage.getItem("textsValues") !== null) {
       const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
       setTextsValues(oldTextsValues);
-    }
-
-    // личные изображения не созраняются в localstorage,
-    // если это личное изображение - навешиваем слушатель на закрытие вкладки,
-    // чтобы предупредить пользователя о том, что изменения не сохранятся
-    const handleOnBeforeUnload = (event) => {
-      event.preventDefault();
-      console.log("handleOnBeforeUnload");
-      return (event.returnValue = "");
-    };
-
-    if (localStorage.getItem("currentMeme") === null) {
-      window.addEventListener("beforeunload", handleOnBeforeUnload);
-
-      return () => {
-        window.removeEventListener("beforeunload", handleOnBeforeUnload);
-      };
     }
   }, []);
 
@@ -375,6 +376,8 @@ const Canvas = ({
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}
+              images={images}
+              setImages={setImages}
             />
           </form>
           <EditorButtonsList
@@ -390,6 +393,8 @@ const Canvas = ({
             textsValues={textsValues}
             setTextsValues={setTextsValues}
             imageSizes={imageSizes}
+            images={images}
+            setImages={setImages}
           />
           <button
             onClick={createMeme}

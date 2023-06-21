@@ -1,0 +1,48 @@
+.extra-image__box {
+    position: absolute;
+    resize: horizontal;
+    overflow: hidden;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.image__button-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 25px;
+}
+
+.image__resizer {
+    background-image: url("../../images/editor/change-size.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 25px;
+    width: 25px;
+    z-index: 2;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    pointer-events: none;
+}
+
+.image__delete-text {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-image: url("../../images/editor/delete-text.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 19px;
+    width: 19px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    border-radius: 50%;
+    z-index: 2;
+    cursor: pointer;
+}

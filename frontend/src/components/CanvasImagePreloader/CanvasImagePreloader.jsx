@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Canvas from "../Canvas/Canvas";
-import { contain } from "../../utils/functionsForCanvas.js";
+import { contain } from "../../utils/imagesFunctions";
 
 const CanvasImagePreloader = ({
   currentMeme,

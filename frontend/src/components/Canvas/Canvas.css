@@ -2,25 +2,6 @@
   position: relative;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .main-editor {
   padding: 20px 30px 20px;
   width: 100%;
@@ -35,7 +16,6 @@
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
-
   min-height: 556px;
 }
 
@@ -43,7 +23,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* height: 556px; */
   width: 675px;
 }
 
@@ -52,7 +31,8 @@
   font-size: 70px;
   line-height: 83px;
   white-space: pre-wrap;
-  word-break: break-all
+  word-break: break-all;
+  border-radius: 20px;
 }
 
 .editor__box {
