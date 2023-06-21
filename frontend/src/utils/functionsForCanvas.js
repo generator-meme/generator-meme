@@ -32,6 +32,22 @@ const fit = (contains) => {
 export const contain = fit(true);
 export const cover = fit(false);
 
+export const getOffsetY = (element, textsValues, outsideTextHeight) => {
+  if (element.isOutside) {
+    if (element.canvasTop !== null) return element.canvasTop;
+    if (element.canvasBottom !== null) return element.canvasBottom;
+  } else {
+    let pointOY;
+    if (element.top !== null) {
+      pointOY = element.top;
+      return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
+    } else {
+      pointOY = element.bottom;
+      return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
+    }
+  }
+};
+
 // расчет координаты по оси X текста
 export const calculateMarginX = (width, fontPosition, textMargin, offsetX) => {
   if (fontPosition === "start") {

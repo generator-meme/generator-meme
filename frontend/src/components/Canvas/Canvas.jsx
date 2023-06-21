@@ -6,6 +6,7 @@ import "./Canvas.css";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
 import { fontFamilyOptions } from "../../utils/constants";
 import {
+  getOffsetY,
   calculateMarginX,
   wrapText,
   drawText,
@@ -235,25 +236,13 @@ const Canvas = ({
     const textMarginYTop = 58; //50
     const textMarginYBottom = 20; //20
 
-    const getOffsetY = (element) => {
-      if (element.isOutside) {
-        if (element.canvasTop !== null) return element.canvasTop;
-        if (element.canvasBottom !== null) return element.canvasBottom;
-      } else {
-        let pointOY;
-        if (element.top !== null) {
-          pointOY = element.top;
-          return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
-        } else {
-          pointOY = element.bottom;
-          return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
-        }
-      }
-    };
-
     textsValues.forEach((element) => {
       if (!element.isVisible) return; // текст основные характеристики
-      const elementOffsetY = getOffsetY(element);
+      const elementOffsetY = getOffsetY(
+        element,
+        textsValues,
+        outsideTextHeight
+      );
 
       const elementOffsetX = element.isOutside
         ? element.canvasLeft
