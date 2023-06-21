@@ -300,6 +300,25 @@ const Canvas = ({
   }, [image, images, imageSizes, canvasHeight, textsValues, outsideTextHeight]);
 
   useEffect(() => {
+    // личные изображения не созраняются в localstorage,
+    // если это личное изображение - навешиваем слушатель на закрытие вкладки,
+    // чтобы предупредить пользователя о том, что изменения не сохранятся
+    const handleOnBeforeUnload = (event) => {
+      event.preventDefault();
+      console.log("handleOnBeforeUnload");
+      return (event.returnValue = "");
+    };
+
+    if (localStorage.getItem("currentMeme") === null || images.length > 0) {
+      window.addEventListener("beforeunload", handleOnBeforeUnload);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleOnBeforeUnload);
+      };
+    }
+  }, [images]);
+
+  useEffect(() => {
     // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
     // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
     if (!currentMeme && localStorage.getItem("currentMeme") === null) {
@@ -314,23 +333,6 @@ const Canvas = ({
     if (!isNewMeme && localStorage.getItem("textsValues") !== null) {
       const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
       setTextsValues(oldTextsValues);
-    }
-
-    // личные изображения не созраняются в localstorage,
-    // если это личное изображение - навешиваем слушатель на закрытие вкладки,
-    // чтобы предупредить пользователя о том, что изменения не сохранятся
-    const handleOnBeforeUnload = (event) => {
-      event.preventDefault();
-      console.log("handleOnBeforeUnload");
-      return (event.returnValue = "");
-    };
-
-    if (localStorage.getItem("currentMeme") === null) {
-      window.addEventListener("beforeunload", handleOnBeforeUnload);
-
-      return () => {
-        window.removeEventListener("beforeunload", handleOnBeforeUnload);
-      };
     }
   }, []);
 
