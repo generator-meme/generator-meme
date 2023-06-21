@@ -98,7 +98,7 @@ const ExtraImage = ({
         left: image.left,
         maxHeight: (imageSizes.width / 1.7) * image.heightToWidthRayio,
         maxWidth: imageSizes.width / 1.7,
-        backgroundImage: `url(${image.image.currentSrc})`,
+        // backgroundImage: `url(${image.image.currentSrc})`,
         boxShadow:
           isCurrentImageIndex === index || isHover
             ? "2px 2px yellow, 2px -2px yellow, -2px 2px yellow, -2px -2px yellow"

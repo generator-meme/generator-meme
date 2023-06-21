@@ -218,6 +218,17 @@ const Canvas = ({
       );
     }
 
+    images.forEach((element) => {
+      console.log(element.image, "canvas image");
+      ctx.drawImage(
+        element.image,
+        element.left,
+        element.top,
+        element.width,
+        element.heightToWidthRayio * element.width
+      );
+    });
+
     ctx.miterLimit = 2; // настройка выступа контура для strokeText
     ctx.lineJoin = "round"; // настройка сглаживания контура для strokeText
 
@@ -286,7 +297,7 @@ const Canvas = ({
         )
       );
     });
-  }, [image, imageSizes, canvasHeight, textsValues, outsideTextHeight]);
+  }, [image, images, imageSizes, canvasHeight, textsValues, outsideTextHeight]);
 
   useEffect(() => {
     // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
