@@ -318,14 +318,6 @@ const Canvas = ({
   }, [images]);
 
   useEffect(() => {
-    // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
-    // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
-    if (!currentMeme && localStorage.getItem("currentMeme") === null) {
-      setImageNotFoundOpen(true);
-      navigate("/");
-      return;
-    }
-
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 

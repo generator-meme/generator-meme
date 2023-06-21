@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import Canvas from "../Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
 
@@ -10,6 +11,7 @@ const CanvasImagePreloader = ({
   memes,
   setImageNotFoundOpen,
 }) => {
+  const navigate = useNavigate();
   const [image, setImage] = useState(null);
 
   const imageSizes = useMemo(() => {
@@ -25,6 +27,12 @@ const CanvasImagePreloader = ({
   };
 
   useEffect(() => {
+    if (!currentMeme && localStorage.getItem("currentMeme") === null) {
+      setImageNotFoundOpen(true);
+      navigate("/");
+      return;
+    }
+
     const img = new Image(); // создаем изображеиние только при первом рендере, затем оно будет храниться в стейте
     if (currentMeme) {
       img.src = currentMeme.image;
