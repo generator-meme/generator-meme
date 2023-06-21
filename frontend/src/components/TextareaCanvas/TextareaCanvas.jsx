@@ -1,16 +1,13 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLatest } from "react-use";
 import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";
 import Panel from "../Panel/Panel";
-import { updateTextValues } from "../../utils/textPanelFunctions.js";
-import { move, pickup } from "../../utils/functionsForCanvas.js";
+import {
+  updateTextValues,
+  move,
+  pickup,
+} from "../../utils/canvasElementsFunctions";
 
 const TextareaCanvas = ({
   index,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./ExtraImage.css";
 import { useLatest } from "react-use";
-import { move, pickup } from "../../utils/functionsForCanvas.js";
+import { move, pickup } from "../../utils/canvasElementsFunctions";
 
 const ExtraImage = ({
   index,

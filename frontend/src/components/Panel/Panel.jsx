@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Panel.css";
 import Palette from "../Palette/Palette";
 import OpacityPanel from "../OpacityPanel/OpacityPanel.jsx";
 import FontFamilyOptions from "../FontFamilyOptions/FontFamilyOptions";
 import { hexToRgb } from "./panelFunctions";
-import { updateTextValues } from "../../utils/textPanelFunctions.js";
+import { updateTextValues } from "../../utils/canvasElementsFunctions";
 
 function Panel({ textValues, setTextValues }) {
   const form = useRef();
