@@ -1,32 +1,54 @@
 import styles from "./SearchPanel.module.css";
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../utils/api";
-import Chip from "@mui/material/Chip";
 import { Tag } from "../Tag/Tag";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [isToggleSuggestPanelColor, setIsToggleSuggestPanelColor] =
-    useState(true);
   const [tagArray, setTagArray] = useState([]);
-  console.log(searchValue, tagArray);
+  const [isUnknownFlag, setIsUnknownFlag] = useState(false);
+  const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
+  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
+
+  useEffect(() => {
+    const getTagsOnInputChange = async (name) => {
+      try {
+        const tagsArray = await api.getTagsWithQueryName(name);
+        setTagsBasedOnInputValue(tagsArray);
+      } catch {
+        console.log("err");
+      }
+    };
+    getTagsOnInputChange(searchValue);
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (searchValue) {
+      setIsFocusSearchPanel(true);
+      return;
+    } else if (!searchValue && isFocusSearchPanel) {
+      setIsFocusSearchPanel(false);
+      return;
+    }
+  }, [searchValue]);
 
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
       const tempTagArray = [...tagArray, searchValue.trim()];
       setTagArray(tempTagArray);
-      setSearchValue("");
+      setIsFocusSearchPanel(false);
+      setSearchValue(" ");
     }
   };
 
   const onChangeInputValue = (e) => {
     e.preventDefault();
-    setIsToggleSuggestPanelColor(true);
+
     setSearchValue(e.target.value.trim());
   };
 
   const yellowColorOfSuggestPanel = {
-    backgroundColor: "rgba(253, 255, 161, 0.77)",
+    backgroundColor: "#FCFDB5",
     overflowY: "hidden",
   };
   const whiteColorOfSuggestPanel = {
@@ -34,37 +56,35 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   };
   const stringToSearch = useMemo(() => {
     const tempTags = tags;
-    const tagIdArray = tempTags.filter((tag) => {
+    const tagIdArray = tagArray.map((tagName) => {
       let tempTag;
-      console.log(tempTag);
-      for (let i = 0; i < tagArray.length; i++) {
-        if (tag.name === tagArray[i]) {
-          tempTag = tagArray[i];
-        }
+      tempTag = tempTags.find((tag) => {
+        return tag.name === tagName;
+      });
+      if (!tempTag) {
+        return "unknownTag";
       }
-
-      return tempTag ? true : false;
+      return tempTag.id;
     });
-    return tagIdArray
-      .map((item) => {
-        return item.id;
-      })
-      .join(",");
+    return tagIdArray.join(",");
   }, [tagArray]);
 
-  console.log(stringToSearch);
+  useEffect(() => {
+    if (stringToSearch && stringToSearch.indexOf("unknownTag") !== -1) {
+      setIsUnknownFlag(true);
+    } else setIsUnknownFlag(false);
+  }, [stringToSearch]);
 
   const submitToSearch = async (e) => {
-    console.log("in submit");
     e.preventDefault();
     e.stopPropagation();
-
+    setIsFocusSearchPanel(false);
     try {
       if (tagArray.length === 0) {
-        console.log("zero");
         setFilterMemes(initMemes);
+
         return;
-      } else if (stringToSearch) {
+      } else if (stringToSearch && !isUnknownFlag) {
         const filteredMem = await api.getfilteredTemplates(stringToSearch);
         setFilterMemes(filteredMem);
       } else {
@@ -76,26 +96,14 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   };
   // console.log(tags);
   const clickHandle = (tag) => {
-    setIsToggleSuggestPanelColor(false);
     setTagArray(() => {
       return [...tagArray, tag];
     });
+
     setSearchValue("");
   };
-  const filteredTags = useMemo(() => {
-    return tags.filter((item) => {
-      const searchString = searchValue.toLowerCase();
-      const tagString = item.name.toLowerCase();
-      return (
-        searchString &&
-        tagString.startsWith(searchString) &&
-        searchString !== tagString
-      );
-    });
-  }, [tags, searchValue]);
 
   const onDelete = (id) => {
-    console.log(id, tagArray);
     const tempTagArray = tagArray;
     const newTagArray = tempTagArray.filter((item) => {
       return item !== id;
@@ -108,48 +116,66 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
       <div
         className={styles.wrap_background_form}
         style={
-          isToggleSuggestPanelColor && !(filteredTags.length === 0)
+          isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
             ? whiteColorOfSuggestPanel
             : yellowColorOfSuggestPanel
         }
       >
         <div className={styles.wrap_search_panel}>
-          <form className={styles.form_search_panel}>
-            {tagArray.map((tag, id) => {
-              return (
-                <div className={styles.tag_wrap}>
-                  <Tag
-                    id={id}
-                    onClose={() => {
-                      onDelete(tag);
-                    }}
-                    name={tag}
-                  ></Tag>
-                </div>
-              );
-            })}
+          <form className={styles.form_search_panel} onSubmit={submitToSearch}>
+            <div className={styles.wrap_input}>
+              {tagArray.map((tag, id) => {
+                return (
+                  <div className={styles.tag_wrap}>
+                    <Tag
+                      id={id}
+                      onClose={() => {
+                        onDelete(tag);
+                      }}
+                      name={tag}
+                    ></Tag>
+                  </div>
+                );
+              })}
 
-            <input
-              value={searchValue}
-              onFocus={(e) => (e.target.placeholder = "")}
-              onKeyDown={handleSpace}
-              onChange={onChangeInputValue}
-              onBlur={(e) => (e.target.placeholder = "Поиск по шаблонам")}
-              type="text"
-              placeholder="Поиск по шаблонам"
-              className={styles.search_input}
-            />
+              <input
+                value={searchValue}
+                onFocus={(e) => {
+                  e.target.placeholder = "";
+                  setIsFocusSearchPanel(true);
+                }}
+                onBlur={(e) => {
+                  setTimeout(() => {
+                    e.target.placeholder = "Поиск по шаблонам";
+                    setIsFocusSearchPanel(false);
+                  }, 150);
+                }}
+                onKeyDown={handleSpace}
+                onChange={onChangeInputValue}
+                type="text"
+                placeholder="Поиск по шаблонам"
+                className={styles.search_input}
+              />
+            </div>
+            <button className={styles.button_form}></button>
           </form>
-          <button
-            className={styles.button_form}
-            onClick={submitToSearch}
-          ></button>
         </div>
-        <div className={styles.suggestions_wrap}>
-          {filteredTags.map((tag) => {
+
+        <div
+          className={styles.suggestions_wrap}
+          style={{ visibility: isFocusSearchPanel ? "visible" : "hidden" }}
+        >
+          {tagsBasedOnInputValue.map((tag) => {
             return (
-              <div key={tag.id} onClick={() => clickHandle(tag.name)}>
-                <p>{tag.name}</p>
+              <div key={tag.id}>
+                <p
+                  onClick={() => {
+                    clickHandle(tag.name);
+                    // setIsFocusSearchPanel(false);
+                  }}
+                >
+                  {tag.name}
+                </p>
               </div>
             );
           })}
