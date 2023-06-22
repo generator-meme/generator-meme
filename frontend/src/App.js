@@ -50,6 +50,7 @@ const App = () => {
       .getTemplates()
       .then((res) => {
         setMemes(res);
+        console.log(res)
       })
       .catch((err) => {
         console.log(err);
