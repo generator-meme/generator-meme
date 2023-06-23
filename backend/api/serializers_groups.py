@@ -51,8 +51,9 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupMemeSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='meme.id')
-    author = serializers.ReadOnlyField(source='meme.author')
+    author = serializers.SerializerMethodField(source='meme.author')
     image = serializers.ImageField(source='meme.image', read_only=True)
+    added_by = UsersSerializer(read_only=True)
     created_at = serializers.ReadOnlyField(source='meme.created_at')
 
     class Meta:
@@ -61,12 +62,20 @@ class GroupMemeSerializer(serializers.ModelSerializer):
             'author',
             'image',
             'created_at',
+            'added_by',
             'added_at'
         )
         model = GroupMeme
 
+    def get_author(self, obj):
+        author = obj.meme.author
+        if author is None:
+            return None
+        serializer = UsersSerializer(read_only=True, instance=author)
+        return serializer.data
 
-class GroupBannedUserSerializer(serializers.ModelSerializer):
+
+class GroupBannedUserReadSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
@@ -88,9 +97,11 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
 class GroupFullSerializer(serializers.ModelSerializer):
     """Полный сериализатор группы"""
     owner = UsersSerializer()
-    users = GroupUserReadSerializer(source='group_users', many=True, read_only=True)
+    users = GroupUserReadSerializer(source='group_users', many=True,
+                                    read_only=True)
     memes = GroupMemeSerializer(source='group_memes', many=True, read_only=True)
-    banlist = GroupBannedUserSerializer(source='banned_users', many=True, read_only=True)
+    banlist = GroupBannedUserReadSerializer(source='banned_users', many=True,
+                                            read_only=True)
 
     class Meta:
         fields = (
@@ -148,7 +159,7 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
-        read_only_field = ('role', )
+        read_only_field = ('role',)
         model = GroupUser
 
     def validate(self, data):
@@ -157,12 +168,58 @@ class GroupUserSerializer(serializers.ModelSerializer):
         if not request or request.user.is_anonymous:
             return False
         if GroupUser.objects.filter(
-            user=data.get('user'), group=data.get('group')
+                user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
                 {'GroupUser_exists_error': 'Пользователь уже в группе.'}
             )
+        elif data.get('group').owner == data.get('user'):
+            raise ValidationError(
+                {'GroupUser_error': 'Администратора нельзя добавить в список.'}
+            )
+        elif GroupBannedUser.objects.filter(
+                user=data.get('user'), group=data.get('group')
+        ).exists():
+            raise ValidationError(
+                {'GroupBannedUser_error':
+                 'Пользователь забаннен и не может быть добавлен в группу.'}
+            )
         return data
+
+    def to_representation(self, instance):
+        serializer = GroupFullSerializer(
+            instance.group,
+            context={'request': self.context.get('request')}
+        )
+        return serializer.data
+
+
+class GroupMemeWriteSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователей в группе."""
+
+    class Meta:
+        fields = '__all__'
+        model = GroupMeme
+
+    def validate(self, data):
+        """Валидирует на наличие мема в группе и права."""
+        request = self.context['request']
+        if not request or request.user.is_anonymous:
+            return False
+        if GroupMeme.objects.filter(
+                meme=data.get('meme'), group=data.get('group')
+        ).exists():
+            raise ValidationError(
+                {'GroupMeme_exists_error': 'Мем уже в группе.'}
+            )
+        if request.user in data.get('group').users or (
+                request.user == data.get('group').owner
+        ):
+            return data
+        raise ValidationError(
+            {'GroupMeme_error':
+             'Мем может добавить только пользователь группы или админ.'}
+        )
 
     def to_representation(self, instance):
         serializer = GroupFullSerializer(

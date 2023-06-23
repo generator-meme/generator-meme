@@ -83,6 +83,11 @@ class GroupMeme(models.Model):
         on_delete=models.CASCADE,
         related_name='meme_groups',
     )
+    added_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='group_meme_added_by'
+    )
 
     added_at = models.DateTimeField(
         verbose_name='Дата добавления мема в группу',
