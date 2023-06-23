@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from .permissions import IsGroupOwner
 from .serializers_groups import (
     GroupFullSerializer, GroupSerializer,
-    GroupUserSerializer, GroupWriteSerializer, GroupBannedUserSerializer
+    GroupUserSerializer, GroupWriteSerializer, GroupBannedUserReadSerializer
 )
 from users.models import User
 
@@ -73,7 +73,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             )
             self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        serializer = GroupBannedUserSerializer(
+        serializer = GroupBannedUserReadSerializer(
             data={
                 'user': request.data.get('user'),
                 'group': current_group.pk
