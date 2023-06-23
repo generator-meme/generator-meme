@@ -6,7 +6,7 @@ from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CurrentUserDefault
 
-from .serializers_users import UsersSerializer
+from api.serializers_users import UsersSerializer
 
 
 class GroupUserReadSerializer(serializers.ModelSerializer):

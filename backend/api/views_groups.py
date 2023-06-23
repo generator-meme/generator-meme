@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, permissions
 
@@ -6,13 +7,13 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
-from .permissions import IsGroupOwner
-from .serializers_groups import (
+from api.permissions import IsGroupOwner
+from api.serializers_groups import (
     GroupFullSerializer, GroupSerializer,
     GroupUserSerializer, GroupWriteSerializer, GroupBannedUserReadSerializer
 )
-from users.models import User
 
+User = get_user_model()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
