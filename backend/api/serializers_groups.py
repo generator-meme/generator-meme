@@ -206,8 +206,48 @@ class GroupUserSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
+class GroupBannedUserSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователей в группе."""
+
+    class Meta:
+        fields = '__all__'
+        model = GroupBannedUser
+
+    def validate(self, data):
+        """Валидирует на наличие пользователя в группе."""
+        request = self.context['request']
+        if not request or request.user.is_anonymous:
+            return False
+        if not GroupUser.objects.filter(
+                group=data.get('group'),
+                user=data.get('user')
+        ).exists():
+            raise ValidationError(
+                {'GroupUser_exists_error': 'Такого пользователя нет в группе.'}
+            )
+        user = GroupUser.objects.get(
+                group=data.get('group'),
+                user=data.get('user')
+        )
+        if user.role.is_admin:
+            raise ValidationError(
+                {'GroupUser_exists_error':
+                 'Пользователя со статусом "Администратор" нельзя добавить '
+                 'в бан.'}
+            )
+        return data
+
+    def to_representation(self, instance):
+        serializer = GroupFullSerializer(
+            instance.group,
+            context={'request': self.context.get('request')}
+        )
+        return serializer.data
+
+
 class GroupMemeWriteSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в группе."""
+    added_by = UsersSerializer(read_only=True, default=CurrentUserDefault())
 
     class Meta:
         fields = '__all__'
@@ -224,13 +264,12 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
             raise ValidationError(
                 {'GroupMeme_exists_error': 'Мем уже в группе.'}
             )
-        if request.user in data.get('group').users or (
-                request.user == data.get('group').owner
-        ):
+        if GroupUser.objects.filter(group=data.get('group'),
+                                    user=request.user).exists():
             return data
         raise ValidationError(
             {'GroupMeme_error':
-             'Мем может добавить только пользователь группы или админ.'}
+             'Мем может добавить только пользователь группы.'}
         )
 
     def to_representation(self, instance):
