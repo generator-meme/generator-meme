@@ -59,20 +59,21 @@ class TemplateViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_queryset(self):
-        queryset = Template.objects.filter(
-            is_published=True).annotate(
-            used_times=Case(
-                When(Exists(
-                    TemplateUsedTimes.objects.filter(
-                        template=OuterRef('pk')
-                    )
-                ), then=TemplateUsedTimes.objects.filter(
-                    template=OuterRef('pk')
-                ).values('used_times')),
-                default=Value(0)
-            )
-        ).order_by('-used_times')
+#        queryset = Template.objects.filter(
+#            is_published=True).annotate(
+#            used_times=Case(
+#                When(Exists(
+#                    TemplateUsedTimes.objects.filter(
+#                        template=OuterRef('pk')
+#                    )
+#                ), then=TemplateUsedTimes.objects.filter(
+#                    template=OuterRef('pk')
+#                ).values('used_times')),
+#                default=Value(0)
+#            )
+#        ).order_by('-used_times')
         user = self.request.user
+        queryset = Template.objects.filter(is_published=True).all()
         if user.is_authenticated:
             return queryset.annotate(
                 is_favorited=Exists(

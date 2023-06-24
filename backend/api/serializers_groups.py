@@ -8,6 +8,8 @@ from rest_framework.fields import CurrentUserDefault
 
 from api.serializers_users import UsersSerializer
 
+from api.serializers_memes import TemplateReadSerializer
+
 
 class GroupUserReadSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='user.id')
@@ -55,6 +57,7 @@ class GroupMemeSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(source='meme.image', read_only=True)
     added_by = UsersSerializer(read_only=True)
     created_at = serializers.ReadOnlyField(source='meme.created_at')
+    template = serializers.SerializerMethodField(source='meme.template')
 
     class Meta:
         fields = (
@@ -63,7 +66,8 @@ class GroupMemeSerializer(serializers.ModelSerializer):
             'image',
             'created_at',
             'added_by',
-            'added_at'
+            'added_at',
+            'template'
         )
         model = GroupMeme
 
@@ -72,6 +76,13 @@ class GroupMemeSerializer(serializers.ModelSerializer):
         if author is None:
             return None
         serializer = UsersSerializer(read_only=True, instance=author)
+        return serializer.data
+
+    def get_template(self, obj):
+        template = obj.meme.template
+        if template is None:
+            return None
+        serializer = TemplateReadSerializer(read_only=True, instance=template)
         return serializer.data
 
 
@@ -130,12 +141,13 @@ class GroupFullSerializer(serializers.ModelSerializer):
 class GroupWriteSerializer(serializers.ModelSerializer):
     owner = UsersSerializer(read_only=True, default=CurrentUserDefault())
 
+
     class Meta:
         fields = (
             'name',
             'description',
             'owner',
-            'closed'
+            'closed',
         )
         read_only_fields = (
             'owner',
@@ -154,7 +166,7 @@ class GroupUserSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в группе."""
     role = serializers.PrimaryKeyRelatedField(
         queryset=GroupRole.objects.all(),
-        default=get_object_or_404(GroupRole, pk=2)
+        default=GroupRole.objects.get_or_create(name="Пользователь")[0]
     )
 
     class Meta:

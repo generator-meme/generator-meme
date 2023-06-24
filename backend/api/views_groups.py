@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, permissions
 
-from groups.models import Group, GroupUser
+from groups.models import Group, GroupRole, GroupUser
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
@@ -28,19 +28,42 @@ class GroupViewSet(viewsets.ModelViewSet):
         return GroupWriteSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        user = self.request.user
+        serializer.save(owner=user)
+        group = Group.objects.get(
+            owner=self.request.user,
+            name=self.request.data.get('name')
+        )
+        GroupUser.objects.create(
+            group=group,
+            user=user,
+            role=GroupRole.objects.get_or_create(name="Администратор",
+                                                 is_admin=True)[0]
+        )
 
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[IsAuthenticated, ])
     def adduser(self, request, pk):
         current_group = get_object_or_404(Group, pk=pk)
-        if request.user == current_group.owner and request.data.get('user'):
-            user = get_object_or_404(User, id=request.data.get('user'))
-        elif request.user != current_group.owner and request.data.get('user'):
-            return Response(
-                {"Owner_error": "Другого пользователя может добавить или "
-                                "удалить только владелец группы"},
-                status=status.HTTP_401_UNAUTHORIZED)
+        if GroupUser.objects.filter(
+                group=current_group,
+                user=request.user
+        ) and request.data.get('user'):
+            if GroupUser.objects.get(
+                    group=current_group,
+                    user=request.user
+            ).role.is_admin:
+                user = get_object_or_404(User, id=request.data.get('user'))
+            elif not GroupUser.objects.get(
+                    group=current_group,
+                    user=request.user
+            ).role.is_admin and request.user.id != request.data.get('user'):
+                return Response(
+                    {"Owner_error": "Другого пользователя может добавить или "
+                                    "удалить только администратор группы"},
+                    status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                user = request.user
         else:
             user = request.user
         if request.method != 'POST':
@@ -49,7 +72,21 @@ class GroupViewSet(viewsets.ModelViewSet):
                 user=user,
                 group=current_group
             )
-            self.perform_destroy(action_model)
+            if user == current_group.owner:
+                return Response(
+                    {"Owner_error": "Владелец группы не может быть удален."},
+                    status=status.HTTP_400_BAD_REQUEST)
+            elif request.user != user and GroupUser.objects.get(
+                    group=current_group,
+                    user=user
+            ).role.is_admin and request.user != current_group.owner:
+                return Response(
+                    {"Owner_error":
+                     "Пользователя со статусом 'Администратор' может удалить "
+                     "только владелец группы."},
+                    status=status.HTTP_400_BAD_REQUEST)
+            else:
+                self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = GroupUserSerializer(
             data={
