@@ -71,6 +71,10 @@ const TextareaCanvas = ({
     }
   };
 
+  // useEffect(() => {
+
+  // }, [imageSizes]);
+
   useEffect(() => {
     // подписка на изменение размера области textarea
     if (text.current !== null && textValues.isVisible) {
@@ -124,7 +128,8 @@ const TextareaCanvas = ({
           top: textValues.top,
           left: textValues.left,
           bottom: textValues.bottom,
-          maxWidth: textValues.maxWidth,
+          maxWidth: imageSizes?.width,
+          // maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
           maxHeight: imageSizes?.height,
@@ -174,7 +179,8 @@ const TextareaCanvas = ({
             onBlur={(e) => setPlaceholderText("Введите текст")}
             style={{
               width: textValues.width || imageSizes?.width,
-              maxWidth: textValues.maxWidth,
+              maxWidth: imageSizes?.width,
+              // maxWidth: textValues.maxWidth,
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,
@@ -203,8 +209,20 @@ const TextareaCanvas = ({
           className="textarea__panel"
           onClick={(e) => e.stopPropagation()}
           style={{
-            top: outsideTopTextValues[0].isVisible ? -36 - 30 - 80 : -36 - 30,
-            left: imageSizes.width < 609 ? -((609 - imageSizes.width) / 2) : 0,
+            top:
+              window.innerWidth > 700
+                ? outsideTopTextValues[0].isVisible
+                  ? -36 - 30 - 80
+                  : -36 - 30
+                : outsideTopTextValues[0].isVisible
+                ? -36 - 30 - 80 - 36
+                : -36 - 30 - 36,
+            left:
+              imageSizes.width < 609 && window.innerWidth > 700
+                ? -((609 - imageSizes.width) / 2)
+                : imageSizes.width < 331 && window.innerWidth < 701
+                ? -((331 - imageSizes.width) / 2)
+                : 0,
           }}
         >
           <Panel textValues={textValues} setTextValues={setTextValues} />
