@@ -1,20 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, permissions
-
-from groups.models import Group, GroupMeme, GroupRole, GroupBannedUser, \
-    GroupUser
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
 from api.permissions import IsGroupOwner, IsInGroup
-from api.serializers_groups import (
-    GroupFullSerializer, GroupSerializer,
-    GroupUserSerializer, GroupWriteSerializer, GroupBannedUserReadSerializer,
-    GroupMemeWriteSerializer, GroupBannedUserSerializer
-)
-
+from api.serializers_groups import (GroupBannedUserReadSerializer,
+                                    GroupBannedUserSerializer,
+                                    GroupFullSerializer,
+                                    GroupMemeWriteSerializer, GroupSerializer,
+                                    GroupUserSerializer, GroupWriteSerializer)
+from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
+                           GroupUser)
 from memes.models import Meme
 
 User = get_user_model()

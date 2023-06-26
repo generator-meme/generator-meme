@@ -1,14 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-
-from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
-                           GroupUser)
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CurrentUserDefault
 
-from api.serializers_users import UsersSerializer
-
 from api.serializers_memes import TemplateReadSerializer
+from api.serializers_users import UsersSerializer
+from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
+                           GroupUser)
 
 
 class GroupUserReadSerializer(serializers.ModelSerializer):
