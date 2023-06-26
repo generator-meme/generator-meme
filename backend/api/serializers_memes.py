@@ -60,11 +60,11 @@ class TemplateReadSerializer(ModelSerializer):
 
     def get_used_times(self, obj):
         if TemplateUsedTimes.objects.filter(
-                    template=obj
-                ).exists():
+            template=obj
+        ).exists():
             return TemplateUsedTimes.objects.get(
-                    template=obj
-                ).used_times
+                template=obj
+            ).used_times
         return 0
 
 

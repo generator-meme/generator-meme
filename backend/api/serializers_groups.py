@@ -204,11 +204,11 @@ class GroupUserSerializer(serializers.ModelSerializer):
             raise ValidationError(
                 {'GroupUser_exists_error': 'Пользователь уже в группе.'}
             )
-        elif data.get('group').owner == data.get('user'):
+        if data.get('group').owner == data.get('user'):
             raise ValidationError(
                 {'GroupUser_error': 'Администратора нельзя добавить в список.'}
             )
-        elif GroupBannedUser.objects.filter(
+        if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
@@ -245,8 +245,8 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
                 {'GroupUser_exists_error': 'Такого пользователя нет в группе.'}
             )
         user = GroupUser.objects.get(
-                group=data.get('group'),
-                user=data.get('user')
+            group=data.get('group'),
+            user=data.get('user')
         )
         if user.role.is_admin:
             raise ValidationError(
