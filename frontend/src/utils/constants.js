@@ -30,7 +30,7 @@ export const createExtraText = (imageSizes) => {
     isVisible: true,
     hover: false,
     text: "",
-    fontSize: 40,
+    fontSize: window.innerWidth > 700 ? 40 : window.innerWidth > 570 ? 30 : 25,
     fontFamily: fontFamilyOptions.roboto,
     selectedOption: 0,
     fontPosition: "center",

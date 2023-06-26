@@ -8,6 +8,7 @@ const TextFieldset = ({
   imageSizes,
   images,
   setImages,
+  outsideTextHeight,
 }) => {
   const [isCurrentTextIndex, setIsCurrentTextIndex] = useState(null);
   const [isCurrentImageIndex, setIsCurrentImageIndex] = useState(null);
@@ -33,6 +34,7 @@ const TextFieldset = ({
             index={index}
             textValues={text}
             imageSizes={imageSizes}
+            outsideTextHeight={outsideTextHeight}
             setTextValues={(newText) => {
               setTextsValues((textsValues) => {
                 const newTexts = [...textsValues];

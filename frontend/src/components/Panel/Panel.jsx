@@ -299,11 +299,13 @@ function Panel({ textValues, setTextValues }) {
           <span className="panel__pseudo-input panel__pseudo-input_type_end"></span>
         </label>
       </fieldset>
-      <button
-        type="reset"
-        className="panel__button panel__button_type_reset"
-        onClick={(e) => resetForm(e)}
-      ></button>
+      <fieldset className="panel__section">
+        <button
+          type="reset"
+          className="panel__button panel__button_type_reset"
+          onClick={(e) => resetForm(e)}
+        ></button>
+      </fieldset>
       <span className="panel__btn-reset-message">сбросить форматирование</span>
     </form>
   );
