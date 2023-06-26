@@ -106,6 +106,16 @@ class GroupMeme(models.Model):
 class GroupRole(models.Model):
     """Модель роли в группе."""
 
+    @classmethod
+    def get_default_role(cls):
+        """Возвращает id роли по умолчанию."""
+        category, created = cls.objects.get_or_create(
+            name='Пользователь',
+            is_admin=False,
+            is_moderator=False,
+        )
+        return category.id
+
     name = models.CharField(
         verbose_name='Название роли',
         max_length=100,
@@ -155,8 +165,7 @@ class GroupUser(models.Model):
         GroupRole,
         on_delete=models.SET_DEFAULT,
         related_name='users',
-        # надо будет какой то дефолт базового юзера прописать
-        default="",
+        default=GroupRole.get_default_role,
     )
 
     class Meta:
