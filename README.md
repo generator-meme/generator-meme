@@ -56,20 +56,22 @@
 
 ### Фронтенд-разработчики
 
+с 13.02.23 – [Изабелла Чебакова](https://github.com/IzabellaCh)  
+с 20.02.23 по 26.03.23 (5 спринтов), с 19.06.23 – [Александр Подогас](https://github.com/Podogas)  
+с 01.05.23 – [Роман Носов](https://github.com/RomanNV)  
+с 12.06.23 - [Георгий Корепин](https://github.com/GeorgKorepin)  
 с 16.01.23 по 05.02.23 (3 спринта) – [Олеся Дорофеева](https://github.com/lesjok)  
 с 16.01.23 по 12.02.23 (4 спринта) – [Станислав Симаков](https://github.com/Readmaniac)  
-с 13.02.23 – [Изабелла Чебакова](https://github.com/IzabellaCh)  
-с 20.02.23 по 26.03.23 (5 спринтов) – [Александр Подогас](https://github.com/Podogas)  
-с 01.05.23 – [Роман Носов](https://github.com/RomanNV)  
 
 ### Бэкенд-разработчики
 
-с 16.01.23 по 26.03.23 (10 спринтов) – [Михаил Касев](https://github.com/mihailkasev)  
-с 16.01.23 по 19.03.23 (9 спринтов) – [Степан Саржан](https://github.com/ArtKeyplex)  
 с 24.03.23 – [Артем Меньшиков](https://github.com/a-menshikov)  
 с 24.03.23 – [Александр Федорович](https://github.com/Aleksandr140590)  
+с 16.01.23 по 26.03.23 (10 спринтов) – [Михаил Касев](https://github.com/mihailkasev)  
+с 16.01.23 по 19.03.23 (9 спринтов) – [Степан Саржан](https://github.com/ArtKeyplex)  
 
 ### Тестировщики
 
 с 16.01.23 – [Алексей Козлов](https://github.com/aleks-kozl-1922)  
-с 06.03.23 – [Анастасия Карунная](https://github.com/anastasiakaru)  
+с 26.06.23 - [Елена Кузнецова](https://github.com/daughterofLuka)  
+с 06.03.23 по 18.06.23 (15 спринтов) – [Анастасия Карунная](https://github.com/anastasiakaru)  
