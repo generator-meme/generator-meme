@@ -102,9 +102,18 @@
     cursor: pointer;
 }
 
-/* 
-@media screen and (max-width: 1140px) { // сейчас отображается криво,
-    тк рассинхронизация текста в канвасе и курсора в инпуте
+
+@media screen and (max-width: 1140px) {
+    /* 
+    .textarea__text::-webkit-input-placeholder,
+    .textarea__text::-moz-placeholder,
+    .textarea__text::-ms-input-placeholder,
+    .textarea__text::placeholder {
+        font-size: 30px;
+    } */
+}
+
+@media screen and (max-width: 700px) {
 
     .textarea__text::-webkit-input-placeholder,
     .textarea__text::-moz-placeholder,
@@ -114,22 +123,12 @@
     }
 }
 
-@media screen and (max-width: 700px) {
-
-    .textarea__text::-webkit-input-placeholder,
-    .textarea__text::-moz-placeholder,
-    .textarea__text::-ms-input-placeholder,
-    .textarea__text::placeholder {
-        font-size: 20px;
-    }
-}
-
 @media screen and (max-width: 570px) {
 
     .textarea__text::-webkit-input-placeholder,
     .textarea__text::-moz-placeholder,
     .textarea__text::-ms-input-placeholder,
     .textarea__text::placeholder {
-        font-size: 16px;
+        font-size: 25px;
     }
-} */
+}

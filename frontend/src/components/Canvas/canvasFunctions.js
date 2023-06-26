@@ -1,15 +1,25 @@
 export const getOffsetY = (element, textsValues, outsideTextHeight) => {
+  const difference = element.fontSize - 40;
+
   if (element.isOutside) {
-    if (element.canvasTop !== null) return element.canvasTop;
-    if (element.canvasBottom !== null) return element.canvasBottom;
+    if (element.canvasTop !== null) return element.canvasTop + difference;
+    if (element.canvasBottom !== null) return element.canvasBottom - difference;
   } else {
     let pointOY;
     if (element.top !== null) {
       pointOY = element.top;
-      return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
+      return (
+        pointOY +
+        (textsValues[0].isVisible ? outsideTextHeight : 0) +
+        difference
+      );
     } else {
       pointOY = element.bottom;
-      return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
+      return (
+        pointOY +
+        (textsValues[1].isVisible ? outsideTextHeight : 0) -
+        difference
+      );
     }
   }
 };

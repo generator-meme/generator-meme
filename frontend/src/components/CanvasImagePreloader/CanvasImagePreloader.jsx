@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Canvas from "../Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
@@ -13,32 +13,22 @@ const CanvasImagePreloader = ({
 }) => {
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
+  const [fontSize, setFontSize] = useState(40);
   const [imageSizes, setImageSizes] = useState(null);
   const [canvasSizes, setCanvasSisez] = useState({
     width: 657,
     height: 556,
   });
 
-  // const imageSizes = useMemo(() => {
-  //   if (image) {
-  //     return contain(
-  //       canvasSizes.width,
-  //       canvasSizes.height,
-  //       image.naturalWidth,
-  //       image.naturalHeight
-  //     ); // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
-  //   }
-  //   return null;
-  // }, [image, canvasSizes]);
-
   useEffect(() => {
+    // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
     if (image) {
       const sizes = contain(
         canvasSizes.width,
         canvasSizes.height,
         image.naturalWidth,
         image.naturalHeight
-      ); // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
+      );
       setImageSizes(sizes);
     }
   }, [image, canvasSizes]);
@@ -62,8 +52,20 @@ const CanvasImagePreloader = ({
     }
   };
 
+  const updateFontSise = () => {
+    if (window.innerWidth > 700) {
+      setFontSize(40);
+    } else if (window.innerWidth > 570) {
+      setFontSize(30);
+    } else {
+      setFontSize(25);
+    }
+  };
+
   useEffect(() => {
     checkWindowWidth();
+    updateFontSise();
+
     window.addEventListener("resize", checkWindowWidth);
 
     return () => {
@@ -111,6 +113,7 @@ const CanvasImagePreloader = ({
       imageSizes={imageSizes}
       image={image}
       canvasSizes={canvasSizes}
+      fontSize={fontSize}
     />
   );
 };

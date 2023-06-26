@@ -32,7 +32,7 @@ const TextareaCanvas = ({
   const onMove = (e) => {
     if (latestTextValues.current.isMoving) {
       move(e, latestTextValues.current, setTextValues);
-      console.log("move text");
+      // console.log("move text");
     }
   };
 
@@ -47,14 +47,14 @@ const TextareaCanvas = ({
             : -latestTextValues.current.bottom,
         startLeft: latestTextValues.current.left,
       });
-      console.log("drop text");
+      // console.log("drop text");
     }
   };
 
   const deleteText = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("delete text");
+    // console.log("delete text");
     if (e.target === deleteTextButton.current) {
       if (textValues.isOutside) {
         updateTextValues(setTextValues, latestTextValues.current, true);
@@ -72,24 +72,18 @@ const TextareaCanvas = ({
     }
   };
 
-  // const updateWidth = useCallback(() => { // изменение размера шрифта при изменеии размера канвас (протестить после решения проблемы с рассинхроном курсора и текста)
-  //   console.log("resize", latestTextValues.current.width, imageSizes.width);
-  //   if (
-  //     latestTextValues.current.width < imageSizes.width &&
-  //     latestTextValues.current.text === ""
-  //   ) {
-  //     setTextValues({ ...latestTextValues.current, width: imageSizes.width });
-  //   }
-  // }, [imageSizes.width, latestTextValues, setTextValues]);
-
   useEffect(() => {
-    // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен)
+    // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен) + размера шрифта
     const updateWidth = () => {
-      console.log(
-        "resize",
-        latestTextValues.current.width,
-        latestImageSizes.current.width
-      );
+      let size;
+      if (window.innerWidth > 700) {
+        size = 40;
+      } else if (window.innerWidth > 570) {
+        size = 30;
+      } else {
+        size = 25;
+      }
+
       if (
         latestTextValues.current.width < latestImageSizes.current.width &&
         latestTextValues.current.text === ""
@@ -97,6 +91,13 @@ const TextareaCanvas = ({
         setTextValues({
           ...latestTextValues.current,
           width: latestImageSizes.current.width,
+          fontSize: size,
+        });
+      } else {
+        if (latestTextValues.current.fontSize === size) return;
+        setTextValues({
+          ...latestTextValues.current,
+          fontSize: size,
         });
       }
     };
@@ -118,7 +119,7 @@ const TextareaCanvas = ({
           width: text.current?.offsetWidth,
           height: text.current?.offsetHeight,
         });
-        console.log("observer", textValues.name);
+        // console.log("observer", textValues.name);
       });
       observer.observe(textObserved);
       return () => {
@@ -162,7 +163,6 @@ const TextareaCanvas = ({
           left: textValues.left,
           bottom: textValues.bottom,
           maxWidth: imageSizes?.width,
-          // maxWidth: textValues.maxWidth,
           minHeight: 70,
           height: textValues.height,
           maxHeight: imageSizes?.height,
@@ -213,7 +213,6 @@ const TextareaCanvas = ({
             style={{
               width: textValues.width || imageSizes?.width,
               maxWidth: imageSizes?.width,
-              // maxWidth: textValues.maxWidth,
               height: textValues.height,
               minHeight: 70,
               maxHeight: imageSizes?.height,

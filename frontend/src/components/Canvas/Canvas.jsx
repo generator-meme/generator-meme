@@ -22,13 +22,12 @@ const Canvas = ({
   imageSizes,
   image,
   canvasSizes,
+  fontSize,
 }) => {
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [outsideTextHeight, setOusideTextHeight] = useState(80);
   const [images, setImages] = useState([]);
-  const [fontSize, setFontSize] = useState(40);
-
   const [textsValues, setTextsValues] = useState([
     {
       name: "outsideTopTextValues",
@@ -166,7 +165,6 @@ const Canvas = ({
       return item.id === id;
     });
     if (template) {
-      console.log("it's a meme from array");
       handleCreateNewMeme(
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
@@ -174,7 +172,6 @@ const Canvas = ({
         navigate("/saved");
       });
     } else {
-      console.log("it's my image");
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
           navigate("/saved");
@@ -182,29 +179,6 @@ const Canvas = ({
       );
     }
   };
-
-  // const updateFontSise = () => { // сейчас отображается криво, тк рассинхронизация текста в канвасе и курсора в инпуте
-  //   console.log("updateFontSize");
-  //   if (window.innerWidth > 1140) {
-  //     setFontSize(40);
-  //   } else if (window.innerWidth > 700) {
-  //     setFontSize(30);
-  //   } else if (window.innerWidth > 570) {
-  //     setFontSize(20);
-  //   } else {
-  //     setFontSize(16);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   updateFontSise();
-
-  //   window.addEventListener("resize", updateFontSise);
-
-  //   return () => {
-  //     window.removeEventListener("resize", updateFontSise);
-  //   };
-  // }, []);
 
   useEffect(() => {
     // отрисовка канвас
@@ -324,7 +298,6 @@ const Canvas = ({
     // чтобы предупредить пользователя о том, что изменения не сохранятся
     const handleOnBeforeUnload = (event) => {
       event.preventDefault();
-      console.log("handleOnBeforeUnload");
       return (event.returnValue = "");
     };
 
