@@ -26,6 +26,9 @@ class AdminOrReadOnly(permissions.BasePermission):
 
 class IsGroupOwner(permissions.BasePermission):
     """Разрешение только для владельцев группы."""
+
+    message = "Вы не являетесь владельцем этой группы."
+
     def has_object_permission(self, request, view, obj):
         if request.user == obj.owner:
             return True
@@ -33,10 +36,12 @@ class IsGroupOwner(permissions.BasePermission):
 
 
 class IsInGroup(permissions.BasePermission):
-    """Разрешение только для владельцев группы."""
+    """Разрешение только для участников группы."""
+
+    message = "Вы не являетесь участником этой группы."
+
     def has_object_permission(self, request, view, obj):
         if GroupUser.objects.filter(group=obj,
                                     user=request.user).exists():
             return True
         return False
-
