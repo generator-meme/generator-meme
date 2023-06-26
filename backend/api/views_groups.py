@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
+from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
 from api.permissions import IsGroupOwner, IsInGroup
@@ -23,6 +24,8 @@ User = get_user_model()
 class GroupViewSet(viewsets.ModelViewSet):
     """Вьюсет групп"""
     queryset = Group.objects.all()
+
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
