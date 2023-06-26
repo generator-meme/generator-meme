@@ -3,8 +3,7 @@ from uuid import uuid4
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import (BooleanField, IntegerField,
-                                        ModelSerializer,
+from rest_framework.serializers import (BooleanField, ModelSerializer,
                                         PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
 
@@ -77,14 +76,6 @@ class TemplateWriteSerializer(ModelSerializer):
         use_url=True,
         max_length=None
     )
-    # tag = PrimaryKeyRelatedField(
-    #     queryset=Tag.objects.all(),
-    #     many=True
-    # )
-    # category = PrimaryKeyRelatedField(
-    #     queryset=Category.objects.all(),
-    #     allow_null=True,
-    # )
 
     class Meta:
         model = Template
