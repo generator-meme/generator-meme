@@ -19,22 +19,22 @@ const Canvas = ({
   setIsNewMeme,
   isNewMeme,
   memes,
-  setImageNotFoundOpen,
   imageSizes,
   image,
+  canvasSizes,
+  fontSize,
+  outsideTextHeight,
 }) => {
   const canvas = useRef(null);
   const navigate = useNavigate();
-  const [outsideTextHeight, setOusideTextHeight] = useState(80);
   const [images, setImages] = useState([]);
-
   const [textsValues, setTextsValues] = useState([
     {
       name: "outsideTopTextValues",
       isOutside: true,
       isVisible: false,
       text: "",
-      fontSize: 40,
+      fontSize: fontSize,
       fontFamily: fontFamilyOptions.roboto,
       selectedOption: 0,
       fontPosition: "center",
@@ -48,10 +48,9 @@ const Canvas = ({
       opacity: 1,
       opacityLevel: 100,
       width: imageSizes?.width - 4,
-      maxWidth: imageSizes?.width - 4,
       textAreaWidth: 0,
       height: 70,
-      top: -80,
+      top: -outsideTextHeight,
       left: 0,
       bottom: null,
       canvasTop: 0,
@@ -63,7 +62,7 @@ const Canvas = ({
       isOutside: true,
       isVisible: false,
       text: "",
-      fontSize: 40,
+      fontSize: fontSize,
       fontFamily: fontFamilyOptions.roboto,
       selectedOption: 0,
       fontPosition: "center",
@@ -77,12 +76,11 @@ const Canvas = ({
       opacity: 1,
       opacityLevel: 100,
       width: imageSizes?.width - 4,
-      maxWidth: imageSizes?.width - 4,
       textAreaWidth: 0,
       height: 70,
       top: null,
       left: 0,
-      bottom: -80,
+      bottom: -outsideTextHeight,
       canvasTop: null,
       canvasLeft: 0,
       canvasBottom: 0,
@@ -92,7 +90,7 @@ const Canvas = ({
       isOutside: false,
       isVisible: true,
       text: "",
-      fontSize: 40,
+      fontSize: fontSize,
       fontFamily: fontFamilyOptions.roboto,
       selectedOption: 0,
       fontPosition: "center",
@@ -106,7 +104,6 @@ const Canvas = ({
       opacity: 1,
       opacityLevel: 100,
       width: imageSizes?.width,
-      maxWidth: imageSizes?.width,
       textAreaWidth: 0,
       height: 70,
       top: 0,
@@ -123,7 +120,7 @@ const Canvas = ({
       isOutside: false,
       isVisible: true,
       text: "",
-      fontSize: 40,
+      fontSize: fontSize,
       fontFamily: fontFamilyOptions.roboto,
       selectedOption: 0,
       fontPosition: "center",
@@ -137,7 +134,6 @@ const Canvas = ({
       opacity: 1,
       opacityLevel: 100,
       width: imageSizes?.width,
-      maxWidth: imageSizes?.width,
       height: 70,
       top: null,
       left: 0,
@@ -169,7 +165,6 @@ const Canvas = ({
       return item.id === id;
     });
     if (template) {
-      console.log("it's a meme from array");
       handleCreateNewMeme(
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
@@ -177,7 +172,6 @@ const Canvas = ({
         navigate("/saved");
       });
     } else {
-      console.log("it's my image");
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
           navigate("/saved");
@@ -304,7 +298,6 @@ const Canvas = ({
     // чтобы предупредить пользователя о том, что изменения не сохранятся
     const handleOnBeforeUnload = (event) => {
       event.preventDefault();
-      console.log("handleOnBeforeUnload");
       return (event.returnValue = "");
     };
 
@@ -318,14 +311,6 @@ const Canvas = ({
   }, [images]);
 
   useEffect(() => {
-    // изображение пользователя не сохраняется с localStorage, и при обновлении страницы его данные пропадут
-    // в этом случае осуществляется переход на главную страницу с пояснением - временное решение, мб будет другое
-    if (!currentMeme && localStorage.getItem("currentMeme") === null) {
-      setImageNotFoundOpen(true);
-      navigate("/");
-      return;
-    }
-
     setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
@@ -348,7 +333,7 @@ const Canvas = ({
         }
       />
       <section className="editor" aria-label="Editor">
-        <div className="editor__canvas">
+        <div className="editor__canvas" style={{ width: canvasSizes.width }}>
           <canvas
             className="editor__image"
             ref={canvas}
@@ -359,14 +344,29 @@ const Canvas = ({
         <div
           className="editor__box"
           style={{
-            height: canvasHeight,
+            height: window.innerWidth > 1140 ? canvasHeight : "auto",
           }}
         >
           <form
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: textsValues[0].isVisible ? 81 + outsideTextHeight : 81,
+              top:
+                window.innerWidth > 1140
+                  ? textsValues[0].isVisible
+                    ? 81 + outsideTextHeight
+                    : 81
+                  : window.innerWidth > 700
+                  ? textsValues[0].isVisible
+                    ? 96 + outsideTextHeight
+                    : 96
+                  : window.innerWidth > 570
+                  ? textsValues[0].isVisible
+                    ? 132 + outsideTextHeight
+                    : 132
+                  : textsValues[0].isVisible
+                  ? 122 + outsideTextHeight
+                  : 122,
               left: imageSizes.offsetX,
               height: imageSizes.height,
               width: imageSizes.width,
@@ -378,6 +378,7 @@ const Canvas = ({
               imageSizes={imageSizes}
               images={images}
               setImages={setImages}
+              outsideTextHeight={outsideTextHeight}
             />
           </form>
           <EditorButtonsList

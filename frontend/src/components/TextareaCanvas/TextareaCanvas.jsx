@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLatest } from "react-use";
 import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";
@@ -13,6 +13,7 @@ const TextareaCanvas = ({
   index,
   textValues,
   imageSizes,
+  outsideTextHeight,
   setTextValues,
   outsideTopTextValues,
   deleteTextFromArray,
@@ -21,6 +22,8 @@ const TextareaCanvas = ({
   deleteCurrentImage,
 }) => {
   const latestTextValues = useLatest(textValues);
+  const latestImageSizes = useLatest(imageSizes);
+  const latestOutsideTextHeight = useLatest(outsideTextHeight);
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
@@ -31,7 +34,7 @@ const TextareaCanvas = ({
   const onMove = (e) => {
     if (latestTextValues.current.isMoving) {
       move(e, latestTextValues.current, setTextValues);
-      console.log("move text");
+      // console.log("move text");
     }
   };
 
@@ -46,14 +49,14 @@ const TextareaCanvas = ({
             : -latestTextValues.current.bottom,
         startLeft: latestTextValues.current.left,
       });
-      console.log("drop text");
+      // console.log("drop text");
     }
   };
 
   const deleteText = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("delete text");
+    // console.log("delete text");
     if (e.target === deleteTextButton.current) {
       if (textValues.isOutside) {
         updateTextValues(setTextValues, latestTextValues.current, true);
@@ -72,6 +75,78 @@ const TextareaCanvas = ({
   };
 
   useEffect(() => {
+    // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен) + размера шрифта
+    const onUpdateWidth = () => {
+      let size;
+      if (window.innerWidth > 700) {
+        size = 40;
+      } else if (window.innerWidth > 570) {
+        size = 30;
+      } else {
+        size = 25;
+      }
+
+      if (latestTextValues.current.isOutside) {
+        if (
+          latestTextValues.current.width < latestImageSizes.current.width &&
+          latestTextValues.current.text === ""
+        ) {
+          setTextValues({
+            ...latestTextValues.current,
+            width: latestImageSizes.current.width,
+            fontSize: size,
+            top:
+              latestTextValues.current.top !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+            bottom:
+              latestTextValues.current.bottom !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+          });
+        } else {
+          if (latestTextValues.current.fontSize === size) return;
+          setTextValues({
+            ...latestTextValues.current,
+            fontSize: size,
+            top:
+              latestTextValues.current.top !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+            bottom:
+              latestTextValues.current.bottom !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+          });
+        }
+      } else {
+        if (
+          latestTextValues.current.width < latestImageSizes.current.width &&
+          latestTextValues.current.text === ""
+        ) {
+          setTextValues({
+            ...latestTextValues.current,
+            width: latestImageSizes.current.width,
+            fontSize: size,
+          });
+        } else {
+          if (latestTextValues.current.fontSize === size) return;
+          setTextValues({
+            ...latestTextValues.current,
+            fontSize: size,
+          });
+        }
+      }
+    };
+
+    window.addEventListener("resize", onUpdateWidth);
+
+    return () => {
+      window.removeEventListener("resize", onUpdateWidth);
+    };
+  }, []);
+
+  useEffect(() => {
     // подписка на изменение размера области textarea
     if (text.current !== null && textValues.isVisible) {
       const textObserved = text.current;
@@ -81,7 +156,7 @@ const TextareaCanvas = ({
           width: text.current?.offsetWidth,
           height: text.current?.offsetHeight,
         });
-        console.log("observer", textValues.name);
+        // console.log("observer", textValues.name);
       });
       observer.observe(textObserved);
       return () => {
@@ -124,8 +199,9 @@ const TextareaCanvas = ({
           top: textValues.top,
           left: textValues.left,
           bottom: textValues.bottom,
-          maxWidth: textValues.maxWidth,
-          minHeight: 70,
+          maxWidth: imageSizes?.width,
+          minHeight:
+            window.innerWidth > 700 ? 70 : window.innerWidth > 570 ? 60 : 50,
           height: textValues.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
@@ -174,9 +250,14 @@ const TextareaCanvas = ({
             onBlur={(e) => setPlaceholderText("Введите текст")}
             style={{
               width: textValues.width || imageSizes?.width,
-              maxWidth: textValues.maxWidth,
+              maxWidth: imageSizes?.width,
               height: textValues.height,
-              minHeight: 70,
+              minHeight:
+                window.innerWidth > 700
+                  ? 70
+                  : window.innerWidth > 570
+                  ? 60
+                  : 50,
               maxHeight: imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
@@ -203,8 +284,20 @@ const TextareaCanvas = ({
           className="textarea__panel"
           onClick={(e) => e.stopPropagation()}
           style={{
-            top: outsideTopTextValues[0].isVisible ? -36 - 30 - 80 : -36 - 30,
-            left: imageSizes.width < 609 ? -((609 - imageSizes.width) / 2) : 0,
+            top:
+              window.innerWidth > 700
+                ? outsideTopTextValues[0].isVisible
+                  ? -36 - 30 - 80
+                  : -36 - 30
+                : outsideTopTextValues[0].isVisible
+                ? -36 - 30 - 80 - 36
+                : -36 - 30 - 36,
+            left:
+              imageSizes.width < 609 && window.innerWidth > 700
+                ? -((609 - imageSizes.width) / 2)
+                : imageSizes.width < 331 && window.innerWidth < 701
+                ? -((331 - imageSizes.width) / 2)
+                : 0,
           }}
         >
           <Panel textValues={textValues} setTextValues={setTextValues} />
