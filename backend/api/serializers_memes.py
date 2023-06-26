@@ -2,15 +2,14 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (BooleanField, IntegerField,
-                                        ModelSerializer,
+from rest_framework.fields import SerializerMethodField
+from rest_framework.serializers import (BooleanField, ModelSerializer,
                                         PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
 
+from api.serializers_users import UsersSerializer
 from memes.models import (Category, Favorite, Meme, Tag, Template,
                           TemplateUsedTimes)
-from team.models import TeamGroup, Teammate
-from users.serializers import UserSerializer
 
 
 class TagSerializer(ModelSerializer):
@@ -41,7 +40,7 @@ class TemplateReadSerializer(ModelSerializer):
 
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
-    used_times = IntegerField()
+    used_times = SerializerMethodField()
     is_favorited = BooleanField(read_only=True)
     category = CategorySerializer(read_only=True,)
 
@@ -58,6 +57,15 @@ class TemplateReadSerializer(ModelSerializer):
             'is_favorited',
             'used_times',
         )
+
+    def get_used_times(self, obj):
+        if TemplateUsedTimes.objects.filter(
+                    template=obj
+                ).exists():
+            return TemplateUsedTimes.objects.get(
+                    template=obj
+                ).used_times
+        return 0
 
 
 class TemplateWriteSerializer(ModelSerializer):
@@ -78,7 +86,7 @@ class MemeReadSerializer(ModelSerializer):
     """Сериализатор модели Meme для чтения объекта."""
 
     id = UUIDField(read_only=True, default=uuid4)
-    author = UserSerializer(read_only=True)
+    author = UsersSerializer(read_only=True)
 
     class Meta:
         model = Meme
@@ -93,7 +101,7 @@ class MemeWriteSerializer(ModelSerializer):
         use_url=True,
         max_length=None
     )
-    author = UserSerializer(read_only=True)
+    author = UsersSerializer(read_only=True)
     template = PrimaryKeyRelatedField(
         queryset=Template.objects.all(),
         required=False
@@ -157,29 +165,3 @@ class FavoriteSerializer(ModelSerializer):
             instance.template,
             context={'request': self.context['request']}
         ).data
-
-
-class TeammateSerializer(ModelSerializer):
-    """Сериализатор модели Teammate приложения Team."""
-
-    class Meta:
-        fields = (
-            'name',
-            'description',
-            'link',
-        )
-        model = Teammate
-
-
-class TeamGroupSerializer(ModelSerializer):
-    """Сериализатор модели Group приложения Team."""
-
-    teammates = TeammateSerializer(many=True, read_only=True)
-
-    class Meta:
-        fields = (
-            'id',
-            'name',
-            'teammates',
-        )
-        model = TeamGroup

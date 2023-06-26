@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'memes',
     'users',
     'team',
+    'groups',
 ]
 
 MIDDLEWARE = [
@@ -143,8 +144,8 @@ DJOSER = {
         'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly']
     },
     "SERIALIZERS": {
-        "user": "users.serializers.UsersSerializer",
-        "current_user": "users.serializers.UsersSerializer",
+        "user": "api.serializers_users.UsersSerializer",
+        "current_user": "api.serializers_users.UsersSerializer",
     },
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
