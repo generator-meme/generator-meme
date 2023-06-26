@@ -13,6 +13,7 @@ const TextareaCanvas = ({
   index,
   textValues,
   imageSizes,
+  outsideTextHeight,
   setTextValues,
   outsideTopTextValues,
   deleteTextFromArray,
@@ -22,6 +23,7 @@ const TextareaCanvas = ({
 }) => {
   const latestTextValues = useLatest(textValues);
   const latestImageSizes = useLatest(imageSizes);
+  const latestOutsideTextHeight = useLatest(outsideTextHeight);
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
@@ -74,7 +76,7 @@ const TextareaCanvas = ({
 
   useEffect(() => {
     // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен) + размера шрифта
-    const updateWidth = () => {
+    const onUpdateWidth = () => {
       let size;
       if (window.innerWidth > 700) {
         size = 40;
@@ -84,28 +86,63 @@ const TextareaCanvas = ({
         size = 25;
       }
 
-      if (
-        latestTextValues.current.width < latestImageSizes.current.width &&
-        latestTextValues.current.text === ""
-      ) {
-        setTextValues({
-          ...latestTextValues.current,
-          width: latestImageSizes.current.width,
-          fontSize: size,
-        });
+      if (latestTextValues.current.isOutside) {
+        if (
+          latestTextValues.current.width < latestImageSizes.current.width &&
+          latestTextValues.current.text === ""
+        ) {
+          setTextValues({
+            ...latestTextValues.current,
+            width: latestImageSizes.current.width,
+            fontSize: size,
+            top:
+              latestTextValues.current.top !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+            bottom:
+              latestTextValues.current.bottom !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+          });
+        } else {
+          if (latestTextValues.current.fontSize === size) return;
+          setTextValues({
+            ...latestTextValues.current,
+            fontSize: size,
+            top:
+              latestTextValues.current.top !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+            bottom:
+              latestTextValues.current.bottom !== null
+                ? -latestOutsideTextHeight.current
+                : null,
+          });
+        }
       } else {
-        if (latestTextValues.current.fontSize === size) return;
-        setTextValues({
-          ...latestTextValues.current,
-          fontSize: size,
-        });
+        if (
+          latestTextValues.current.width < latestImageSizes.current.width &&
+          latestTextValues.current.text === ""
+        ) {
+          setTextValues({
+            ...latestTextValues.current,
+            width: latestImageSizes.current.width,
+            fontSize: size,
+          });
+        } else {
+          if (latestTextValues.current.fontSize === size) return;
+          setTextValues({
+            ...latestTextValues.current,
+            fontSize: size,
+          });
+        }
       }
     };
 
-    window.addEventListener("resize", updateWidth);
+    window.addEventListener("resize", onUpdateWidth);
 
     return () => {
-      window.removeEventListener("resize", updateWidth);
+      window.removeEventListener("resize", onUpdateWidth);
     };
   }, []);
 
@@ -163,13 +200,8 @@ const TextareaCanvas = ({
           left: textValues.left,
           bottom: textValues.bottom,
           maxWidth: imageSizes?.width,
-          minHeight: textValues.isOutside
-            ? 70
-            : window.innerWidth > 700
-            ? 70
-            : window.innerWidth > 570
-            ? 60
-            : 50,
+          minHeight:
+            window.innerWidth > 700 ? 70 : window.innerWidth > 570 ? 60 : 50,
           height: textValues.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
@@ -220,13 +252,12 @@ const TextareaCanvas = ({
               width: textValues.width || imageSizes?.width,
               maxWidth: imageSizes?.width,
               height: textValues.height,
-              minHeight: textValues.isOutside
-                ? 70
-                : window.innerWidth > 700
-                ? 70
-                : window.innerWidth > 570
-                ? 60
-                : 50,
+              minHeight:
+                window.innerWidth > 700
+                  ? 70
+                  : window.innerWidth > 570
+                  ? 60
+                  : 50,
               maxHeight: imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",

@@ -23,10 +23,10 @@ const Canvas = ({
   image,
   canvasSizes,
   fontSize,
+  outsideTextHeight,
 }) => {
   const canvas = useRef(null);
   const navigate = useNavigate();
-  const [outsideTextHeight, setOusideTextHeight] = useState(80);
   const [images, setImages] = useState([]);
   const [textsValues, setTextsValues] = useState([
     {
@@ -50,7 +50,7 @@ const Canvas = ({
       width: imageSizes?.width - 4,
       textAreaWidth: 0,
       height: 70,
-      top: -80,
+      top: -outsideTextHeight,
       left: 0,
       bottom: null,
       canvasTop: 0,
@@ -80,7 +80,7 @@ const Canvas = ({
       height: 70,
       top: null,
       left: 0,
-      bottom: -80,
+      bottom: -outsideTextHeight,
       canvasTop: null,
       canvasLeft: 0,
       canvasBottom: 0,
@@ -378,6 +378,7 @@ const Canvas = ({
               imageSizes={imageSizes}
               images={images}
               setImages={setImages}
+              outsideTextHeight={outsideTextHeight}
             />
           </form>
           <EditorButtonsList

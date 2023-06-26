@@ -14,6 +14,7 @@ const CanvasImagePreloader = ({
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
   const [fontSize, setFontSize] = useState(40);
+  const [outsideTextHeight, setOusideTextHeight] = useState(80);
   const [imageSizes, setImageSizes] = useState(null);
   const [canvasSizes, setCanvasSisez] = useState({
     width: 657,
@@ -38,7 +39,7 @@ const CanvasImagePreloader = ({
     return (event.returnValue = "");
   };
 
-  const checkWindowWidth = () => {
+  const updateCanvasSisez = () => {
     if (window.innerWidth > 1140) {
       setCanvasSisez({
         width: 657,
@@ -62,14 +63,29 @@ const CanvasImagePreloader = ({
     }
   };
 
+  const updateOutsideTextHeight = () => {
+    if (window.innerWidth > 700) {
+      setOusideTextHeight(80);
+    } else if (window.innerWidth > 570) {
+      setOusideTextHeight(70);
+    } else {
+      setOusideTextHeight(60);
+    }
+  };
+
+  const onUpdateWidth = () => {
+    updateCanvasSisez();
+    updateOutsideTextHeight();
+  };
+
   useEffect(() => {
-    checkWindowWidth();
+    onUpdateWidth();
     updateFontSise();
 
-    window.addEventListener("resize", checkWindowWidth);
+    window.addEventListener("resize", onUpdateWidth);
 
     return () => {
-      window.removeEventListener("resize", checkWindowWidth);
+      window.removeEventListener("resize", onUpdateWidth);
     };
   }, []);
 
@@ -114,6 +130,7 @@ const CanvasImagePreloader = ({
       image={image}
       canvasSizes={canvasSizes}
       fontSize={fontSize}
+      outsideTextHeight={outsideTextHeight}
     />
   );
 };
