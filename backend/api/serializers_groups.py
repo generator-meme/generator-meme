@@ -185,7 +185,7 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
     role = serializers.PrimaryKeyRelatedField(
         queryset=GroupRole.objects.all(),
-        default=GroupRole.objects.get_or_create(name="Пользователь")[0]
+        # default=GroupRole.objects.get_or_create(name="Пользователь")[0]
     )
 
     class Meta:
