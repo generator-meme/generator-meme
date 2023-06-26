@@ -1,4 +1,4 @@
-from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
+from django.db.models import Count, Exists, OuterRef, Q, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -18,7 +18,7 @@ from api.serializers_memes import (Category, CategorySerializer,
                                    TemplateWriteSerializer)
 from api.services import create_delete_relation
 from api.viewsets import ListRetriveViewSet
-from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
+from memes.models import Favorite, Meme, Tag, Template
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -59,19 +59,19 @@ class TemplateViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_queryset(self):
-#        queryset = Template.objects.filter(
-#            is_published=True).annotate(
-#            used_times=Case(
-#                When(Exists(
-#                    TemplateUsedTimes.objects.filter(
-#                        template=OuterRef('pk')
-#                    )
-#                ), then=TemplateUsedTimes.objects.filter(
-#                    template=OuterRef('pk')
-#                ).values('used_times')),
-#                default=Value(0)
-#            )
-#        ).order_by('-used_times')
+        # queryset = Template.objects.filter(
+        #     is_published=True).annotate(
+        #     used_times=Case(
+        #         When(Exists(
+        #             TemplateUsedTimes.objects.filter(
+        #                 template=OuterRef('pk')
+        #             )
+        #         ), then=TemplateUsedTimes.objects.filter(
+        #             template=OuterRef('pk')
+        #         ).values('used_times')),
+        #         default=Value(0)
+        #     )
+        # ).order_by('-used_times')
         user = self.request.user
         queryset = Template.objects.filter(is_published=True).all()
         if user.is_authenticated:

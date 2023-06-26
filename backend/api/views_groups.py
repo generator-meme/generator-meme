@@ -85,7 +85,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                 return Response(
                     {"Owner_error": "Владелец группы не может быть удален."},
                     status=status.HTTP_400_BAD_REQUEST)
-            elif request.user != user and GroupUser.objects.get(
+            if request.user != user and GroupUser.objects.get(
                     group=current_group,
                     user=user
             ).role.is_admin and request.user != current_group.owner:
@@ -168,8 +168,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                      "Удалить мем может только тот кто его добавил или "
                      "'Администратор' группы."},
                     status=status.HTTP_400_BAD_REQUEST)
-            else:
-                self.perform_destroy(action_model)
+            self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = GroupMemeWriteSerializer(
             data={
@@ -183,20 +182,20 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-            request_body=NewOwnerSerializer,
-            method='post',
-            responses={200: 'Успешная смена владельца'},
-            )
+        request_body=NewOwnerSerializer,
+        method='post',
+        responses={200: 'Успешная смена владельца'},
+    )
     @action(
-            detail=True,
-            methods=['post', ],
-            permission_classes=[
-                IsAuthenticated,
-                IsInGroup,
-                IsGroupOwner,
-                ],
-            serializer_class=NewOwnerSerializer,
-            )
+        detail=True,
+        methods=['post', ],
+        permission_classes=[
+            IsAuthenticated,
+            IsInGroup,
+            IsGroupOwner,
+        ],
+        serializer_class=NewOwnerSerializer,
+    )
     def changeowner(self, request, pk):
         """Сменить владельца группы."""
         current_group = get_object_or_404(Group, pk=pk)
@@ -211,8 +210,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                 'current_group': current_group,
                 'current_user_id': current_user_id,
                 'new_owner_id': new_owner_id,
-                },
-            )
+            },
+        )
         serializer.is_valid(raise_exception=True)
 
         with transaction.atomic():
@@ -226,6 +225,6 @@ class GroupViewSet(viewsets.ModelViewSet):
             new_owner_in_group.role = GroupRole.objects.get_or_create(
                 name="Администратор",
                 is_admin=True,
-                )[0]
+            )[0]
             new_owner_in_group.save()
         return Response(status=status.HTTP_200_OK)
