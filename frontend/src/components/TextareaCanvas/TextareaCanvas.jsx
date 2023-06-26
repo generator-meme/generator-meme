@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLatest } from "react-use";
 import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";
@@ -21,6 +21,7 @@ const TextareaCanvas = ({
   deleteCurrentImage,
 }) => {
   const latestTextValues = useLatest(textValues);
+  const latestImageSizes = useLatest(imageSizes);
   const text = useRef(null);
   const textMoving = useRef(null);
   const panel = useRef(null);
@@ -71,9 +72,41 @@ const TextareaCanvas = ({
     }
   };
 
-  // useEffect(() => {
+  // const updateWidth = useCallback(() => { // изменение размера шрифта при изменеии размера канвас (протестить после решения проблемы с рассинхроном курсора и текста)
+  //   console.log("resize", latestTextValues.current.width, imageSizes.width);
+  //   if (
+  //     latestTextValues.current.width < imageSizes.width &&
+  //     latestTextValues.current.text === ""
+  //   ) {
+  //     setTextValues({ ...latestTextValues.current, width: imageSizes.width });
+  //   }
+  // }, [imageSizes.width, latestTextValues, setTextValues]);
 
-  // }, [imageSizes]);
+  useEffect(() => {
+    // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен)
+    const updateWidth = () => {
+      console.log(
+        "resize",
+        latestTextValues.current.width,
+        latestImageSizes.current.width
+      );
+      if (
+        latestTextValues.current.width < latestImageSizes.current.width &&
+        latestTextValues.current.text === ""
+      ) {
+        setTextValues({
+          ...latestTextValues.current,
+          width: latestImageSizes.current.width,
+        });
+      }
+    };
+
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   useEffect(() => {
     // подписка на изменение размера области textarea
