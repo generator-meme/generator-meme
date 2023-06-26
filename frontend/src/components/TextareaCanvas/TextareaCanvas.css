@@ -102,17 +102,6 @@
     cursor: pointer;
 }
 
-
-@media screen and (max-width: 1140px) {
-    /* 
-    .textarea__text::-webkit-input-placeholder,
-    .textarea__text::-moz-placeholder,
-    .textarea__text::-ms-input-placeholder,
-    .textarea__text::placeholder {
-        font-size: 30px;
-    } */
-}
-
 @media screen and (max-width: 700px) {
 
     .textarea__text::-webkit-input-placeholder,

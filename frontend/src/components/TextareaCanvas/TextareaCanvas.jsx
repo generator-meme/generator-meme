@@ -163,7 +163,13 @@ const TextareaCanvas = ({
           left: textValues.left,
           bottom: textValues.bottom,
           maxWidth: imageSizes?.width,
-          minHeight: 70,
+          minHeight: textValues.isOutside
+            ? 70
+            : window.innerWidth > 700
+            ? 70
+            : window.innerWidth > 570
+            ? 60
+            : 50,
           height: textValues.height,
           maxHeight: imageSizes?.height,
           backgroundColor:
@@ -214,7 +220,13 @@ const TextareaCanvas = ({
               width: textValues.width || imageSizes?.width,
               maxWidth: imageSizes?.width,
               height: textValues.height,
-              minHeight: 70,
+              minHeight: textValues.isOutside
+                ? 70
+                : window.innerWidth > 700
+                ? 70
+                : window.innerWidth > 570
+                ? 60
+                : 50,
               maxHeight: imageSizes?.height,
               fontFamily: textValues.fontFamily,
               fontStyle: textValues.fontStyle ? "italic" : "normal",
