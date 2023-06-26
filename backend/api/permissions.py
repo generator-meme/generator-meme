@@ -1,5 +1,7 @@
 from rest_framework import permissions
 
+from groups.models import GroupUser
+
 
 class AdminOrReadOnly(permissions.BasePermission):
     '''Разрешает изменение админу, чтение всем'''
@@ -18,5 +20,28 @@ class AdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         if request.user.is_superuser:
+            return True
+        return False
+
+
+class IsGroupOwner(permissions.BasePermission):
+    """Разрешение только для владельцев группы."""
+
+    message = "Вы не являетесь владельцем этой группы."
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj.owner:
+            return True
+        return False
+
+
+class IsInGroup(permissions.BasePermission):
+    """Разрешение только для участников группы."""
+
+    message = "Вы не являетесь участником этой группы."
+
+    def has_object_permission(self, request, view, obj):
+        if GroupUser.objects.filter(group=obj,
+                                    user=request.user).exists():
             return True
         return False

@@ -49,6 +49,12 @@
   padding: 0;
 }
 
+@media screen and (max-width: 690px) {
+  .main__text-advice {
+    font-size: 20px;
+  }
+}
+
 .main__label {
   text-decoration: underline;
   cursor: pointer;
@@ -72,6 +78,7 @@
   clip-path: inset(0 0 0 0);
   opacity: 0;
 }
+
 .search {
   padding-bottom: 20px;
 }
