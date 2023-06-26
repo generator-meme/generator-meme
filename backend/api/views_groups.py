@@ -1,16 +1,18 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
 from api.permissions import IsGroupOwner, IsInGroup
-from api.serializers_groups import (GroupBannedUserReadSerializer,
-                                    GroupBannedUserSerializer,
+from api.serializers_groups import (GroupBannedUserSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
-                                    GroupUserSerializer, GroupWriteSerializer)
+                                    GroupUserSerializer, GroupWriteSerializer,
+                                    UserIdSerializer)
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
@@ -112,8 +114,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         if not user.role.is_admin:
             return Response(
                 {"Permission_error":
-                     "Только пользователь со статусом 'Администратор' может "
-                     "добавить или удалить пользователя в бан."},
+                    "Только пользователь со статусом 'Администратор' может "
+                    "добавить или удалить пользователя в бан."},
                 status=status.HTTP_400_BAD_REQUEST)
         if request.method != 'POST':
             action_model = get_object_or_404(
@@ -172,3 +174,55 @@ class GroupViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(added_by=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+            request_body=UserIdSerializer,
+            method='post',
+            responses={200: 'Успешная смена владельца'},
+            )
+    @action(
+            detail=True,
+            methods=['post', ],
+            permission_classes=[
+                IsAuthenticated,
+                IsInGroup,
+                IsGroupOwner,
+                ],
+            serializer_class=UserIdSerializer,
+            )
+    def changeowner(self, request, pk):
+        """Сменить владельца группы."""
+        current_group = get_object_or_404(Group, pk=pk)
+        current_user_id = request.user.id
+        new_owner_id = request.data.get('user_id')
+
+        self.check_object_permissions(request, current_group)
+        serializer = UserIdSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        if current_user_id == new_owner_id:
+            data = {'message': 'Вы уже являетесь владельцем этой группы.'}
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
+        if not User.objects.filter(id=new_owner_id).exists():
+            data = {'message': 'Пользователя с таким ID не существует.'}
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
+        if not GroupUser.objects.filter(group=current_group,
+                                        user_id=new_owner_id).exists():
+            data = {'message': 'Новый владелец не состоит в этой группе.'}
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
+
+        with transaction.atomic():
+            current_group.owner_id = new_owner_id
+            current_group.save()
+            new_owner_in_group = get_object_or_404(
+                GroupUser,
+                group=current_group,
+                user_id=new_owner_id,
+            )
+            new_owner_in_group.role = GroupRole.objects.get_or_create(
+                name="Администратор",
+                is_admin=True,
+                )[0]
+            new_owner_in_group.save()
+        return Response(status=status.HTTP_200_OK)

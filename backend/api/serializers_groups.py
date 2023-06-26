@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CurrentUserDefault
@@ -106,11 +105,21 @@ class GroupBannedUserReadSerializer(serializers.ModelSerializer):
 class GroupFullSerializer(serializers.ModelSerializer):
     """Полный сериализатор группы"""
     owner = UsersSerializer()
-    users = GroupUserReadSerializer(source='group_users', many=True,
-                                    read_only=True)
-    memes = GroupMemeSerializer(source='group_memes', many=True, read_only=True)
-    banlist = GroupBannedUserReadSerializer(source='banned_users', many=True,
-                                            read_only=True)
+    users = GroupUserReadSerializer(
+        source='group_users',
+        many=True,
+        read_only=True,
+    )
+    memes = GroupMemeSerializer(
+        source='group_memes',
+        many=True,
+        read_only=True,
+    )
+    banlist = GroupBannedUserReadSerializer(
+        source='banned_users',
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         fields = (
@@ -138,7 +147,6 @@ class GroupFullSerializer(serializers.ModelSerializer):
 
 class GroupWriteSerializer(serializers.ModelSerializer):
     owner = UsersSerializer(read_only=True, default=CurrentUserDefault())
-
 
     class Meta:
         fields = (
@@ -276,3 +284,9 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
             context={'request': self.context.get('request')}
         )
         return serializer.data
+
+
+class UserIdSerializer(serializers.Serializer):
+    """Сериализатор данных при передаче только id юзера."""
+
+    user_id = serializers.IntegerField()
