@@ -13,7 +13,7 @@ from api.serializers_groups import (GroupBannedUserSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
-                                    UserIdSerializer)
+                                    NewOwnerSerializer)
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
@@ -22,7 +22,8 @@ User = get_user_model()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """Вьюсет групп"""
+    """Группы для готовых мемов."""
+
     queryset = Group.objects.all()
 
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -51,6 +52,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[IsAuthenticated, ])
     def adduser(self, request, pk):
+        """Добавить/удалить пользователя в группу."""
         current_group = get_object_or_404(Group, pk=pk)
         if GroupUser.objects.filter(
                 group=current_group,
@@ -109,6 +111,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[IsAuthenticated, ])
     def addusertoban(self, request, pk):
+        """Добавить/удалить пользователя в банлист группы."""
         current_group = get_object_or_404(Group, pk=pk)
         user = get_object_or_404(GroupUser,
                                  group=current_group,
@@ -146,6 +149,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post', 'delete'],
             permission_classes=[IsAuthenticated, IsInGroup, ])
     def addmeme(self, request, pk):
+        """Добавить/удалить мем из группы."""
         current_group = get_object_or_404(Group, pk=pk)
         if request.method != 'POST':
             action_model = get_object_or_404(
@@ -179,7 +183,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-            request_body=UserIdSerializer,
+            request_body=NewOwnerSerializer,
             method='post',
             responses={200: 'Успешная смена владельца'},
             )
@@ -191,7 +195,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                 IsInGroup,
                 IsGroupOwner,
                 ],
-            serializer_class=UserIdSerializer,
+            serializer_class=NewOwnerSerializer,
             )
     def changeowner(self, request, pk):
         """Сменить владельца группы."""
@@ -200,20 +204,16 @@ class GroupViewSet(viewsets.ModelViewSet):
         new_owner_id = request.data.get('user_id')
 
         self.check_object_permissions(request, current_group)
-        serializer = UserIdSerializer(data=request.data)
 
+        serializer = NewOwnerSerializer(
+            data=request.data,
+            context={
+                'current_group': current_group,
+                'current_user_id': current_user_id,
+                'new_owner_id': new_owner_id,
+                },
+            )
         serializer.is_valid(raise_exception=True)
-
-        if current_user_id == new_owner_id:
-            data = {'message': 'Вы уже являетесь владельцем этой группы.'}
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
-        if not User.objects.filter(id=new_owner_id).exists():
-            data = {'message': 'Пользователя с таким ID не существует.'}
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
-        if not GroupUser.objects.filter(group=current_group,
-                                        user_id=new_owner_id).exists():
-            data = {'message': 'Новый владелец не состоит в этой группе.'}
-            return Response(status=status.HTTP_400_BAD_REQUEST, data=data)
 
         with transaction.atomic():
             current_group.owner_id = new_owner_id

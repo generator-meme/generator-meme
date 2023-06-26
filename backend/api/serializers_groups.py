@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CurrentUserDefault
@@ -7,8 +8,12 @@ from api.serializers_users import UsersSerializer
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 
+User = get_user_model()
+
 
 class GroupUserReadSerializer(serializers.ModelSerializer):
+    """Сериализатор юзеров в группе (чтение)."""
+
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
@@ -29,7 +34,7 @@ class GroupUserReadSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    """Сериализатор модели Group."""
+    """Сериализатор модели Group (чтение)."""
 
     class Meta:
         fields = (
@@ -49,6 +54,8 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GroupMemeSerializer(serializers.ModelSerializer):
+    """Сериализатор готового мема в группе (чтение)."""
+
     id = serializers.ReadOnlyField(source='meme.id')
     author = serializers.SerializerMethodField(source='meme.author')
     image = serializers.ImageField(source='meme.image', read_only=True)
@@ -84,6 +91,8 @@ class GroupMemeSerializer(serializers.ModelSerializer):
 
 
 class GroupBannedUserReadSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователей в банлисте группы (чтение)."""
+
     id = serializers.ReadOnlyField(source='user.id')
     username = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
@@ -103,7 +112,8 @@ class GroupBannedUserReadSerializer(serializers.ModelSerializer):
 
 
 class GroupFullSerializer(serializers.ModelSerializer):
-    """Полный сериализатор группы"""
+    """Полный сериализатор группы."""
+
     owner = UsersSerializer()
     users = GroupUserReadSerializer(
         source='group_users',
@@ -146,6 +156,8 @@ class GroupFullSerializer(serializers.ModelSerializer):
 
 
 class GroupWriteSerializer(serializers.ModelSerializer):
+    """Сериализатор модели Group (запись)."""
+
     owner = UsersSerializer(read_only=True, default=CurrentUserDefault())
 
     class Meta:
@@ -169,7 +181,8 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 
 
 class GroupUserSerializer(serializers.ModelSerializer):
-    """Сериализатор пользователей в группе."""
+    """Сериализатор пользователей в группе (запись)."""
+
     role = serializers.PrimaryKeyRelatedField(
         queryset=GroupRole.objects.all(),
         default=GroupRole.objects.get_or_create(name="Пользователь")[0]
@@ -213,7 +226,7 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
 
 class GroupBannedUserSerializer(serializers.ModelSerializer):
-    """Сериализатор пользователей в группе."""
+    """Сериализатор пользователей в банлисте группы (запись)."""
 
     class Meta:
         fields = '__all__'
@@ -252,7 +265,8 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
 
 
 class GroupMemeWriteSerializer(serializers.ModelSerializer):
-    """Сериализатор пользователей в группе."""
+    """Сериализатор готового мема в группе (запись)."""
+
     added_by = UsersSerializer(read_only=True, default=CurrentUserDefault())
 
     class Meta:
@@ -286,7 +300,28 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class UserIdSerializer(serializers.Serializer):
-    """Сериализатор данных при передаче только id юзера."""
+class NewOwnerSerializer(serializers.Serializer):
+    """Сериализатор данных при смене владельца группы."""
 
     user_id = serializers.IntegerField()
+
+    def validate(self, data):
+        """Валидирует данные по новому владельцу группы."""
+        current_group = self.context['current_group']
+        current_user_id = self.context['current_user_id']
+        new_owner_id = self.context['new_owner_id']
+
+        if current_user_id == new_owner_id:
+            raise ValidationError(
+                {'user_id': 'Вы уже являетесь владельцем этой группы.'}
+            )
+        if not User.objects.filter(id=new_owner_id).exists():
+            raise ValidationError(
+                {'user_id': 'Пользователя с таким ID не существует.'}
+            )
+        if not GroupUser.objects.filter(group=current_group,
+                                        user_id=new_owner_id).exists():
+            raise ValidationError(
+                {'user_id': 'Новый владелец не состоит в этой группе.'}
+            )
+        return data
