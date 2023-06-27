@@ -87,10 +87,7 @@ const TextareaCanvas = ({
       }
 
       if (latestTextValues.current.isOutside) {
-        if (
-          latestTextValues.current.width < latestImageSizes.current.width &&
-          latestTextValues.current.text === ""
-        ) {
+        if (latestTextValues.current.width < latestImageSizes.current.width) {
           setTextValues({
             ...latestTextValues.current,
             width: latestImageSizes.current.width,
@@ -120,10 +117,7 @@ const TextareaCanvas = ({
           });
         }
       } else {
-        if (
-          latestTextValues.current.width < latestImageSizes.current.width &&
-          latestTextValues.current.text === ""
-        ) {
+        if (latestTextValues.current.width < latestImageSizes.current.width) {
           setTextValues({
             ...latestTextValues.current,
             width: latestImageSizes.current.width,
@@ -164,6 +158,25 @@ const TextareaCanvas = ({
       };
     }
   }, [textValues.isVisible]);
+
+  useEffect(() => {
+    if (!latestTextValues.current.isOutside) return;
+    if (window.innerWidth > 700 && latestTextValues.current.height > 70) {
+      setTextValues({
+        ...latestTextValues.current,
+        fontSize: Math.floor(latestTextValues.current.fontSize / 1.2),
+        height: 70,
+      });
+    } else if (
+      window.innerWidth > 570 &&
+      latestTextValues.current.height > 60
+    ) {
+    } else if (
+      window.innerWidth < 571 &&
+      latestTextValues.current.height > 50
+    ) {
+    }
+  }, [textValues.height]);
 
   useEffect(() => {
     if (
@@ -289,8 +302,12 @@ const TextareaCanvas = ({
                 ? outsideTopTextValues[0].isVisible
                   ? -36 - 30 - 80
                   : -36 - 30
+                : window.innerWidth > 570
+                ? outsideTopTextValues[0].isVisible
+                  ? -36 - 30 - 80 - 36
+                  : -36 - 30 - 36
                 : outsideTopTextValues[0].isVisible
-                ? -36 - 30 - 80 - 36
+                ? -36 - 30 - 80 - 36 + 10
                 : -36 - 30 - 36,
             left:
               imageSizes.width < 609 && window.innerWidth > 700

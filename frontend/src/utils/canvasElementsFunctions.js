@@ -41,7 +41,7 @@ export const pickup = (e, movingElement, values, setValues) => {
       oldY: e.touches[0].clientY,
     });
   }
-  console.log(`pick up ${values.name ? "text" : "image"}`);
+  // console.log(`pick up ${values.name ? "text" : "image"}`);
 };
 
 export const move = (e, textValues, setTextValues) => {
