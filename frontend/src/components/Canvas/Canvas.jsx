@@ -11,7 +11,7 @@ import {
   drawText,
 } from "./canvasFunctions";
 
-import TextFieldset from "../TextFieldset/TextFieldset";
+import Fieldset from "../Fieldset/Fieldset";
 
 const Canvas = ({
   currentMeme,
@@ -372,7 +372,7 @@ const Canvas = ({
               width: imageSizes.width,
             }}
           >
-            <TextFieldset
+            <Fieldset
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}
