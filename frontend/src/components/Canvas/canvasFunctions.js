@@ -11,9 +11,14 @@ export const getOffsetY = (element, textsValues, outsideTextHeight) => {
   }
 
   if (element.isOutside) {
-    if (element.canvasTop !== null) return element.canvasTop + difference;
-    if (element.canvasBottom !== null)
-      return element.canvasBottom - bottomDifference;
+    if (element.name === "outsideTopTextValues")
+      return element.canvasTop + difference;
+    if (element.name === "outsideBottomTextValues")
+      return (
+        element.canvasTop +
+        difference +
+        (textsValues[0].isVisible ? outsideTextHeight : 0)
+      );
   } else {
     let pointOY;
     if (element.top !== null) {
