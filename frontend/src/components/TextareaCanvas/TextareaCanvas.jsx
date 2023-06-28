@@ -171,10 +171,20 @@ const TextareaCanvas = ({
       window.innerWidth > 570 &&
       latestTextValues.current.height > 60
     ) {
+      setTextValues({
+        ...latestTextValues.current,
+        fontSize: Math.floor(latestTextValues.current.fontSize / 1.2),
+        height: 60,
+      });
     } else if (
       window.innerWidth < 571 &&
       latestTextValues.current.height > 50
     ) {
+      setTextValues({
+        ...latestTextValues.current,
+        fontSize: Math.floor(latestTextValues.current.fontSize / 1.2),
+        height: 50,
+      });
     }
   }, [textValues.height]);
 

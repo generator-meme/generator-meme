@@ -275,10 +275,10 @@ const Canvas = ({
           .reverse(); // если нижний текст - перенос строк снизу вверх
       }
 
-      elementTextWrap.forEach((t, i) =>
+      elementTextWrap.forEach((string, index) =>
         drawText(
-          t,
-          i,
+          string,
+          index,
           ctx,
           element.bottom === null ? true : false,
           canvasHeight,
@@ -286,7 +286,8 @@ const Canvas = ({
           textMarginYBottom,
           textMarginYTop,
           elementMarginX,
-          element
+          element,
+          elementTextWrap.length
         )
       );
     });
