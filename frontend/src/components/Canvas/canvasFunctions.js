@@ -1,5 +1,5 @@
 export const getOffsetY = (element, textsValues, outsideTextHeight) => {
-  const difference = element.fontSize - 40;
+  const sizeDifference = element.fontSize - 40;
   let bottomDifference;
 
   if (window.innerWidth > 700) {
@@ -12,11 +12,11 @@ export const getOffsetY = (element, textsValues, outsideTextHeight) => {
 
   if (element.isOutside) {
     if (element.name === "outsideTopTextValues")
-      return element.canvasTop + difference;
+      return element.canvasTop + sizeDifference;
     if (element.name === "outsideBottomTextValues")
       return (
         element.canvasTop +
-        difference +
+        sizeDifference +
         (textsValues[0].isVisible ? outsideTextHeight : 0)
       );
   } else {
@@ -26,7 +26,7 @@ export const getOffsetY = (element, textsValues, outsideTextHeight) => {
       return (
         pointOY +
         (textsValues[0].isVisible ? outsideTextHeight : 0) +
-        difference
+        sizeDifference
       );
     } else {
       pointOY = element.bottom;
@@ -188,19 +188,25 @@ export const drawText = (
   } else {
     // const standartSize =
     //   window.innerWidth > 700 ? 40 : window.innerWidth > 570 ? 30 : 25;
-    const sizeIndex =
-      textValues.fontSize > 40 ? 0.2 : textValues.fontSize > 30 ? 0.3 : 0.7;
-    const sizeDifference =
-      textLength === 1
-        ? 40 - textValues.fontSize + 5
-        : (40 - textValues.fontSize) * sizeIndex;
+    // const sizeIndex =
+    //   textValues.fontSize > 40
+    //     ? 0.2
+    //     : textValues.fontSize > 30
+    //     ? 0.3
+    //     : textValues.fontSize > 20
+    //     ? 0.3
+    //     : 0.4;
+    // const sizeDifference =
+    //   textLength === 1
+    //     ? 40 - textValues.fontSize + 5
+    //     : (40 - textValues.fontSize) * sizeIndex;
 
     marginY =
       canvasHeight -
       offsetY -
       index * lineHeight(textValues.fontSize) -
-      textMarginYBottom -
-      sizeDifference;
+      textMarginYBottom;
+    // sizeDifference;
   }
 
   ctx.fillStyle = textValues.backColor;

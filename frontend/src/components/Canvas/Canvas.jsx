@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLatest } from "react-use";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
@@ -28,6 +29,8 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
+  const latestImageSizes = useLatest(imageSizes);
+
   const [textsValues, setTextsValues] = useState([
     {
       name: "outsideTopTextValues",

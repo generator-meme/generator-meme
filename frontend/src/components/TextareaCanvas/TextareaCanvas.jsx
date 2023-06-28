@@ -75,7 +75,7 @@ const TextareaCanvas = ({
   };
 
   useEffect(() => {
-    // при смене положения экрана (телефона) - обновление ширины области текста (если текст не был внесен) + размера шрифта
+    // при смене положения экрана (телефона) - обновление ширины, размера шрифта, позиции текста
     const onUpdateWidth = () => {
       let size;
       if (window.innerWidth > 700) {
@@ -86,36 +86,30 @@ const TextareaCanvas = ({
         size = 25;
       }
 
-      if (latestTextValues.current.isOutside) {
-        if (latestTextValues.current.width < latestImageSizes.current.width) {
-          setTextValues({
-            ...latestTextValues.current,
-            width: latestImageSizes.current.width,
-            fontSize: size,
-            top:
-              latestTextValues.current.top !== null
-                ? -latestOutsideTextHeight.current
-                : null,
-            bottom:
-              latestTextValues.current.bottom !== null
-                ? -latestOutsideTextHeight.current
-                : null,
-          });
-        } else {
-          if (latestTextValues.current.fontSize === size) return;
-          setTextValues({
-            ...latestTextValues.current,
-            fontSize: size,
-            top:
-              latestTextValues.current.top !== null
-                ? -latestOutsideTextHeight.current
-                : null,
-            bottom:
-              latestTextValues.current.bottom !== null
-                ? -latestOutsideTextHeight.current
-                : null,
-          });
-        }
+      if (
+        latestTextValues.current.isOutside ||
+        latestTextValues.current.name === "extraTextValues"
+      ) {
+        setTextValues({
+          ...latestTextValues.current,
+          width: latestImageSizes.current.width,
+          fontSize: size,
+          top:
+            latestTextValues.current.name === "outsideTopTextValues"
+              ? -latestOutsideTextHeight.current
+              : latestTextValues.current.name === "outsideBottomTextValues"
+              ? latestImageSizes?.current.height
+              : latestImageSizes?.current.height / 2 -
+                (window.innerWidth > 700
+                  ? 40
+                  : window.innerWidth > 570
+                  ? 35
+                  : 30),
+          canvasTop:
+            latestTextValues.current.name === "outsideBottomTextValues"
+              ? latestImageSizes?.current.height
+              : 0,
+        });
       } else {
         if (latestTextValues.current.width < latestImageSizes.current.width) {
           setTextValues({
@@ -161,7 +155,7 @@ const TextareaCanvas = ({
 
   useEffect(() => {
     if (!latestTextValues.current.isOutside) return;
-    if (window.innerWidth > 700 && latestTextValues.current.height > 70) {
+    if (window.innerWidth > 700 && latestTextValues.current.height > 80) {
       setTextValues({
         ...latestTextValues.current,
         fontSize: Math.floor(latestTextValues.current.fontSize / 1.2),
@@ -169,7 +163,7 @@ const TextareaCanvas = ({
       });
     } else if (
       window.innerWidth > 570 &&
-      latestTextValues.current.height > 60
+      latestTextValues.current.height > 70
     ) {
       setTextValues({
         ...latestTextValues.current,
@@ -178,7 +172,7 @@ const TextareaCanvas = ({
       });
     } else if (
       window.innerWidth < 571 &&
-      latestTextValues.current.height > 50
+      latestTextValues.current.height > 60
     ) {
       setTextValues({
         ...latestTextValues.current,
