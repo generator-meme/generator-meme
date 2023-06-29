@@ -53,9 +53,13 @@ class TemplateAdmin(admin.ModelAdmin):
         'is_published',
         'tag',
         'used_times',
+        'created_at',
+        'published_at',
     )
     readonly_fields = (
         'used_times',
+        'created_at',
+        'published_at',
     )
     list_display = (
         'image_tag',
@@ -93,12 +97,18 @@ class TemplateAdmin(admin.ModelAdmin):
     @admin.action(description='Опубликовать на сайте')
     def publish(self, request, queryset):
         """Публикует выбранные шаблоны мемов"""
-        queryset.update(is_published=True)
+        for template in queryset:
+            if not template.is_published:
+                template.is_published = True
+                template.save()
 
     @admin.action(description='Скрыть на сайте')
     def hide(self, request, queryset):
         """Отменяет публикацию выбранных шаблонов мемов"""
-        queryset.update(is_published=False)
+        for template in queryset:
+            if template.is_published:
+                template.is_published = False
+                template.save()
 
     @admin.action(description='Категория "Картинки"')
     def picture_category(self, request, queryset):
