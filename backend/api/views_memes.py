@@ -51,7 +51,14 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    """Шаблоны мемов."""
+    """Шаблоны мемов.
+    Сортировка шаблонов задается параметром ordering:
+    - если параметр не задан, то по умолчанию выше будут шаблоны,
+    которые чаще других использовались для создания мема
+    - если задан параметр 'random', то шаблоны будут
+    отсортированы в случайном порядке
+    - если задан параметр '-published_at', то выше будут шаблоны
+    опубликованные на сайте позднее, если 'published_at' то наоборот."""
 
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
