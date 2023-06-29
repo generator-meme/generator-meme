@@ -3,8 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
-import Canvas from "./components/Canvas/Canvas";
-import CanvasImagePreloader from "./components/CanvasImagePreloader/CanvasImagePreloader";
+import CanvasPreloader from "./components/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
@@ -80,16 +79,11 @@ const App = () => {
             />
           }
         />
-        <Route
-          path="/team"
-          element={
-            <Team/>
-          }
-        />
+        <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
           element={
-            <CanvasImagePreloader
+            <CanvasPreloader
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}

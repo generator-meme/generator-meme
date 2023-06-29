@@ -47,7 +47,9 @@ export const createExtraText = (imageSizes) => {
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
     height: 70,
-    top: imageSizes?.height / 2 - 40,
+    top:
+      imageSizes?.height / 2 -
+      (window.innerWidth > 700 ? 40 : window.innerWidth > 570 ? 35 : 30),
     left: 0,
     bottom: null,
     startTop: imageSizes?.height / 2 - 40,

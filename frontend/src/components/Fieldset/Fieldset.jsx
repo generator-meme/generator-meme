@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import "./Fieldset.css";
 import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import ExtraImage from "../ExtraImage/ExtraImage";
 
-const TextFieldset = ({
+const Fieldset = ({
   textsValues,
   setTextsValues,
   imageSizes,
@@ -26,7 +27,7 @@ const TextFieldset = ({
   }, []);
 
   return (
-    <fieldset className="text-fieldset">
+    <fieldset className="fieldset">
       {textsValues.map((text, index) => {
         return (
           <TextareaCanvas
@@ -92,4 +93,4 @@ const TextFieldset = ({
   );
 };
 
-export default TextFieldset;
+export default Fieldset;
