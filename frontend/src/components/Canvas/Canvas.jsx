@@ -11,7 +11,7 @@ import {
   drawText,
 } from "./canvasFunctions";
 
-import TextFieldset from "../TextFieldset/TextFieldset";
+import Fieldset from "../Fieldset/Fieldset";
 
 const Canvas = ({
   currentMeme,
@@ -28,6 +28,7 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
+
   const [textsValues, setTextsValues] = useState([
     {
       name: "outsideTopTextValues",
@@ -78,12 +79,12 @@ const Canvas = ({
       width: imageSizes?.width - 4,
       textAreaWidth: 0,
       height: 70,
-      top: null,
+      top: imageSizes?.height,
       left: 0,
-      bottom: -outsideTextHeight,
-      canvasTop: null,
+      bottom: null,
+      canvasTop: imageSizes?.height,
       canvasLeft: 0,
-      canvasBottom: 0,
+      canvasBottom: null,
     },
     {
       name: "topTextValues",
@@ -275,10 +276,10 @@ const Canvas = ({
           .reverse(); // если нижний текст - перенос строк снизу вверх
       }
 
-      elementTextWrap.forEach((t, i) =>
+      elementTextWrap.forEach((string, index) =>
         drawText(
-          t,
-          i,
+          string,
+          index,
           ctx,
           element.bottom === null ? true : false,
           canvasHeight,
@@ -286,7 +287,8 @@ const Canvas = ({
           textMarginYBottom,
           textMarginYTop,
           elementMarginX,
-          element
+          element,
+          elementTextWrap.length
         )
       );
     });
@@ -372,7 +374,7 @@ const Canvas = ({
               width: imageSizes.width,
             }}
           >
-            <TextFieldset
+            <Fieldset
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}

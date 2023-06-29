@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Canvas from "../Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
 
-const CanvasImagePreloader = ({
+const CanvasPreloader = ({
   currentMeme,
   handleCreateNewMeme,
   setIsNewMeme,
@@ -135,4 +135,4 @@ const CanvasImagePreloader = ({
   );
 };
 
-export default CanvasImagePreloader;
+export default CanvasPreloader;
