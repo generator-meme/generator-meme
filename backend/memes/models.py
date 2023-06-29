@@ -84,7 +84,7 @@ class Template(models.Model):
     published_at = models.DateTimeField(
         verbose_name='Дата публикации на сайт',
         null=True,
-        )
+    )
     is_published = models.BooleanField(
         default=False,
         verbose_name='Опубликован'
