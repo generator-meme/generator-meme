@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CurrentUserDefault
+from rest_framework.fields import CurrentUserDefault, SerializerMethodField
 
 from api.serializers_memes import TemplateReadSerializer
 from api.serializers_users import UsersSerializer
@@ -324,3 +324,36 @@ class NewOwnerSerializer(serializers.Serializer):
                 {'user_id': 'Новый владелец не состоит в этой группе.'}
             )
         return data
+
+
+class GroupRoleSerializer(serializers.ModelSerializer):
+    """Сериализатор ролей в группах мемов."""
+
+    class Meta:
+        fields = (
+            'name',
+            'is_admin',
+            'is_moderator',
+        )
+        model = GroupRole
+
+
+class UserGroupReadSerializer(serializers.ModelSerializer):
+    """Сериализатор групп пользователя (чтение)."""
+
+    group = GroupSerializer()
+    role = GroupRoleSerializer()
+    is_owner = SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'group',
+            'added_at',
+            'role',
+            'is_owner',
+        )
+        model = GroupUser
+
+    def get_is_owner(self, obj):
+        """Проверяет, является ли пользователь владельцем группы."""
+        return self.context['request'].user == obj.group.owner
