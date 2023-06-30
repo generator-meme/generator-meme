@@ -25,13 +25,45 @@ class AdminOrReadOnly(permissions.BasePermission):
 
 
 class IsGroupOwner(permissions.BasePermission):
-    """Разрешение только для владельцев группы."""
+    """Разрешение только для владельца группы."""
 
     message = "Вы не являетесь владельцем этой группы."
 
     def has_object_permission(self, request, view, obj):
         if request.user == obj.owner:
             return True
+        return False
+
+
+class IsGroupAdmin(permissions.BasePermission):
+    """Разрешение только для админа группы."""
+
+    message = "Вы не являетесь администратором этой группы."
+
+    def has_object_permission(self, request, view, obj):
+        user_in_group = GroupUser.objects.filter(
+            group=obj,
+            user=request.user
+        )
+        if user_in_group.exists():
+            return user_in_group[0].role.is_admin
+        return False
+
+
+class IsGroupAdminOrModer(permissions.BasePermission):
+    """Разрешение для админа или модератора группы."""
+
+    message = ("Вы не являетесь администратором "
+               "или модератором этой группы.")
+
+    def has_object_permission(self, request, view, obj):
+        user_in_group = GroupUser.objects.filter(
+            group=obj,
+            user=request.user
+        )
+        if user_in_group.exists():
+            return (user_in_group[0].role.is_admin or
+                    user_in_group[0].role.is_moderator)
         return False
 
 
