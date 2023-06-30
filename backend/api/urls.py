@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from api.views_groups import GroupViewSet, UserGroupsViewSet
+from api.views_groups import GroupRoleViewSet, GroupViewSet, UserGroupsViewSet
 from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
                              TemplateViewSet)
 from api.views_team import TeamGroupViewSet
@@ -12,6 +12,7 @@ router.register('templates', TemplateViewSet, basename='templates')
 router.register('tags', TagViewSet, basename='tags')
 router.register('categories', CategoryViewSet, basename='categories')
 router.register('team', TeamGroupViewSet, basename='team')
+router.register('groups/roles', GroupRoleViewSet, basename='group_roles')
 router.register('groups', GroupViewSet, basename='group')
 router.register('users/mygroups', UserGroupsViewSet, basename='mygroups')
 

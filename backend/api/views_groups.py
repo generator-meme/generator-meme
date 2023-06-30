@@ -12,13 +12,14 @@ from rest_framework.response import Response
 
 from api.permissions import IsGroupOwner, IsInGroup
 from api.serializers_groups import (GroupBannedUserSerializer,
+                                    GroupRoleSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
 from api.filters import GroupSearchFilter
-from api.viewsets import ListViewSet
+from api.viewsets import ListRetriveViewSet, ListViewSet
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
@@ -262,3 +263,10 @@ class UserGroupsViewSet(ListViewSet):
         context = super().get_serializer_context()
         context["request"] = self.request
         return context
+
+
+class GroupRoleViewSet(ListRetriveViewSet):
+    """Возможные роли пользователей в группах мемов."""
+
+    queryset = GroupRole.objects.all()
+    serializer_class = GroupRoleSerializer
