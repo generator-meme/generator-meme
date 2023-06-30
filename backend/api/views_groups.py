@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
@@ -14,8 +15,10 @@ from api.serializers_groups import (GroupBannedUserSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
-                                    NewOwnerSerializer)
+                                    NewOwnerSerializer,
+                                    UserGroupReadSerializer)
 from api.filters import GroupSearchFilter
+from api.viewsets import ListViewSet
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
@@ -236,3 +239,26 @@ class GroupViewSet(viewsets.ModelViewSet):
             )[0]
             new_owner_in_group.save()
         return Response(status=status.HTTP_200_OK)
+
+
+class UserGroupsViewSet(ListViewSet):
+    """Список групп в которых состоит пользователь
+    Содержит информацию о группе, дате вступления,
+    роль пользователя в группе и отметку о том,
+    является ли пользователь владельцем данной группы.
+    Поумолчанию отсортированы по названию группы лексикографически.
+    """
+
+    serializer_class = UserGroupReadSerializer
+    permission_classes = (IsAuthenticated, )
+    filter_backends = [OrderingFilter, ]
+    ordering = ('group__name',)
+
+    def get_queryset(self):
+        user = self.request.user
+        return user.user_groups.all()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
