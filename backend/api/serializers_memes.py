@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.fields import SerializerMethodField
+# from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import (BooleanField, ModelSerializer,
                                         PrimaryKeyRelatedField, UUIDField,
                                         ValidationError)
@@ -40,7 +40,6 @@ class TemplateReadSerializer(ModelSerializer):
 
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
-    used_times = SerializerMethodField()
     is_favorited = BooleanField(read_only=True)
     category = CategorySerializer(read_only=True,)
 
@@ -52,20 +51,10 @@ class TemplateReadSerializer(ModelSerializer):
             'image',
             'category',
             'tag',
-            'created_at',
             'is_published',
             'is_favorited',
-            'used_times',
+            'published_at',
         )
-
-    def get_used_times(self, obj):
-        if TemplateUsedTimes.objects.filter(
-            template=obj
-        ).exists():
-            return TemplateUsedTimes.objects.get(
-                template=obj
-            ).used_times
-        return 0
 
 
 class TemplateWriteSerializer(ModelSerializer):
