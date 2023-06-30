@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
+from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
@@ -14,6 +15,7 @@ from api.serializers_groups import (GroupBannedUserSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer)
+from api.filters import GroupSearchFilter
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
@@ -22,11 +24,17 @@ User = get_user_model()
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """Группы для готовых мемов."""
+    """Группы для готовых мемов
+    Поиск доступен по параметрам name и description
+    Оба поиска работают без учёта регистра и проверяют
+    вхождение строки заданной в поиск в значение поля модели."""
 
     queryset = Group.objects.all()
 
     permission_classes = (IsAuthenticatedOrReadOnly, )
+
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = GroupSearchFilter
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
