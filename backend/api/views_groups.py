@@ -10,8 +10,9 @@ from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from api.permissions import IsGroupOwner, IsInGroup
-from api.serializers_groups import (GroupBannedUserSerializer,
+from api.permissions import IsGroupAdmin, IsGroupOwner, IsInGroup
+from api.serializers_groups import (ChangeRoleSerializer,
+                                    GroupBannedUserSerializer,
                                     GroupRoleSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer, GroupSerializer,
@@ -196,7 +197,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         request_body=NewOwnerSerializer,
         method='post',
-        responses={200: 'Успешная смена владельца'},
+        responses={201: 'Успешная смена владельца'},
     )
     @action(
         detail=True,
@@ -239,7 +240,51 @@ class GroupViewSet(viewsets.ModelViewSet):
                 is_admin=True,
             )[0]
             new_owner_in_group.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        request_body=ChangeRoleSerializer,
+        method='post',
+        responses={201: 'Успешная смена роли'},
+    )
+    @action(
+        detail=True,
+        methods=['post', ],
+        permission_classes=[
+            IsAuthenticated,
+            IsInGroup,
+            IsGroupAdmin,
+        ],
+        serializer_class=NewOwnerSerializer,
+    )
+    def changeuserrole(self, request, pk):
+        """Задать участнику группы роль."""
+        current_group = get_object_or_404(Group, pk=pk)
+        user_id = request.data.get('user_id')
+        role_id = request.data.get('role_id')
+        user_in_group = GroupUser.objects.filter(
+            group=current_group,
+            user_id=user_id
+        )
+
+        self.check_object_permissions(request, current_group)
+
+        serializer = ChangeRoleSerializer(
+            data=request.data,
+            context={
+                'user_id': user_id,
+                'role_id': role_id,
+                'user_in_group': user_in_group,
+            },
+        )
+        serializer.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            user_in_group_object = user_in_group[0]
+            user_in_group_object.role_id = role_id
+            user_in_group_object.save()
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class UserGroupsViewSet(ListViewSet):

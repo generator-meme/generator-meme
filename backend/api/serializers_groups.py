@@ -326,6 +326,37 @@ class NewOwnerSerializer(serializers.Serializer):
         return data
 
 
+class ChangeRoleSerializer(serializers.Serializer):
+    """Сериализатор данных при установке роли участнику группы."""
+
+    user_id = serializers.IntegerField()
+    role_id = serializers.IntegerField()
+
+    def validate(self, data):
+        """Валидирует данные."""
+        user_id = self.context['user_id']
+        role_id = self.context['role_id']
+        user_in_group = self.context['user_in_group']
+
+        if not User.objects.filter(id=user_id).exists():
+            raise ValidationError(
+                {'user_id': 'Пользователя с таким ID не существует.'}
+            )
+        if not GroupRole.objects.filter(id=role_id).exists():
+            raise ValidationError(
+                {'role_id': 'Роли с таким ID не существует.'}
+            )
+        if not user_in_group.exists():
+            raise ValidationError(
+                {'user_id': 'Пользователь не является участником группы.'}
+            )
+        if user_in_group[0].role.id == role_id:
+            raise ValidationError(
+                {'role_id': 'Эта роль уже установлена у пользователя.'}
+            )
+        return data
+
+
 class GroupRoleSerializer(serializers.ModelSerializer):
     """Сериализатор ролей в группах мемов."""
 
