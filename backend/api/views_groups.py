@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -10,16 +10,16 @@ from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
+from api.filters import GroupSearchFilter
 from api.permissions import IsGroupAdmin, IsGroupOwner, IsInGroup
 from api.serializers_groups import (ChangeRoleSerializer,
                                     GroupBannedUserSerializer,
-                                    GroupRoleSerializer,
                                     GroupFullSerializer,
-                                    GroupMemeWriteSerializer, GroupSerializer,
+                                    GroupMemeWriteSerializer,
+                                    GroupRoleSerializer, GroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
-from api.filters import GroupSearchFilter
 from api.viewsets import ListRetriveViewSet, ListViewSet
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
