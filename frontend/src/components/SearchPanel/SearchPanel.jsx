@@ -2,6 +2,7 @@ import styles from "./SearchPanel.module.css";
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../utils/api";
 import { Tag } from "../Tag/Tag";
+import { isMobile, isAndroid } from "react-device-detect";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -33,7 +34,13 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   }, [searchValue]);
 
   const handleSpace = (e) => {
-    if (searchValue.trim() !== "" && e.keyCode === 32) {
+    if (isMobile && isAndroid && e.key === " ") {
+      const tempTagArray = [...tagArray, searchValue.trim()];
+      setTagArray(tempTagArray);
+      setIsFocusSearchPanel(false);
+      setSearchValue(" ");
+    } else if (searchValue.trim() !== "" && e.keyCode === 32) {
+      console.log("eeeessssssss");
       const tempTagArray = [...tagArray, searchValue.trim()];
       setTagArray(tempTagArray);
       setIsFocusSearchPanel(false);
@@ -43,7 +50,6 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
 
   const onChangeInputValue = (e) => {
     e.preventDefault();
-
     setSearchValue(e.target.value.trim());
   };
 
