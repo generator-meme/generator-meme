@@ -6,6 +6,7 @@ import { isMobile, isAndroid } from "react-device-detect";
 
 export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
+  const [inputChar, setInputChar] = useState("");
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
@@ -33,24 +34,38 @@ export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    if (inputChar === "@" && searchValue.trim() !== "") {
+      const tempTagArray = [...tagArray, searchValue.trim()];
+      setTagArray(tempTagArray);
+      setIsFocusSearchPanel(false);
+      setSearchValue(" ");
+      setInputChar("");
+    }
+  }, [inputChar]);
+
   const handleSpace = (e) => {
-    if (isMobile && isAndroid && e.key === " ") {
+    if (searchValue.trim() !== "" && e.keyCode === 32) {
       const tempTagArray = [...tagArray, searchValue.trim()];
       setTagArray(tempTagArray);
       setIsFocusSearchPanel(false);
       setSearchValue(" ");
-    } else if (searchValue.trim() !== "" && e.keyCode === 32) {
-      console.log("eeeessssssss");
-      const tempTagArray = [...tagArray, searchValue.trim()];
-      setTagArray(tempTagArray);
-      setIsFocusSearchPanel(false);
-      setSearchValue(" ");
+    } else if (isMobile) {
+      // setInputChar("");
     }
   };
 
   const onChangeInputValue = (e) => {
-    e.preventDefault();
-    setSearchValue(e.target.value.trim());
+    console.log("three");
+    if (e.target.value.trim().split("").pop() === "@") {
+      const tempArr = e.target.value.trim().split("");
+      const lengthArr = tempArr.length;
+      setInputChar(tempArr.pop());
+      setSearchValue(tempArr.slice(0, lengthArr - 1).join(""));
+    } else {
+      setInputChar(e.target.value.trim().split("").pop());
+      setSearchValue(e.target.value.trim());
+    }
   };
 
   const yellowColorOfSuggestPanel = {
