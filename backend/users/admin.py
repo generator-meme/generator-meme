@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.admin.models import LogEntry, DELETION
+from django.contrib.admin.models import DELETION, LogEntry
+from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.urls import reverse
 
 from .models import User
 
@@ -62,9 +62,9 @@ class LogEntryAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
     @admin.display(
-            ordering='object_repr',
-            description='Объект',
-        )
+        ordering='object_repr',
+        description='Объект',
+    )
     def object_link(self, obj):
         """Ссылка на объект."""
         if obj.action_flag == DELETION:
