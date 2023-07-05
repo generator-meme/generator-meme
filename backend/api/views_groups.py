@@ -7,7 +7,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+                                        AllowAny)
 from rest_framework.response import Response
 
 from api.filters import GroupSearchFilter
@@ -34,14 +34,14 @@ User = get_user_model()
 
 class GroupViewSet(viewsets.ModelViewSet):
     """Группы для готовых мемов
-    Поиск доступен по параметрам name и description
+    1. Поиск доступен по параметрам name и description
     Оба поиска работают без учёта регистра и проверяют
-    вхождение строки заданной в поиск в значение поля модели."""
-    # необходимо дописать фильтрацию по юзеру
+    вхождение строки заданной в поиск в значение поля модели.
+    2. Добавлен поиск по параметру users. В качестве значения указывается id
+    пользователя. Можно получить список всех групп пользователя."""
 
     queryset = Group.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly, )
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = GroupSearchFilter
 
     def get_serializer_class(self):
@@ -50,6 +50,13 @@ class GroupViewSet(viewsets.ModelViewSet):
                 return GroupFullSerializer
             return GroupSerializer
         return GroupWriteSerializer
+
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return [AllowAny(), ]
+        elif self.request.method == 'create':
+            return [IsAuthenticated(), ]
+        return [IsGroupOwner(), ]  # возможно разделить и дать права админу еще
 
     @transaction.atomic
     def perform_create(self, serializer):

@@ -40,15 +40,25 @@ class TagSearchFilter(filters.FilterSet):
         fields = ('name',)
 
 
+def user_groups(request):
+    if request is None:
+        return Group.objects.none()
+
+    groups = Group.objects.all()
+    return groups
+
+
 class GroupSearchFilter(filters.FilterSet):
     """Поиск по группам мемов."""
 
     name = filters.CharFilter(lookup_expr='icontains')
     description = filters.CharFilter(lookup_expr='icontains')
+    user = filters.ModelChoiceFilter(queryset=user_groups)
 
     class Meta:
         model = Group
         fields = (
             'name',
             'description',
+            'users'
         )
