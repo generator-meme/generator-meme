@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from groups.models import GroupUser
+from groups.models import GroupMeme, GroupUser
 
 
 class AdminOrReadOnly(permissions.BasePermission):
