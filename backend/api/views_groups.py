@@ -48,8 +48,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes_by_action = {
         'POST': [IsAuthenticated, ],
         'GET': [AllowAny, ],
-        'DELETE': [IsGroupOwner, ],
-        'PATCH': [IsGroupOwner, ],
+        'DELETE': [IsAuthenticated, IsGroupOwner, ],
+        'PATCH': [IsAuthenticated, IsGroupOwner, ],
     }
 
     def get_serializer_class(self):
