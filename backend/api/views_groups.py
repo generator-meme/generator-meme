@@ -12,9 +12,9 @@ from rest_framework.response import Response
 
 from api.filters import GroupSearchFilter
 from api.permissions import (IsGroupAdmin,
+                             IsGroupAdminOrMemeAddedBy,
                              IsGroupOwner,
-                             IsInGroup,
-                             IsGroupAdminOrMemeAddedBy)
+                             IsInGroup)
 from api.serializers_groups import (ChangeRoleSerializer,
                                     EnterGroupSerializer,
                                     GroupBannedUserSerializer,
@@ -181,7 +181,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             permission_classes_by_action={
                 'POST': [IsAuthenticated, IsGroupAdmin],
                 'DELETE': [IsAuthenticated, IsGroupAdmin],
-                }
+            }
             )
     def addusertoban(self, request, pk):
         """Добавить/удалить пользователя в банлист группы."""

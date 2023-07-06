@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from groups.models import GroupMeme, GroupUser
+from groups.models import GroupUser
 
 
 class AdminOrReadOnly(permissions.BasePermission):
@@ -62,8 +62,8 @@ class IsGroupAdminOrModer(permissions.BasePermission):
             user=request.user
         )
         if user_in_group.exists():
-            return (user_in_group[0].role.is_admin or
-                    user_in_group[0].role.is_moderator)
+            return (user_in_group[0].role.is_admin
+                    or user_in_group[0].role.is_moderator)
         return False
 
 
@@ -88,8 +88,8 @@ class IsGroupAdminOrMemeAddedBy(permissions.BasePermission):
         if request.user == obj.added_by:
             return True
         group_user = GroupUser.objects.filter(
-                group=obj.group,
-                user=request.user
+            group=obj.group,
+            user=request.user
         )
         if group_user.exists() and group_user[0].role.is_admin:
             return True

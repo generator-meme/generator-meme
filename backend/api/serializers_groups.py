@@ -360,7 +360,8 @@ class GroupUserDeleteSerializer(serializers.Serializer):
         if not request or request.user.is_anonymous:
             return False
         group_user = GroupUser.objects.filter(
-                user=self.context['user'], group=self.context['group']
+            user=self.context['user'],
+            group=self.context['group']
         )
         if not group_user.exists():
             raise ValidationError(
@@ -373,7 +374,7 @@ class GroupUserDeleteSerializer(serializers.Serializer):
                 {"Owner_error":
                  "Пользователя со статусом 'Администратор' может "
                  "удалить только владелец группы."},
-                )
+            )
         elif request.user == group_user.group.owner and (
                 group_user.user == group_user.group.owner):
             raise ValidationError(
@@ -381,7 +382,7 @@ class GroupUserDeleteSerializer(serializers.Serializer):
                  "Владелец группы не может удалить себя из списка "
                  "пользователей. Вначале передайте группу другому "
                  "пользователю!"}
-                )
+            )
         return data
 
 
@@ -397,7 +398,8 @@ class GroupMemeDeleteSerializer(serializers.Serializer):
         if not request or request.user.is_anonymous:
             return False
         group_meme = GroupMeme.objects.filter(
-                meme=self.context['meme'], group=self.context['group']
+            meme=self.context['meme'],
+            group=self.context['group']
         )
         if not group_meme.exists():
             raise ValidationError(
