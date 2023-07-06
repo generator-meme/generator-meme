@@ -77,3 +77,20 @@ class IsInGroup(permissions.BasePermission):
                                     user=request.user).exists():
             return True
         return False
+
+
+class IsGroupAdminOrMemeAddedBy(permissions.BasePermission):
+    """Разрешение только для участников группы."""
+
+    message = "У вас нет прав для действий с этим мемом."
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj.added_by:
+            return True
+        group_user = GroupUser.objects.filter(
+                group=obj.group,
+                user=request.user
+        )
+        if group_user.exists() and group_user[0].role.is_admin:
+            return True
+        return False

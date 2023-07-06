@@ -13,7 +13,8 @@ from rest_framework.response import Response
 from api.filters import GroupSearchFilter
 from api.permissions import (IsGroupAdmin,
                              IsGroupOwner,
-                             IsInGroup)
+                             IsInGroup,
+                             IsGroupAdminOrMemeAddedBy)
 from api.serializers_groups import (ChangeRoleSerializer,
                                     EnterGroupSerializer,
                                     GroupBannedUserSerializer,
@@ -21,7 +22,9 @@ from api.serializers_groups import (ChangeRoleSerializer,
                                     GroupFullSerializer,
                                     GroupMemeWriteSerializer,
                                     GroupRoleSerializer, GroupSerializer,
-                                    GroupUserSerializer, GroupWriteSerializer,
+                                    GroupUserSerializer,
+                                    GroupUserDeleteSerializer,
+                                    GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
 from api.viewsets import ListRetriveViewSet, ListViewSet
@@ -41,6 +44,13 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = GroupSearchFilter
+    http_method_names = ['get', 'post', 'patch', 'delete', ]
+    permission_classes_by_action = {
+        'POST': [IsAuthenticated, ],
+        'GET': [AllowAny, ],
+        'DELETE': [IsGroupOwner, ],
+        'PATCH': [IsGroupOwner, ],
+    }
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -50,11 +60,21 @@ class GroupViewSet(viewsets.ModelViewSet):
         return GroupWriteSerializer
 
     def get_permissions(self):
-        if self.request.method in SAFE_METHODS:
-            return [AllowAny(), ]
-        elif self.request.method == 'create':
-            return [IsAuthenticated(), ]
-        return [IsGroupOwner(), ]  # возможно разделить и дать права админу еще
+        permission_classes = [IsAuthenticated, ]
+
+        if self.request.method == "GET":
+            permission_classes = self.permission_classes_by_action['GET']
+
+        elif self.request.method == "POST":
+            permission_classes = self.permission_classes_by_action['POST']
+
+        elif self.request.method == "DELETE":
+            permission_classes = self.permission_classes_by_action['DELETE']
+
+        elif self.request.method == "PATCH":
+            permission_classes = self.permission_classes_by_action['PATCH']
+
+        return [permission() for permission in permission_classes]
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -74,36 +94,33 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post',
                      'delete'],
-            permission_classes=[IsAuthenticated,
-                                IsGroupAdmin]
+            permission_classes_by_action={
+                'POST': [IsAuthenticated, IsGroupAdmin],
+                'DELETE': [IsAuthenticated, IsGroupAdmin],
+            }
             )
     def adduser(self, request, pk):
         current_group = get_object_or_404(Group, pk=pk)
         user = get_object_or_404(User, pk=request.data.get('user'))
         self.check_object_permissions(request, current_group)
         if request.method != 'POST':
+            serializer = GroupUserDeleteSerializer(
+                data={
+                    'user': request.data.get('user'),
+                    'group': current_group.pk
+                },
+                context={'request': request,
+                         'user': request.data.get('user'),
+                         'group': pk
+                         }
+            )
+            serializer.is_valid(raise_exception=True)
             action_model = get_object_or_404(
                 GroupUser,
                 user=user,
                 group=current_group
             )
-            if request.user != user and action_model.role.is_admin and (
-                    request.user != current_group.owner):
-                return Response(
-                    {"Owner_error":
-                     "Пользователя со статусом 'Администратор' может "
-                     "удалить только владелец группы."},
-                    status=status.HTTP_400_BAD_REQUEST)
-            elif request.user == current_group.owner and (
-                    user == current_group.owner):
-                return Response(
-                    {"Owner_error":
-                     "Владелец группы не может удалить себя из списка "
-                     "пользователей. Вначале передайте группу другому "
-                     "пользователю!"},
-                    status=status.HTTP_400_BAD_REQUEST)
-            else:
-                self.perform_destroy(action_model)
+            self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = GroupUserSerializer(
             data={
@@ -118,7 +135,10 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     @action(detail=True,
             methods=['post', 'delete'],
-            permission_classes=[IsAuthenticated, ]
+            permission_classes_by_action={
+                'POST': [IsAuthenticated, ],
+                'DELETE': [IsAuthenticated, ],
+            }
             )
     def enter(self, request, pk):
         """Добавить/удалить пользователя в группу."""
@@ -126,21 +146,23 @@ class GroupViewSet(viewsets.ModelViewSet):
         user = request.user
         self.check_object_permissions(request, current_group)
         if request.method != 'POST':
+            serializer = GroupUserDeleteSerializer(
+                data={
+                    'user': user.id,
+                    'group': pk
+                },
+                context={'request': request,
+                         'user': user.id,
+                         'group': pk
+                         }
+            )
+            serializer.is_valid(raise_exception=True)
             action_model = get_object_or_404(
                 GroupUser,
                 user=user,
                 group=current_group
             )
-            if request.user == current_group.owner and (
-                    user == current_group.owner):
-                return Response(
-                    {"Owner_error":
-                     "Владелец группы не может удалить себя из списка "
-                     "пользователей. Вначале передайте группу другому "
-                     "пользователю!"},
-                    status=status.HTTP_400_BAD_REQUEST)
-            else:
-                self.perform_destroy(action_model)
+            self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
         serializer = EnterGroupSerializer(
             data={
@@ -156,8 +178,11 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post',
                      'delete'],
-            permission_classes=[IsAuthenticated,
-                                IsGroupAdmin])
+            permission_classes_by_action={
+                'POST': [IsAuthenticated, IsGroupAdmin],
+                'DELETE': [IsAuthenticated, IsGroupAdmin],
+                }
+            )
     def addusertoban(self, request, pk):
         """Добавить/удалить пользователя в банлист группы."""
         current_group = get_object_or_404(Group, pk=pk)
@@ -189,12 +214,14 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post',
                      'delete'],
-            permission_classes=[IsAuthenticated,
-                                IsInGroup])
+            permission_classes_by_action={
+                'POST': [IsAuthenticated, IsInGroup],
+                'DELETE': [IsAuthenticated, IsGroupAdminOrMemeAddedBy],
+            }
+            )
     def addmeme(self, request, pk):
         """Добавить/удалить мем из группы."""
         current_group = get_object_or_404(Group, pk=pk)
-        self.check_object_permissions(request, current_group)
         if request.method != 'POST':
             serializer = GroupMemeDeleteSerializer(
                 data={
@@ -212,8 +239,10 @@ class GroupViewSet(viewsets.ModelViewSet):
                 meme=get_object_or_404(Meme, id=request.data.get('meme')),
                 group=current_group
             )
+            self.check_object_permissions(request, action_model)
             self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
+        self.check_object_permissions(request, current_group)
         serializer = GroupMemeWriteSerializer(
             data={
                 'meme': request.data.get('meme'),
@@ -233,11 +262,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['post', ],
-        permission_classes=[
-            IsAuthenticated,
-            IsInGroup,
-            IsGroupOwner,
-        ],
+        permission_classes_by_action={
+            'POST': [IsAuthenticated, IsInGroup, IsGroupOwner]
+        },
         serializer_class=NewOwnerSerializer,
     )
     def changeowner(self, request, pk):
@@ -281,11 +308,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=['post', ],
-        permission_classes=[
-            IsAuthenticated,
-            IsInGroup,
-            IsGroupAdmin,
-        ],
+        permission_classes_by_action={
+            'POST': [IsAuthenticated, IsInGroup, IsGroupOwner]
+        },
         serializer_class=NewOwnerSerializer,
     )
     def changeuserrole(self, request, pk):

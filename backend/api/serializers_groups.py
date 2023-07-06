@@ -351,6 +351,40 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
+class GroupUserDeleteSerializer(serializers.Serializer):
+    user = serializers.ReadOnlyField()
+    group = serializers.ReadOnlyField()
+
+    def validate(self, data):
+        request = self.context['request']
+        if not request or request.user.is_anonymous:
+            return False
+        group_user = GroupUser.objects.filter(
+                user=self.context['user'], group=self.context['group']
+        )
+        if not group_user.exists():
+            raise ValidationError(
+                {'GroupUser_exists_error':
+                 'Данного пользователя нет в группе.'}
+            )
+        if request.user != group_user.user and group_user.role.is_admin and (
+                request.user != group_user.owner):
+            raise ValidationError(
+                {"Owner_error":
+                 "Пользователя со статусом 'Администратор' может "
+                 "удалить только владелец группы."},
+                )
+        elif request.user == group_user.group.owner and (
+                group_user.user == group_user.group.owner):
+            raise ValidationError(
+                {"Owner_error":
+                 "Владелец группы не может удалить себя из списка "
+                 "пользователей. Вначале передайте группу другому "
+                 "пользователю!"}
+                )
+        return data
+
+
 class GroupMemeDeleteSerializer(serializers.Serializer):
     """Сериализатор готового мема в группе (удаление)."""
 
@@ -368,20 +402,6 @@ class GroupMemeDeleteSerializer(serializers.Serializer):
         if not group_meme.exists():
             raise ValidationError(
                 {'GroupMeme_exists_error': 'Данного мема нет в группе.'}
-            )
-        group_meme = GroupMeme.objects.get(
-            meme=self.context['meme'],
-            group=self.context['group']
-        )
-        group_user = GroupUser.objects.get(
-            user=request.user.id,
-            group=self.context['group'])
-        if (not group_user.role.is_admin and
-                not group_user.role.is_moderator and
-                request.user != group_meme.added_by):
-            raise ValidationError(
-                {'GroupMeme_exists_error':
-                 'У вас нет прав для удаления данного мема.'}
             )
         return data
 
