@@ -281,7 +281,14 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в банлисте группы (запись)."""
 
     class Meta:
-        fields = '__all__'
+        fields = (
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'baned_at'
+        )
         model = GroupBannedUser
 
     def validate(self, data):
@@ -327,7 +334,15 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
     added_by = UsersSerializer(read_only=True, default=CurrentUserDefault())
 
     class Meta:
-        fields = '__all__'
+        fields = (
+            'id',
+            'author',
+            'image',
+            'created_at',
+            'added_by',
+            'added_at',
+            'template'
+        )
         model = GroupMeme
 
     def validate(self, data):
@@ -368,15 +383,16 @@ class GroupUserDeleteSerializer(serializers.Serializer):
                 {'GroupUser_exists_error':
                  'Данного пользователя нет в группе.'}
             )
-        if request.user != group_user.user and group_user.role.is_admin and (
-                request.user != group_user.owner):
+        if (request.user != group_user[0].user
+                and group_user[0].role.is_admin
+                and request.user != group_user[0].owner):
             raise ValidationError(
                 {"Owner_error":
                  "Пользователя со статусом 'Администратор' может "
                  "удалить только владелец группы."},
             )
-        elif request.user == group_user.group.owner and (
-                group_user.user == group_user.group.owner):
+        elif request.user == group_user[0].group.owner and (
+                group_user[0].user == group_user[0].group.owner):
             raise ValidationError(
                 {"Owner_error":
                  "Владелец группы не может удалить себя из списка "
