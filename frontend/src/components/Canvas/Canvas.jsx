@@ -28,7 +28,6 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-
   const [textsValues, setTextsValues] = useState([
     {
       name: "outsideTopTextValues",
@@ -170,12 +169,16 @@ const Canvas = ({
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
       ).finally(() => {
-        navigate("/saved");
+        navigate(
+          `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
+        );
       });
     } else {
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
-          navigate("/saved");
+          navigate(
+            `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
+          );
         }
       );
     }

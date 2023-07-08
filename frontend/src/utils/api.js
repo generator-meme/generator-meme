@@ -51,13 +51,13 @@ class Api {
     }).then(this._errorHandler);
   }
 
-  // getCreatedMeme(memeId) {
-  //   return fetch(`${this._baseUrl}/memes/${memeId}`, {
-  //     method: "GET",
-  //     headers: this._headers,
-  //     body: JSON.stringify(),
-  //   }).then(this._errorHandler);
-  // }
+  getCreatedMeme(memeId) {
+    return fetch(`${this._baseUrl}/memes/${memeId}`, {
+      method: "GET",
+      headers: this._headers,
+      body: JSON.stringify(),
+    }).then(this._errorHandler);
+  }
 
   downloadNewMem(memeId) {
     return fetch(`${this._baseUrl}/memes/${memeId}/download_meme/`, {

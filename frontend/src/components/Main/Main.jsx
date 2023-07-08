@@ -8,7 +8,7 @@ import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
 
-const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
+const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
@@ -67,7 +67,6 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
       </section>
       <section className="search">
         <SearchPanel
-          tags={tags}
           setFilterMemes={setFilterMemes}
           initMemes={memes}
         ></SearchPanel>

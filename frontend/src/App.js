@@ -18,7 +18,6 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
-  const [tags, setTags] = useState([]);
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
@@ -26,6 +25,7 @@ const App = () => {
       .then((res) => {
         // console.log(memeUrl, memeId);
         setNewMeme(res);
+        console.log(res);
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
@@ -54,14 +54,6 @@ const App = () => {
         console.log(err);
       });
   }, []);
-  useEffect(() => {
-    api
-      .getTags()
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <div className="page">
@@ -75,7 +67,6 @@ const App = () => {
               memes={memes}
               setCurrentMeme={setCurrentMeme}
               setIsNewMeme={setIsNewMeme}
-              tags={tags}
             />
           }
         />
@@ -94,7 +85,7 @@ const App = () => {
           }
         />
         <Route
-          path="/saved"
+          path="/saved/:id"
           element={
             <SavedMeme
               currentMeme={currentMeme}
