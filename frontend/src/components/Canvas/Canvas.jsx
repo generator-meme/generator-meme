@@ -12,10 +12,13 @@ import {
 } from "./canvasFunctions";
 
 import Fieldset from "../Fieldset/Fieldset";
+import api from "../../utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { handleCreateNewMemeAction } from "../../services/actions/canvasActions";
+import { ColorRing } from "react-loader-spinner";
 
 const Canvas = ({
   currentMeme,
-  handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
   memes,
@@ -145,6 +148,7 @@ const Canvas = ({
       oldY: null,
     },
   ]);
+  // const [newMeme, setNewMeme] = useState(null);
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -157,32 +161,24 @@ const Canvas = ({
     }
     return null;
   }, [imageSizes, textsValues, outsideTextHeight]);
-
+  const dispatch = useDispatch();
+  const { newMeme, isLoading } = useSelector((state) => state.canvasData);
   const createMeme = () => {
-    let id =
-      currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
-    const template = memes.some((item) => {
-      return item.id === id;
-    });
-    if (template) {
-      handleCreateNewMeme(
-        canvas.current.toDataURL("image/jpeg", 0.92),
-        id
-      ).finally(() => {
-        navigate(
-          `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
-        );
-      });
-    } else {
-      handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
-        () => {
-          navigate(
-            `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
-          );
-        }
-      );
-    }
+    // let id =
+    //   currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    // const template = memes.some((item) => {
+    //   return item.id === id;
+    // });
+    dispatch(
+      handleCreateNewMemeAction(canvas.current.toDataURL("image/jpeg", 0.92))
+    );
   };
+  useEffect(() => {
+    if (!isLoading) {
+      navigate(`saved/${newMeme.id}`);
+    }
+    return;
+  }, [isLoading]);
 
   useEffect(() => {
     // отрисовка канвас
@@ -316,7 +312,8 @@ const Canvas = ({
   }, [images]);
 
   useEffect(() => {
-    setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут, false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
+    setIsNewMeme(false); // true - сразу после выбора нового шаблона, данные из хранилища подгружаться не будут,
+    // false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;
     localStorage.removeItem("createdMeme");
 
     if (!isNewMeme && localStorage.getItem("textsValues") !== null) {

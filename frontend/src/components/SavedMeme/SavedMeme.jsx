@@ -13,37 +13,31 @@ import icDownloadToPc from "../../images/icons/ic-download-to-pc.svg";
 import icGoogleDrive from "../../images/icons/ic-google-drive.svg";
 import icDropbox from "../../images/icons/ic-dropbox.svg";
 import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import api from "../../utils/api";
+import { useSelector } from "react-redux";
+import { ColorRing } from "react-loader-spinner";
 
-function SavedMeme({ currentMeme, newMeme, handleDownloadMeme }) {
+function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   console.log(currentMeme, newMeme, handleDownloadMeme);
-
-  const { id } = useParams();
-  console.log(id);
-  useEffect(() => {
-    if (currentMeme && newMeme !== null) {
-      return;
-    }
-    api.getCreatedMeme(id);
-  }, []);
+  const { newMeme } = useSelector((state) => state.canvasData);
 
   return (
     <main className="saved-meme">
-      <Navigation
+      {/* <Navigation
         isSavedMeme={isSavedMeme}
         id={
           currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id
         }
-      />
+      /> */}
       <div className="saved-meme__container">
         <img
           className="saved-meme__image"
           src={
-            newMeme?.image ||
-            JSON.parse(localStorage.getItem("createdMeme")).image
+            newMeme?.image
+            // JSON.parse(localStorage.getItem("createdMeme")).image
           }
           alt="Мем."
         />

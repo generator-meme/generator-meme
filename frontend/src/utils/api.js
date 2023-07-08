@@ -8,7 +8,16 @@ class Api {
     if (res.ok) {
       return res.json();
     }
+
     return Promise.reject(`Ошибка: ${res.status}`);
+  }
+
+  _checkReponce(res) {
+    return res.ok
+      ? res.json()
+      : res.json().then((err) => {
+          return Promise.reject(err);
+        });
   }
 
   getTemplates() {
