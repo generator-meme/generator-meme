@@ -102,7 +102,7 @@
 .main__btn:hover+.main__btn_help {
   opacity: 1;
 } */
-@media (max-width: 1480px) and (min-width: 1081px) {
+@media (max-width: 2080px)  {
   .main__title {max-width:420px; max-height: 45px;}
   .main__text-box {padding-top: 30px; height: 32px; width: 100%;display: flex;align-items: center;}
   .main__text-advice {font-size: 30px;margin-left: 239px;margin-right: 5px;}
@@ -128,38 +128,25 @@
   .main__text-advice{font-size: 25px;}
   .main__label{font-size: 25px;}
 }
-@media (max-width: 1020px){
-  .main__text-advice{font-size: 24px;}
-  .main__label{font-size: 24px;}
+@media (max-width: 1020px)and (min-width: 800px)  {
+  .main__text-advice,
+  .main__label {
+    font-size: calc(20px + ((100vw - 840px) / 55)); }
 }
 @media (max-width: 980px){
-  .main__text-advice{font-size: 23px;}
-  .main__label{font-size: 23px;}
-  .main__cat{display: none;}
-  .main__text-box {padding-top: 30px}
+.main__cat{display: none;}
+.main__text-box {padding-top: 30px}
 }
-  @media (max-width: 920px){
-    .main__text-advice{font-size: 22px;}
-    .main__label{font-size: 22px;}
-  }
-  @media (max-width: 870px){
-    .main__text-advice{font-size: 21px;}
-    .main__label{font-size: 21px;}
-  }
-  @media (max-width: 840px){
-    .main__text-advice{font-size: 20px;}
-    .main__label{font-size: 20px;}
-  }
+
   @media (max-width: 800px){
-  
   .main__form {font-size: 20px;display: inline-block;}
-  .main__text-advice{font-size:20px; margin-left: 40px}
+  .main__text-box {padding-top: 30px;text-align: center ;width: 100%; height: 100%;}
+  .main__text-advice{font-size:20px; margin-left: 40px;padding-top:30px;}
   .main__label{font-size: 20px;}
-  }
-  @media (max-width:760px)and (min-width:521px){
-    .main__text-box {width: 80%; height: 80%;}
-      .main__text-advice{margin-left: 40px}
-  }
+  .main__title {max-width:256px; max-height: 27px;}
+}
+
+
 @media (max-width: 520px) and (min-width: 376px) {
   .main__text-box {padding-top: 30px;text-align: center ;width: 100%; height: 100%;}
   .main__cat{display: none;}
@@ -170,7 +157,7 @@
   
 }
 @media (max-width: 375px) {
-  .main__text-box {padding-top: 77px;text-align: center;}
+  .main__text-box {padding-top: 30px;text-align: center;}
   .main__cat{display: none;}
   .main__title {max-width:252px; max-height: 27px;}
   .main__form {font-size: 20px; display: inline-block;}
