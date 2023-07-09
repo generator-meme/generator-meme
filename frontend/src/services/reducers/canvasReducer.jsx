@@ -2,6 +2,7 @@ import {
   POST_NEW_MEME_FAILED,
   POST_NEW_MEME_REQUEST,
   POST_NEW_MEME_SUCCESS,
+  IS_OUTSIDE_CALL,
 } from "../actions/canvasActions";
 
 const initialState = {
@@ -9,6 +10,7 @@ const initialState = {
   isPostMemeRequest: false,
   error: null,
   isLoading: true,
+  isOutsideCall: false,
 };
 
 export const canvasReducer = (state = initialState, action) => {
@@ -32,6 +34,9 @@ export const canvasReducer = (state = initialState, action) => {
         isPostMemeRequest: false,
         error: action.payload,
       };
+    }
+    case IS_OUTSIDE_CALL: {
+      return { ...state, isOutsideCall: true };
     }
     default:
       return state;

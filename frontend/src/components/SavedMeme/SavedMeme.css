@@ -56,13 +56,21 @@
 .saved-meme-share-btns-container img:last-child {
   margin-right: 0;
 }
+.dropdown-btn-wrapper {
+  position: relative;
+  display: flex;
+  margin-bottom: 29px;
+}
 
 .download-options {
-  margin-top: -17px;
-  margin-bottom: 12px;
-  padding: 20px;
+  margin-top: 77px;
+  width: 500px;
+  /* padding: 20px; */
   border-radius: 10px;
   background-color: wheat;
+  position: absolute;
+
+  z-index: 2;
 }
 
 .download-option {

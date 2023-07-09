@@ -15,37 +15,43 @@ import icDropbox from "../../images/icons/ic-dropbox.svg";
 import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
 import { useLocation, useParams } from "react-router-dom";
 import api from "../../utils/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ColorRing } from "react-loader-spinner";
+import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
 
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
+  const { isLoading, meme } = useSelector((state) => state.savedMeme);
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
-  console.log(currentMeme, newMeme, handleDownloadMeme);
-  const { newMeme } = useSelector((state) => state.canvasData);
+  const { id } = useParams();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getMemeByIdAction(id));
+  }, []);
+  if (isLoading) {
+    console.log("load");
+    return <ColorRing></ColorRing>;
+  }
   return (
     <main className="saved-meme">
-      {/* <Navigation
-        isSavedMeme={isSavedMeme}
-        id={
-          currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id
-        }
-      /> */}
-      <div className="saved-meme__container">
-        <img
-          className="saved-meme__image"
-          src={
-            newMeme?.image
-            // JSON.parse(localStorage.getItem("createdMeme")).image
+      {location.state === null ? null : (
+        <Navigation
+          isSavedMeme={isSavedMeme}
+          id={
+            currentMeme?.id ||
+            JSON.parse(localStorage.getItem("currentMeme")).id
           }
-          alt="Мем."
         />
+      )}
+
+      <div className="saved-meme__container">
+        <img className="saved-meme__image" src={meme.image} alt="Мем." />
         <div className="saved-meme-btns-wrapper">
           <div
             onClick={() => setIsDownloadDropdownOpen(!isDownloadDropdownOpen)}
             className="dropdown-btn-wrapper"
-            style={{ display: "flex", marginBottom: "29px" }}
           >
             <button
               className="btn"
@@ -54,6 +60,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
                 marginRight: "5px",
+                fontSize: "20px",
               }}
             >
               скачать мем
@@ -76,7 +83,12 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             </button>
           </div>
           {isDownloadDropdownOpen ? (
-            <div className="download-options">
+            <div
+              className="download-options"
+              onClick={() => {
+                setIsDownloadDropdownOpen(false);
+              }}
+            >
               <div className="download-option">
                 <img src={icDownloadToPc} alt="icon download to pc" />
                 <span>Скачать на устройство</span>

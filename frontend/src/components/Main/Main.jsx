@@ -7,8 +7,11 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
+import { useDispatch } from "react-redux";
+import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
-const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
+const Main = ({ memes, setIsNewMeme }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
@@ -29,7 +32,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
         id: uuidv4(),
         image: URL.createObjectURL(currentFile),
       };
-      setCurrentMeme(myCurrentMeme);
+      dispatch({ type: SET_CURRENT_MEME, payload: myCurrentMeme });
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
       navigate(`/${myCurrentMeme.id}`);
@@ -73,7 +76,6 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme }) => {
       </section>
       <MemesBox
         memes={filterMemes}
-        setCurrentMeme={setCurrentMeme}
         numberOfVisibleMems={numberOfVisibleMems}
         setNumberOfVisibleMems={setNumberOfVisibleMems}
         setIsNewMeme={setIsNewMeme}

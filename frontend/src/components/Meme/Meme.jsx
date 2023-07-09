@@ -2,16 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Meme.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import like from "../../images/like.svg";
+import { useDispatch } from "react-redux";
+import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
-function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
+function Meme({ elem, setIsNewMeme }) {
   console.log(elem);
   const [isMore, setIsMore] = useState(false);
   const [allTagsHeight, setAllTagsHeight] = useState(0);
   const navigate = useNavigate();
   const allTags = useRef(null);
-
+  const dispatch = useDispatch();
   const onClick = () => {
-    setCurrentMeme(elem);
+    dispatch({ type: SET_CURRENT_MEME, payload: elem });
     setIsNewMeme(true);
     localStorage.setItem("currentMeme", JSON.stringify(elem));
     navigate(`/${elem.id}`);

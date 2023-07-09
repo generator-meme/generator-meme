@@ -14,7 +14,7 @@ import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
-  const [currentMeme, setCurrentMeme] = useState(null);
+
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
@@ -62,20 +62,13 @@ const App = () => {
         <Route
           exact
           path="/"
-          element={
-            <Main
-              memes={memes}
-              setCurrentMeme={setCurrentMeme}
-              setIsNewMeme={setIsNewMeme}
-            />
-          }
+          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
         />
         <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
           element={
             <CanvasPreloader
-              currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
               isNewMeme={isNewMeme}
@@ -88,7 +81,6 @@ const App = () => {
           path="/saved/:id"
           element={
             <SavedMeme
-              currentMeme={currentMeme}
               newMeme={newMeme}
               handleDownloadMeme={handleDownloadNewMeme}
             />
