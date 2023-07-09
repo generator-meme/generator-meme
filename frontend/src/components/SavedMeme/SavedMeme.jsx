@@ -38,7 +38,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const closeDropDownMenuWhenChouse = () => {
     setTimeout(() => {
       setIsDownloadDropdownOpen(false);
-    }, 1000);
+    }, 200);
   };
   return (
     <main className="saved-meme">

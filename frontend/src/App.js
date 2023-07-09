@@ -11,10 +11,11 @@ import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 import { optionsList } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
+import { useSelector } from "react-redux";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
-
+  const { meme } = useSelector((state) => state.savedMeme);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
@@ -35,7 +36,7 @@ const App = () => {
 
   function handleDownloadNewMeme() {
     api
-      .downloadNewMem(newMeme.id)
+      .downloadNewMem(meme.id)
       .then((res) => {
         // console.log(res, newMeme.id);
       })
