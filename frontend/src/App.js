@@ -37,7 +37,7 @@ const App = () => {
     api
       .downloadNewMem(newMeme.id)
       .then((res) => {
-        console.log(res, newMeme.id);
+        // console.log(res, newMeme.id);
       })
       .catch((err) => {
         console.log(err);

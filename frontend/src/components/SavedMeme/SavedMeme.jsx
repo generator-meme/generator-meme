@@ -30,10 +30,16 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
   }, []);
+
   if (isLoading) {
     console.log("load");
     return <ColorRing></ColorRing>;
   }
+  const closeDropDownMenuWhenChouse = () => {
+    setTimeout(() => {
+      setIsDownloadDropdownOpen(false);
+    }, 1000);
+  };
   return (
     <main className="saved-meme">
       {location.state === null ? null : (
@@ -46,7 +52,12 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
         />
       )}
 
-      <div className="saved-meme__container">
+      <div
+        className="saved-meme__container"
+        // onClick={() => {
+        //   setIsDownloadDropdownOpen(false);
+        // }}
+      >
         <img className="saved-meme__image" src={meme.image} alt="Мем." />
         <div className="saved-meme-btns-wrapper">
           <div
@@ -86,10 +97,15 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             <div
               className="download-options"
               onClick={() => {
-                setIsDownloadDropdownOpen(false);
+                closeDropDownMenuWhenChouse();
               }}
             >
-              <div className="download-option">
+              <div
+                className="download-option"
+                onClick={() => {
+                  handleDownloadMeme();
+                }}
+              >
                 <img src={icDownloadToPc} alt="icon download to pc" />
                 <span>Скачать на устройство</span>
               </div>
