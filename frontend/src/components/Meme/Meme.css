@@ -51,6 +51,7 @@
 }
 
 .meme__create-btn {
+  color: #1E1D1D;
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
@@ -88,9 +89,9 @@
   align-items: flex-start;
   flex-wrap: wrap;
   font-weight: 400;
-  font-size: 20px;
-  line-height: 24px;
-  color: #000000;
+  font-size: 18px;
+  line-height: 21px;
+  color: #1E1D1D;
   align-self: flex-start;
   padding: 0;
   max-height: 48px;

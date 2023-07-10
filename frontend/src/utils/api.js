@@ -25,6 +25,13 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
+  getTagsWithQueryName(name) {
+    return fetch(`${this._baseUrl}/tags/?name=${name}`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
   getfilteredTemplates(id) {
     return fetch(`${this._baseUrl}/templates/?tag=${id}`, {
       method: "GET",

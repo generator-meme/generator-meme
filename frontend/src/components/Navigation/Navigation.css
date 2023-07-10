@@ -20,8 +20,8 @@
     margin: 0;
     padding: 0;
     font-weight: 300;
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 1.2;
     text-decoration: none;
     color: #1E1D1D;
     cursor: pointer;
@@ -38,4 +38,16 @@
 
 .navigation__link_active {
     font-weight: 500;
+}
+
+@media screen and (max-width: 1140px) {
+    .navigation__link {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .navigation__link {
+        font-size: 16px;
+    }
 }
