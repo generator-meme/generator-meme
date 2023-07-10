@@ -11,6 +11,7 @@ import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 import { optionsList } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
+import Registration from "./components/Registration/Registration";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -103,7 +104,11 @@ const App = () => {
             />
           }
         />
-        <Route path="/font" element={<FontFamilyOptions />} />
+        <Route path="/signin" element={<Registration />} />
+        {/* <Route
+          path="/login"
+          element={}
+        /> */}
       </Routes>
       <Footer />
       {imageNotFoundOpen && (

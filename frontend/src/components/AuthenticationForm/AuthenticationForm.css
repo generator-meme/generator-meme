@@ -1,0 +1,198 @@
+.authentication {
+    margin: 0;
+    padding: 3vh 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 55px - 110px);
+    box-sizing: border-box;
+}
+
+.authentication__container {
+    margin: 0;
+    padding: 65px 70px;
+    max-width: 753px;
+    width: 50%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-sizing: border-box;
+    row-gap: 20px;
+    background-color: #FFF;
+    border-radius: 20px;
+    border: 1px solid var(--stroke, #9D0095);
+}
+
+.authentication__title {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: 100%;
+    text-align: center;
+}
+
+.authentication__form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    row-gap: 20px;
+}
+
+.authentication__label {
+    position: relative;
+}
+
+.authentication__input-name {
+    margin: 0;
+    padding: 0 0 15px 0;
+    display: block;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.authentication__input {
+    margin: 0;
+    padding: 25px 0 25px 25px;
+    width: 100%;
+    color: #000;
+    font-family: "Rubik";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 20px;
+    border: 1px solid #9D0095;
+    box-sizing: border-box;
+}
+
+.authentication__input:focus {
+    outline: none;
+}
+
+.authentication__input_type_error {
+    border-bottom-color: #EE3465;
+}
+
+.authentication__input-checked {
+    background-image: url("../../images/authenticationPage/input-checked.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 59px;
+    right: 30px;
+    display: none;
+}
+
+.authentication__input-checked-visible {
+    display: block;
+}
+
+.authentication__input-prompt {
+    padding: 10px 0 0;
+    margin: 0;
+    width: 100%;
+    min-height: 38px;
+    font-family: Rubik;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: block;
+}
+
+.authentication__input-prompt_type_normal {
+    color: #665D5D;
+}
+
+.authentication__input-prompt_type_error {
+    color: #F50000;
+}
+
+.authentication__button {
+    margin: 10px 0 0;
+    padding: 0;
+    height: 75px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: #1E1D1D;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.authentication__button_type_disabled {
+    background: #9B9B9B;
+}
+
+.authentication__button_type_disabled:focus {
+    background: #9B9B9B;
+}
+
+.authentication__button_type_disabled:active {
+    background: #9B9B9B;
+}
+
+.authentication__checkbox-container {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 15px;
+    cursor: pointer;
+}
+
+.authentication__invisible-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+}
+
+.authentication__pseudo-checkbox {
+    margin: 0;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #D9D9D9;
+    background-color: transparent;
+}
+
+.authentication__invisible-checkbox:checked+.authentication__pseudo-checkbox {
+    background-image: url('../../images/authenticationPage/checkbox.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.authentication__checkbox-name {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: #000000;
+}
+
+.authentication__checkbox-name-colored {
+    color: #7656CD;
+}
