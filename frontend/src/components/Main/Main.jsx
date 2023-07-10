@@ -49,7 +49,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
         <div className="main__text-box">
           <p className="main__text-advice">
             Выберите шаблон для создания мема или загрузите&nbsp;
-          </p>
+          
           <form className="main__form">
             <label className="main__label">
               свое изображение
@@ -63,6 +63,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
               />
             </label>
           </form>
+          </p>
         </div>
       </section>
       <section className="search">
