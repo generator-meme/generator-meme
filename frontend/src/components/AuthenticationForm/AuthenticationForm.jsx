@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./AuthenticationForm.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { prompts } from "./authentificationConstant";
+import AuthenticationPrompt from "../AuthenticationPrompt/AuthenticationPrompt";
+import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
+import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
+import { ReactComponent as Google } from "../../images/authenticationPage/google-copy.svg";
+import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
 
 function AuthenticationForm({ info, handleSubmit }) {
   const [values, setValues] = useState({ name: "", email: "", password: "" });
@@ -12,8 +17,8 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   const navigate = useNavigate();
 
-  // данные формы и валидация
   const onChange = (event) => {
+    // данные формы и валидация
     const { name, value, validationMessage } = event.target;
 
     setValues((prev) => ({
@@ -38,8 +43,6 @@ function AuthenticationForm({ info, handleSubmit }) {
     setIsSubmitted(true);
   };
 
-  console.log(isValid, isChecked);
-
   useEffect(() => {
     if (isSubmitted) {
       setValues(() => ({
@@ -54,17 +57,29 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   return (
     <section className="authentication" aria-label="Аутентификация">
-      <div className="authentication__container">
+      <div
+        className="authentication__container"
+        style={{
+          rowGap: info.isItSignIn ? 10 : 30,
+        }}
+      >
         <h2 className="authentication__title">{info.title}</h2>
-        <form className="authentication__form" onSubmit={onSubmit}>
+        <form
+          className="authentication__form"
+          onSubmit={onSubmit}
+          style={{
+            rowGap: info.isItSignIn ? 10 : 0,
+          }}
+        >
           {info.isItSignIn && (
             <label className="authentication__label">
               <span className="authentication__input-name">
                 Имя пользователя
               </span>
               <input
-                type="name"
+                type="text"
                 name="name"
+                pattern="[A-Za-z0-9]{3,40}"
                 value={values.name}
                 onChange={onChange}
                 className={`authentication__input ${
@@ -73,8 +88,6 @@ function AuthenticationForm({ info, handleSubmit }) {
                     : ""
                 }`}
                 placeholder="Valeria Rusakova"
-                minLength="3"
-                maxLength="40"
                 required
               />
               <div
@@ -84,19 +97,17 @@ function AuthenticationForm({ info, handleSubmit }) {
                     : ""
                 }`}
               ></div>
-              <span
-                className={`authentication__input-prompt ${
-                  errors.name?.length > 1
-                    ? "authentication__input-prompt_type_error"
-                    : "authentication__input-prompt_type_normal"
-                }`}
-              >
-                {errors.name?.length > 1 ? errors.name : prompts.name}
-              </span>
+              <AuthenticationPrompt
+                errorName={errors.name}
+                spanName={prompts.name}
+                isItSignIn={info.isItSignIn}
+              />
             </label>
           )}
           <label className="authentication__label">
-            <span className="authentication__input-name">Почта</span>
+            {info.isItSignIn && (
+              <span className="authentication__input-name">Почта</span>
+            )}
             <input
               type="email"
               value={values.email}
@@ -107,33 +118,34 @@ function AuthenticationForm({ info, handleSubmit }) {
                   ? "authentication__input_type_error"
                   : ""
               }`}
-              placeholder="ValeriaRusakova@mail.ru"
+              placeholder={`${
+                info.isItSignIn ? "ValeriaRusakova@mail.ru" : "Email"
+              }`}
               required
             />
-            <div
-              className={`authentication__input-checked ${
-                !errors.email?.length && values.email.length
-                  ? "authentication__input-checked-visible"
-                  : ""
-              }`}
-            ></div>
-            <span
-              className={`authentication__input-prompt ${
-                info.isItSignIn && errors.email?.length > 1
-                  ? "authentication__input-prompt_type_error"
-                  : "authentication__input-prompt_type_normal"
-              }`}
-            >
-              {info.isItSignIn && errors.email?.length > 1
-                ? errors.email
-                : prompts.email}
-            </span>
+            {info.isItSignIn && (
+              <div
+                className={`authentication__input-checked ${
+                  !errors.email?.length && values.email.length
+                    ? "authentication__input-checked-visible"
+                    : ""
+                }`}
+              ></div>
+            )}
+            <AuthenticationPrompt
+              errorName={errors.email}
+              spanName={prompts.email}
+              isItSignIn={info.isItSignIn}
+            />
           </label>
           <label className="authentication__label">
-            <span className="authentication__input-name">Пароль</span>
+            {info.isItSignIn && (
+              <span className="authentication__input-name">Пароль</span>
+            )}
             <input
               type="password"
               value={values.password}
+              pattern="[^А-Я^а-я]{5,16}"
               onChange={onChange}
               name="password"
               className={`authentication__input ${
@@ -141,29 +153,23 @@ function AuthenticationForm({ info, handleSubmit }) {
                   ? "authentication__input_type_error"
                   : ""
               }`}
-              placeholder="Ssscrumble_"
-              minLength="5"
-              maxLength="16"
+              placeholder={`${info.isItSignIn ? "Ssscrumble_" : "Пароль"}`}
               required
             />
-            <div
-              className={`authentication__input-checked ${
-                !errors.password?.length && values.password.length
-                  ? "authentication__input-checked-visible"
-                  : ""
-              }`}
-            ></div>
-            <span
-              className={`authentication__input-prompt ${
-                info.isItSignIn && errors.password?.length > 1
-                  ? "authentication__input-prompt_type_error"
-                  : "authentication__input-prompt_type_normal"
-              } `}
-            >
-              {info.isItSignIn && errors.password?.length > 1
-                ? errors.password
-                : prompts.password}
-            </span>
+            {info.isItSignIn && (
+              <div
+                className={`authentication__input-checked ${
+                  !errors.password?.length && values.password.length
+                    ? "authentication__input-checked-visible"
+                    : ""
+                }`}
+              ></div>
+            )}
+            <AuthenticationPrompt
+              errorName={errors.password}
+              spanName={prompts.password}
+              isItSignIn={info.isItSignIn}
+            />
           </label>
           {info.isItSignIn && (
             <label className="authentication__checkbox-container">
@@ -173,24 +179,36 @@ function AuthenticationForm({ info, handleSubmit }) {
                 onChange={(e) => {
                   setIsChecked((prev) => !prev);
                 }}
-                // name="checkbox"
                 className="authentication__invisible-checkbox"
-                // required
               ></input>
               <span className="authentication__pseudo-checkbox"></span>
               <span className="authentication__checkbox-name">
                 Я соглашаюсь{" "}
-                <span className="authentication__checkbox-name-colored">
+                <span className="authentication__colored-text">
                   с обработкой персональных данных
                 </span>
               </span>
             </label>
           )}
+          {!info.isItSignIn && (
+            <Link
+              to="/change-password"
+              className="authentication__colored-text authentication__link"
+            >
+              Забыли пароль?
+            </Link>
+          )}
           <button
             type="submit"
-            disabled={!isValid && !isChecked}
+            disabled={
+              (info.isItSignIn && !isValid && !isChecked) ||
+              (!info.isItSignIn && !isValid)
+            }
             className={`btn authentication__button ${
-              isValid && isChecked ? "" : "authentication__button_type_disabled"
+              (info.isItSignIn && isValid && isChecked) ||
+              (!info.isItSignIn && isValid)
+                ? ""
+                : "authentication__button_type_disabled"
             }`}
           >
             {info.buttonText}
@@ -198,11 +216,23 @@ function AuthenticationForm({ info, handleSubmit }) {
         </form>
         {!info.isItSignIn && (
           <button
-            className={`bth authentication__button`}
+            className={`btn authentication__button`}
+            style={{ margin: 0 }}
             onClick={() => navigate("/signin")}
           >
             зарегистрироваться
           </button>
+        )}
+        {!info.isItSignIn && (
+          <div className="authentication__login-container">
+            <p className="authentication__login-text">Войти с помощью</p>
+            <div className="authentication__login-icons">
+              <Vkontakte />
+              <Telegram />
+              <Yandex />
+              <Google />
+            </div>
+          </div>
         )}
       </div>
     </section>
