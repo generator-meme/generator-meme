@@ -142,7 +142,7 @@ function AuthenticationForm({ info, handleSubmit }) {
                   : ""
               }`}
               placeholder="Ssscrumble_"
-              minLength="4"
+              minLength="5"
               maxLength="16"
               required
             />
