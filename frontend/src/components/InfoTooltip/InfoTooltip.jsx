@@ -14,7 +14,7 @@ function InfoTooltip({ title, buttonText, onClose }) {
       <div className="info-tooltip__container">
         <p className="info-tooltip__heading">{title}</p>
         <button
-          className="btn info-tooltip__badd utton"
+          className="btn info-tooltip__button"
           onClick={(e) => onClose(false)}
         >
           {buttonText}

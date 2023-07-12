@@ -57,7 +57,7 @@ function AuthenticationForm({ info, handleSubmit }) {
   }, [isSubmitted]);
 
   return (
-    <section className="authentication" aria-label="Аутентификация">
+    <main className="authentication">
       <div
         className="authentication__container"
         style={{
@@ -227,7 +227,7 @@ function AuthenticationForm({ info, handleSubmit }) {
           </div>
         )}
       </div>
-    </section>
+    </main>
   );
 }
 

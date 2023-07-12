@@ -8,10 +8,11 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import { optionsList } from "./utils/constants.js";
+import { optionsList, checkEmailMessage } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 import Registration from "./components/Registration/Registration";
 import Login from "./components/Login/Login";
+import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -106,6 +107,16 @@ const App = () => {
         />
         <Route path="/signin" element={<Registration />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/signin-success"
+          element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
+        />
+        <Route
+          path="/change-password-message"
+          element={
+            <CheckEmailMessage info={checkEmailMessage.changePasswordMessage} />
+          }
+        />
       </Routes>
       <Footer />
       {imageNotFoundOpen && (

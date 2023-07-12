@@ -95,3 +95,18 @@ export const updateOutideText = (top, imageSizes) => {
 
 export const regExpFromLastCommaToLastRoundBracket =
   /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+
+export const checkEmailMessage = {
+  signinSuccess: {
+    title: "Вы успешно зарегистрировались!",
+    text: "На вашу электронную почту отправлено письмо. Перейдите по ссылке в письме для завершения успешной регистрации.",
+    maxWidth: "100%",
+    back: "/signin",
+  },
+  changePasswordMessage: {
+    title: "На вашу электронную почту отправлено письмо. ",
+    text: "Перейдите по ссылке в письме для сохранения нового пароля на сайте.",
+    maxWidth: 460,
+    back: "",
+  },
+};
