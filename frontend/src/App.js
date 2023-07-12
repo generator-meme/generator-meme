@@ -18,7 +18,7 @@ const App = () => {
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
-  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(true);
+  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
   const [tags, setTags] = useState([]);
 
   function handleCreateNewMeme(memeUrl, memeId) {
