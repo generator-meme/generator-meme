@@ -3,6 +3,7 @@ import "./AuthenticationForm.css";
 import { Link, useNavigate } from "react-router-dom";
 import { prompts } from "./authentificationConstant";
 import AuthenticationPrompt from "../AuthenticationPrompt/AuthenticationPrompt";
+import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
 import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
 import { ReactComponent as Google } from "../../images/authenticationPage/google-copy.svg";
@@ -90,13 +91,10 @@ function AuthenticationForm({ info, handleSubmit }) {
                 placeholder="Valeria Rusakova"
                 required
               />
-              <div
-                className={`authentication__input-checked ${
-                  !errors.name?.length && values.name.length
-                    ? "authentication__input-checked-visible"
-                    : ""
-                }`}
-              ></div>
+              <AuthenticationInputValid
+                error={errors.name}
+                value={values.name}
+              />
               <AuthenticationPrompt
                 errorName={errors.name}
                 spanName={prompts.name}
@@ -124,13 +122,10 @@ function AuthenticationForm({ info, handleSubmit }) {
               required
             />
             {info.isItSignIn && (
-              <div
-                className={`authentication__input-checked ${
-                  !errors.email?.length && values.email.length
-                    ? "authentication__input-checked-visible"
-                    : ""
-                }`}
-              ></div>
+              <AuthenticationInputValid
+                error={errors.email}
+                value={values.email}
+              />
             )}
             <AuthenticationPrompt
               errorName={errors.email}
@@ -143,7 +138,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               <span className="authentication__input-name">Пароль</span>
             )}
             <input
-              type="password"
+              type="text"
               value={values.password}
               pattern="[^А-Я^а-я]{5,16}"
               onChange={onChange}
@@ -157,13 +152,10 @@ function AuthenticationForm({ info, handleSubmit }) {
               required
             />
             {info.isItSignIn && (
-              <div
-                className={`authentication__input-checked ${
-                  !errors.password?.length && values.password.length
-                    ? "authentication__input-checked-visible"
-                    : ""
-                }`}
-              ></div>
+              <AuthenticationInputValid
+                error={errors.password}
+                value={values.password}
+              />
             )}
             <AuthenticationPrompt
               errorName={errors.password}

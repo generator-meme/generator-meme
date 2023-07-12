@@ -8,7 +8,6 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 import { optionsList } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 import Registration from "./components/Registration/Registration";
@@ -19,7 +18,7 @@ const App = () => {
   const [currentMeme, setCurrentMeme] = useState(null);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
-  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  const [imageNotFoundOpen, setImageNotFoundOpen] = useState(true);
   const [tags, setTags] = useState([]);
 
   function handleCreateNewMeme(memeUrl, memeId) {
@@ -111,7 +110,8 @@ const App = () => {
       <Footer />
       {imageNotFoundOpen && (
         <InfoTooltip
-          title="Личные изображения не сохраняется при перезагрузке, пожалуйста, вернитесь к выбору изображения"
+          title="Личные изображения не сохраняются после перезагрузки. Пожалуйста,&nbsp;вернитесь&nbsp;к выбору изображения"
+          buttonText="вернуться к выбору"
           onClose={setImageNotFoundOpen}
         />
       )}

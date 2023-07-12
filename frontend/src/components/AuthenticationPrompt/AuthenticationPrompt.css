@@ -1,0 +1,20 @@
+.authentication__input-prompt {
+    padding: 10px 0 0;
+    margin: 0;
+    width: 100%;
+    min-height: 38px;
+    font-family: Rubik;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: block;
+}
+
+.authentication__input-prompt_type_normal {
+    color: #665D5D;
+}
+
+.authentication__input-prompt_type_error {
+    color: #F50000;
+}
