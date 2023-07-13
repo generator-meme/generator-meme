@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Rubik';
+  font-family: "Rubik";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -8,7 +8,7 @@
 }
 
 @font-face {
-  font-family: 'Rubik';
+  font-family: "Rubik";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -17,7 +17,7 @@
 }
 
 @font-face {
-  font-family: 'Rubik';
+  font-family: "Rubik";
   font-style: normal;
   font-weight: 300;
   font-display: swap;
@@ -26,7 +26,7 @@
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -44,77 +44,79 @@ Playfair display: regular 400, regular 400 italic, bold 700, bold 700 italic;
 Pacifico: regular 400;
 Balsamiq Sans: regular 400, regular 400 italic, bold 700, bold 700 italic;
 */
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
 
 /* Нормально подключенные шрифты*/
 @font-face {
-  font-family: 'Times New Roman';
+  font-family: "Times New Roman";
   font-weight: normal;
   font-style: normal;
   font-display: swap;
   src: url("../fonts/TimesNewRomanpsmt-webfont.woff2") format("woff2"),
-    url("../fonts/TimesNewRomanPSMT.woff") format("woff"),
+    url("../fonts/TimesNewRomanPSMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Times New Roman';
+  font-family: "Times New Roman";
   font-weight: normal;
   font-style: italic;
   font-display: swap;
   src: url("../fonts/TimesNewRomanps-italicmt-webfont.woff2") format("woff2"),
-    url("../fonts/TimesNewRomanPS-ItalicMT.woff") format("woff"),
+    url("../fonts/TimesNewRomanPS-ItalicMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Times New Roman';
+  font-family: "Times New Roman";
   font-weight: bold;
   font-style: normal;
   font-display: swap;
   src: url("../fonts/TimesNewRomanps-boldmt-webfont.woff2") format("woff2"),
-    url("../fonts/TimesNewRomanPS-BoldMT.woff") format("woff"),
+    url("../fonts/TimesNewRomanPS-BoldMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Times New Roman';
+  font-family: "Times New Roman";
   font-weight: bold;
   font-style: italic;
   font-display: swap;
-  src: url("../fonts/TimesNewRomanps-bolditalicmt-webfont.woff2") format("woff2"),
-    url("../fonts/TimesNewRomanPS-BoldItalicMT.woff") format("woff"),
+  src: url("../fonts/TimesNewRomanps-bolditalicmt-webfont.woff2")
+      format("woff2"),
+    url("../fonts/TimesNewRomanPS-BoldItalicMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Arial';
+  font-family: "Arial";
   font-weight: normal;
   font-style: normal;
   font-display: swap;
   src: url("../fonts/Arialmt-webfont.woff2") format("woff2"),
-    url("../fonts/ArialMT.woff") format("woff"),
+    url("../fonts/ArialMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Arial';
+  font-family: "Arial";
   font-weight: normal;
   font-style: italic;
   font-display: swap;
   src: url("../fonts/Arial-italicmt-webfont.woff2") format("woff2"),
-    url("../fonts/Arial-ItalicMT.woff") format("woff"),
+    url("../fonts/Arial-ItalicMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Arial';
+  font-family: "Arial";
   font-weight: bold;
   font-style: normal;
   font-display: swap;
   src: url("../fonts/Arial-boldmt-webfont.woff2") format("woff2"),
-    url("../fonts/Arial-BoldMT.woff") format("woff"),
+    url("../fonts/Arial-BoldMT.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Arial';
+  font-family: "Arial";
   font-weight: bold;
   font-style: italic;
   font-display: swap;
   src: url("../fonts/Arial-bolditalicmt-webfont.woff2") format("woff2"),
-    url("../fonts/Arial-BoldItalicMT.woff") format("woff"),
+    url("../fonts/Arial-BoldItalicMT.woff") format("woff");
 }
