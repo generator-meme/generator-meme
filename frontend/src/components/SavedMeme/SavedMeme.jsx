@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "./SavedMeme.css";
 import Navigation from "../Navigation/Navigation";
 import { useState } from "react";
@@ -14,10 +14,14 @@ import icGoogleDrive from "../../images/icons/ic-google-drive.svg";
 import icDropbox from "../../images/icons/ic-dropbox.svg";
 import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
 import { useLocation, useParams } from "react-router-dom";
-import api from "../../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorRing } from "react-loader-spinner";
 import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
+import {
+  TelegramShareButton,
+  ViberShareButton,
+  WhatsappShareButton,
+} from "react-share";
 
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { isLoading, meme } = useSelector((state) => state.savedMeme);
@@ -26,13 +30,52 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
+  const memeRef = useRef(null);
+
+  const writeToCanvas = (src) => {
+    return new Promise((res) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob((blob) => {
+          res(blob);
+        }, "image/png");
+      };
+    });
+  };
+
+  const copyURL = async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      console.log("Content copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
+  const copyToClipboard = async (src) => {
+    const image = await writeToCanvas(src);
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [image.type]: image,
+        }),
+      ]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
   }, []);
 
   if (isLoading) {
-    console.log("load");
     return <ColorRing></ColorRing>;
   }
   const closeDropDownMenuWhenChouse = () => {
@@ -52,18 +95,15 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
         />
       )}
 
-      <div
-        className="saved-meme__container"
-        // onClick={() => {
-        //   setIsDownloadDropdownOpen(false);
-        // }}
-      >
-        <img className="saved-meme__image" src={meme.image} alt="Мем." />
+      <div className="saved-meme__container">
+        <img
+          className="saved-meme__image"
+          ref={memeRef}
+          src={meme.image}
+          alt="Мем."
+        />
         <div className="saved-meme-btns-wrapper">
-          <div
-            onClick={() => setIsDownloadDropdownOpen(!isDownloadDropdownOpen)}
-            className="dropdown-btn-wrapper"
-          >
+          <div className="dropdown-btn-wrapper">
             <button
               className="btn"
               style={{
@@ -73,10 +113,14 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
                 marginRight: "5px",
                 fontSize: "20px",
               }}
+              onClick={() => {
+                handleDownloadMeme();
+              }}
             >
               скачать мем
             </button>
             <button
+              onClick={() => setIsDownloadDropdownOpen(!isDownloadDropdownOpen)}
               className="btn"
               style={{
                 width: "80px",
@@ -126,12 +170,42 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
 
           <button className="btn saved-meme__btn-save">сохранить в ЛК</button>
           <div className="saved-meme-share-btns-container">
-            <img src={icWhatsapp} alt="icon whatsapp" />
-            <img src={icTelegram} alt="icon telegram" />
-            <img src={icViber} alt="icon viber" />
-            <img src={icGroup} alt="icon group" />
-            <img src={icGlobal} alt="icon global" />
-            <img src={icNote} alt="icon note" />
+            <div>
+              <WhatsappShareButton url={location.href}>
+                <img src={icWhatsapp} alt="icon whatsapp" />
+              </WhatsappShareButton>
+            </div>
+            <div>
+              <TelegramShareButton url={location.href}>
+                <img src={icTelegram} alt="icon telegram" />
+              </TelegramShareButton>
+            </div>
+            <div>
+              <ViberShareButton url={location.href}>
+                <img src={icViber} alt="icon viber" />
+              </ViberShareButton>
+            </div>
+            <div>
+              <img src={icGroup} alt="icon group" />
+            </div>
+            <div>
+              <img
+                src={icGlobal}
+                alt="icon global"
+                onClick={() => {
+                  copyURL();
+                }}
+              />
+            </div>
+            <div>
+              <img
+                onClick={() => {
+                  copyToClipboard(memeRef.current.src);
+                }}
+                src={icNote}
+                alt="icon note"
+              />
+            </div>
           </div>
         </div>
       </div>

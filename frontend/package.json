@@ -20,6 +20,7 @@
     "react-router-dom": "^6.3.0",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "^5.0.1",
+    "react-share": "^4.4.1",
     "react-textarea-autosize": "^8.4.1",
     "react-use": "^17.4.0",
     "redux-thunk": "^2.4.2",

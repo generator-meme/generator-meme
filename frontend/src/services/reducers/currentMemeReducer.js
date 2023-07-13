@@ -10,7 +10,6 @@ const initialState = {
 export const currentMemeReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_MEME: {
-      console.log("i am in currentmeme");
       return {
         ...state,
         currentMeme: action.payload,

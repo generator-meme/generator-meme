@@ -89,6 +89,8 @@ class Api {
       });
     });
   }
+
+  copyNewMeme() {}
 }
 
 const api = new Api({

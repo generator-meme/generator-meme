@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
 function Meme({ elem, setIsNewMeme }) {
-  console.log(elem);
   const [isMore, setIsMore] = useState(false);
   const [allTagsHeight, setAllTagsHeight] = useState(0);
   const navigate = useNavigate();
