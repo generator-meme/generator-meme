@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Canvas from "../Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
+import { useSelector } from "react-redux";
 
 const CanvasPreloader = ({
-  currentMeme,
   handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
@@ -20,6 +20,7 @@ const CanvasPreloader = ({
     width: 657,
     height: 556,
   });
+  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
 
   useEffect(() => {
     // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
@@ -121,7 +122,6 @@ const CanvasPreloader = ({
 
   return (
     <Canvas
-      currentMeme={currentMeme}
       handleCreateNewMeme={handleCreateNewMeme}
       setIsNewMeme={setIsNewMeme}
       isNewMeme={isNewMeme}
