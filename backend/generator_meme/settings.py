@@ -147,6 +147,8 @@ DJOSER = {
         "user": "api.serializers_users.UsersSerializer",
         "current_user": "api.serializers_users.UsersSerializer",
     },
+    'PASSWORD_RESET_CONFIRM_URL': 'reset/password/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'reset/username/confirm/{uid}/{token}',
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
