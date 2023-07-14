@@ -299,7 +299,7 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
                  'Пользователя со статусом "Администратор" добавить '
                  'в бан может только владелец группы.'}
             )
-        elif group_user.user == request.user:
+        if group_user.user == request.user:
             raise ValidationError(
                 {'user':
                  'Себя нельзя добавить в бан.'}
@@ -369,7 +369,7 @@ class GroupUserDeleteSerializer(serializers.Serializer):
                  "Пользователя со статусом 'Администратор' может "
                  "удалить только владелец группы."},
             )
-        elif request.user == group_user[0].group.owner and (
+        if request.user == group_user[0].group.owner and (
                 group_user[0].user == group_user[0].group.owner):
             raise ValidationError(
                 {"Owner_error":

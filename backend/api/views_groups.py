@@ -101,7 +101,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         methods=[
             'post',
             'delete',
-            ],
+        ],
     )
     @action(detail=True,
             methods=['post',
@@ -155,7 +155,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         methods=[
             'post',
             'delete',
-            ],
+        ],
     )
     @action(detail=True,
             methods=['post', 'delete'],
@@ -212,14 +212,14 @@ class GroupViewSet(viewsets.ModelViewSet):
         methods=[
             'post',
             'delete',
-            ],
+        ],
     )
     @action(
         detail=True,
         methods=[
             'post',
             'delete',
-            ],
+        ],
         permission_classes_by_action={
             'POST': [IsAuthenticated, IsInGroup, IsGroupAdmin],
             'DELETE': [IsAuthenticated, IsInGroup, IsGroupAdmin],
@@ -265,7 +265,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         methods=[
             'post',
             'delete',
-            ],
+        ],
     )
     @action(
         detail=True,
