@@ -39,7 +39,10 @@ class GroupViewSet(viewsets.ModelViewSet):
     """Группы для готовых мемов
     Поиск доступен по параметрам name и description
     Оба поиска работают без учёта регистра и проверяют
-    вхождение строки заданной в поиск в значение поля модели."""
+    вхождение строки заданной в поиск в значение поля модели;
+    GET доступен всем
+    POST зарегистрированным пользователям
+    DELETE и PATCH только владельцу группы."""
 
     queryset = Group.objects.all()
     filter_backends = (DjangoFilterBackend,)
@@ -100,6 +103,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             }
             )
     def adduser(self, request, pk):
+        """Добавление/удаление пользователя в группу администратором
+        POST и DELETE доступны администратору группы."""
         current_group = get_object_or_404(Group, pk=pk)
         user = get_object_or_404(User, pk=request.data.get('user'))
         self.check_object_permissions(request, current_group)
@@ -141,7 +146,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             }
             )
     def enter(self, request, pk):
-        """Добавить/удалить пользователя в группу."""
+        """Самостоятельный вход/выход пользователя в/из группы
+        POST и DELETE доступны авторизованному пользователю
+        В теле не ждёт никаких данных."""
         current_group = get_object_or_404(Group, pk=pk)
         user = request.user
         self.check_object_permissions(request, current_group)
@@ -184,7 +191,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             }
             )
     def addusertoban(self, request, pk):
-        """Добавить/удалить пользователя в банлист группы."""
+        """Добавить/удалить пользователя в банлист группы
+        POST и DELETE доступны администратору группы."""
         current_group = get_object_or_404(Group, pk=pk)
         self.check_object_permissions(request, current_group)
         if request.method != 'POST':
@@ -220,7 +228,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             }
             )
     def addmeme(self, request, pk):
-        """Добавить/удалить мем из группы."""
+        """Добавить/удалить мем из группы
+        POST доступен участнику группы
+        DELETE доступен админу группы или тому, кто добавил мем."""
         current_group = get_object_or_404(Group, pk=pk)
         if request.method != 'POST':
             serializer = GroupMemeDeleteSerializer(
@@ -268,7 +278,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         serializer_class=NewOwnerSerializer,
     )
     def changeowner(self, request, pk):
-        """Сменить владельца группы."""
+        """Сменить владельца группы
+        POST доступен только владельцу группы."""
         current_group = get_object_or_404(Group, pk=pk)
         current_user_id = request.user.id
         new_owner_id = request.data.get('user_id')
@@ -314,7 +325,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         serializer_class=NewOwnerSerializer,
     )
     def changeuserrole(self, request, pk):
-        """Задать участнику группы роль."""
+        """Задать участнику группы роль
+        POST доступен только владельцу группы."""
         current_group = get_object_or_404(Group, pk=pk)
         user_id = request.data.get('user_id')
         role_id = request.data.get('role_id')

@@ -229,7 +229,7 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
 
 class EnterGroupSerializer(serializers.ModelSerializer):
-    """Сериализатор пользователей в группе (самостаятельная вход в группу)."""
+    """Сериализатор пользователей в группе (самостоятельный вход в группу)."""
     role = serializers.PrimaryKeyRelatedField(
         queryset=GroupRole.objects.all(),
         default=GroupRole.get_default_role
