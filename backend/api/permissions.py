@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 
-from groups.models import GroupUser
+from groups.models import GroupMeme, GroupUser
+from memes.models import Meme
 
 
 class AdminOrReadOnly(permissions.BasePermission):
@@ -80,15 +82,21 @@ class IsInGroup(permissions.BasePermission):
 
 
 class IsGroupAdminOrMemeAddedBy(permissions.BasePermission):
-    """Разрешение только для участников группы."""
+    """Разрешение только для админа или
+    пользователя который добавил мем."""
 
     message = "У вас нет прав для действий с этим мемом."
 
     def has_object_permission(self, request, view, obj):
-        if request.user == obj.added_by:
+        action_model = get_object_or_404(
+            GroupMeme,
+            meme=get_object_or_404(Meme, id=request.data.get('meme')),
+            group=obj,
+        )
+        if request.user == action_model.added_by:
             return True
         group_user = GroupUser.objects.filter(
-            group=obj.group,
+            group=obj,
             user=request.user
         )
         if group_user.exists() and group_user[0].role.is_admin:
