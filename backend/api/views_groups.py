@@ -95,6 +95,19 @@ class GroupViewSet(viewsets.ModelViewSet):
                                                  is_admin=True)[0]
         )
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
+            },
+            required=['user', ],
+        ),
+        methods=[
+            'post',
+            'delete',
+            ],
+    )
     @action(detail=True,
             methods=['post',
                      'delete'],
@@ -143,10 +156,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             nullable=True,
-            # properties={
-            #     'user': openapi.Schema(type=openapi.TYPE_INTEGER),
-            # },
-            # required=['user', ],
         ),
         methods=[
             'post',
