@@ -8,3 +8,11 @@ class ListRetriveViewSet(
 ):
     """Вьюсет только list/retrieve."""
     pass
+
+
+class ListViewSet(
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
+    """Вьюсет только list."""
+    pass
