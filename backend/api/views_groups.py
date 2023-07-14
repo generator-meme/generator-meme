@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -138,6 +139,20 @@ class GroupViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            nullable=True,
+            # properties={
+            #     'user': openapi.Schema(type=openapi.TYPE_INTEGER),
+            # },
+            # required=['user', ],
+        ),
+        methods=[
+            'post',
+            'delete',
+            ],
+    )
     @action(detail=True,
             methods=['post', 'delete'],
             permission_classes_by_action={
@@ -182,14 +197,30 @@ class GroupViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True,
-            methods=['post',
-                     'delete'],
-            permission_classes_by_action={
-                'POST': [IsAuthenticated, IsGroupAdmin],
-                'DELETE': [IsAuthenticated, IsGroupAdmin],
-            }
-            )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
+            },
+            required=['user', ],
+        ),
+        methods=[
+            'post',
+            'delete',
+            ],
+    )
+    @action(
+        detail=True,
+        methods=[
+            'post',
+            'delete',
+            ],
+        permission_classes_by_action={
+            'POST': [IsAuthenticated, IsInGroup, IsGroupAdmin],
+            'DELETE': [IsAuthenticated, IsInGroup, IsGroupAdmin],
+        }
+    )
     def addusertoban(self, request, pk):
         """Добавить/удалить пользователя в банлист группы
         POST и DELETE доступны администратору группы."""
