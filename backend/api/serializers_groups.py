@@ -282,26 +282,21 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = (
-            'id',
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'baned_at'
+            'group',
+            'user',
         )
         model = GroupBannedUser
 
     def validate(self, data):
         """Валидирует на наличие пользователя в группе."""
         request = self.context['request']
-        if not request or request.user.is_anonymous:
-            return False
+
         if not GroupUser.objects.filter(
                 group=data.get('group'),
                 user=data.get('user')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Такого пользователя нет в группе.'}
+                {'user': 'Такого пользователя нет в группе.'}
             )
         group_user = GroupUser.objects.get(
             group=data.get('group'),
@@ -309,13 +304,13 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
         )
         if request.user != group_user.group.owner and group_user.role.is_admin:
             raise ValidationError(
-                {'GroupUser_exists_error':
+                {'user':
                  'Пользователя со статусом "Администратор" добавить '
                  'в бан может только владелец группы.'}
             )
         elif group_user.user == request.user:
             raise ValidationError(
-                {'GroupUser_exists_error':
+                {'user':
                  'Себя нельзя добавить в бан.'}
             )
         return data
