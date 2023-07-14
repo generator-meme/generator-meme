@@ -183,11 +183,6 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 class GroupUserSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в группе (запись)."""
 
-    role = serializers.PrimaryKeyRelatedField(
-        queryset=GroupRole.objects.all(),
-        default=GroupRole.get_default_role
-    )
-
     class Meta:
         fields = ('id',
                   'group',
@@ -230,10 +225,6 @@ class GroupUserSerializer(serializers.ModelSerializer):
 
 class EnterGroupSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в группе (самостоятельный вход в группу)."""
-    role = serializers.PrimaryKeyRelatedField(
-        queryset=GroupRole.objects.all(),
-        default=GroupRole.get_default_role
-    )
 
     class Meta:
         fields = ('id',

@@ -114,7 +114,7 @@ class GroupRole(models.Model):
             is_admin=False,
             is_moderator=False,
         )
-        return category
+        return category.id
 
     name = models.CharField(
         verbose_name='Название роли',
