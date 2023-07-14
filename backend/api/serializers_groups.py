@@ -326,30 +326,22 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
 class GroupMemeWriteSerializer(serializers.ModelSerializer):
     """Сериализатор готового мема в группе (запись)."""
 
-    added_by = UsersSerializer(read_only=True, default=CurrentUserDefault())
-
     class Meta:
         fields = (
-            'id',
-            'author',
-            'image',
-            'created_at',
+            'group',
             'added_by',
-            'added_at',
-            'template'
+            'meme',
         )
         model = GroupMeme
 
     def validate(self, data):
-        """Валидирует на наличие мема в группе и права."""
-        request = self.context['request']
-        if not request or request.user.is_anonymous:
-            return False
+        """Валидирует на наличие мема в группе."""
+
         if GroupMeme.objects.filter(
                 meme=data.get('meme'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupMeme_exists_error': 'Мем уже в группе.'}
+                {'meme': 'Мем уже в группе.'}
             )
         return data
 
@@ -397,24 +389,24 @@ class GroupUserDeleteSerializer(serializers.Serializer):
         return data
 
 
-class GroupMemeDeleteSerializer(serializers.Serializer):
+class GroupMemeDeleteSerializer(serializers.ModelSerializer):
     """Сериализатор готового мема в группе (удаление)."""
 
-    meme = serializers.ReadOnlyField()
-    group = serializers.ReadOnlyField()
+    class Meta:
+        fields = (
+            'group',
+            'meme',
+        )
+        model = GroupMeme
 
     def validate(self, data):
-        """Валидирует на наличие мема в группе и права."""
-        request = self.context['request']
-        if not request or request.user.is_anonymous:
-            return False
-        group_meme = GroupMeme.objects.filter(
-            meme=self.context['meme'],
-            group=self.context['group']
-        )
-        if not group_meme.exists():
+        """Валидирует на наличие мема в группе."""
+        if not GroupMeme.objects.filter(
+            meme=data.get('meme'),
+            group=data.get('group'),
+        ).exists():
             raise ValidationError(
-                {'GroupMeme_exists_error': 'Данного мема нет в группе.'}
+                {'meme': 'Данного мема нет в группе.'}
             )
         return data
 

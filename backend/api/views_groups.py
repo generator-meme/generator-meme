@@ -259,14 +259,31 @@ class GroupViewSet(viewsets.ModelViewSet):
             ).delete()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True,
-            methods=['post',
-                     'delete'],
-            permission_classes_by_action={
-                'POST': [IsAuthenticated, IsInGroup],
-                'DELETE': [IsAuthenticated, IsGroupAdminOrMemeAddedBy],
-            }
-            )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'meme': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+            required=['meme', ],
+        ),
+        methods=[
+            'post',
+            'delete',
+            ],
+    )
+    @action(
+        detail=True,
+        methods=[
+            'post',
+            'delete',
+        ],
+        permission_classes_by_action={
+            'POST': [IsAuthenticated, IsInGroup],
+            'DELETE': [IsAuthenticated, IsInGroup,
+                       IsGroupAdminOrMemeAddedBy],
+        }
+    )
     def addmeme(self, request, pk):
         """Добавить/удалить мем из группы
         POST доступен участнику группы
@@ -276,32 +293,30 @@ class GroupViewSet(viewsets.ModelViewSet):
             serializer = GroupMemeDeleteSerializer(
                 data={
                     'meme': request.data.get('meme'),
-                    'group': pk
+                    'group': pk,
                 },
-                context={'request': request,
-                         'meme': request.data.get('meme'),
-                         'group': pk
-                         }
+                context={'request': request}
             )
             serializer.is_valid(raise_exception=True)
             action_model = get_object_or_404(
                 GroupMeme,
                 meme=get_object_or_404(Meme, id=request.data.get('meme')),
-                group=current_group
+                group__id=pk,
             )
-            self.check_object_permissions(request, action_model)
+            self.check_object_permissions(request, current_group)
             self.perform_destroy(action_model)
             return Response(status=status.HTTP_204_NO_CONTENT)
         self.check_object_permissions(request, current_group)
         serializer = GroupMemeWriteSerializer(
             data={
                 'meme': request.data.get('meme'),
-                'group': pk
+                'group': pk,
+                'added_by': request.user.id,
             },
             context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save(added_by=request.user)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
