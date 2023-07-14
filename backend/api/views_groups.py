@@ -7,25 +7,20 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
-                                        AllowAny)
+from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from api.filters import GroupSearchFilter
-from api.permissions import (IsGroupAdmin,
-                             IsGroupAdminOrMemeAddedBy,
-                             IsGroupOwner,
-                             IsInGroup)
-from api.serializers_groups import (ChangeRoleSerializer,
-                                    EnterGroupSerializer,
+from api.permissions import (IsGroupAdmin, IsGroupAdminOrMemeAddedBy,
+                             IsGroupOwner, IsInGroup)
+from api.serializers_groups import (ChangeRoleSerializer, EnterGroupSerializer,
                                     GroupBannedUserSerializer,
-                                    GroupMemeDeleteSerializer,
                                     GroupFullSerializer,
+                                    GroupMemeDeleteSerializer,
                                     GroupMemeWriteSerializer,
                                     GroupRoleSerializer, GroupSerializer,
-                                    GroupUserSerializer,
                                     GroupUserDeleteSerializer,
-                                    GroupWriteSerializer,
+                                    GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
 from api.viewsets import ListRetriveViewSet, ListViewSet
