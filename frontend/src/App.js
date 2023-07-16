@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
-import Canvas from "./components/Canvas/Canvas";
+import CanvasPreloader from "./components/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
@@ -19,7 +19,6 @@ const App = () => {
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
   const [tags, setTags] = useState([]);
-  // const []
 
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
@@ -80,16 +79,11 @@ const App = () => {
             />
           }
         />
-        <Route
-          path="/team"
-          element={
-            <Team/>
-          }
-        />
+        <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
           element={
-            <Canvas
+            <CanvasPreloader
               currentMeme={currentMeme}
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}

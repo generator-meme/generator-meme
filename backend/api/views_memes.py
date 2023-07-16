@@ -11,18 +11,18 @@ from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
 from api.permissions import AdminOrReadOnly
-from api.serializers import (CategorySerializer, FavoriteSerializer,
-                             MemeReadSerializer, MemeWriteSerializer,
-                             TagSerializer, TemplateReadSerializer,
-                             TemplateWriteSerializer)
+from api.serializers_memes import (Category, CategorySerializer,
+                                   FavoriteSerializer, MemeReadSerializer,
+                                   MemeWriteSerializer, TagSerializer,
+                                   TemplateReadSerializer,
+                                   TemplateWriteSerializer)
 from api.services import create_delete_relation
 from api.viewsets import ListRetriveViewSet
-from memes.models import (Category, Favorite, Meme, Tag, Template,
-                          TemplateUsedTimes)
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
-    """Представление для модели готового мема."""
+    """Готовые мемы."""
 
     queryset = Meme.objects.all()
     filter_backends = [DjangoFilterBackend, ]
@@ -39,7 +39,7 @@ class MemeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def download_meme(self, request, pk):
-        '''Скачивает готовый мем в формате jpeg'''
+        """Скачивает готовый мем в формате jpeg."""
         image = get_object_or_404(Meme, pk=pk).image
         if request.user.is_authenticated:
             filename = f'{request.user.username}_meme.jpg'
@@ -51,28 +51,43 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    """Представление для модели Meme."""
+    """Шаблоны мемов.
+    Сортировка шаблонов задается параметром ordering:
+    - если параметр не задан, то по умолчанию выше будут шаблоны,
+    которые чаще других использовались для создания мема
+    - если задан параметр 'random', то шаблоны будут
+    отсортированы в случайном порядке
+    - если задан параметр '-published_at', то выше будут шаблоны
+    опубликованные на сайте позднее, если 'published_at' то наоборот."""
 
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
-    ordering_fields = ['created_at']
+    ordering_fields = ('published_at', )
 
     def get_queryset(self):
-        queryset = Template.objects.filter(
-            is_published=True).annotate(
-            used_times=Case(
-                When(Exists(
-                    TemplateUsedTimes.objects.filter(
-                        template=OuterRef('pk')
-                    )
-                ), then=TemplateUsedTimes.objects.filter(
-                    template=OuterRef('pk')
-                ).values('used_times')),
-                default=Value(0)
-            )
-        ).order_by('-used_times')
         user = self.request.user
+        queryset = Template.objects.filter(is_published=True).all()
+
+        order_by = self.request.query_params.get('ordering')
+
+        if order_by:
+            if order_by == 'random':
+                queryset = queryset.order_by('?')
+        else:
+            queryset = queryset.annotate(
+                used_times=Case(
+                    When(Exists(
+                        TemplateUsedTimes.objects.filter(
+                            template=OuterRef('pk')
+                        )
+                    ), then=TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    ).values('used_times')),
+                    default=Value(0)
+                )
+            ).order_by('-used_times')
+
         if user.is_authenticated:
             return queryset.annotate(
                 is_favorited=Exists(
@@ -94,11 +109,10 @@ class TemplateViewSet(viewsets.ModelViewSet):
         )
 
 
-class TagViewSet(viewsets.ModelViewSet):
-    """Представление для модели Tag."""
+class TagViewSet(ListRetriveViewSet):
+    """Теги шаблонов."""
 
     serializer_class = TagSerializer
-    permission_classes = [AdminOrReadOnly]
     filter_backends = (DjangoFilterBackend, )
     filterset_class = TagSearchFilter
 
@@ -114,7 +128,7 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(ListRetriveViewSet):
-    """Представление для модели Category."""
+    """Категории шаблонов."""
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

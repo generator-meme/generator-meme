@@ -73,7 +73,6 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
           initMemes={memes}
         ></SearchPanel>
       </section>
-
       <MemesBox
         memes={filterMemes}
         setCurrentMeme={setCurrentMeme}
