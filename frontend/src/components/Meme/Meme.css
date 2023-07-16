@@ -122,17 +122,3 @@
   color: #1E1D1D;
   cursor: pointer;
 }
-@media (max-width: 1480px) and (min-width: 1081px) {
-  .meme {max-width: 453px; max-height: 360px;}
-  }
-
-@media (max-width: 1080px)and (min-width: 521px) {
-  .meme {max-width: 440px; max-height: 360px;}
-}
-@media (max-width: 520px) and (min-width: 376px) {
-  .meme {max-width: 440px; max-height: 360px;}
-}
-
-@media (max-width: 375px) {
-  .meme {max-width: 345px; max-height: 300px;}
-}

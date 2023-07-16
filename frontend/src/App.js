@@ -19,12 +19,8 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
-<<<<<<< HEAD
   const [tags, setTags] = useState([]);
   const [footerType, setFooterType] = useState('');
-=======
-
->>>>>>> test
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
@@ -68,7 +64,6 @@ const App = () => {
         <Route
           exact
           path="/"
-<<<<<<< HEAD
           element={
             <Main
               memes={memes}
@@ -84,9 +79,6 @@ const App = () => {
           element={
             <Team/>
           }
-=======
-          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
->>>>>>> test
         />
         <Route path="/team" element={<Team />} />
         <Route

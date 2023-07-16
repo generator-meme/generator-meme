@@ -2,24 +2,13 @@ import styles from "./SearchPanel.module.css";
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../utils/api";
 import { Tag } from "../Tag/Tag";
-import { isMobile } from "react-device-detect";
 
-export const SearchPanel = ({ setFilterMemes, initMemes }) => {
+export const SearchPanel = ({ setFilterMemes, initMemes, tags }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [inputChar, setInputChar] = useState("");
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
-  const [tags, setTags] = useState([]);
-  useEffect(() => {
-    api
-      .getTags()
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     const getTagsOnInputChange = async (name) => {
@@ -43,16 +32,6 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
     }
   }, [searchValue]);
 
-  useEffect(() => {
-    if (inputChar === " " && isMobile) {
-      const tempTagArray = [...tagArray, searchValue.trim()];
-      setTagArray(tempTagArray);
-      setIsFocusSearchPanel(false);
-      setSearchValue(" ");
-      // setInputChar("");
-    }
-  }, [inputChar, searchValue]);
-
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
       const tempTagArray = [...tagArray, searchValue.trim()];
@@ -63,7 +42,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
   };
 
   const onChangeInputValue = (e) => {
-    setInputChar(e.target.value.split("").pop());
+    e.preventDefault();
 
     setSearchValue(e.target.value.trim());
   };
@@ -146,10 +125,6 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
           <form className={styles.form_search_panel} onSubmit={submitToSearch}>
             <div className={styles.wrap_input}>
               {tagArray.map((tag, id) => {
-                if (tag === "") {
-                  return null;
-                }
-
                 return (
                   <div className={styles.tag_wrap}>
                     <Tag

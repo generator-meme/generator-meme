@@ -1,102 +1,34 @@
 .saved-meme {
-  padding: 20px 30px 40px;
-  width: 100%;
-  box-sizing: border-box;
-  position: relative;
+    padding: 20px 30px 40px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .saved-meme__container {
-  padding: 62px 0 0;
-  width: 100%;
-  display: flex;
-  /* flex-direction: column; */
-  justify-content: center;
-  column-gap: 60px;
-  align-items: center;
-  box-sizing: border-box;
+    padding: 62px 0 0;
+    width: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    column-gap: 60px;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .saved-meme__image {
-  width: auto;
-  height: auto;
-  object-fit: cover;
-  object-position: center;
-  max-height: 556px;
-  border-radius: 20px;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    max-height: 556px;
+    border-radius: 20px;
 }
 
 .saved-meme__btn-save {
-  width: 500px;
-  /* margin-top: 50px; */
-  color: #1e1d1d;
-  font-size: 20px;
-  line-height: 1.2;
-}
-.saved-meme-btns-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.saved-meme__btn-save:first-child {
-  margin-bottom: 29px;
-}
-
-.saved-meme-share-btns-container {
-  margin-top: 32px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.saved-meme-share-btns-container > div {
-  display: inline-block;
-  margin-right: 25px;
-}
-
-.saved-meme-share-btns-container div:hover {
-  cursor: pointer;
-}
-
-.saved-meme-share-btns-container div:last-child {
-  margin-right: 0;
-}
-.dropdown-btn-wrapper {
-  position: relative;
-  display: flex;
-  margin-bottom: 29px;
-}
-
-.download-options {
-  margin-top: 82px;
-  width: 500px;
-  /* padding: 20px; */
-  border-radius: 10px;
-  background-color: #ffff;
-  position: absolute;
-  z-index: 2;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.download-option {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-  color: #000;
-  font-size: 20px;
-  font-weight: 600;
-  font-family: "Montserrat";
-}
-
-.download-option:hover {
-  cursor: pointer;
-}
-
-.download-option:last-child {
-  margin-bottom: 0;
-}
-
-.download-option img {
-  margin-right: 5px;
+    width: 500px;
+    /* margin-top: 50px; */
+    color: #1E1D1D;
+    font-size: 20px;
+    line-height: 1.2;
 }
