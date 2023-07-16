@@ -10,6 +10,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import SAFE_METHODS
 
 from api.filters import TagSearchFilter, TemplateFilter
+from api.paginators import TemplatePagination
 from api.permissions import AdminOrReadOnly
 from api.serializers_memes import (Category, CategorySerializer,
                                    FavoriteSerializer, MemeReadSerializer,
@@ -61,6 +62,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     опубликованные на сайте позднее, если 'published_at' то наоборот."""
 
     permission_classes = [AdminOrReadOnly]
+    pagination_class = TemplatePagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
     ordering_fields = ('published_at', )

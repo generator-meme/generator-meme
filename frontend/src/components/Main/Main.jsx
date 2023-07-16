@@ -7,20 +7,31 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
-import { useDispatch } from "react-redux";
-import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
+import api from "../../utils/api";
 
-const Main = ({ memes, setIsNewMeme }) => {
-  const dispatch = useDispatch();
+const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags, setFooterType }) => {
+  
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
   const [filterMemes, setFilterMemes] = useState(memes);
-
+//
+  const [count, setCount] = useState(memes.count);
+  const [next, setNext] = useState(memes.next)
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [isNextPageLoading, setIsNextPageLoading] = useState(false);
+  const [items, setItems] = useState(memes.results);
   useEffect(() => {
     setFilterMemes(memes);
+    setFooterType('main')
   }, [memes]);
-
+  useEffect(() => {
+    setHasNextPage(!!filterMemes.next || false)
+    setNext(filterMemes.next);
+    setItems(filterMemes.results);
+    setCount(filterMemes.count);
+    
+  }, [filterMemes]);
   const onChange = (event) => {
     if (event.target.files[0].size > 400000) {
       alert("Вес изображения не должен превышать 400 КБ");
@@ -32,12 +43,28 @@ const Main = ({ memes, setIsNewMeme }) => {
         id: uuidv4(),
         image: URL.createObjectURL(currentFile),
       };
-      dispatch({ type: SET_CURRENT_MEME, payload: myCurrentMeme });
+      setCurrentMeme(myCurrentMeme);
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
       navigate(`/${myCurrentMeme.id}`);
     }
   };
+  //
+  const loadNextPage = () => {
+    if(!next){
+      return;
+    }
+    setIsNextPageLoading(true);
+    return api.getTemplatesChunk(next)
+      .then((res) => {
+        setItems((prevItems) => [...prevItems, ...res.results]);
+        setNext(res.next);
+        setHasNextPage(res.next ? true : false);
+        setIsNextPageLoading(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
 
   return (
     <main>
@@ -52,7 +79,7 @@ const Main = ({ memes, setIsNewMeme }) => {
         <div className="main__text-box">
           <p className="main__text-advice">
             Выберите шаблон для создания мема или загрузите&nbsp;
-          
+          </p>
           <form className="main__form">
             <label className="main__label">
               свое изображение
@@ -66,21 +93,27 @@ const Main = ({ memes, setIsNewMeme }) => {
               />
             </label>
           </form>
-          </p>
         </div>
       </section>
+      
       <section className="search">
         <SearchPanel
+          tags={tags}
           setFilterMemes={setFilterMemes}
           initMemes={memes}
         ></SearchPanel>
       </section>
+      { !!items ?
       <MemesBox
-        memes={filterMemes}
-        numberOfVisibleMems={numberOfVisibleMems}
-        setNumberOfVisibleMems={setNumberOfVisibleMems}
+        setCurrentMeme={setCurrentMeme}
         setIsNewMeme={setIsNewMeme}
-      />
+        hasNextPage={hasNextPage}
+        isNextPageLoading={isNextPageLoading}
+        items={items}
+        loadNextPage={loadNextPage}
+        count={count}
+      /> : <h1>NO RESULTS</h1>
+      }
     </main>
   );
 };

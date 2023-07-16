@@ -5,9 +5,15 @@
   justify-content: flex-end;
   align-items: center;
   padding: 28px 60px;
-  box-sizing: border-box;
 }
-
+.footer__main {
+  min-height: 50px;
+  background-color: #FFFFDA;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 60px;
+}
 .footer__link-team {
   font-weight: 400;
   font-size: 14px;
@@ -15,23 +21,9 @@
   text-decoration: none;
   color: #000000;
 }
-
 .footer__link-team--active {
   color: #AC52D1;
 }
-
-.footer__link-team:hover {
+.footer__link-team:hover{
   color: #1083DD;
-}
-
-@media screen and (max-width: 1140px) {
-  .footer {
-    min-height: 92px;
-  }
-}
-
-@media screen and (max-width: 570px) {
-  .footer {
-    min-height: 72px;
-  }
 }

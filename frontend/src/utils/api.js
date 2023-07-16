@@ -11,6 +11,11 @@ class Api {
 
     return Promise.reject(`Ошибка: ${res.status}`);
   }
+<<<<<<< HEAD
+  getTemplatesChunk(url) {
+    const queryUrl = url ? url : `${this._baseUrl}/templates/`; 
+    return fetch(queryUrl, {
+=======
 
   _checkReponce(res) {
     return res.ok
@@ -22,6 +27,7 @@ class Api {
 
   getTemplates() {
     return fetch(`${this._baseUrl}/templates/`, {
+>>>>>>> test
       method: "GET",
       body: JSON.stringify(),
       headers: this._headers,
@@ -59,6 +65,22 @@ class Api {
       }),
     }).then(this._errorHandler);
   }
+<<<<<<< HEAD
+  getTeam() {
+    return fetch(`${this._baseUrl}/team/`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
+  // getCreatedMeme(memeId) {
+  //   return fetch(`${this._baseUrl}/memes/${memeId}`, {
+  //     method: "GET",
+  //     headers: this._headers,
+  //     body: JSON.stringify(),
+  //   }).then(this._errorHandler);
+  // }
+=======
 
   getCreatedMeme(memeId) {
     return fetch(`${this._baseUrl}/memes/${memeId}`, {
@@ -67,6 +89,7 @@ class Api {
       body: JSON.stringify(),
     }).then(this._errorHandler);
   }
+>>>>>>> test
 
   downloadNewMem(memeId) {
     return fetch(`${this._baseUrl}/memes/${memeId}/download_meme/`, {
@@ -92,6 +115,7 @@ class Api {
 
   copyNewMeme() {}
 }
+
 
 const api = new Api({
   baseUrl: "/api",

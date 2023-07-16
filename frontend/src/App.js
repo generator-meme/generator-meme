@@ -19,7 +19,8 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
-
+  const [tags, setTags] = useState([]);
+  const [footerType, setFooterType] = useState('');
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
@@ -44,10 +45,10 @@ const App = () => {
         console.log(err);
       });
   }
-
+  
   useEffect(() => {
     api
-      .getTemplates()
+      .getTemplatesChunk()
       .then((res) => {
         setMemes(res);
       })
@@ -63,7 +64,21 @@ const App = () => {
         <Route
           exact
           path="/"
-          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
+          element={
+            <Main
+              memes={memes}
+              setCurrentMeme={setCurrentMeme}
+              setIsNewMeme={setIsNewMeme}
+              tags={tags}
+              setFooterType={setFooterType}
+            />
+          }
+        />
+        <Route
+          path="/team"
+          element={
+            <Team/>
+          }
         />
         <Route path="/team" element={<Team />} />
         <Route
@@ -89,7 +104,7 @@ const App = () => {
         />
         <Route path="/font" element={<FontFamilyOptions />} />
       </Routes>
-      <Footer />
+      <Footer type={footerType}/>
       {imageNotFoundOpen && (
         <InfoTooltip
           title="Личные изображения не сохраняется при перезагрузке, пожалуйста, вернитесь к выбору изображения"
