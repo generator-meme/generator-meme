@@ -22,7 +22,7 @@ const ExtraImage = ({
   const deleteImage = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("delete image");
+    // console.log("delete image");
     if (e.target === deleteImageButton.current) {
       deleteImageFromArray();
     }
@@ -39,7 +39,7 @@ const ExtraImage = ({
   const onMove = (e) => {
     if (latestImageValues.current.isMoving) {
       move(e, latestImageValues.current, setImages);
-      console.log("move image");
+      // console.log("move image");
     }
   };
 
@@ -51,7 +51,7 @@ const ExtraImage = ({
         startTop: latestImageValues.current.top,
         startLeft: latestImageValues.current.left,
       });
-      console.log("drop image");
+      // console.log("drop image");
     }
   };
 
@@ -78,7 +78,7 @@ const ExtraImage = ({
           width: picture.current?.offsetWidth,
           height: picture.current?.offsetHeight,
         });
-        console.log("observer image", image.id);
+        // console.log("observer image", image.id);
       });
       observer.observe(pictureObserved);
       return () => {

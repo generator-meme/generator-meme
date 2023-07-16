@@ -1,7 +1,3 @@
-.editor-canvas_wrapper {
-  position: relative;
-}
-
 .main-editor {
   padding: 20px 30px 20px;
   width: 100%;
@@ -23,7 +19,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 675px;
+  /* width: 675px; */
 }
 
 .editor__image {
@@ -43,7 +39,6 @@
   justify-content: center;
   row-gap: 42px;
   align-items: center;
-  /* height: 556px; */
   width: calc(100% - 675px);
 }
 
@@ -105,4 +100,55 @@
   color: #1E1D1D;
   font-size: 20px;
   line-height: 1.2;
+}
+
+@media screen and (max-width: 1240px) {
+  .editor__btn_type_create-mem {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 1140px) {
+  .main-editor {
+    padding-right: 6.5%;
+    padding-left: 6.5%;
+    padding-bottom: 75px;
+  }
+
+  .editor {
+    flex-direction: column;
+    row-gap: 40px;
+    padding-top: 96px;
+  }
+
+  .editor__btn_type_create-mem {
+    width: 500px;
+  }
+
+  .editor__box {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .editor {
+    padding-top: 132px;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .main-editor {
+    padding-bottom: 25px;
+  }
+
+  .editor {
+    padding-top: 122px;
+    row-gap: 20px;
+  }
+
+  .editor__btn_type_create-mem {
+    font-size: 18px;
+    width: 77%;
+    height: 44px;
+  }
 }

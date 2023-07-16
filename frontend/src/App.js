@@ -3,8 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
-import Canvas from "./components/Canvas/Canvas";
-import CanvasImagePreloader from "./components/CanvasImagePreloader/CanvasImagePreloader";
+import CanvasPreloader from "./components/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
@@ -12,21 +11,27 @@ import "./App.css";
 import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
 import { optionsList } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
+import { useSelector } from "react-redux";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
-  const [currentMeme, setCurrentMeme] = useState(null);
+  const { meme } = useSelector((state) => state.savedMeme);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+<<<<<<< HEAD
   const [tags, setTags] = useState([]);
   const [footerType, setFooterType] = useState('');
+=======
+
+>>>>>>> test
   function handleCreateNewMeme(memeUrl, memeId) {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
         // console.log(memeUrl, memeId);
         setNewMeme(res);
+
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
@@ -36,9 +41,9 @@ const App = () => {
 
   function handleDownloadNewMeme() {
     api
-      .downloadNewMem(newMeme.id)
+      .downloadNewMem(meme.id)
       .then((res) => {
-        console.log(res, newMeme.id);
+        // console.log(res, newMeme.id);
       })
       .catch((err) => {
         console.log(err);
@@ -55,14 +60,6 @@ const App = () => {
         console.log(err);
       });
   }, []);
-  useEffect(() => {
-    api
-      .getTags()
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   return (
     <div className="page">
@@ -71,6 +68,7 @@ const App = () => {
         <Route
           exact
           path="/"
+<<<<<<< HEAD
           element={
             <Main
               memes={memes}
@@ -86,12 +84,15 @@ const App = () => {
           element={
             <Team/>
           }
+=======
+          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
+>>>>>>> test
         />
+        <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
           element={
-            <CanvasImagePreloader
-              currentMeme={currentMeme}
+            <CanvasPreloader
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
               isNewMeme={isNewMeme}
@@ -101,10 +102,9 @@ const App = () => {
           }
         />
         <Route
-          path="/saved"
+          path="/saved/:id"
           element={
             <SavedMeme
-              currentMeme={currentMeme}
               newMeme={newMeme}
               handleDownloadMeme={handleDownloadNewMeme}
             />

@@ -29,6 +29,15 @@ class Tag(models.Model):
 
 class Category(models.Model):
     """Модель категорий шаблонов."""
+
+    @classmethod
+    def get_default_id(cls):
+        """Возвращает id категории по умолчанию."""
+        category, created = cls.objects.get_or_create(
+            name='Картинки',
+        )
+        return category.id
+
     name = models.CharField(
         verbose_name='Название категории',
         max_length=300,
@@ -59,20 +68,23 @@ class Template(models.Model):
     )
     category = models.ForeignKey(
         Category,
-        on_delete=models.SET_NULL,
+        on_delete=models.SET_DEFAULT,
         related_name='templates',
-        null=True,
-        blank=True
+        default=Category.get_default_id,
     )
     tag = models.ManyToManyField(
         Tag,
         verbose_name='Теги',
         related_name='memes',
-        blank=True
+        blank=True,
     )
     created_at = models.DateTimeField(
-        verbose_name='Дата публикации',
+        verbose_name='Дата загрузки в базу',
         auto_now_add=True)
+    published_at = models.DateTimeField(
+        verbose_name='Дата публикации на сайт',
+        null=True,
+    )
     is_published = models.BooleanField(
         default=False,
         verbose_name='Опубликован'

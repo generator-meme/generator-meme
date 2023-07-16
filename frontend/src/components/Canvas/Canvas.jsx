@@ -11,144 +11,34 @@ import {
   drawText,
 } from "./canvasFunctions";
 
-import TextFieldset from "../TextFieldset/TextFieldset";
+import Fieldset from "../Fieldset/Fieldset";
+import { useSelector } from "react-redux";
+import { getCanvasSettings } from "../../utils/canvasData";
 
 const Canvas = ({
-  currentMeme,
+  // currentMeme,
   handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
   memes,
-  setImageNotFoundOpen,
   imageSizes,
   image,
+  canvasSizes,
+  fontSize,
+  outsideTextHeight,
 }) => {
   const canvas = useRef(null);
   const navigate = useNavigate();
-  const [outsideTextHeight, setOusideTextHeight] = useState(80);
   const [images, setImages] = useState([]);
-
-  const [textsValues, setTextsValues] = useState([
-    {
-      name: "outsideTopTextValues",
-      isOutside: true,
-      isVisible: false,
-      text: "",
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width - 4,
-      maxWidth: imageSizes?.width - 4,
-      textAreaWidth: 0,
-      height: 70,
-      top: -80,
-      left: 0,
-      bottom: null,
-      canvasTop: 0,
-      canvasLeft: 0,
-      canvasBottom: null,
-    },
-    {
-      name: "outsideBottomTextValues",
-      isOutside: true,
-      isVisible: false,
-      text: "",
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width - 4,
-      maxWidth: imageSizes?.width - 4,
-      textAreaWidth: 0,
-      height: 70,
-      top: null,
-      left: 0,
-      bottom: -80,
-      canvasTop: null,
-      canvasLeft: 0,
-      canvasBottom: 0,
-    },
-    {
-      name: "topTextValues",
-      isOutside: false,
-      isVisible: true,
-      text: "",
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width,
-      maxWidth: imageSizes?.width,
-      textAreaWidth: 0,
-      height: 70,
-      top: 0,
-      left: 0,
-      bottom: null,
-      startTop: 0,
-      startLeft: 0,
-      isMoving: false,
-      oldX: null,
-      oldY: null,
-    },
-    {
-      name: "bottomTextValues",
-      isOutside: false,
-      isVisible: true,
-      text: "",
-      fontSize: 40,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width,
-      maxWidth: imageSizes?.width,
-      height: 70,
-      top: null,
-      left: 0,
-      bottom: 0,
-      startTop: 0,
-      startLeft: 0,
-      isMoving: false,
-      oldX: null,
-      oldY: null,
-    },
-  ]);
+  const [textsValues, setTextsValues] = useState(
+    getCanvasSettings(
+      fontSize,
+      fontFamilyOptions,
+      imageSizes,
+      outsideTextHeight
+    )
+  );
+  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -169,18 +59,21 @@ const Canvas = ({
       return item.id === id;
     });
     if (template) {
-      console.log("it's a meme from array");
       handleCreateNewMeme(
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
       ).finally(() => {
-        navigate("/saved");
+        navigate(
+          `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
+          { state: JSON.parse(localStorage.getItem("createdMeme")).id }
+        );
       });
     } else {
-      console.log("it's my image");
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
-          navigate("/saved");
+          navigate(
+            `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
+          );
         }
       );
     }
@@ -281,10 +174,10 @@ const Canvas = ({
           .reverse(); // если нижний текст - перенос строк снизу вверх
       }
 
-      elementTextWrap.forEach((t, i) =>
+      elementTextWrap.forEach((string, index) =>
         drawText(
-          t,
-          i,
+          string,
+          index,
           ctx,
           element.bottom === null ? true : false,
           canvasHeight,
@@ -292,7 +185,8 @@ const Canvas = ({
           textMarginYBottom,
           textMarginYTop,
           elementMarginX,
-          element
+          element,
+          elementTextWrap.length
         )
       );
     });
@@ -304,7 +198,6 @@ const Canvas = ({
     // чтобы предупредить пользователя о том, что изменения не сохранятся
     const handleOnBeforeUnload = (event) => {
       event.preventDefault();
-      console.log("handleOnBeforeUnload");
       return (event.returnValue = "");
     };
 
@@ -340,7 +233,7 @@ const Canvas = ({
         }
       />
       <section className="editor" aria-label="Editor">
-        <div className="editor__canvas">
+        <div className="editor__canvas" style={{ width: canvasSizes.width }}>
           <canvas
             className="editor__image"
             ref={canvas}
@@ -351,25 +244,41 @@ const Canvas = ({
         <div
           className="editor__box"
           style={{
-            height: canvasHeight,
+            height: window.innerWidth > 1140 ? canvasHeight : "auto",
           }}
         >
           <form
             className="editor__text-form"
             style={{
               position: "absolute",
-              top: textsValues[0].isVisible ? 81 + outsideTextHeight : 81,
+              top:
+                window.innerWidth > 1140
+                  ? textsValues[0].isVisible
+                    ? 81 + outsideTextHeight
+                    : 81
+                  : window.innerWidth > 700
+                  ? textsValues[0].isVisible
+                    ? 96 + outsideTextHeight
+                    : 96
+                  : window.innerWidth > 570
+                  ? textsValues[0].isVisible
+                    ? 132 + outsideTextHeight
+                    : 132
+                  : textsValues[0].isVisible
+                  ? 122 + outsideTextHeight
+                  : 122,
               left: imageSizes.offsetX,
               height: imageSizes.height,
               width: imageSizes.width,
             }}
           >
-            <TextFieldset
+            <Fieldset
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}
               images={images}
               setImages={setImages}
+              outsideTextHeight={outsideTextHeight}
             />
           </form>
           <EditorButtonsList

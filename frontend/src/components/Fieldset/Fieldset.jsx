@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import "./Fieldset.css";
 import TextareaCanvas from "../TextareaCanvas/TextareaCanvas";
 import ExtraImage from "../ExtraImage/ExtraImage";
 
-const TextFieldset = ({
+const Fieldset = ({
   textsValues,
   setTextsValues,
   imageSizes,
   images,
   setImages,
+  outsideTextHeight,
 }) => {
   const [isCurrentTextIndex, setIsCurrentTextIndex] = useState(null);
   const [isCurrentImageIndex, setIsCurrentImageIndex] = useState(null);
@@ -25,7 +27,7 @@ const TextFieldset = ({
   }, []);
 
   return (
-    <fieldset className="text-fieldset">
+    <fieldset className="fieldset">
       {textsValues.map((text, index) => {
         return (
           <TextareaCanvas
@@ -33,6 +35,7 @@ const TextFieldset = ({
             index={index}
             textValues={text}
             imageSizes={imageSizes}
+            outsideTextHeight={outsideTextHeight}
             setTextValues={(newText) => {
               setTextsValues((textsValues) => {
                 const newTexts = [...textsValues];
@@ -90,4 +93,4 @@ const TextFieldset = ({
   );
 };
 
-export default TextFieldset;
+export default Fieldset;

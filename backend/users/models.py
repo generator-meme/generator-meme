@@ -19,8 +19,8 @@ class User(AbstractUser):
         default=UserRole.User
     )
     username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     email = models.EmailField(unique=True, max_length=254)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]

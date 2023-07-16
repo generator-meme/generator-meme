@@ -39,3 +39,15 @@
 .navigation__link_active {
     font-weight: 500;
 }
+
+@media screen and (max-width: 1140px) {
+    .navigation__link {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .navigation__link {
+        font-size: 16px;
+    }
+}

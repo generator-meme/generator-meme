@@ -1,12 +1,24 @@
 export const getOffsetY = (element, textsValues, outsideTextHeight) => {
+  const sizeDifference = element.fontSize - 40;
+
   if (element.isOutside) {
-    if (element.canvasTop !== null) return element.canvasTop;
-    if (element.canvasBottom !== null) return element.canvasBottom;
+    if (element.name === "outsideTopTextValues")
+      return element.canvasTop + sizeDifference;
+    if (element.name === "outsideBottomTextValues")
+      return (
+        element.canvasTop +
+        sizeDifference +
+        (textsValues[0].isVisible ? outsideTextHeight : 0)
+      );
   } else {
     let pointOY;
     if (element.top !== null) {
       pointOY = element.top;
-      return pointOY + (textsValues[0].isVisible ? outsideTextHeight : 0);
+      return (
+        pointOY +
+        (textsValues[0].isVisible ? outsideTextHeight : 0) +
+        sizeDifference
+      );
     } else {
       pointOY = element.bottom;
       return pointOY + (textsValues[1].isVisible ? outsideTextHeight : 0);
@@ -132,8 +144,8 @@ export const wrapText = (ctx, text, maxWidth) => {
 
 // отрисовка текст (используется внутри канвас для верхнего и нижнего текста, есть отличия - условия внутри функции, top - булево значение)
 export const drawText = (
-  t,
-  i,
+  string,
+  index,
   ctx,
   top,
   canvasHeight,
@@ -141,48 +153,72 @@ export const drawText = (
   textMarginYBottom,
   textMarginYTop,
   marginX,
-  textValues
+  textValues,
+  textLength
 ) => {
-  if (t[0] === " ") {
+  if (string[0] === " ") {
     // если первый символ - пробел - убрать его из строки
-    t = t.slice(1);
+    string = string.slice(1);
   }
 
-  if (t[t.length - 1] === " ") {
+  if (string[string.length - 1] === " ") {
     // если последний символ - пробел (не поставленный пользователем) - убрать его из строки (важно, чтобы не было подчеркивания или выделения пустоты)
-    t = t.slice(0, t.length - 1);
+    string = string.slice(0, string.length - 1);
   }
 
   // t += "\n";
 
   let marginY;
   if (top) {
-    marginY = offsetY + i * lineHeight(textValues.fontSize) + textMarginYTop;
+    marginY =
+      offsetY + index * lineHeight(textValues.fontSize) + textMarginYTop;
   } else {
+    // const standartSize =
+    //   window.innerWidth > 700 ? 40 : window.innerWidth > 570 ? 30 : 25;
+    // const sizeIndex =
+    //   textValues.fontSize > 40
+    //     ? 0.2
+    //     : textValues.fontSize > 30
+    //     ? 0.3
+    //     : textValues.fontSize > 20
+    //     ? 0.3
+    //     : 0.4;
+    // const sizeDifference =
+    //   textLength === 1
+    //     ? 40 - textValues.fontSize + 5
+    //     : (40 - textValues.fontSize) * sizeIndex;
+
     marginY =
       canvasHeight -
       offsetY -
-      i * lineHeight(textValues.fontSize) -
+      index * lineHeight(textValues.fontSize) -
       textMarginYBottom;
+    // sizeDifference;
   }
 
   ctx.fillStyle = textValues.backColor;
   ctx.strokeStyle = textValues.strokeTextColor;
 
-  addTextBackground(ctx, t, marginX, marginY, lineHeight(textValues.fontSize)); // добавление заливки (default - transparent)
+  addTextBackground(
+    ctx,
+    string,
+    marginX,
+    marginY,
+    lineHeight(textValues.fontSize)
+  ); // добавление заливки (default - transparent)
 
   ctx.fillStyle = textValues.fillTextColor;
 
   ctx.lineWidth = 7; // увеличение ширины линии для адекватного контура текста
-  ctx.strokeText(t, marginX, marginY); // добавление контура
+  ctx.strokeText(string, marginX, marginY); // добавление контура
   ctx.lineWidth = 1; // возвращение ширины линии до стандарта (для подчеркивания и зачеркивания)
 
-  ctx.fillText(t, marginX, marginY, textValues.width); // добавление текста построчно
+  ctx.fillText(string, marginX, marginY, textValues.width); // добавление текста построчно
 
   if (textValues.underline) {
     addLineToText(
       ctx,
-      t,
+      string,
       marginX,
       marginY + 0.125 * textValues.fontSize,
       textValues.fontSize
@@ -192,7 +228,7 @@ export const drawText = (
   if (textValues.lineThrough) {
     addLineToText(
       ctx,
-      t,
+      string,
       marginX,
       marginY - textValues.fontSize / 4,
       textValues.fontSize
