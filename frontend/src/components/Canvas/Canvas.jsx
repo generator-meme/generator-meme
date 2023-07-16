@@ -165,7 +165,7 @@ const Canvas = ({
   const createMeme = () => {
     let id =
       currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
-    const template = memes.some((item) => {
+    const template = memes.results.some((item) => {
       return item.id === id;
     });
     if (template) {

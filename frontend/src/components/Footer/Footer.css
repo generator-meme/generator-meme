@@ -6,6 +6,14 @@
   align-items: center;
   padding: 28px 60px;
 }
+.footer__main {
+  min-height: 50px;
+  background-color: #FFFFDA;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 60px;
+}
 .footer__link-team {
   font-weight: 400;
   font-size: 14px;

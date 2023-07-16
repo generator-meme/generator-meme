@@ -1,9 +1,13 @@
 import "./Team.css";
 import Navigation from "../Navigation/Navigation";
-import Teammates from "../../utils/Teammates";
-
+import { useEffect, useState } from "react";
+import api from "../../utils/api";
 const Team = () => {
-  
+  const [team, setTeam] = useState([])
+  useEffect(()=>{
+    api.getTeam()
+    .then(res => setTeam(res))
+  },[])
   const renderTeam = (teamGroup) => {
     return (
       <div className="team__group">
@@ -31,7 +35,7 @@ const Team = () => {
     <section className="team">
       <Navigation isSavedMeme={false} id="team" isTeam={true} />
       <div className="team__container">
-        {Teammates.map(teamGroup => renderTeam(teamGroup))}
+        {team.map(teamGroup => renderTeam(teamGroup))}
       </div>
     </section>
   );

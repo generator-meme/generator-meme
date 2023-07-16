@@ -1,9 +1,9 @@
 import "./Footer.css";
 import { NavLink } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ({type}) => {
   return (
-    <div className="footer">
+    <div className={`footer footer__${type}`} >
       <NavLink
         end
         to="/team"

@@ -3,7 +3,7 @@ import './Meme.css'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import like from "../../images/like.svg";
 
-function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
+function Meme({ style ,elem, setCurrentMeme, setIsNewMeme }) {
   const [isMore, setIsMore] = useState(false);
   const [allTagsHeight, setAllTagsHeight] = useState(0);
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
   }, [])
 
   return (
-    <li className="meme">
+    <li className="meme" style={style}>
       <img className="meme__image" src={elem.image} alt={`${elem.name} шаблон.`} />
       <button onClick={onClick} className="meme__create-btn">создать мем</button>
       <div onClick={onClick} className="meme__image-hover"></div>
@@ -59,4 +59,4 @@ function Meme({ elem, setCurrentMeme, setIsNewMeme }) {
   )
 }
 
-export default Meme
+export default Meme;

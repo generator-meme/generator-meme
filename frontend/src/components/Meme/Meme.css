@@ -1,3 +1,6 @@
+::-webkit-scrollbar {
+  width: 1px;
+}
 .meme {
   display: flex;
   flex-direction: column;
@@ -45,7 +48,8 @@
 .meme__like {
   position: absolute;
   top: 25px;
-  left: 25px;
+  left: 50%;
+  transform: translateX(-200px);
   z-index: 2;
   cursor: pointer;
 }
