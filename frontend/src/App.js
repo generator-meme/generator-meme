@@ -8,10 +8,17 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import { optionsList, checkEmailMessage } from "./utils/constants.js";
+import {
+  optionsList,
+  checkEmailMessage,
+  pageResetPasswordStepOneInfo,
+  pageResetPasswordStepTwoInfo,
+} from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 import Registration from "./components/Registration/Registration";
 import Login from "./components/Login/Login";
+import ResetForm from "./components/ResetForm/ResetForm";
+// import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 
 const App = () => {
@@ -110,6 +117,14 @@ const App = () => {
         <Route
           path="/signin-success"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetForm info={pageResetPasswordStepOneInfo} />}
+        />
+        <Route
+          path="/set-new-password"
+          element={<ResetForm info={pageResetPasswordStepTwoInfo} />}
         />
         <Route
           path="/change-password-message"

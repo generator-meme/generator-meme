@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./AuthenticationForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { prompts } from "./authentificationConstant";
-import AuthenticationPrompt from "../AuthenticationPrompt/AuthenticationPrompt";
+import { formPrompts } from "../../utils/constants";
+import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
 import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
@@ -15,6 +15,13 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
+
+  useEffect(() => {
+    if (document.referrer === "") {
+      setIsDirectedFromThisSite(false);
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -95,10 +102,10 @@ function AuthenticationForm({ info, handleSubmit }) {
                 error={errors.name}
                 value={values.name}
               />
-              <AuthenticationPrompt
+              <FormPrompt
                 errorName={errors.name}
-                spanName={prompts.name}
-                isItSignIn={info.isItSignIn}
+                spanName={formPrompts.name}
+                isVisible={info.isItSignIn}
               />
             </label>
           )}
@@ -127,10 +134,10 @@ function AuthenticationForm({ info, handleSubmit }) {
                 value={values.email}
               />
             )}
-            <AuthenticationPrompt
+            <FormPrompt
               errorName={errors.email}
-              spanName={prompts.email}
-              isItSignIn={info.isItSignIn}
+              spanName={formPrompts.email}
+              isVisible={info.isItSignIn}
             />
           </label>
           <label className="authentication__label">
@@ -157,10 +164,10 @@ function AuthenticationForm({ info, handleSubmit }) {
                 value={values.password}
               />
             )}
-            <AuthenticationPrompt
+            <FormPrompt
               errorName={errors.password}
-              spanName={prompts.password}
-              isItSignIn={info.isItSignIn}
+              spanName={formPrompts.password}
+              isVisible={info.isItSignIn}
             />
           </label>
           {info.isItSignIn && (
@@ -193,11 +200,11 @@ function AuthenticationForm({ info, handleSubmit }) {
           <button
             type="submit"
             disabled={
-              (info.isItSignIn && !isValid && !isChecked) ||
+              (info.isItSignIn && (!isValid || !isChecked)) ||
               (!info.isItSignIn && !isValid)
             }
             className={`btn authentication__button ${
-              (info.isItSignIn && isValid && isChecked) ||
+              (info.isItSignIn && (isValid || isChecked)) ||
               (!info.isItSignIn && isValid)
                 ? ""
                 : "authentication__button_type_disabled"
@@ -215,7 +222,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             зарегистрироваться
           </button>
         )}
-        {!info.isItSignIn && (
+        {!info.isItSignIn && isDirectedFromThisSite && (
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">

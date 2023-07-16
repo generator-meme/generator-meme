@@ -1,7 +1,7 @@
 import React from "react";
-import "./AuthenticationPrompt.css";
+import "./FormPrompt.css";
 
-function AuthenticationPrompt({ errorName, spanName, isItSignIn }) {
+function FormPrompt({ errorName, spanName, isVisible }) {
   return (
     <span
       className={`authentication__input-prompt ${
@@ -10,9 +10,9 @@ function AuthenticationPrompt({ errorName, spanName, isItSignIn }) {
           : "authentication__input-prompt_type_normal"
       }`}
     >
-      {errorName?.length > 1 ? errorName : isItSignIn ? spanName : null}
+      {errorName?.length > 1 ? errorName : isVisible ? spanName : null}
     </span>
   );
 }
 
-export default AuthenticationPrompt;
+export default FormPrompt;

@@ -3,7 +3,7 @@
     padding: 3vh 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     height: calc(100% - 55px - 110px);
     min-height: calc(100vh - 55px - 110px);

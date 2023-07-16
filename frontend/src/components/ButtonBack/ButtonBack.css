@@ -1,0 +1,20 @@
+.btn-back {
+    position: absolute;
+    top: 42px;
+    left: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 10px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border: none;
+    background-color: transparent;
+}
+
+.btn-back__text {
+    margin: 0;
+    padding: 0;
+}
