@@ -12,9 +12,9 @@
 
 .authentication__container {
     margin: 0;
-    padding: 20px 35px;
-    max-width: 597px;
-    width: 40vw;
+    padding: 35px 35px;
+    max-width: 620px;
+    width: 42vw;
     max-height: 100%;
     display: flex;
     flex-direction: column;
@@ -85,9 +85,10 @@
 }
 
 .authentication__button {
-    margin: 10px 0 0;
+    margin: 0;
     padding: 0;
-    height: 75px;
+    height: 60px;
+    min-height: 60px;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -153,9 +154,9 @@
 }
 
 .authentication__link {
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
-    padding: 0;
+    padding: 0 0 20px;
     text-decoration: none;
 }
 

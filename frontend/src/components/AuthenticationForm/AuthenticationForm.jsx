@@ -17,11 +17,11 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
 
-  useEffect(() => {
-    if (document.referrer === "") {
-      setIsDirectedFromThisSite(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (document.referrer === "") {
+  //     setIsDirectedFromThisSite(false);
+  //   }
+  // }, []);
 
   const navigate = useNavigate();
 
@@ -76,7 +76,7 @@ function AuthenticationForm({ info, handleSubmit }) {
           className="authentication__form"
           onSubmit={onSubmit}
           style={{
-            rowGap: info.isItSignIn ? 10 : 0,
+            rowGap: info.isItSignIn ? 12 : 10,
           }}
         >
           {info.isItSignIn && (
@@ -192,7 +192,7 @@ function AuthenticationForm({ info, handleSubmit }) {
           )}
           {!info.isItSignIn && (
             <Link
-              to="/change-password"
+              to="/reset-password"
               className="authentication__colored-text authentication__link"
             >
               Забыли пароль?

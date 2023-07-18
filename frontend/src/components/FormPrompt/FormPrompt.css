@@ -1,14 +1,15 @@
 .authentication__input-prompt {
-    padding: 10px 0 0;
+    padding: 5px 0 0;
     margin: 0;
     width: 100%;
-    min-height: 38px;
+    min-height: 34px;
     font-family: Rubik;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     display: block;
+    box-sizing: border-box;
 }
 
 .authentication__input-prompt_type_normal {
