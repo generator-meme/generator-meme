@@ -191,6 +191,7 @@ LOGOUT_REDIRECT_URL = '/'
 # )
 
 # записывать логи
+# документация https://pypi.org/project/drf-api-logger/
 DRF_API_LOGGER_DATABASE = True
 # максимум 50 записей держит в кэше до записи в таблицу
 DRF_LOGGER_QUEUE_MAX_SIZE = 50
