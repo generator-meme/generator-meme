@@ -115,7 +115,7 @@ const App = () => {
         <Route path="/signin" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/signin-success"
+          path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
         />
         <Route

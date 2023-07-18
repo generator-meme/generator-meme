@@ -118,6 +118,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
@@ -204,10 +205,10 @@ function AuthenticationForm({ info, handleSubmit }) {
               (!info.isItSignIn && !isValid)
             }
             className={`btn authentication__button ${
-              (info.isItSignIn && (isValid || isChecked)) ||
-              (!info.isItSignIn && isValid)
-                ? ""
-                : "authentication__button_type_disabled"
+              (info.isItSignIn && (!isValid || !isChecked)) ||
+              (!info.isItSignIn && !isValid)
+                ? "authentication__button_type_disabled"
+                : ""
             }`}
           >
             {info.buttonText}
