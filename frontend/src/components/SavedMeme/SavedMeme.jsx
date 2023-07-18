@@ -13,6 +13,7 @@ import icDownloadToPc from "../../images/icons/ic-download-to-pc.svg";
 import icGoogleDrive from "../../images/icons/ic-google-drive.svg";
 import icDropbox from "../../images/icons/ic-dropbox.svg";
 import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
+import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorRing } from "react-loader-spinner";
@@ -51,8 +52,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
 
   const copyURL = async () => {
     try {
-      await navigator.clipboard.writeText(location.href);
-      console.log("Content copied to clipboard");
+      await navigator.clipboard.writeText(document.location.href);
     } catch (err) {
       console.error("Failed to copy: ", err);
     }
@@ -171,22 +171,22 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
           <button className="btn saved-meme__btn-save">сохранить в ЛК</button>
           <div className="saved-meme-share-btns-container">
             <div>
-              <WhatsappShareButton url={location.href}>
+              <WhatsappShareButton url={document.location.href}>
                 <img src={icWhatsapp} alt="icon whatsapp" />
               </WhatsappShareButton>
             </div>
             <div>
-              <TelegramShareButton url={location.href}>
+              <TelegramShareButton url={document.location.href}>
                 <img src={icTelegram} alt="icon telegram" />
               </TelegramShareButton>
             </div>
             <div>
-              <ViberShareButton url={location.href}>
+              <ViberShareButton url={document.location.href}>
                 <img src={icViber} alt="icon viber" />
               </ViberShareButton>
             </div>
             <div>
-              <img src={icGroup} alt="icon group" />
+              <img src={icNotWorkedAddGroup} alt="icon group" />
             </div>
             <div>
               <img
