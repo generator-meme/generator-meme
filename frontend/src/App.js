@@ -8,9 +8,18 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import FontFamilyOptions from "./components/FontFamilyOptions/FontFamilyOptions";
-import { optionsList } from "./utils/constants.js";
+import {
+  optionsList,
+  checkEmailMessage,
+  pageResetPasswordStepOneInfo,
+  pageResetPasswordStepTwoInfo,
+} from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
+import Registration from "./components/Registration/Registration";
+import Login from "./components/Login/Login";
+import ResetForm from "./components/ResetForm/ResetForm";
+// import ResetPassword from "./components/ResetPassword/ResetPassword";
+import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -87,12 +96,32 @@ const App = () => {
             />
           }
         />
-        <Route path="/font" element={<FontFamilyOptions />} />
+        <Route path="/signin" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/signin-success-message"
+          element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetForm info={pageResetPasswordStepOneInfo} />}
+        />
+        <Route
+          path="/set-new-password"
+          element={<ResetForm info={pageResetPasswordStepTwoInfo} />}
+        />
+        <Route
+          path="/change-password-message"
+          element={
+            <CheckEmailMessage info={checkEmailMessage.changePasswordMessage} />
+          }
+        />
       </Routes>
       <Footer />
       {imageNotFoundOpen && (
         <InfoTooltip
-          title="Личные изображения не сохраняется при перезагрузке, пожалуйста, вернитесь к выбору изображения"
+          title="Личные изображения не сохраняются после перезагрузки. Пожалуйста,&nbsp;вернитесь&nbsp;к выбору изображения"
+          buttonText="вернуться к выбору"
           onClose={setImageNotFoundOpen}
         />
       )}
