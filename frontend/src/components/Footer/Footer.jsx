@@ -1,19 +1,23 @@
 import "./Footer.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Footer = () => {
+  const { pathname } = useLocation();
+
   return (
     <div className="footer">
-      <NavLink
-        end
-        to="/team"
-        className={({ isActive }) =>
-        `footer__link-team
-        ${isActive ? "footer__link-team--active": ""}`
-        }
-      >
-        Команда
-      </NavLink>
+      {pathname === "/" ? (
+        <NavLink
+          end
+          to="/team"
+          className={({ isActive }) =>
+            `footer__link-team
+        ${isActive ? "footer__link-team--active" : ""}`
+          }
+        >
+          Команда
+        </NavLink>
+      ) : null}
     </div>
   );
 };

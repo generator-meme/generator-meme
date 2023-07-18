@@ -7,8 +7,11 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
+import { useDispatch } from "react-redux";
+import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
-const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
+const Main = ({ memes, setIsNewMeme }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
@@ -29,7 +32,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
         id: uuidv4(),
         image: URL.createObjectURL(currentFile),
       };
-      setCurrentMeme(myCurrentMeme);
+      dispatch({ type: SET_CURRENT_MEME, payload: myCurrentMeme });
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
       navigate(`/${myCurrentMeme.id}`);
@@ -49,7 +52,7 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
         <div className="main__text-box">
           <p className="main__text-advice">
             Выберите шаблон для создания мема или загрузите&nbsp;
-          </p>
+          
           <form className="main__form">
             <label className="main__label">
               свое изображение
@@ -63,18 +66,17 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
               />
             </label>
           </form>
+          </p>
         </div>
       </section>
       <section className="search">
         <SearchPanel
-          tags={tags}
           setFilterMemes={setFilterMemes}
           initMemes={memes}
         ></SearchPanel>
       </section>
       <MemesBox
         memes={filterMemes}
-        setCurrentMeme={setCurrentMeme}
         numberOfVisibleMems={numberOfVisibleMems}
         setNumberOfVisibleMems={setNumberOfVisibleMems}
         setIsNewMeme={setIsNewMeme}
