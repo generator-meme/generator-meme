@@ -1,4 +1,4 @@
-from django.db.models import Count, Exists, OuterRef, Q, Value
+from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -18,7 +18,7 @@ from api.serializers_memes import (Category, CategorySerializer,
                                    TemplateWriteSerializer)
 from api.services import create_delete_relation
 from api.viewsets import ListRetriveViewSet
-from memes.models import Favorite, Meme, Tag, Template
+from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -39,7 +39,7 @@ class MemeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def download_meme(self, request, pk):
-        '''Скачивает готовый мем в формате jpeg'''
+        """Скачивает готовый мем в формате jpeg."""
         image = get_object_or_404(Meme, pk=pk).image
         if request.user.is_authenticated:
             filename = f'{request.user.username}_meme.jpg'
@@ -51,29 +51,43 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 
 class TemplateViewSet(viewsets.ModelViewSet):
-    """Шаблоны мемов."""
+    """Шаблоны мемов.
+    Сортировка шаблонов задается параметром ordering:
+    - если параметр не задан, то по умолчанию выше будут шаблоны,
+    которые чаще других использовались для создания мема
+    - если задан параметр 'random', то шаблоны будут
+    отсортированы в случайном порядке
+    - если задан параметр '-published_at', то выше будут шаблоны
+    опубликованные на сайте позднее, если 'published_at' то наоборот."""
 
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
-    ordering_fields = ['created_at']
+    ordering_fields = ('published_at', )
 
     def get_queryset(self):
-        # queryset = Template.objects.filter(
-        #     is_published=True).annotate(
-        #     used_times=Case(
-        #         When(Exists(
-        #             TemplateUsedTimes.objects.filter(
-        #                 template=OuterRef('pk')
-        #             )
-        #         ), then=TemplateUsedTimes.objects.filter(
-        #             template=OuterRef('pk')
-        #         ).values('used_times')),
-        #         default=Value(0)
-        #     )
-        # ).order_by('-used_times')
         user = self.request.user
         queryset = Template.objects.filter(is_published=True).all()
+
+        order_by = self.request.query_params.get('ordering')
+
+        if order_by:
+            if order_by == 'random':
+                queryset = queryset.order_by('?')
+        else:
+            queryset = queryset.annotate(
+                used_times=Case(
+                    When(Exists(
+                        TemplateUsedTimes.objects.filter(
+                            template=OuterRef('pk')
+                        )
+                    ), then=TemplateUsedTimes.objects.filter(
+                        template=OuterRef('pk')
+                    ).values('used_times')),
+                    default=Value(0)
+                )
+            ).order_by('-used_times')
+
         if user.is_authenticated:
             return queryset.annotate(
                 is_favorited=Exists(

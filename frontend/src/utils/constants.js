@@ -47,7 +47,9 @@ export const createExtraText = (imageSizes) => {
     maxWidth: imageSizes?.width,
     textAreaWidth: 0,
     height: 70,
-    top: imageSizes?.height / 2 - 40,
+    top:
+      imageSizes?.height / 2 -
+      (window.innerWidth > 700 ? 40 : window.innerWidth > 570 ? 35 : 30),
     left: 0,
     bottom: null,
     startTop: imageSizes?.height / 2 - 40,
@@ -93,3 +95,43 @@ export const updateOutideText = (top, imageSizes) => {
 
 export const regExpFromLastCommaToLastRoundBracket =
   /\,(?=[^,]*$)([\s\S]+?)\)(?=[^)]*$)/g;
+
+export const checkEmailMessage = {
+  signinSuccess: {
+    title: "Вы успешно зарегистрировались!",
+    text: "На вашу электронную почту отправлено письмо. Перейдите по ссылке в письме для завершения успешной регистрации.",
+    maxWidth: "100%",
+  },
+  changePasswordMessage: {
+    title: "На вашу электронную почту отправлено письмо. ",
+    text: "Перейдите по ссылке в письме для сохранения нового пароля на сайте.",
+    maxWidth: 460,
+  },
+};
+
+export const formPrompts = {
+  name: "Латинские буквы и цифры в количестве больше 3",
+  email:
+    "Корректные символы для ввода: только цифры, латинские буквы, нижнее подчеркивание, дефис, «@» и точка",
+  password: "Латинские буквы, цифры и символы в количестве больше 5",
+};
+
+export const pageResetPasswordStepOneInfo = {
+  title: "Сброс пароля",
+  fieldName: "Почта",
+  type: "email",
+  inputName: "email",
+  buttonText: "сбросить пароль",
+  prompt:
+    "Введите вашу почту. На неё придёт письмо со ссылкой на страницу установки нового пароля",
+};
+
+export const pageResetPasswordStepTwoInfo = {
+  title: "Сброс пароля",
+  fieldName: "Новый пароль",
+  type: "text",
+  inputName: "password",
+  buttonText: "сохранить пароль",
+  prompt:
+    "Введите новый пароль. Латинские буквы, цифры и символы в количестве больше 5",
+};

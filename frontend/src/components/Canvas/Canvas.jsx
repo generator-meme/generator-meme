@@ -11,10 +11,12 @@ import {
   drawText,
 } from "./canvasFunctions";
 
-import TextFieldset from "../TextFieldset/TextFieldset";
+import Fieldset from "../Fieldset/Fieldset";
+import { useSelector } from "react-redux";
+import { getCanvasSettings } from "../../utils/canvasData";
 
 const Canvas = ({
-  currentMeme,
+  // currentMeme,
   handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
@@ -28,123 +30,15 @@ const Canvas = ({
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const [textsValues, setTextsValues] = useState([
-    {
-      name: "outsideTopTextValues",
-      isOutside: true,
-      isVisible: false,
-      text: "",
-      fontSize: fontSize,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width - 4,
-      textAreaWidth: 0,
-      height: 70,
-      top: -outsideTextHeight,
-      left: 0,
-      bottom: null,
-      canvasTop: 0,
-      canvasLeft: 0,
-      canvasBottom: null,
-    },
-    {
-      name: "outsideBottomTextValues",
-      isOutside: true,
-      isVisible: false,
-      text: "",
-      fontSize: fontSize,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width - 4,
-      textAreaWidth: 0,
-      height: 70,
-      top: null,
-      left: 0,
-      bottom: -outsideTextHeight,
-      canvasTop: null,
-      canvasLeft: 0,
-      canvasBottom: 0,
-    },
-    {
-      name: "topTextValues",
-      isOutside: false,
-      isVisible: true,
-      text: "",
-      fontSize: fontSize,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width,
-      textAreaWidth: 0,
-      height: 70,
-      top: 0,
-      left: 0,
-      bottom: null,
-      startTop: 0,
-      startLeft: 0,
-      isMoving: false,
-      oldX: null,
-      oldY: null,
-    },
-    {
-      name: "bottomTextValues",
-      isOutside: false,
-      isVisible: true,
-      text: "",
-      fontSize: fontSize,
-      fontFamily: fontFamilyOptions.roboto,
-      selectedOption: 0,
-      fontPosition: "center",
-      fontWeight: false,
-      fontStyle: false,
-      fillTextColor: "black",
-      strokeTextColor: "transparent",
-      underline: false,
-      lineThrough: false,
-      backColor: "transparent",
-      opacity: 1,
-      opacityLevel: 100,
-      width: imageSizes?.width,
-      height: 70,
-      top: null,
-      left: 0,
-      bottom: 0,
-      startTop: 0,
-      startLeft: 0,
-      isMoving: false,
-      oldX: null,
-      oldY: null,
-    },
-  ]);
+  const [textsValues, setTextsValues] = useState(
+    getCanvasSettings(
+      fontSize,
+      fontFamilyOptions,
+      imageSizes,
+      outsideTextHeight
+    )
+  );
+  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -169,12 +63,17 @@ const Canvas = ({
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
       ).finally(() => {
-        navigate("/saved");
+        navigate(
+          `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
+          { state: JSON.parse(localStorage.getItem("createdMeme")).id }
+        );
       });
     } else {
       handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
         () => {
-          navigate("/saved");
+          navigate(
+            `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
+          );
         }
       );
     }
@@ -275,10 +174,10 @@ const Canvas = ({
           .reverse(); // если нижний текст - перенос строк снизу вверх
       }
 
-      elementTextWrap.forEach((t, i) =>
+      elementTextWrap.forEach((string, index) =>
         drawText(
-          t,
-          i,
+          string,
+          index,
           ctx,
           element.bottom === null ? true : false,
           canvasHeight,
@@ -286,7 +185,8 @@ const Canvas = ({
           textMarginYBottom,
           textMarginYTop,
           elementMarginX,
-          element
+          element,
+          elementTextWrap.length
         )
       );
     });
@@ -372,7 +272,7 @@ const Canvas = ({
               width: imageSizes.width,
             }}
           >
-            <TextFieldset
+            <Fieldset
               textsValues={textsValues}
               setTextsValues={setTextsValues}
               imageSizes={imageSizes}

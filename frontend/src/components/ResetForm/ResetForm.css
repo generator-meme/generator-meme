@@ -1,0 +1,110 @@
+.reset-form {
+    margin: 0;
+    padding: 4vh 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: calc(100% - 55px - 110px);
+    min-height: calc(100vh - 55px - 110px);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.reset-form__container {
+    margin: 0;
+    padding: 40px 70px 70px;
+    max-width: 753px;
+    width: 50vw;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    row-gap: 50px;
+    box-sizing: border-box;
+    background-color: #FFF;
+    border-radius: 20px;
+    border: 1px solid var(--stroke, #9D0095);
+}
+
+.reset-form__title {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: 100%;
+    text-align: center;
+}
+
+.reset-form__form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    row-gap: 10px;
+}
+
+
+.reset-form__input-name {
+    margin: 0;
+    padding: 0 0 10px 0;
+    display: block;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.reset-form__input {
+    margin: 0;
+    padding: 20px 0 20px 25px;
+    width: 100%;
+    color: #000;
+    font-family: "Rubik";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 20px;
+    border: 1px solid #9D0095;
+    box-sizing: border-box;
+}
+
+.reset-form__input:focus {
+    outline: none;
+}
+
+.reset-form__input_type_error {
+    border-color: #F50000;
+}
+
+.reset-form__button {
+    margin: 20px 0 0;
+    padding: 0;
+    height: 75px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: #1E1D1D;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reset-form__button_type_disabled {
+    background: #9B9B9B;
+}
+
+.reset-form__button_type_disabled:focus {
+    background: #9B9B9B;
+}
+
+.reset-form__button_type_disabled:active {
+    background: #9B9B9B;
+}

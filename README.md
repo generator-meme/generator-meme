@@ -20,7 +20,7 @@
 ## **Backend and infra**
 
 - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 3.9-slim  
-- ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) 4.1.9  
+- ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) 4.1.10  
 - ![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray) 3.14.0  
 - ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) 14.4-alpine  
 - ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) 1.19.3  
@@ -57,11 +57,11 @@
 ### Фронтенд-разработчики
 
 с 13.02.23 – [Изабелла Чебакова](https://github.com/IzabellaCh)  
-с 20.02.23 по 26.03.23 (5 спринтов), с 19.06.23 – [Александр Подогас](https://github.com/Podogas)  
 с 01.05.23 – [Роман Носов](https://github.com/RomanNV)  
 с 12.06.23 - [Георгий Корепин](https://github.com/GeorgKorepin)  
 с 16.01.23 по 05.02.23 (3 спринта) – [Олеся Дорофеева](https://github.com/lesjok)  
 с 16.01.23 по 12.02.23 (4 спринта) – [Станислав Симаков](https://github.com/Readmaniac)  
+с 20.02.23 по 26.03.23 (5 спринтов), с 19.06.23 по 16.07.2023 – [Александр Подогас](https://github.com/Podogas)  
 
 ### Бэкенд-разработчики
 

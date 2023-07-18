@@ -3,10 +3,10 @@ import "./MemesBox.css";
 import arrowUp from "../../images/arrow-up.svg";
 import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
+import { useDispatch } from "react-redux";
 
 const MemesBox = ({
   memes,
-  setCurrentMeme,
   saveNumberOfVisibleMemes,
   numberOfVisibleMems,
   setNumberOfVisibleMems,
@@ -14,6 +14,7 @@ const MemesBox = ({
 }) => {
   // console.log(memes);
   const [scrollTop, setScrollTop] = useState(null);
+  const dispatch = useDispatch();
 
   const fullHeight = Math.max(
     document.body.scrollHeight,
@@ -51,12 +52,7 @@ const MemesBox = ({
           <ul className="memesbox__container">
             {memes.slice(0, numberOfVisibleMems).map((elem) => {
               return (
-                <Meme
-                  elem={elem}
-                  key={elem.id}
-                  setCurrentMeme={setCurrentMeme}
-                  setIsNewMeme={setIsNewMeme}
-                />
+                <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
               );
             })}
           </ul>
