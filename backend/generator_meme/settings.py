@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users',
     'team',
     'groups',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -44,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'generator_meme.urls'
@@ -187,3 +189,14 @@ LOGOUT_REDIRECT_URL = '/'
 # SOCIAL_AUTH_PIPELINE = (
 #     'social_core.pipeline.social_auth.associate_by_email',
 # )
+
+# записывать логи
+DRF_API_LOGGER_DATABASE = True
+# максимум 50 записей держит в кэше до записи в таблицу
+DRF_LOGGER_QUEUE_MAX_SIZE = 50
+# максимум раз в десять секунд пишет в таблицу
+DRF_LOGGER_INTERVAL = 10
+# плюс 180 минут к UTС часовой пояс мск
+DRF_API_LOGGER_TIMEDELTA = 180
+# формат ссылки на ручку
+DRF_API_LOGGER_PATH_TYPE = 'FULL_PATH'
