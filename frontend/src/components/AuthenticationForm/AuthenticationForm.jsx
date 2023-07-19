@@ -17,11 +17,11 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
 
-  // useEffect(() => {
-  //   if (document.referrer === "") {
-  //     setIsDirectedFromThisSite(false);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (document.referrer === "") {
+      setIsDirectedFromThisSite(false);
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -47,6 +47,7 @@ function AuthenticationForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
+    console.log("submit");
     handleSubmit(event, values.email, values.password, setValues, values.name);
     setIsSubmitted(true);
   };

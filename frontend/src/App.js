@@ -29,7 +29,7 @@ const App = () => {
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
   const [tags, setTags] = useState([]);
 
-  function handleCreateNewMeme(memeUrl, memeId) {
+  const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
@@ -40,9 +40,9 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
-  function handleDownloadNewMeme() {
+  const handleDownloadNewMeme = () => {
     api
       .downloadNewMem(newMeme.id)
       .then((res) => {
@@ -51,7 +51,7 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     api
