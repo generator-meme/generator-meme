@@ -37,6 +37,7 @@ services:
     volumes:
       - static_value:/app/backend-static/
       - media_value:/app/backend-media/
+      - email_dev_data:/app/sent_emails/
     environment:
       - PYTHONUNBUFFERED=1
     depends_on:
@@ -65,3 +66,4 @@ volumes:
   media_value:
   meme_data:
   pgadmin_data:
+  email_dev_data:
