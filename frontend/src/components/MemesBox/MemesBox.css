@@ -77,11 +77,23 @@
 }
 
 .memesbox__up-text {
-  margin: 0;
-  margin-top: 7px;
-  padding: 0;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 1.4px;
-  color: #1e1d1d;
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 26px;
+    color: #1E1D1D;
+}
+
+@media (max-width: 1480px) and (min-width: 1081px) {
+    .memebox__container {padding: 31px, 29px, 43px, 0;}
+}
+@media (max-width: 1080px)and (min-width: 521px) {
+    .memebox__container {padding: 83px, 74px, 115px, 0;}
+}
+@media (max-width: 520px) and (min-width: 376px) {
+    .memebox__container {padding: 42px, 40px, 85px, 0;}
+}
+@media (max-width: 375px) {
+    .memebox__container {padding: 15px, 15px, 77px, 0;}
 }

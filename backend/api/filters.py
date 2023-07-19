@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
 
+from groups.models import Group
 from memes.models import Tag, Template
 
 
@@ -37,3 +38,17 @@ class TagSearchFilter(filters.FilterSet):
     class Meta:
         model = Tag
         fields = ('name',)
+
+
+class GroupSearchFilter(filters.FilterSet):
+    """Поиск по группам мемов."""
+
+    name = filters.CharFilter(lookup_expr='icontains')
+    description = filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = Group
+        fields = (
+            'name',
+            'description',
+        )
