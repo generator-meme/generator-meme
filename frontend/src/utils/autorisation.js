@@ -65,7 +65,7 @@ class Authorisation {
 }
 
 export const authorisation = new Authorisation({
-  baseUrl: "https://testmemes.ddns.net/api/auth/users",
+  baseUrl: "/api/auth/users/",
   headers: {
     "Content-Type": "application/json",
   },

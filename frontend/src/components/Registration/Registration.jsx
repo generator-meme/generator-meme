@@ -5,21 +5,28 @@ import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
 
 function Registration() {
-  const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
-  const handleSignIn = async (event, email, password, updateInputs, name) => {
+  const handleSignIn = async (
+    event,
+    email,
+    password,
+    updateInputs,
+    updateErrors,
+    name
+  ) => {
     try {
       event.preventDefault();
-      console.log("async");
-      const signInInfo = await authorisation.signIn(name, email, password);
-      setUserInfo(signInInfo);
-      console.log(userInfo);
-      console.log(signInInfo, "await");
+      await authorisation.signIn(name, email, password);
       navigate("/signin-success-message");
     } catch (err) {
       updateInputs({ name: name, email: email, password: password });
-      console.log("err", err);
+      updateErrors({
+        name: err.username?.join(" "),
+        email: err.email?.join(" "),
+        password: err.password?.join(" "),
+      });
+      // console.log("err", err);
     }
   };
 

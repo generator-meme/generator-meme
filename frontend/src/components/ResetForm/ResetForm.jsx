@@ -73,7 +73,7 @@ function ResetForm({ info, handleSubmit }) {
               pattern={
                 info.inputName === "password"
                   ? "[^А-Я^а-я]{5,16}"
-                  : "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
+                  : "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
               }
               //   placeholder={}
               required

@@ -48,7 +48,14 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   const onSubmit = (event) => {
     console.log("submit");
-    handleSubmit(event, values.email, values.password, setValues, values.name);
+    handleSubmit(
+      event,
+      values.email,
+      values.password,
+      setValues,
+      setErrors,
+      values.name
+    );
     setIsSubmitted(true);
   };
 
@@ -119,7 +126,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
+              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
