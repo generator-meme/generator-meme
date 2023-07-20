@@ -16,7 +16,7 @@ class Authorisation {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        name: name,
+        username: name,
         email: email,
         password: password,
       }),
@@ -65,7 +65,7 @@ class Authorisation {
 }
 
 export const authorisation = new Authorisation({
-  baseUrl: "/auth/users",
+  baseUrl: "https://testmemes.ddns.net/api/auth/users",
   headers: {
     "Content-Type": "application/json",
   },
