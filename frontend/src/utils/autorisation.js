@@ -6,7 +6,7 @@ class Authorisation {
 
   async _checkResponse(res) {
     if (res.ok) {
-      return res.json();
+      return res.status === 204 ? res.text : res.json();
     }
     return Promise.reject(await res.json());
   }
@@ -22,7 +22,16 @@ class Authorisation {
       }),
     }).then(this._checkResponse);
   }
-
+  activateAccount(uid, token) {
+    return fetch(`${this._baseUrl}activation/`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        uid: uid,
+        token: token,
+      }),
+    }).then(this._checkResponse);
+  }
   //   signIn(name, email, password) {
   //     return fetch(`${this._baseUrl}`, {
   //       method: "POST",

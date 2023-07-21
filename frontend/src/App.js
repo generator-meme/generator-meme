@@ -20,6 +20,7 @@ import Login from "./components/Login/Login";
 import ResetForm from "./components/ResetForm/ResetForm";
 // import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
+import EmptyPage from "./components/EmptyPage/EmptyPage";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -102,6 +103,7 @@ const App = () => {
           path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
         />
+        <Route path="/activate/:uid/:token/" element={<EmptyPage />} />
         <Route
           path="/reset-password"
           element={<ResetForm info={pageResetPasswordStepOneInfo} />}
@@ -122,7 +124,9 @@ const App = () => {
         <InfoTooltip
           title="Личные изображения не сохраняются после перезагрузки. Пожалуйста,&nbsp;вернитесь&nbsp;к выбору изображения"
           buttonText="вернуться к выбору"
-          onClose={setImageNotFoundOpen}
+          onButtonClick={(e) => {
+            setImageNotFoundOpen(false);
+          }}
         />
       )}
       <div
