@@ -12,7 +12,7 @@ class Authorisation {
   }
 
   signIn(name, email, password) {
-    return fetch(`${this._baseUrl}`, {
+    return fetch(`${this._baseUrl}/users/`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
@@ -23,7 +23,7 @@ class Authorisation {
     }).then(this._checkResponse);
   }
   activateAccount(uid, token) {
-    return fetch(`${this._baseUrl}activation/`, {
+    return fetch(`${this._baseUrl}/users/activation/`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
@@ -32,29 +32,17 @@ class Authorisation {
       }),
     }).then(this._checkResponse);
   }
-  //   signIn(name, email, password) {
-  //     return fetch(`${this._baseUrl}`, {
-  //       method: "POST",
-  //       headers: this._headers,
-  //       body: JSON.stringify({
-  //         name: name,
-  //         email: email,
-  //         password: password,
-  //       }),
-  //     }).then(this._checkResponse);
-  //   }
-
-  //   login(email, password) {
-  //     return fetch(`${this._baseUrl}/signin`, {
-  //       method: "POST",
-  //       credentials: "include",
-  //       headers: this._headers,
-  //       body: JSON.stringify({
-  //         password: password,
-  //         email: email,
-  //       }),
-  //     }).then(this._checkResponse);
-  //   }
+  logIn(email, password) {
+    return fetch(`${this._baseUrl}/token/login/`, {
+      method: "POST",
+      //   credentials: "include", // для tokena внутри httpOnly cookie, если потом будет реализовывать
+      headers: this._headers,
+      body: JSON.stringify({
+        password: password,
+        email: email,
+      }),
+    }).then(this._checkResponse);
+  }
 
   //   checkToken() {
   //     return fetch(`${this._baseUrl}/users/me`, {
@@ -74,7 +62,7 @@ class Authorisation {
 }
 
 export const authorisation = new Authorisation({
-  baseUrl: "/api/auth/users/",
+  baseUrl: "/api/auth",
   headers: {
     "Content-Type": "application/json",
   },

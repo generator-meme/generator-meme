@@ -222,7 +222,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             {info.buttonText}
           </button>
         </form>
-        {!info.isItSignIn && (
+        {!info.isItSignIn && isDirectedFromThisSite && (
           <button
             className={`btn authentication__button`}
             style={{ margin: 0 }}
