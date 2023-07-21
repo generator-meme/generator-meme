@@ -26,6 +26,8 @@ function EmptyPage() {
     activateAccount(uid, token);
   }, []);
 
+  // вставить ниже прелоадер на длительность запроса, когда он будет готов
+
   return (
     <>
       <main className="empty-page"></main>
