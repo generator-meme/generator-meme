@@ -191,7 +191,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/auth/social/token'
-
+SOCIAL_AUTH_VK_OAUTH2_EXTRA_DATA = ['email', ]
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
