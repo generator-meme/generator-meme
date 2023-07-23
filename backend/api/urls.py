@@ -8,7 +8,6 @@ from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
                              TemplateViewSet)
 from api.views_team import TeamGroupViewSet
 
-
 router = routers.DefaultRouter()
 router.register('memes', MemeViewSet, basename='memes')
 router.register('templates', TemplateViewSet, basename='templates')
