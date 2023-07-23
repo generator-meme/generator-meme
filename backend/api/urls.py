@@ -2,12 +2,12 @@ from django.urls import include, path
 from djoser.views import UserViewSet
 from rest_framework import routers
 
+from api import view_token
 from api.views_groups import GroupRoleViewSet, GroupViewSet, UserGroupsViewSet
 from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
                              TemplateViewSet)
 from api.views_team import TeamGroupViewSet
 
-from api import view_token
 
 router = routers.DefaultRouter()
 router.register('memes', MemeViewSet, basename='memes')

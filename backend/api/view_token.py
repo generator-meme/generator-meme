@@ -15,7 +15,6 @@ def set_token(request):
             'username': user.username,
             'token': token.key
         }, status.HTTP_200_OK)
-    else:
-        return Response({
-            'message': 'Вы не авторизированы!'
-        }, status.HTTP_401_UNAUTHORIZED)
+    return Response({
+        'message': 'Вы не авторизированы!'
+    }, status.HTTP_401_UNAUTHORIZED)
