@@ -7,6 +7,8 @@ from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
                              TemplateViewSet)
 from api.views_team import TeamGroupViewSet
 
+from api import view_token
+
 router = routers.DefaultRouter()
 router.register('memes', MemeViewSet, basename='memes')
 router.register('templates', TemplateViewSet, basename='templates')
@@ -40,5 +42,6 @@ selected_user_routes = list(filter(is_route_selected, user_router.urls))
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('djoser.urls.authtoken')),
+    path('auth/social/token', view_token.set_token, name='set_token'),
     path('auth/social/', include('social_django.urls', namespace='social'))
 ] + selected_user_routes
