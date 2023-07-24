@@ -1,0 +1,31 @@
+.button-section-container {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+   justify-content: space-between; /* Выравниваем элементы по краям контейнера */
+   align-items: center; /* Выравниваем элементы вертикально по центру */
+   padding: 0 30px; /* Отступы слева и справа по 30px */
+ }
+
+.button {
+  background-color: transparent; /* Прозрачный фон */
+  color: #000000; /* Цвет текста */
+  border: none; /* Убираем рамку у кнопок */
+  margin-right: 30px; /* Отступ между кнопками по 30px */
+  font-size: 25px; /* Размер текста кнопки в 25px */
+  cursor: pointer;
+}
+
+.button:last-child { 
+  color: gray;
+  margin-right: 0; /* У последней кнопки убираем правый отступ */
+}
+.button:active {
+  color: purple; /* Выделяем нажатую кнопку фиолетовым цветом */
+} 
+.sort {
+  align-self: flex-end; 
+}
