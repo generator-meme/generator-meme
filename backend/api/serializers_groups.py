@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CurrentUserDefault
+from rest_framework.fields import CurrentUserDefault, SerializerMethodField
 
 from api.serializers_memes import TemplateReadSerializer
 from api.serializers_users import UsersSerializer
@@ -183,13 +183,16 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 class GroupUserSerializer(serializers.ModelSerializer):
     """Сериализатор пользователей в группе (запись)."""
 
-    role = serializers.PrimaryKeyRelatedField(
-        queryset=GroupRole.objects.all(),
-    )
-
     class Meta:
-        fields = '__all__'
-        read_only_field = ('role',)
+        fields = ('id',
+                  'group',
+                  'user',
+                  'added_at',
+                  'role')
+        read_only_field = ('id',
+                           'group',
+                           'added_at',
+                           'role',)
         model = GroupUser
 
     def validate(self, data):
@@ -202,10 +205,6 @@ class GroupUserSerializer(serializers.ModelSerializer):
         ).exists():
             raise ValidationError(
                 {'GroupUser_exists_error': 'Пользователь уже в группе.'}
-            )
-        if data.get('group').owner == data.get('user'):
-            raise ValidationError(
-                {'GroupUser_error': 'Администратора нельзя добавить в список.'}
             )
         if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
@@ -224,34 +223,86 @@ class GroupUserSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class GroupBannedUserSerializer(serializers.ModelSerializer):
-    """Сериализатор пользователей в банлисте группы (запись)."""
+class EnterGroupSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователей в группе (самостоятельный вход в группу)."""
 
     class Meta:
-        fields = '__all__'
-        model = GroupBannedUser
+        fields = ('id',
+                  'group',
+                  'user',
+                  'added_at',
+                  'role')
+        read_only_field = ('id',
+                           'group',
+                           'user',
+                           'added_at',
+                           'role')
+        model = GroupUser
 
     def validate(self, data):
         """Валидирует на наличие пользователя в группе."""
         request = self.context['request']
         if not request or request.user.is_anonymous:
             return False
+        if GroupUser.objects.filter(
+                user=data.get('user'), group=data.get('group')
+        ).exists():
+            raise ValidationError(
+                {'GroupUser_exists_error': 'Вы уже в группе.'}
+            )
+        if GroupBannedUser.objects.filter(
+                user=data.get('user'), group=data.get('group')
+        ).exists():
+            raise ValidationError(
+                {'GroupBannedUser_error':
+                 'Вы забаннены и не можете вступить в группу. '
+                 'Обратитесь к Администраторам группы'}
+            )
+        return data
+
+    def to_representation(self, instance):
+        serializer = GroupFullSerializer(
+            instance.group,
+            context={'request': self.context.get('request')}
+        )
+        return serializer.data
+
+
+class GroupBannedUserSerializer(serializers.ModelSerializer):
+    """Сериализатор пользователей в банлисте группы (запись)."""
+
+    class Meta:
+        fields = (
+            'group',
+            'user',
+        )
+        model = GroupBannedUser
+
+    def validate(self, data):
+        """Валидирует на наличие пользователя в группе."""
+        request = self.context['request']
+
         if not GroupUser.objects.filter(
                 group=data.get('group'),
                 user=data.get('user')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Такого пользователя нет в группе.'}
+                {'user': 'Такого пользователя нет в группе.'}
             )
-        user = GroupUser.objects.get(
+        group_user = GroupUser.objects.get(
             group=data.get('group'),
             user=data.get('user')
         )
-        if user.role.is_admin:
+        if request.user != group_user.group.owner and group_user.role.is_admin:
             raise ValidationError(
-                {'GroupUser_exists_error':
-                 'Пользователя со статусом "Администратор" нельзя добавить '
-                 'в бан.'}
+                {'user':
+                 'Пользователя со статусом "Администратор" добавить '
+                 'в бан может только владелец группы.'}
+            )
+        if group_user.user == request.user:
+            raise ValidationError(
+                {'user':
+                 'Себя нельзя добавить в бан.'}
             )
         return data
 
@@ -266,30 +317,24 @@ class GroupBannedUserSerializer(serializers.ModelSerializer):
 class GroupMemeWriteSerializer(serializers.ModelSerializer):
     """Сериализатор готового мема в группе (запись)."""
 
-    added_by = UsersSerializer(read_only=True, default=CurrentUserDefault())
-
     class Meta:
-        fields = '__all__'
+        fields = (
+            'group',
+            'added_by',
+            'meme',
+        )
         model = GroupMeme
 
     def validate(self, data):
-        """Валидирует на наличие мема в группе и права."""
-        request = self.context['request']
-        if not request or request.user.is_anonymous:
-            return False
+        """Валидирует на наличие мема в группе."""
+
         if GroupMeme.objects.filter(
                 meme=data.get('meme'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupMeme_exists_error': 'Мем уже в группе.'}
+                {'meme': 'Мем уже в группе.'}
             )
-        if GroupUser.objects.filter(group=data.get('group'),
-                                    user=request.user).exists():
-            return data
-        raise ValidationError(
-            {'GroupMeme_error':
-             'Мем может добавить только пользователь группы.'}
-        )
+        return data
 
     def to_representation(self, instance):
         serializer = GroupFullSerializer(
@@ -297,6 +342,64 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
             context={'request': self.context.get('request')}
         )
         return serializer.data
+
+
+class GroupUserDeleteSerializer(serializers.Serializer):
+    user = serializers.ReadOnlyField()
+    group = serializers.ReadOnlyField()
+
+    def validate(self, data):
+        request = self.context['request']
+        if not request or request.user.is_anonymous:
+            return False
+        group_user = GroupUser.objects.filter(
+            user=self.context['user'],
+            group=self.context['group']
+        )
+        if not group_user.exists():
+            raise ValidationError(
+                {'GroupUser_exists_error':
+                 'Данного пользователя нет в группе.'}
+            )
+        if (request.user != group_user[0].user
+                and group_user[0].role.is_admin
+                and request.user != group_user[0].owner):
+            raise ValidationError(
+                {"Owner_error":
+                 "Пользователя со статусом 'Администратор' может "
+                 "удалить только владелец группы."},
+            )
+        if request.user == group_user[0].group.owner and (
+                group_user[0].user == group_user[0].group.owner):
+            raise ValidationError(
+                {"Owner_error":
+                 "Владелец группы не может удалить себя из списка "
+                 "пользователей. Вначале передайте группу другому "
+                 "пользователю!"}
+            )
+        return data
+
+
+class GroupMemeDeleteSerializer(serializers.ModelSerializer):
+    """Сериализатор готового мема в группе (удаление)."""
+
+    class Meta:
+        fields = (
+            'group',
+            'meme',
+        )
+        model = GroupMeme
+
+    def validate(self, data):
+        """Валидирует на наличие мема в группе."""
+        if not GroupMeme.objects.filter(
+            meme=data.get('meme'),
+            group=data.get('group'),
+        ).exists():
+            raise ValidationError(
+                {'meme': 'Данного мема нет в группе.'}
+            )
+        return data
 
 
 class NewOwnerSerializer(serializers.Serializer):
@@ -324,3 +427,67 @@ class NewOwnerSerializer(serializers.Serializer):
                 {'user_id': 'Новый владелец не состоит в этой группе.'}
             )
         return data
+
+
+class ChangeRoleSerializer(serializers.Serializer):
+    """Сериализатор данных при установке роли участнику группы."""
+
+    user_id = serializers.IntegerField()
+    role_id = serializers.IntegerField()
+
+    def validate(self, data):
+        """Валидирует данные."""
+        user_id = self.context['user_id']
+        role_id = self.context['role_id']
+        user_in_group = self.context['user_in_group']
+
+        if not User.objects.filter(id=user_id).exists():
+            raise ValidationError(
+                {'user_id': 'Пользователя с таким ID не существует.'}
+            )
+        if not GroupRole.objects.filter(id=role_id).exists():
+            raise ValidationError(
+                {'role_id': 'Роли с таким ID не существует.'}
+            )
+        if not user_in_group.exists():
+            raise ValidationError(
+                {'user_id': 'Пользователь не является участником группы.'}
+            )
+        if user_in_group[0].role.id == role_id:
+            raise ValidationError(
+                {'role_id': 'Эта роль уже установлена у пользователя.'}
+            )
+        return data
+
+
+class GroupRoleSerializer(serializers.ModelSerializer):
+    """Сериализатор ролей в группах мемов."""
+
+    class Meta:
+        fields = (
+            'name',
+            'is_admin',
+            'is_moderator',
+        )
+        model = GroupRole
+
+
+class UserGroupReadSerializer(serializers.ModelSerializer):
+    """Сериализатор групп пользователя (чтение)."""
+
+    group = GroupSerializer()
+    role = GroupRoleSerializer()
+    is_owner = SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'group',
+            'added_at',
+            'role',
+            'is_owner',
+        )
+        model = GroupUser
+
+    def get_is_owner(self, obj):
+        """Проверяет, является ли пользователь владельцем группы."""
+        return self.context['request'].user == obj.group.owner

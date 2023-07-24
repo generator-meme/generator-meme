@@ -115,23 +115,3 @@ export const formPrompts = {
     "Корректные символы для ввода: только цифры, латинские буквы, нижнее подчеркивание, дефис, «@» и точка",
   password: "Латинские буквы, цифры и символы в количестве больше 5",
 };
-
-export const pageResetPasswordStepOneInfo = {
-  title: "Сброс пароля",
-  fieldName: "Почта",
-  type: "email",
-  inputName: "email",
-  buttonText: "сбросить пароль",
-  prompt:
-    "Введите вашу почту. На неё придёт письмо со ссылкой на страницу установки нового пароля",
-};
-
-export const pageResetPasswordStepTwoInfo = {
-  title: "Сброс пароля",
-  fieldName: "Новый пароль",
-  type: "text",
-  inputName: "password",
-  buttonText: "сохранить пароль",
-  prompt:
-    "Введите новый пароль. Латинские буквы, цифры и символы в количестве больше 5",
-};

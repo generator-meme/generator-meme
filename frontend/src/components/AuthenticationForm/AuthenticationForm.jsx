@@ -15,13 +15,6 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
-
-  // useEffect(() => {
-  //   if (document.referrer === "") {
-  //     setIsDirectedFromThisSite(false);
-  //   }
-  // }, []);
 
   const navigate = useNavigate();
 
@@ -47,7 +40,15 @@ function AuthenticationForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
-    handleSubmit(event, values.email, values.password, setValues, values.name);
+    console.log("submit");
+    handleSubmit(
+      event,
+      values.email,
+      values.password,
+      setValues,
+      setErrors,
+      values.name
+    );
     setIsSubmitted(true);
   };
 
@@ -65,13 +66,13 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   return (
     <main className="authentication">
-      <div
-        className="authentication__container"
-        style={{
-          rowGap: info.isItSignIn ? 10 : 30,
-        }}
-      >
-        <h2 className="authentication__title">{info.title}</h2>
+      <div className="authentication__container">
+        <h2
+          className="authentication__title"
+          style={{ paddingBottom: info.isItSignIn ? 0 : 20 }}
+        >
+          {info.title}
+        </h2>
         <form
           className="authentication__form"
           onSubmit={onSubmit}
@@ -118,7 +119,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
+              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
@@ -214,7 +215,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             {info.buttonText}
           </button>
         </form>
-        {!info.isItSignIn && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <button
             className={`btn authentication__button`}
             style={{ margin: 0 }}
@@ -223,7 +224,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             зарегистрироваться
           </button>
         )}
-        {!info.isItSignIn && isDirectedFromThisSite && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">

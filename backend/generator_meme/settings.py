@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users',
     'team',
     'groups',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -44,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'generator_meme.urls'
@@ -122,19 +124,24 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
-EMAIL_USE_SSL = True
-EMAIL_USE_TLS = False
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 465
+if DEVELOPE:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+    SECURITY_EMAIL_SENDER = os.getenv('DEFAULT_FROM_EMAIL')
+    EMAIL_USE_SSL = True
+    EMAIL_USE_TLS = False
+    EMAIL_HOST = os.getenv('EMAIL_HOST')
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = 465
 
 
 DJOSER = {
@@ -147,6 +154,7 @@ DJOSER = {
         "user": "api.serializers_users.UsersSerializer",
         "current_user": "api.serializers_users.UsersSerializer",
     },
+    'PASSWORD_RESET_CONFIRM_URL': 'reset/password/confirm/{uid}/{token}',
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True
 }
@@ -182,7 +190,29 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/auth/social/token'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_TELEGRAM_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_core.pipeline.social_auth.associate_by_email',
-# )
+# записывать логи
+# документация https://pypi.org/project/drf-api-logger/
+DRF_API_LOGGER_DATABASE = True
+# максимум 50 записей держит в кэше до записи в таблицу
+DRF_LOGGER_QUEUE_MAX_SIZE = 50
+# максимум раз в десять секунд пишет в таблицу
+DRF_LOGGER_INTERVAL = 10
+# плюс 180 минут к UTС часовой пояс мск
+DRF_API_LOGGER_TIMEDELTA = 180
+# формат ссылки на ручку
+DRF_API_LOGGER_PATH_TYPE = 'FULL_PATH'

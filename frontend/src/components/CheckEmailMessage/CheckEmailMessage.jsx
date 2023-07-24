@@ -1,8 +1,11 @@
 import React from "react";
 import "./CheckEmailMessage.css";
 import ButtonBack from "../ButtonBack/ButtonBack";
+import { useNavigate } from "react-router-dom";
 
 function CheckEmailMessage({ info }) {
+  const navigate = useNavigate();
+
   return (
     <main className="check-email">
       <ButtonBack />
@@ -13,7 +16,7 @@ function CheckEmailMessage({ info }) {
         </p>
         <button
           className="btn check-email__button"
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => navigate("/")}
         >
           мемы ждут меня!
         </button>
