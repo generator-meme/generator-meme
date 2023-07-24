@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
 
 function Login() {
+  const [abridgedVersion, setAbridgedVersion] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogIn = async (
     event,
@@ -29,12 +31,24 @@ function Login() {
       // console.log("err", err);
     }
   };
+
+  useEffect(() => {
+    //если переход со страница активации или подтверждения сброса пароля - форма без полей "войти с помощью"
+    if (
+      location.state?.from?.pathname.includes("activate") ||
+      location.state?.from?.pathname.includes("confirm")
+    ) {
+      setAbridgedVersion(true);
+    }
+  }, []);
+
   return (
     <AuthenticationForm
       info={{
         title: "Войдите, чтобы продолжить",
         isItSignIn: false,
         buttonText: "войти",
+        abridgedVersion: abridgedVersion,
       }}
       handleSubmit={handleLogIn}
     ></AuthenticationForm>

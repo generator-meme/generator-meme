@@ -1,15 +1,16 @@
 import React from "react";
 import EmptyPage from "../EmptyPage/EmptyPage";
 import { authorisation } from "../../utils/autorisation";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function AuthActivation() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const activateAccount = async (uid, token, setResponse) => {
     try {
       await authorisation.activateAccount(uid, token);
-      navigate("/login");
+      navigate("/login", { state: { from: location } });
     } catch (err) {
       if (err.detail) {
         setResponse(err.detail);

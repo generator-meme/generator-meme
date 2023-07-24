@@ -1,11 +1,12 @@
 import React from "react";
 import ResetForm from "../ResetForm/ResetForm";
 import { authorisation } from "../../utils/autorisation";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 function ResetPassordConfirm() {
   const navigate = useNavigate();
   const { uid, token } = useParams();
+  const location = useLocation();
 
   const pageInfo = {
     title: "Сброс пароля",
@@ -26,7 +27,7 @@ function ResetPassordConfirm() {
     try {
       event.preventDefault();
       await authorisation.resetPasswordConfirm(uid, token, new_password);
-      navigate("/login");
+      navigate("/login", { state: { from: location } });
     } catch (err) {
       updateInputs({ password: new_password });
       updateErrors({

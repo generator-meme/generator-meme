@@ -15,13 +15,6 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
-
-  useEffect(() => {
-    if (document.referrer === "") {
-      setIsDirectedFromThisSite(false);
-    }
-  }, []);
 
   const navigate = useNavigate();
 
@@ -222,7 +215,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             {info.buttonText}
           </button>
         </form>
-        {!info.isItSignIn && isDirectedFromThisSite && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <button
             className={`btn authentication__button`}
             style={{ margin: 0 }}
@@ -231,7 +224,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             зарегистрироваться
           </button>
         )}
-        {!info.isItSignIn && isDirectedFromThisSite && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
