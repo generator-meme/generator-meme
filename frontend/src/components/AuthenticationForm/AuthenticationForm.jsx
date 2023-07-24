@@ -6,7 +6,7 @@ import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
 import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
-import { ReactComponent as Google } from "../../images/authenticationPage/google-copy.svg";
+import { ReactComponent as Google } from "../../images/authenticationPage/google.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
 
 function AuthenticationForm({ info, handleSubmit }) {
@@ -228,10 +228,10 @@ function AuthenticationForm({ info, handleSubmit }) {
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
-              <Vkontakte />
-              <Telegram />
-              <Yandex />
-              <Google />
+              <Vkontakte className="authentication__icon" />
+              <Telegram className="authentication__icon" />
+              <Yandex className="authentication__icon" />
+              <Google className="authentication__icon" />
             </div>
           </div>
         )}

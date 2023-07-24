@@ -185,3 +185,12 @@
     align-items: center;
     column-gap: 25px;
 }
+
+.authentication__icon {
+    transform: scale(1);
+    transition: transform 0.2s linear;
+}
+
+.authentication__icon:hover {
+    transform: scale(1.083);
+}
