@@ -8,19 +8,14 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import {
-  optionsList,
-  checkEmailMessage,
-  pageResetPasswordStepOneInfo,
-  pageResetPasswordStepTwoInfo,
-} from "./utils/constants.js";
+import { optionsList, checkEmailMessage } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 import Registration from "./components/Registration/Registration";
 import Login from "./components/Login/Login";
-import ResetForm from "./components/ResetForm/ResetForm";
-// import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ResetPassordConfirm from "./components/ResetPassordConfirm/ResetPassordConfirm";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
-import EmptyPage from "./components/EmptyPage/EmptyPage";
+import AuthActivation from "./components/AuthActivation/AuthActivation";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -103,14 +98,11 @@ const App = () => {
           path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
         />
-        <Route path="/activate/:uid/:token/" element={<EmptyPage />} />
+        <Route path="/activate/:uid/:token/" element={<AuthActivation />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
-          path="/reset-password"
-          element={<ResetForm info={pageResetPasswordStepOneInfo} />}
-        />
-        <Route
-          path="/set-new-password"
-          element={<ResetForm info={pageResetPasswordStepTwoInfo} />}
+          path="/reset/password/confirm/:uid/:token/"
+          element={<ResetPassordConfirm />}
         />
         <Route
           path="/change-password-message"

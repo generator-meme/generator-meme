@@ -43,7 +43,26 @@ class Authorisation {
       }),
     }).then(this._checkResponse);
   }
-
+  resetPassword(email) {
+    return fetch(`${this._baseUrl}/users/reset_password/`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        email: email,
+      }),
+    }).then(this._checkResponse);
+  }
+  resetPasswordConfirm(uid, token, new_password) {
+    return fetch(`${this._baseUrl}/users/reset_password_confirm/`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        uid: uid,
+        token: token,
+        new_password: new_password,
+      }),
+    }).then(this._checkResponse);
+  }
   //   checkToken() {
   //     return fetch(`${this._baseUrl}/users/me`, {
   //       method: "GET",

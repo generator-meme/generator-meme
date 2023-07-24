@@ -1,29 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./EmptyPage.css";
 import { useParams, useNavigate } from "react-router-dom";
-import { authorisation } from "../../utils/autorisation";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
-function EmptyPage() {
+function EmptyPage({ handleRequest, errorNavigate }) {
   const { uid, token } = useParams();
   const navigate = useNavigate();
   const [response, setResponse] = useState(false);
 
-  const activateAccount = async (uid, token) => {
-    try {
-      await authorisation.activateAccount(uid, token);
-      navigate("/login");
-    } catch (err) {
-      if (err.detail) {
-        setResponse(err.detail);
-      } else {
-        setResponse("Что-то пошло не так, попробуйте зарегистрироваться снова");
-      }
-    }
-  };
-
   useEffect(() => {
-    activateAccount(uid, token);
+    handleRequest(uid, token, setResponse);
   }, []);
 
   // вставить ниже прелоадер на длительность запроса, когда он будет готов
@@ -34,9 +20,9 @@ function EmptyPage() {
       {response && (
         <InfoTooltip
           title={response}
-          buttonText="зарегистрироваться снова"
+          buttonText="попробовать снова"
           onButtonClick={(e) => {
-            navigate("/signin");
+            navigate(errorNavigate);
           }}
         />
       )}
