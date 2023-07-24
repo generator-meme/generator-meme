@@ -66,13 +66,13 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   return (
     <main className="authentication">
-      <div
-        className="authentication__container"
-        style={{
-          rowGap: info.isItSignIn ? 10 : 30,
-        }}
-      >
-        <h2 className="authentication__title">{info.title}</h2>
+      <div className="authentication__container">
+        <h2
+          className="authentication__title"
+          style={{ paddingBottom: info.isItSignIn ? 0 : 20 }}
+        >
+          {info.title}
+        </h2>
         <form
           className="authentication__form"
           onSubmit={onSubmit}

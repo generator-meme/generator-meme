@@ -24,6 +24,7 @@
     background-color: #FFF;
     border-radius: 20px;
     border: 1px solid var(--stroke, #9D0095);
+    row-gap: 10px;
 }
 
 .authentication__title {
@@ -156,7 +157,7 @@
 .authentication__link {
     font-size: 16px;
     margin: 0;
-    padding: 0 0 20px;
+    padding: 0 0 10px;
     text-decoration: none;
 }
 
@@ -171,7 +172,7 @@
 
 .authentication__login-text {
     margin: 0;
-    padding: 0;
+    padding: 5px 0 0;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
