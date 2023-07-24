@@ -8,18 +8,14 @@ import SavedMeme from "./components/SavedMeme/SavedMeme";
 import Team from "./components/Team/Team";
 import api from "./utils/api";
 import "./App.css";
-import {
-  optionsList,
-  checkEmailMessage,
-  pageResetPasswordStepOneInfo,
-  pageResetPasswordStepTwoInfo,
-} from "./utils/constants.js";
+import { optionsList, checkEmailMessage } from "./utils/constants.js";
 import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
 import Registration from "./components/Registration/Registration";
 import Login from "./components/Login/Login";
-import ResetForm from "./components/ResetForm/ResetForm";
-// import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ResetPassordConfirm from "./components/ResetPassordConfirm/ResetPassordConfirm";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
+import AuthActivation from "./components/AuthActivation/AuthActivation";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -29,7 +25,7 @@ const App = () => {
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
 
-  function handleCreateNewMeme(memeUrl, memeId) {
+  const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
@@ -41,9 +37,9 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
-  function handleDownloadNewMeme() {
+  const handleDownloadNewMeme = () => {
     api
       .downloadNewMem(meme.id)
       .then((res) => {
@@ -52,7 +48,7 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     api
@@ -102,13 +98,11 @@ const App = () => {
           path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}
         />
+        <Route path="/activate/:uid/:token/" element={<AuthActivation />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
-          path="/reset-password"
-          element={<ResetForm info={pageResetPasswordStepOneInfo} />}
-        />
-        <Route
-          path="/set-new-password"
-          element={<ResetForm info={pageResetPasswordStepTwoInfo} />}
+          path="/reset/password/confirm/:uid/:token/"
+          element={<ResetPassordConfirm />}
         />
         <Route
           path="/change-password-message"
@@ -122,7 +116,9 @@ const App = () => {
         <InfoTooltip
           title="Личные изображения не сохраняются после перезагрузки. Пожалуйста,&nbsp;вернитесь&nbsp;к выбору изображения"
           buttonText="вернуться к выбору"
-          onClose={setImageNotFoundOpen}
+          onButtonClick={(e) => {
+            setImageNotFoundOpen(false);
+          }}
         />
       )}
       <div

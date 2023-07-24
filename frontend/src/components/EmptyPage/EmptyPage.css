@@ -1,0 +1,4 @@
+.empty-page {
+    min-height: calc(100vh - 55px - 110px);
+    box-sizing: border-box;
+}
