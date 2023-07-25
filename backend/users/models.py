@@ -29,7 +29,7 @@ class User(AbstractUser):
                 limit_value=3,
             ),
             RegexValidator(
-                regex=r"^[a-zA-Zа-яА-ЯёЁ0-9 !@#$%^&*()\-=\+]+$",
+                regex=r"^[a-zA-Zа-яА-ЯёЁ0-9 !@#$%^&*(_)\-=\+]+$",
                 message='Поле должно содержать только допустимые символы',
             ),
         ],
