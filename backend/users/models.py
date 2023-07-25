@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator, MinLengthValidator
 from django.db import models
 
 
@@ -14,22 +15,33 @@ class UserRole:
 class User(AbstractUser):
 
     role = models.CharField(
+        verbose_name='Роль пользователя',
         max_length=16,
         choices=UserRole.ROLES,
-        default=UserRole.User
+        default=UserRole.User,
     )
-    username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    email = models.EmailField(unique=True, max_length=254)
+    username = models.CharField(
+        verbose_name='Имя пользователя',
+        max_length=50,
+        unique=True,
+        validators=[
+            MinLengthValidator(
+                limit_value=4,
+            ),
+            RegexValidator(
+                regex=r"^[a-zA-Zа-яА-ЯёЁ0-9 !@#$%^&*()\-=\+]+$",
+                message='Поле должно содержать только допустимые символы',
+            ),
+        ],
+    )
+    email = models.EmailField(
+        verbose_name='Электронная почта',
+        db_index=True,
+        unique=True,
+        max_length=254,
+    )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]
-
-    models.UniqueConstraint(fields=['username', 'email'],
-                            name='unique_username_email')
-
-    models.UniqueConstraint(fields=['first_name', 'last_name'],
-                            name='name')
 
     class Meta:
         verbose_name = 'Пользователь'
