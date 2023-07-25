@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AuthenticationForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { formPrompts } from "../../utils/constants";
+import { formPrompts, inputPattern } from "../../utils/constants";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
@@ -88,7 +88,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               <input
                 type="text"
                 name="name"
-                pattern="[A-Za-z0-9]{3,40}"
+                pattern={inputPattern.name}
                 value={values.name}
                 onChange={onChange}
                 className={`authentication__input ${
@@ -119,7 +119,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
-              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+              pattern={inputPattern.email}
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
@@ -149,7 +149,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             <input
               type="text"
               value={values.password}
-              pattern="[^А-Я^а-я]{5,16}"
+              pattern={inputPattern.password}
               onChange={onChange}
               name="password"
               className={`authentication__input ${
