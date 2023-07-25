@@ -228,9 +228,13 @@ function AuthenticationForm({ info, handleSubmit }) {
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
+              {/* <Link to="/api/auth/social/login/vk-oauth2"> */}
               <Vkontakte className="authentication__icon" />
+              {/* </Link> */}
               <Telegram className="authentication__icon" />
+              {/* <Link to="/api/auth/social/login/yandex-oauth2"> */}
               <Yandex className="authentication__icon" />
+              {/* </Link> */}
               <Google className="authentication__icon" />
             </div>
           </div>
