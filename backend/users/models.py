@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator, MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 
 
@@ -26,7 +26,7 @@ class User(AbstractUser):
         unique=True,
         validators=[
             MinLengthValidator(
-                limit_value=4,
+                limit_value=3,
             ),
             RegexValidator(
                 regex=r"^[a-zA-Zа-яА-ЯёЁ0-9 !@#$%^&*()\-=\+]+$",
