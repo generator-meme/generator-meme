@@ -16,6 +16,7 @@ import ResetPassordConfirm from "./components/ResetPassordConfirm/ResetPassordCo
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 import AuthActivation from "./components/AuthActivation/AuthActivation";
+import AuthUsingSocialNetworks from "./components/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import { useSelector } from "react-redux";
 import { getCookie } from "./utils/cookie";
 import { authorisation } from "./utils/autorisation";
@@ -123,6 +124,10 @@ const App = () => {
         <Route
           path="/login"
           element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/auth/social/:token/"
+          element={<AuthUsingSocialNetworks setIsLoggedIn={setIsLoggedIn} />}
         />
         <Route
           path="/signin-success-message"
