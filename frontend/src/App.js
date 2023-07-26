@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
@@ -17,6 +17,8 @@ import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 import AuthActivation from "./components/AuthActivation/AuthActivation";
 import { useSelector } from "react-redux";
+import { getCookie } from "./utils/cookie";
+import { authorisation } from "./utils/autorisation";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -24,6 +26,8 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isTokenChecked, setIsTokenChecked] = useState(false);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -50,6 +54,20 @@ const App = () => {
       });
   };
 
+  const handleCheckToken = useCallback(async () => {
+    try {
+      const savedToken = getCookie("token");
+      const userData = await authorisation.checkToken(savedToken);
+      setIsLoggedIn(true);
+      setIsTokenChecked(true);
+      console.log(userData); //положить в Redux
+    } catch (err) {
+      setIsTokenChecked(true);
+      console.log(err, "checkTokenError");
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   useEffect(() => {
     api
       .getTemplates()
@@ -61,9 +79,15 @@ const App = () => {
       });
   }, []);
 
+  useEffect(() => {
+    handleCheckToken();
+  }, []);
+
+  if (!isTokenChecked) return null;
+
   return (
     <div className="page">
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
       <Routes>
         <Route
           exact
@@ -92,8 +116,14 @@ const App = () => {
             />
           }
         />
-        <Route path="/signin" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/signin"
+          element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/login"
+          element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
+        />
         <Route
           path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}

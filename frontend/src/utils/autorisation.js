@@ -63,13 +63,17 @@ class Authorisation {
       }),
     }).then(this._checkResponse);
   }
-  //   checkToken() {
-  //     return fetch(`${this._baseUrl}/users/me`, {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: this._headers,
-  //     }).then(this._checkResponse);
-  //   }
+  checkToken(token) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "GET",
+      // credentials: "include", // для отправки httpOnlyCookie
+      headers: {
+        "Accept": "application/json", // prettier-ignore
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkResponse);
+  }
 
   //   signout() {
   //     return fetch(`${this._baseUrl}/signout`, {

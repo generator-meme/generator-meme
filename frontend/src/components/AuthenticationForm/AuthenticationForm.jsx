@@ -40,7 +40,6 @@ function AuthenticationForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
-    console.log("submit");
     handleSubmit(
       event,
       values.email,

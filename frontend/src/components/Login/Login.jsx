@@ -3,8 +3,9 @@ import "./Login.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
+import { setCookie } from "../../utils/cookie";
 
-function Login() {
+function Login({ setIsLoggedIn }) {
   const [abridgedVersion, setAbridgedVersion] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,16 +20,15 @@ function Login() {
     try {
       event.preventDefault();
       const userInfo = await authorisation.logIn(email, password);
-      // разобраться с куками, записать туда token, сделать функцию для обновления, решить, через какое время нужно его удалить
-      navigate("/"); // пока на главную, потом в личный кабинет?
-      // console.log("вы успешло вошли", userInfo);
+      setCookie("token", userInfo.auth_token, 7);
+      setIsLoggedIn(true);
+      navigate("/");
     } catch (err) {
       updateInputs({ email: email, password: password });
       updateErrors({
-        email: err.email?.join(" "),
-        password: err.password?.join(" "),
+        email: err.email?.join(" ") || err.non_field_errors?.join(" "),
+        password: err.password?.join(" ") || err.non_field_errors?.join(" "),
       });
-      // console.log("err", err);
     }
   };
 
