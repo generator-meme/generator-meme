@@ -5,6 +5,9 @@
   height: 55px;
   border-radius: 0px 0px 20px 20px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header__logo {
@@ -12,4 +15,53 @@
   padding: 0;
   height: 43px;
   width: 58px;
+}
+
+.header__link {
+  color: #1E1D1D;
+  font-family: "Rubik";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.header__link:hover {
+  color: #AC52D1;
+}
+
+.header__link:active {
+  color: #7657CD;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 35px;
+}
+
+.header__button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header__button:hover .header__button_type_like path {
+  stroke: #AD27DC;
+}
+
+.header__button:hover .header__button_type_bell path,
+.header__link:hover .header__button_type_avatar path {
+  fill: #AD27DC;
+}
+
+.header__link-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
 }
