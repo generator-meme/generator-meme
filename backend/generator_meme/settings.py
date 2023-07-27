@@ -67,6 +67,7 @@ TEMPLATES = [
                 'social_django.context_processors.login_redirect',
                 'api.context_processors.analytics.templates_statistics',
                 'api.context_processors.analytics.users_statistics',
+                'api.context_processors.analytics.meme_statistics',
             ],
         },
     },

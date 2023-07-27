@@ -45,6 +45,18 @@
         </table>
     </div>
 
+    <div class="table_module">
+        <table border="1" width="200px" height='40px' align="center">
+        <caption class="django-admin-caption">{{ meme_table_name }}</caption>
+        {% for key, value in meme_info.items %}
+            <tr>
+            <td width='75%' valign="center">{{ key }}</td>
+            <td width='25%' align="center" valign="center">{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
 </div>
 {{ block.super }}
 {% endblock %}

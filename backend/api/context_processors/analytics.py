@@ -1,6 +1,9 @@
-from django.contrib.auth import get_user_model
+from datetime import datetime, timedelta
 
-from memes.models import Template
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+from memes.models import Meme, Template
 
 User = get_user_model()
 
@@ -29,5 +32,29 @@ def users_statistics(request):
         'user_info': {
             'Всего': all_users,
             'Активных': active_users,
+        }
+    }
+
+def meme_statistics(request):
+    """Контекстный процессор про готовые мемы."""
+    current_datetime = timezone.now()
+    today = Meme.objects.filter(
+        created_at__date=current_datetime.date()
+    ).count()
+    week = Meme.objects.filter(
+        created_at__gte=timezone.now() - timedelta(days=7)
+    ).count()
+    month = Meme.objects.filter(
+        created_at__gte=timezone.now() - timedelta(days=30)
+    ).count()
+
+
+
+    return {
+        'meme_table_name': 'Сделано мемов',
+        'meme_info': {
+            'Сегодня': today,
+            'За неделю': week,
+            'За месяц': month,
         }
     }
