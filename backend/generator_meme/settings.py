@@ -65,6 +65,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'api.context_processors.analytics.templates_statistics',
+                'api.context_processors.analytics.users_statistics',
             ],
         },
     },

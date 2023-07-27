@@ -1,0 +1,50 @@
+{% extends "admin/index.html" %}
+
+{% block nav-sidebar %}
+<style>
+    .table-container {
+        display: flex;
+        flex-direction: column;
+      }
+    
+    .table_module {
+      margin-top: 30px;
+    }
+
+    .django-admin-caption {
+        margin-bottom: 10px;
+        font-weight: bold;
+        align: center;
+        valign: center;
+      }
+</style>
+
+<div class="table-container">
+
+    <div class="table_module">
+    <table border="1px" width="200px" height='60px' align="center">
+        <caption class="django-admin-caption">{{ template_table_name }}</caption>
+        {% for key, value in template_info.items %}
+        <tr>
+            <td width='75%' valign="center">{{ key }}</td>
+            <td width='25%' align="center" valign="center">{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <div class="table_module">
+        <table border="1" width="200px" height='40px' align="center">
+        <caption class="django-admin-caption">{{ user_table_name }}</caption>
+        {% for key, value in user_info.items %}
+            <tr>
+            <td width='75%' valign="center">{{ key }}</td>
+            <td width='25%' align="center" valign="center">{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+</div>
+{{ block.super }}
+{% endblock %}
