@@ -9,7 +9,8 @@ function EmptyPage({ handleRequest, errorNavigate }) {
   const [response, setResponse] = useState(false);
 
   useEffect(() => {
-    handleRequest(uid, token, setResponse);
+    console.log(token, uid, "useEffect");
+    handleRequest(token, uid, setResponse);
   }, []);
 
   // вставить ниже прелоадер на длительность запроса, когда он будет готов

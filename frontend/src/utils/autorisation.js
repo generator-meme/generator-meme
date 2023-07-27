@@ -75,13 +75,17 @@ class Authorisation {
     }).then(this._checkResponse);
   }
 
-  //   signout() {
-  //     return fetch(`${this._baseUrl}/signout`, {
-  //       method: "POST",
-  //       credentials: "include",
-  //       headers: this._headers,
-  //     }).then(this._checkResponse);
-  //   }
+  logOut(token) {
+    return fetch(`${this._baseUrl}/token/logout/`, {
+      method: "POST",
+      // credentials: "include",
+      headers: {
+        "Accept": "application/json", // prettier-ignore
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkResponse);
+  }
 }
 
 export const authorisation = new Authorisation({

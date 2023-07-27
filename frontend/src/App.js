@@ -65,7 +65,7 @@ const App = () => {
     } catch (err) {
       setIsTokenChecked(true);
       console.log(err, "checkTokenError");
-      setIsLoggedIn(false);
+      // setIsLoggedIn(false);
     }
   }, []);
 
@@ -88,7 +88,7 @@ const App = () => {
 
   return (
     <div className="page">
-      <Header isLoggedIn={isLoggedIn} />
+      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         <Route
           exact
@@ -121,10 +121,11 @@ const App = () => {
           path="/signin"
           element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
         />
-        <Route
+        {/* <Route
           path="/login"
           element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
-        />
+        /> */}
+        <Route path="/login" element={<Login />} />
         <Route
           path="/auth/social/:token/"
           element={<AuthUsingSocialNetworks setIsLoggedIn={setIsLoggedIn} />}

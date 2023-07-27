@@ -5,9 +5,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Like } from "../../images/header/like-black.svg";
 import { ReactComponent as Bell } from "../../images/header/bell.svg";
 import { ReactComponent as Avatar } from "../../images/header/avatar.svg";
+import { getCookie, deleteCookie } from "../../utils/cookie";
+import { authorisation } from "../../utils/autorisation";
 
-const Header = ({ isLoggedIn }) => {
+const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
+
+  const handleLogOut = async () => {
+    try {
+      const savedToken = getCookie("token");
+      console.log(savedToken);
+      await authorisation.logOut(savedToken);
+      deleteCookie("token");
+      setIsLoggedIn(false);
+      navigate("/"); // подумать, должно ли выбрасывать, когда пользователь выходит из личного кабинета
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="header">
       <Link to="/">
@@ -34,7 +50,8 @@ const Header = ({ isLoggedIn }) => {
           </button>
           <button
             className="header__button"
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => handleLogOut()}
+            // onClick={(e) => e.preventDefault()}
           >
             <Avatar className="header__button_type_avatar" />
             <p>Username</p>
