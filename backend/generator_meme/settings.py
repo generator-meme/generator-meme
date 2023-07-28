@@ -68,6 +68,7 @@ TEMPLATES = [
                 'api.context_processors.analytics.templates_statistics',
                 'api.context_processors.analytics.users_statistics',
                 'api.context_processors.analytics.meme_statistics',
+                'api.context_processors.analytics.group_statistics',
             ],
         },
     },
