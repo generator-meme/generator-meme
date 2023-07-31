@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Like } from "../../images/header/like-black.svg";
 import { ReactComponent as Bell } from "../../images/header/bell.svg";
 import { ReactComponent as Avatar } from "../../images/header/avatar.svg";
+import { ReactComponent as Burger } from "../../images/header/burger.svg";
 import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 
@@ -34,7 +35,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
           Войти
         </botton>
       )}
-      {isLoggedIn && (
+      {isLoggedIn && window.innerWidth > 690 && (
         <div className="header__container">
           <button
             className="header__button"
@@ -57,6 +58,11 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
             <p>Username</p>
           </button>
         </div>
+      )}
+      {isLoggedIn && window.innerWidth < 691 && (
+        <button className="header__button" onClick={(e) => e.preventDefault()}>
+          <Burger className="header__button_type_burger" />
+        </button>
       )}
     </div>
   );

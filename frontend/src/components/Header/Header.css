@@ -51,11 +51,35 @@
   color: #7657CD;
 }
 
-.header__button:hover .header__button_type_like path {
+.header__button:hover .header__button_type_like path,
+.header__button:hover .header__button_type_burger path {
   stroke: #AD27DC;
 }
 
 .header__button:hover .header__button_type_bell path,
 .header__button:hover .header__button_type_avatar path {
   fill: #AD27DC;
+}
+
+@media screen and (max-width: 1080px) {
+  .header {
+    padding: 5px 75px 0;
+  }
+
+}
+
+@media screen and (max-width: 880px) {
+  .header__container {
+    column-gap: 20px;
+  }
+
+  .header {
+    padding: 5px 40px 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header {
+    padding: 5px 20px 0;
+  }
 }
