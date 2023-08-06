@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import logo from "../../images/logo.svg";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Like } from "../../images/header/like-black.svg";
 import { ReactComponent as Bell } from "../../images/header/bell.svg";
 import { ReactComponent as Avatar } from "../../images/header/avatar.svg";
@@ -9,44 +10,50 @@ import { ReactComponent as Burger } from "../../images/header/burger.svg";
 import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 import Menu from "../Menu/Menu.jsx";
+import { setIsLoggedOut } from "../../services/actions/userActions";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = true;
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [myMainMenuIsOpen, setMyMainMenuIsOpen] = useState(false);
   const [myExtraMenuIsOpen, setMyExtraMenuIsOpen] = useState(false);
   const myMainMenu = useRef(null);
   const myExtraMenu = useRef(null);
+  const userData = useSelector((state) => state.user.userInfo);
 
-  const handleLogOut = async () => {
+  const handleLogOut = async (e) => {
+    e.stopPropagation();
     try {
       const savedToken = getCookie("token");
-      console.log(savedToken);
       await authorisation.logOut(savedToken);
       deleteCookie("token");
-      // setIsLoggedIn(false);
-      navigate("/login"); // подумать, должно ли выбрасывать, когда пользователь выходит из личного кабинета
+      dispatch(setIsLoggedOut());
+      setMyMainMenuIsOpen(false);
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    const hideMenu = (e) => {
-      if (!myMainMenu.current.contains(e.target) && myMainMenuIsOpen) {
-        setMyMainMenuIsOpen(false);
-      }
+    if (myMainMenuIsOpen || myExtraMenuIsOpen) {
+      const hideMenu = (e) => {
+        if (!myMainMenu?.current.contains(e.target) && myMainMenuIsOpen) {
+          setMyMainMenuIsOpen(false);
+        }
 
-      if (!myExtraMenu.current.contains(e.target) && myExtraMenuIsOpen) {
-        setMyExtraMenuIsOpen(false);
-      }
-    };
+        if (!myExtraMenu?.current.contains(e.target) && myExtraMenuIsOpen) {
+          setMyExtraMenuIsOpen(false);
+        }
+      };
 
-    window.addEventListener("click", hideMenu);
+      window.addEventListener("click", hideMenu);
 
-    return () => {
-      window.removeEventListener("click", hideMenu);
-    };
+      return () => {
+        window.removeEventListener("click", hideMenu);
+      };
+    }
   }, [myMainMenuIsOpen, myExtraMenuIsOpen]);
 
   return (
@@ -81,7 +88,7 @@ const Header = () => {
                 ref={myMainMenu}
               >
                 <Avatar className="header__button_type_avatar" />
-                <p>Username</p>
+                <p>{userData.username}</p>
               </button>
             </>
           )}
@@ -112,7 +119,7 @@ const Header = () => {
                 },
                 {
                   name: "Выйти",
-                  onClick: (e) => e.preventDefault(),
+                  onClick: (e) => handleLogOut(e),
                 },
               ]}
             ></Menu>

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
 import { setCookie } from "../../utils/cookie";
+import { setIsLoggedIn } from "../../services/actions/userActions";
 
-function Login({ setIsLoggedIn }) {
+function Login() {
   const [abridgedVersion, setAbridgedVersion] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleLogIn = async (
     event,
@@ -21,7 +24,7 @@ function Login({ setIsLoggedIn }) {
       event.preventDefault();
       const userInfo = await authorisation.logIn(email, password);
       setCookie("token", userInfo.auth_token, 7);
-      setIsLoggedIn(true);
+      dispatch(setIsLoggedIn());
       navigate("/");
     } catch (err) {
       updateInputs({ email: email, password: password });

@@ -18,8 +18,8 @@ import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage"
 import AuthActivation from "./components/AuthActivation/AuthActivation";
 import AuthUsingSocialNetworks from "./components/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import { useSelector } from "react-redux";
-import { getCookie } from "./utils/cookie";
-import { authorisation } from "./utils/autorisation";
+import { loadUserInfo } from "./services/actions/userActions";
+import { useDispatch } from "react-redux";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -27,8 +27,9 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [isTokenChecked, setIsTokenChecked] = useState(false);
+  const [isTokenChecked, setIsTokenChecked] = useState(false);
+  const dispatch = useDispatch();
+  const { isLoggedIn, userInfo } = useSelector((state) => state.user);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -55,20 +56,6 @@ const App = () => {
       });
   };
 
-  // const handleCheckToken = useCallback(async () => {
-  //   try {
-  //     const savedToken = getCookie("token");
-  //     const userData = await authorisation.checkToken(savedToken);
-  //     setIsLoggedIn(true);
-  //     setIsTokenChecked(true);
-  //     console.log(userData); //положить в Redux
-  //   } catch (err) {
-  //     setIsTokenChecked(true);
-  //     console.log(err, "checkTokenError");
-  //     // setIsLoggedIn(false);
-  //   }
-  // }, []);
-
   useEffect(() => {
     api
       .getTemplates()
@@ -80,11 +67,13 @@ const App = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   handleCheckToken();
-  // }, []);
+  useEffect(() => {
+    if (Object.values(userInfo).length) return;
+    dispatch(loadUserInfo());
+    setIsTokenChecked(true);
+  }, [dispatch, isLoggedIn, userInfo]);
 
-  // if (!isTokenChecked) return null;
+  if (!isTokenChecked) return null;
 
   return (
     <div className="page">
@@ -117,16 +106,16 @@ const App = () => {
             />
           }
         />
-        <Route path="/signin" element={<Registration />} />
-        {/* <Route
+        {/* <Route path="/signin" element={<Registration />} /> */}
+        <Route
           path="/signin"
           element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
-        /> */}
-        {/* <Route
+        />
+        <Route
           path="/login"
           element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
-        /> */}
-        <Route path="/login" element={<Login />} />
+        />
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route
           path="/auth/social/:token/"
           element={<AuthUsingSocialNetworks />}
