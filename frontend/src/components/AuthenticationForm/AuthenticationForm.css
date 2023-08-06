@@ -14,7 +14,7 @@
     margin: 0;
     padding: 35px 35px;
     max-width: 620px;
-    width: 42vw;
+    min-width: 42vw;
     max-height: 100%;
     display: flex;
     flex-direction: column;
@@ -143,7 +143,7 @@
     display: block;
     margin: 0;
     padding: 0;
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -194,4 +194,123 @@
 
 .authentication__icon:hover {
     transform: scale(1.083);
+}
+
+.google {
+    background-image: url("../../images/authenticationPage/google.svg");
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media screen and (max-width: 1080px) {
+    .authentication {
+        padding: 9vh 0;
+        height: calc(100% - 55px - 92px);
+        min-height: calc(100vh - 55px - 92px);
+    }
+
+    .authentication__container {
+        padding: 40px 40px;
+        width: 63vw;
+        max-width: calc(100% - 30px);
+    }
+
+    .authentication__title {
+        font-size: 25px;
+    }
+
+    .authentication__input-name {
+        font-size: 20px;
+    }
+
+    .authentication__input {
+        padding: 28px 0 28px 20px;
+        font-size: 20px;
+    }
+
+    .authentication__button {
+        height: 75px;
+        min-height: 75px;
+    }
+
+    .authentication__link {
+        font-size: 20px;
+    }
+
+    .authentication__checkbox-name {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .authentication__container {
+        padding: 40px 40px;
+        max-width: calc(100% - 30px);
+        width: calc(100% - 30px);
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .authentication {
+        padding: 0;
+        background-color: #FFF;
+        height: calc(100% - 55px - 72px);
+        min-height: calc(100vh - 55px - 72px);
+    }
+
+    .authentication__container {
+        padding: 40px 15px 70px;
+        max-width: 100%;
+        width: 100%;
+        border: none;
+    }
+
+    .authentication__title {
+        font-size: 16px;
+    }
+
+    .authentication__input-name {
+        font-size: 14px;
+    }
+
+    .authentication__input {
+        padding: 14px 0 14px 20px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .authentication__button {
+        height: 45px;
+        min-height: 45px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    .authentication__link {
+        font-size: 14px;
+    }
+
+    .authentication__checkbox-name {
+        font-size: 12px;
+    }
+
+    .authentication__login-text {
+        font-size: 16px;
+    }
+
+    .authentication__login-icons {
+        column-gap: 15px;
+    }
+
+    .authentication__icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .authentication__icon:hover {
+        transform: scale(1.125);
+    }
 }

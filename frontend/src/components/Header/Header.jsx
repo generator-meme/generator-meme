@@ -11,6 +11,7 @@ import { authorisation } from "../../utils/autorisation";
 
 const Header = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
+  // const []
 
   const handleLogOut = async () => {
     try {
@@ -19,7 +20,7 @@ const Header = ({ isLoggedIn, setIsLoggedIn }) => {
       await authorisation.logOut(savedToken);
       deleteCookie("token");
       setIsLoggedIn(false);
-      navigate("/"); // подумать, должно ли выбрасывать, когда пользователь выходит из личного кабинета
+      navigate("/login"); // подумать, должно ли выбрасывать, когда пользователь выходит из личного кабинета
     } catch (err) {
       console.log(err);
     }

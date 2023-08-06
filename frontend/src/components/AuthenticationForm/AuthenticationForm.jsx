@@ -6,7 +6,6 @@ import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
 import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
-import { ReactComponent as Google } from "../../images/authenticationPage/google.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
 
 function AuthenticationForm({ info, handleSubmit }) {
@@ -234,7 +233,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               {/* <Link to="/api/auth/social/login/yandex-oauth2"> */}
               <Yandex className="authentication__icon" />
               {/* </Link> */}
-              <Google className="authentication__icon" />
+              <div className="authentication__icon google"></div>
             </div>
           </div>
         )}

@@ -82,4 +82,8 @@
   .header {
     padding: 5px 20px 0;
   }
+
+  .header__button {
+    font-size: 14px;
+  }
 }
