@@ -27,8 +27,8 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isTokenChecked, setIsTokenChecked] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isTokenChecked, setIsTokenChecked] = useState(false);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -55,19 +55,19 @@ const App = () => {
       });
   };
 
-  const handleCheckToken = useCallback(async () => {
-    try {
-      const savedToken = getCookie("token");
-      const userData = await authorisation.checkToken(savedToken);
-      setIsLoggedIn(true);
-      setIsTokenChecked(true);
-      console.log(userData); //положить в Redux
-    } catch (err) {
-      setIsTokenChecked(true);
-      console.log(err, "checkTokenError");
-      // setIsLoggedIn(false);
-    }
-  }, []);
+  // const handleCheckToken = useCallback(async () => {
+  //   try {
+  //     const savedToken = getCookie("token");
+  //     const userData = await authorisation.checkToken(savedToken);
+  //     setIsLoggedIn(true);
+  //     setIsTokenChecked(true);
+  //     console.log(userData); //положить в Redux
+  //   } catch (err) {
+  //     setIsTokenChecked(true);
+  //     console.log(err, "checkTokenError");
+  //     // setIsLoggedIn(false);
+  //   }
+  // }, []);
 
   useEffect(() => {
     api
@@ -80,15 +80,15 @@ const App = () => {
       });
   }, []);
 
-  useEffect(() => {
-    handleCheckToken();
-  }, []);
+  // useEffect(() => {
+  //   handleCheckToken();
+  // }, []);
 
-  if (!isTokenChecked) return null;
+  // if (!isTokenChecked) return null;
 
   return (
     <div className="page">
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Header />
       <Routes>
         <Route
           exact
@@ -117,10 +117,11 @@ const App = () => {
             />
           }
         />
-        <Route
+        <Route path="/signin" element={<Registration />} />
+        {/* <Route
           path="/signin"
           element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
-        />
+        /> */}
         {/* <Route
           path="/login"
           element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
@@ -128,7 +129,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route
           path="/auth/social/:token/"
-          element={<AuthUsingSocialNetworks setIsLoggedIn={setIsLoggedIn} />}
+          element={<AuthUsingSocialNetworks />}
         />
         <Route
           path="/signin-success-message"
