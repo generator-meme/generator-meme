@@ -215,7 +215,7 @@
     .authentication__container {
         padding: 40px 40px;
         width: 63vw;
-        max-width: calc(100% - 30px);
+        max-width: calc(100% - 150px);
     }
 
     .authentication__title {
@@ -248,8 +248,8 @@
 @media screen and (max-width: 700px) {
     .authentication__container {
         padding: 40px 40px;
-        max-width: calc(100% - 30px);
-        width: calc(100% - 30px);
+        max-width: calc(100% - 80px);
+        width: calc(100% - 80px);
     }
 }
 

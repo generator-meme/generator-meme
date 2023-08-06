@@ -100,12 +100,14 @@ export const checkEmailMessage = {
   signinSuccess: {
     title: "Вы успешно зарегистрировались!",
     text: "На вашу электронную почту отправлено письмо. Перейдите по ссылке в письме для завершения успешной регистрации.",
-    maxWidth: "100%",
+    maxWidth:
+      window.innerWidth > 1080 ? 625 : window.innerWidth > 700 ? 532 : 285,
   },
   changePasswordMessage: {
     title: "На вашу электронную почту отправлено письмо. ",
     text: "Перейдите по ссылке в письме для сохранения нового пароля на сайте.",
-    maxWidth: 460,
+    maxWidth:
+      window.innerWidth > 1080 ? 460 : window.innerWidth > 700 ? 420 : 287,
   },
 };
 
