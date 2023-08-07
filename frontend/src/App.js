@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
@@ -16,7 +16,10 @@ import ResetPassordConfirm from "./components/ResetPassordConfirm/ResetPassordCo
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 import AuthActivation from "./components/AuthActivation/AuthActivation";
+import AuthUsingSocialNetworks from "./components/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import { useSelector } from "react-redux";
+import { loadUserInfo } from "./services/actions/userActions";
+import { useDispatch } from "react-redux";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -24,6 +27,9 @@ const App = () => {
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
+  const [isTokenChecked, setIsTokenChecked] = useState(false);
+  const dispatch = useDispatch();
+  const { isLoggedIn, userInfo } = useSelector((state) => state.user);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -61,6 +67,14 @@ const App = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (Object.values(userInfo).length) return;
+    dispatch(loadUserInfo());
+    setIsTokenChecked(true);
+  }, [dispatch, isLoggedIn, userInfo]);
+
+  if (!isTokenChecked) return null;
+
   return (
     <div className="page">
       <Header />
@@ -92,8 +106,20 @@ const App = () => {
             />
           }
         />
-        <Route path="/signin" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/signin" element={<Registration />} /> */}
+        <Route
+          path="/signin"
+          element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/login"
+          element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
+        />
+        {/* <Route path="/login" element={<Login />} /> */}
+        <Route
+          path="/auth/social/:token/"
+          element={<AuthUsingSocialNetworks />}
+        />
         <Route
           path="/signin-success-message"
           element={<CheckEmailMessage info={checkEmailMessage.signinSuccess} />}

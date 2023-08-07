@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./AuthenticationForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { formPrompts } from "../../utils/constants";
+import { formPrompts, inputPattern } from "../../utils/constants";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
 import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
-import { ReactComponent as Google } from "../../images/authenticationPage/google-copy.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
 
 function AuthenticationForm({ info, handleSubmit }) {
@@ -40,7 +39,6 @@ function AuthenticationForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
-    console.log("submit");
     handleSubmit(
       event,
       values.email,
@@ -88,7 +86,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               <input
                 type="text"
                 name="name"
-                pattern="[A-Za-z0-9]{3,40}"
+                pattern={inputPattern.name}
                 value={values.name}
                 onChange={onChange}
                 className={`authentication__input ${
@@ -119,7 +117,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
-              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+              pattern={inputPattern.email}
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
@@ -149,7 +147,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             <input
               type="text"
               value={values.password}
-              pattern="[^А-Я^а-я]{5,16}"
+              pattern={inputPattern.password}
               onChange={onChange}
               name="password"
               className={`authentication__input ${
@@ -228,10 +226,16 @@ function AuthenticationForm({ info, handleSubmit }) {
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
-              <Vkontakte />
-              <Telegram />
-              <Yandex />
-              <Google />
+              <Link to="/api/auth/social/login/vk-oauth2">
+                <Vkontakte className="authentication__icon" />
+              </Link>
+              {/* </Link> */}
+              <Telegram className="authentication__icon" />
+              <Link to="/api/auth/social/login/yandex-oauth2">
+                <Yandex className="authentication__icon" />
+              </Link>
+              {/* </Link> */}
+              <div className="authentication__icon google"></div>
             </div>
           </div>
         )}

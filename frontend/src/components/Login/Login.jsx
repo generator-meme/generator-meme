@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
+import { setCookie } from "../../utils/cookie";
+import { setIsLoggedIn } from "../../services/actions/userActions";
 
 function Login() {
   const [abridgedVersion, setAbridgedVersion] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const handleLogIn = async (
     event,
@@ -19,16 +23,15 @@ function Login() {
     try {
       event.preventDefault();
       const userInfo = await authorisation.logIn(email, password);
-      // разобраться с куками, записать туда token, сделать функцию для обновления, решить, через какое время нужно его удалить
-      navigate("/"); // пока на главную, потом в личный кабинет?
-      // console.log("вы успешло вошли", userInfo);
+      setCookie("token", userInfo.auth_token, 7);
+      dispatch(setIsLoggedIn());
+      navigate("/");
     } catch (err) {
       updateInputs({ email: email, password: password });
       updateErrors({
-        email: err.email?.join(" "),
-        password: err.password?.join(" "),
+        email: err.email?.join(" ") || err.non_field_errors?.join(" "),
+        password: err.password?.join(" ") || err.non_field_errors?.join(" "),
       });
-      // console.log("err", err);
     }
   };
 

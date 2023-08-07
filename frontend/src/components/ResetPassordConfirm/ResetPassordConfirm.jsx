@@ -2,6 +2,7 @@ import React from "react";
 import ResetForm from "../ResetForm/ResetForm";
 import { authorisation } from "../../utils/autorisation";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { inputPattern } from "../../utils/constants";
 
 function ResetPassordConfirm() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function ResetPassordConfirm() {
     title: "Сброс пароля",
     fieldName: "Новый пароль",
     type: "text",
+    pattern: inputPattern.password,
     inputName: "password",
     buttonText: "сохранить пароль",
     prompt:
