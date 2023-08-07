@@ -205,6 +205,14 @@
     background-size: cover;
 }
 
+.authentication__temporarily-inactive {
+    position: relative;
+}
+
+.authentication__temporarily-inactive:hover .in-progress {
+    display: flex;
+}
+
 @media screen and (max-width: 1080px) {
     .authentication {
         padding: 9vh 0;
