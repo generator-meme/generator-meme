@@ -11,6 +11,7 @@ import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 import Menu from "../Menu/Menu.jsx";
 import { setIsLoggedOut } from "../../services/actions/userActions";
+import InProgress from "../InProgress/InProgress";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -75,12 +76,14 @@ const Header = () => {
                 onClick={(e) => e.preventDefault()}
               >
                 <Like className="header__button_type_like" />
+                <InProgress />
               </button>
               <button
                 className="header__button"
                 onClick={(e) => e.preventDefault()}
               >
                 <Bell className="header__button_type_bell" />
+                <InProgress />
               </button>
               <button
                 className="header__button"
@@ -116,10 +119,12 @@ const Header = () => {
                 {
                   name: "Личный\u00A0кабинет",
                   onClick: (e) => e.preventDefault(),
+                  inProgress: true,
                 },
                 {
                   name: "Выйти",
                   onClick: (e) => handleLogOut(e),
+                  inProgress: false,
                 },
               ]}
             ></Menu>
@@ -130,10 +135,12 @@ const Header = () => {
                 {
                   name: "Избранное",
                   onClick: (e) => e.preventDefault(),
+                  inProgress: true,
                 },
                 {
                   name: "Уведомления",
                   onClick: (e) => e.preventDefault(),
+                  inProgress: true,
                 },
               ]}
             ></Menu>

@@ -21,6 +21,7 @@
 
 .menu__option {
     text-decoration: none;
+    position: relative;
 }
 
 .menu__button {
@@ -39,6 +40,10 @@
 
 .menu__button:hover {
     color: #AC52D1;
+}
+
+.menu__button:hover~.in-progress {
+    display: flex;
 }
 
 @media screen and (max-width: 500px) {
