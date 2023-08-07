@@ -19,3 +19,29 @@
     margin: 0;
     padding: 0;
 }
+
+@media screen and (max-width: 1080px) {
+    .btn-back {
+        left: 75px;
+    }
+}
+
+@media screen and (max-width: 880px) {
+    .btn-back {
+        top: 40px;
+        left: 40px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .btn-back {
+        top: 32px;
+        left: 20px;
+        font-size: 15px;
+    }
+
+    .btn-back__arrow {
+        max-width: 8px;
+        max-height: 14px;
+    }
+}

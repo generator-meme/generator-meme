@@ -5,6 +5,9 @@
   height: 55px;
   border-radius: 0px 0px 20px 20px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header__logo {
@@ -12,4 +15,91 @@
   padding: 0;
   height: 43px;
   width: 58px;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 35px;
+  position: relative;
+}
+
+.header__button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  color: #1E1D1D;
+  font-family: "Rubik";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none;
+  position: relative;
+}
+
+.header__button:hover {
+  color: #AC52D1;
+}
+
+.header__button:hover .in-progress {
+  display: flex;
+}
+
+.header__button:active {
+  color: #7657CD;
+}
+
+/* .header__button:hover .header__button_type_like path, */
+.header__button:hover .header__button_type_burger path {
+  stroke: #AD27DC;
+}
+
+/* .header__button:hover .header__button_type_bell path, */
+.header__button:hover .header__button_type_avatar path {
+  fill: #AD27DC;
+}
+
+/*разработка*/
+.header__button:hover .header__button_type_like path {
+  stroke: rgba(155, 155, 155, 0.50);
+}
+
+.header__button:hover .header__button_type_bell path {
+  fill: rgba(155, 155, 155, 0.50);
+  ;
+}
+
+@media screen and (max-width: 1080px) {
+  .header {
+    padding: 5px 75px 0;
+  }
+
+}
+
+@media screen and (max-width: 880px) {
+  .header__container {
+    column-gap: 20px;
+  }
+
+  .header {
+    padding: 5px 40px 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header {
+    padding: 5px 20px 0;
+  }
+
+  .header__button {
+    font-size: 14px;
+  }
 }

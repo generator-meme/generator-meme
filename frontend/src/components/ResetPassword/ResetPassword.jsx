@@ -2,6 +2,7 @@ import React from "react";
 import ResetForm from "../ResetForm/ResetForm";
 import { useNavigate } from "react-router-dom";
 import { authorisation } from "../../utils/autorisation";
+import { inputPattern } from "../../utils/constants";
 
 function ResetPassword() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function ResetPassword() {
     title: "Сброс пароля",
     fieldName: "Почта",
     type: "email",
+    pattern: inputPattern.email,
     inputName: "email",
     buttonText: "сбросить пароль",
     prompt:

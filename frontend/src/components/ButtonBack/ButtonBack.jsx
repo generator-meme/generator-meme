@@ -8,7 +8,7 @@ function ButtonBack() {
 
   return (
     <button className="btn-back" onClick={(e) => navigate(-1)}>
-      <ArrowBack />
+      <ArrowBack className="btn-back__arrow" />
       <p className="btn-back__text">Назад</p>
     </button>
   );
