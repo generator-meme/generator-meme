@@ -226,12 +226,12 @@ function AuthenticationForm({ info, handleSubmit }) {
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
-              <Link to="/api/auth/social/login/vk-oauth2">
+              <Link to="/api/auth/social/login/vk-oauth2" reloadDocument>
                 <Vkontakte className="authentication__icon" />
               </Link>
               {/* </Link> */}
               <Telegram className="authentication__icon" />
-              <Link to="/api/auth/social/login/yandex-oauth2">
+              <Link to="/api/auth/social/login/yandex-oauth2" reloadDocument>
                 <Yandex className="authentication__icon" />
               </Link>
               {/* </Link> */}
