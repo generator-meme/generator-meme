@@ -10,7 +10,7 @@ export const setIsLoggedIn = () => ({
 });
 
 export const setIsLoggedOut = () => ({
-  type: SET_IS_LOGGED_IN,
+  type: SET_IS_LOGGET_OUT,
 });
 
 const getUserInfo = (info) => ({
@@ -21,7 +21,9 @@ const getUserInfo = (info) => ({
 export const loadUserInfo = () => async (dispatch) => {
   try {
     const savedToken = getCookie("token");
+    console.log("try to get userData");
     const userData = await authorisation.checkToken(savedToken);
+    console.log(userData, "got userData");
     dispatch(getUserInfo(userData));
   } catch (err) {
     console.log(err, "checkTokenError");

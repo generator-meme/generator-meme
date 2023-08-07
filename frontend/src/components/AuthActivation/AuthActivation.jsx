@@ -7,7 +7,7 @@ function AuthActivation() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const activateAccount = async (token, uid, setResponse) => {
+  const activateAccount = async (token, setResponse, uid) => {
     try {
       await authorisation.activateAccount(uid, token);
       navigate("/login", { state: { from: location } });

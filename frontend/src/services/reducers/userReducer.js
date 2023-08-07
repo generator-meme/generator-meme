@@ -17,10 +17,7 @@ export const userReducer = (state = initialState, { type, payload }) => {
         isLoggedIn: true,
       };
     case SET_IS_LOGGET_OUT:
-      return {
-        ...state,
-        isLoggedIn: false,
-      };
+      return initialState;
     case GET_USER_INFO:
       return {
         ...state,
