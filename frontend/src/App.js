@@ -71,7 +71,7 @@ const App = () => {
     if (Object.values(userInfo).length) return;
     dispatch(loadUserInfo());
     setIsTokenChecked(true);
-  }, [dispatch, isLoggedIn, userInfo]);
+  }, [isLoggedIn, dispatch, userInfo]);
 
   if (!isTokenChecked) return null;
 

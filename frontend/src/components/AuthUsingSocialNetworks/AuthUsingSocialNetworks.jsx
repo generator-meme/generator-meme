@@ -9,13 +9,11 @@ function AuthUsingSocialNetworks() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handelSaveToken = (token, setResponse) => {
+  const handelSaveToken = async (token, setResponse) => {
     try {
       setCookie("token", token, 7);
-      // navigate("/");
-      dispatch(setIsLoggedIn());
+      await dispatch(setIsLoggedIn());
       console.log("получила токен из сторонних сетей");
-      // setIsLoggedIn(true);
       navigate("/");
     } catch (err) {
       if (err.detail) {
