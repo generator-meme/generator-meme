@@ -1,5 +1,5 @@
 import React from "react";
-import "./inProgress.css";
+import "./InProgress.css";
 
 const InProgress = () => {
   return <div className="in-progress">в разработке</div>;
