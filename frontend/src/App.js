@@ -17,9 +17,9 @@ import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
 import AuthActivation from "./components/AuthActivation/AuthActivation";
 import AuthUsingSocialNetworks from "./components/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUserInfo } from "./services/actions/userActions";
-import { useDispatch } from "react-redux";
+import Preloader from "./components/Preloader/Preloader";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -30,6 +30,7 @@ const App = () => {
   const [isTokenChecked, setIsTokenChecked] = useState(false);
   const dispatch = useDispatch();
   const { isLoggedIn, userInfo } = useSelector((state) => state.user);
+  const isPreloaderActive = useSelector((state) => state.preloader);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -106,7 +107,6 @@ const App = () => {
             />
           }
         />
-        {/* <Route path="/signin" element={<Registration />} /> */}
         <Route
           path="/signin"
           element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}
@@ -115,7 +115,6 @@ const App = () => {
           path="/login"
           element={!isLoggedIn ? <Login /> : <Navigate to="/" replace />}
         />
-        {/* <Route path="/login" element={<Login />} /> */}
         <Route
           path="/auth/social/:token/"
           element={<AuthUsingSocialNetworks />}
@@ -147,6 +146,7 @@ const App = () => {
           }}
         />
       )}
+      {isPreloaderActive && <Preloader />}
       <div
         class="font-preload"
         style={{

@@ -9,7 +9,7 @@ function EmptyPage({ handleRequest, errorNavigate }) {
   const [response, setResponse] = useState(false);
 
   useEffect(() => {
-    console.log(token, uid, "useEffect");
+    // console.log(token, uid, "useEffect");
     handleRequest(token, setResponse, uid);
   }, []);
 
