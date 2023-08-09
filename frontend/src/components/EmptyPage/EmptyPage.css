@@ -2,3 +2,9 @@
     min-height: calc(100vh - 55px - 110px);
     box-sizing: border-box;
 }
+
+@media screen and (max-width: 520px) {
+    .empty-page {
+        min-height: calc(100vh - 55px - 72px);
+    }
+}
