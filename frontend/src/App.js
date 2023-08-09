@@ -137,6 +137,7 @@ const App = () => {
         />
       </Routes>
       <Footer />
+      <Preloader />
       {imageNotFoundOpen && (
         <InfoTooltip
           title="Личные изображения не сохраняются после перезагрузки. Пожалуйста,&nbsp;вернитесь&nbsp;к выбору изображения"
