@@ -204,3 +204,9 @@ class UserCollection(models.Model):
         verbose_name = 'Коллекция мемов'
         verbose_name_plural = 'Коллекции мемов'
         ordering = ('-added_at',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'meme'),
+                name='unique_user_meme',
+            ),
+        )
