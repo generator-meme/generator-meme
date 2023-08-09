@@ -74,3 +74,14 @@
     text-align: center;
     color: #FEFEFE;
 }
+
+@media screen and (max-width: 520px) {
+    .preloader__circle {
+        width: 200px;
+        height: 200px;
+    }
+
+    .preloader__text {
+        font-size: 18px;
+    }
+}
