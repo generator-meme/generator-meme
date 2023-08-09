@@ -8,7 +8,7 @@ from rest_framework.serializers import (BooleanField, ModelSerializer,
 
 from api.serializers_users import UsersSerializer
 from memes.models import (Category, Favorite, Meme, Tag, Template,
-                          TemplateUsedTimes)
+                          TemplateUsedTimes, UserCollection)
 
 
 class TagSerializer(ModelSerializer):
@@ -79,6 +79,24 @@ class MemeReadSerializer(ModelSerializer):
     class Meta:
         model = Meme
         fields = '__all__'
+
+
+class MemeInCollectionSerializer(ModelSerializer):
+    """Сериализатор модели Meme для отображении
+    объекта в коллекции пользователя."""
+
+    id = UUIDField(read_only=True, default=uuid4)
+    author = UsersSerializer(read_only=True)
+    template = TemplateReadSerializer(read_only=True)
+
+    class Meta:
+        model = Meme
+        fields = (
+            'id',
+            'image',
+            'template',
+            'author',
+        )
 
 
 class MemeWriteSerializer(ModelSerializer):
@@ -153,3 +171,63 @@ class FavoriteSerializer(ModelSerializer):
             instance.template,
             context={'request': self.context['request']}
         ).data
+
+
+class CollectionReadSerializer(ModelSerializer):
+    """Сериализатор модели Collection для чтения."""
+
+    meme = MemeInCollectionSerializer(read_only=True)
+
+    class Meta:
+        model = UserCollection
+        fields = (
+            'meme',
+            'added_at',
+            'is_author',
+        )
+
+
+class CollectionWriteSerializer(ModelSerializer):
+    """Сериализатор модели Collection для записи."""
+
+    meme = PrimaryKeyRelatedField(
+        queryset=Meme.objects.all(),
+    )
+
+    class Meta:
+        model = UserCollection
+        fields = (
+            'meme',
+        )
+
+    def validate(self, data):
+        if UserCollection.objects.filter(
+            user=self.context['user'], meme=data.get('meme').id
+        ).exists():
+            raise ValidationError(
+                {'meme': 'Мем уже в коллекции пользователя.'}
+            )
+        return data
+
+
+class CollectionDeleteSerializer(ModelSerializer):
+    """Сериализатор модели Collection для удаления."""
+
+    meme = PrimaryKeyRelatedField(
+        queryset=Meme.objects.all(),
+    )
+
+    class Meta:
+        model = UserCollection
+        fields = (
+            'meme',
+        )
+
+    def validate(self, data):
+        if not UserCollection.objects.filter(
+            user=self.context['user'], meme=data.get('meme').id
+        ).exists():
+            raise ValidationError(
+                {'meme': 'Мема нет в коллекции пользователя.'}
+            )
+        return data

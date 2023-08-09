@@ -1,12 +1,14 @@
 from uuid import uuid4
 
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from users.models import User
+User = get_user_model()
 
 
 class Tag(models.Model):
-    """Модель хэштегов"""
+    """Модель хэштегов для шаблонов."""
+
     name = models.CharField(
         verbose_name='Название тега',
         max_length=150,
@@ -54,7 +56,8 @@ class Category(models.Model):
 
 
 class Template(models.Model):
-    """Модель шаблона"""
+    """Модель шаблона."""
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     name = models.CharField(
         verbose_name='Название шаблона',
@@ -100,7 +103,8 @@ class Template(models.Model):
 
 
 class Meme(models.Model):
-    """Модель готового мема пользователя"""
+    """Модель готового мема."""
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     image = models.ImageField(
         verbose_name='Изображение',
@@ -130,7 +134,8 @@ class Meme(models.Model):
 
 
 class Favorite(models.Model):
-    """Модель избранного шаблона"""
+    """Модель избранного шаблона."""
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(
         User,
@@ -169,3 +174,39 @@ class TemplateUsedTimes(models.Model):
         verbose_name='Использован раз'
     )
     used_times = models.IntegerField(default=0)
+
+
+class UserCollection(models.Model):
+    """Коллекция готовых мемов пользователя."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='collection',
+        verbose_name='Пользователь',
+    )
+    meme = models.ForeignKey(
+        Meme,
+        on_delete=models.CASCADE,
+        related_name='collection',
+        verbose_name='Мем',
+    )
+    added_at = models.DateTimeField(
+        verbose_name='Дата добавления',
+        auto_now_add=True,
+    )
+    is_author = models.BooleanField(
+        default=False,
+        verbose_name='Собственный мем',
+    )
+
+    class Meta:
+        verbose_name = 'Коллекция мемов'
+        verbose_name_plural = 'Коллекции мемов'
+        ordering = ('-added_at',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'meme'),
+                name='unique_user_meme',
+            ),
+        )

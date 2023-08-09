@@ -4,21 +4,28 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
-from rest_framework.permissions import SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
+from rest_framework.response import Response
 
-from api.filters import TagSearchFilter, TemplateFilter
+from api.filters import CollectionFilter, TagSearchFilter, TemplateFilter
+from api.paginators import CollectionPagination
 from api.permissions import AdminOrReadOnly
 from api.serializers_memes import (Category, CategorySerializer,
+                                   CollectionDeleteSerializer,
+                                   CollectionReadSerializer,
+                                   CollectionWriteSerializer,
                                    FavoriteSerializer, MemeReadSerializer,
                                    MemeWriteSerializer, TagSerializer,
                                    TemplateReadSerializer,
                                    TemplateWriteSerializer)
 from api.services import create_delete_relation
-from api.viewsets import ListRetriveViewSet
-from memes.models import Favorite, Meme, Tag, Template, TemplateUsedTimes
+from api.viewsets import ListRetriveViewSet, ListViewSet
+from memes.models import (Favorite, Meme, Tag, Template, TemplateUsedTimes,
+                          UserCollection)
 
 
 class MemeViewSet(viewsets.ModelViewSet):
@@ -132,3 +139,82 @@ class CategoryViewSet(ListRetriveViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class CollectionViewSet(ListViewSet):
+    """Пользовательская коллекция мемов,
+    принимает параметр "only_my" = "true" для
+    отображения авторских мемов."""
+
+    pagination_class = CollectionPagination
+    permission_classes = (IsAuthenticated, )
+    serializer_class = CollectionReadSerializer
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_class = CollectionFilter
+
+    def get_queryset(self):
+        user = self.request.user
+        only_my = self.request.query_params.get('only_my')
+        if only_my == 'true':
+            return UserCollection.objects.filter(
+                user=user, is_author=True
+            ).all()
+        return UserCollection.objects.filter(user=user).all()
+
+    @swagger_auto_schema(
+        request_body=CollectionWriteSerializer,
+        method='post',
+        responses={201: ''},
+    )
+    @action(
+        detail=False,
+        methods=['post', ],
+        serializer_class=CollectionWriteSerializer,
+    )
+    def add(self, request):
+        """Добавляет мем в коллекцию."""
+        user = self.request.user
+        serializer = CollectionWriteSerializer(
+            data=request.data,
+            context={
+                'user': user,
+            },
+        )
+        serializer.is_valid(raise_exception=True)
+        meme = serializer.validated_data['meme']
+        is_author = False
+        if user == meme.author:
+            is_author = True
+        UserCollection.objects.create(
+            user=user,
+            meme=meme,
+            is_author=is_author,
+        )
+        return Response(status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(
+        request_body=CollectionDeleteSerializer,
+        method='delete',
+        responses={204: ''},
+    )
+    @action(
+        detail=False,
+        methods=['delete', ],
+        serializer_class=CollectionDeleteSerializer,
+    )
+    def delete(self, request):
+        """Удаляет мем из коллекции."""
+        user = self.request.user
+        serializer = CollectionDeleteSerializer(
+            data=request.data,
+            context={
+                'user': user,
+            },
+        )
+        serializer.is_valid(raise_exception=True)
+        meme = serializer.validated_data['meme']
+        UserCollection.objects.get(
+            meme=meme,
+            user=user,
+        ).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
