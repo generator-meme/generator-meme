@@ -16,3 +16,13 @@ class ListViewSet(
 ):
     """Вьюсет только list."""
     pass
+
+
+class ListCreateDestroyViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
+    """Вьюсет для операций list, retrieve, create и delete."""
+    pass

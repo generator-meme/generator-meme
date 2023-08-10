@@ -4,7 +4,8 @@ from django.db.models import Case, Count, Exists, OuterRef, Q, Value, When
 from django.forms import TextInput
 from django.utils.html import format_html
 
-from memes.models import Category, Meme, Tag, Template, TemplateUsedTimes
+from memes.models import (Category, Meme, Tag, Template, TemplateUsedTimes,
+                          UserCollection)
 
 
 @admin.register(Meme)
@@ -217,3 +218,20 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     def templates_use_this(self, obj):
         return obj.templates_use_this
+
+
+@admin.register(UserCollection)
+class CollectionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'user',
+        'meme',
+        'added_at',
+        'is_author',
+    )
+    list_editable = (
+        'is_author',
+        'user',
+        'meme',
+    )
