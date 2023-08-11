@@ -46,7 +46,7 @@
     color: #7657CD;
 }
 
-.menu__button:hover~.in-progress {
+.menu__button:hover~.prompt {
     display: flex;
 }
 

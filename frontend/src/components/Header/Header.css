@@ -49,7 +49,7 @@
   color: #AC52D1;
 }
 
-.header__button:hover .in-progress {
+.header__button:hover .prompt {
   display: flex;
 }
 

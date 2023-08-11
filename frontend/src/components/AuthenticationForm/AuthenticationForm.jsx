@@ -5,9 +5,8 @@ import { formPrompts, inputPattern } from "../../utils/constants";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
-import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
-import InProgress from "../InProgress/InProgress";
+import Prompt from "../Prompt/Prompt";
 
 function AuthenticationForm({ info, handleSubmit }) {
   const [values, setValues] = useState({ name: "", email: "", password: "" });
@@ -230,12 +229,6 @@ function AuthenticationForm({ info, handleSubmit }) {
               <Link to="/api/auth/social/login/vk-oauth2" reloadDocument>
                 <Vkontakte className="authentication__icon" />
               </Link>
-              <div className="authentication__temporarily-inactive">
-                <Telegram
-                  className="authentication__icon" // если будем полключать - обернуть в ссылку, убрать обертку и компонент inProgress
-                />
-                <InProgress />
-              </div>
               <Link to="/api/auth/social/login/yandex-oauth2" reloadDocument>
                 <Yandex className="authentication__icon" />
               </Link>
@@ -243,7 +236,7 @@ function AuthenticationForm({ info, handleSubmit }) {
                 // не ReactComponent, как остальные, тк проблемы с svg, некорректно масштабируется для мобильной версии
                 className="authentication__icon google authentication__temporarily-inactive" // если будем полключать - обернуть в ссылку, удалить последний класс, удалить inProgress
               >
-                <InProgress />
+                <Prompt text={"В РАЗРАБОТКЕ"} />
               </div>
             </div>
           </div>

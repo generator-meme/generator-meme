@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import logo from "../../images/logo.svg";
 import "./Header.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Like } from "../../images/header/like-black.svg";
 import { ReactComponent as Bell } from "../../images/header/bell.svg";
@@ -11,11 +11,12 @@ import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 import Menu from "../Menu/Menu.jsx";
 import { setIsLoggedOut } from "../../services/actions/userActions";
-import InProgress from "../InProgress/InProgress";
+import Prompt from "../Prompt/Prompt";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [myMainMenuIsOpen, setMyMainMenuIsOpen] = useState(false);
   const [myExtraMenuIsOpen, setMyExtraMenuIsOpen] = useState(false);
@@ -62,11 +63,18 @@ const Header = () => {
       <Link to="/">
         <img className="header__logo" src={logo} alt="Логотип." />
       </Link>
-      {!isLoggedIn && (
-        <botton className="header__button" onClick={(e) => navigate("/login")}>
-          Войти
-        </botton>
-      )}
+      {!isLoggedIn &&
+        !(
+          location.pathname.includes("login") ||
+          location.pathname.includes("signin")
+        ) && (
+          <botton
+            className="header__button"
+            onClick={(e) => navigate("/login")}
+          >
+            Войти
+          </botton>
+        )}
       {isLoggedIn && (
         <div className="header__container">
           {window.innerWidth >= 690 && (
@@ -76,14 +84,14 @@ const Header = () => {
                 onClick={(e) => e.preventDefault()}
               >
                 <Like className="header__button_type_like" />
-                <InProgress />
+                <Prompt text={"В РАЗРАБОТКЕ"} />
               </button>
               <button
                 className="header__button"
                 onClick={(e) => e.preventDefault()}
               >
                 <Bell className="header__button_type_bell" />
-                <InProgress />
+                <Prompt text={"В РАЗРАБОТКЕ"} />
               </button>
               <button
                 className="header__button"

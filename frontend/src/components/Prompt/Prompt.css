@@ -1,4 +1,4 @@
-.in-progress {
+.prompt {
     display: none;
     border-radius: 0px 20px 20px 20px;
     border: 1px solid #D1D1D1;
@@ -16,4 +16,5 @@
     height: 30px;
     align-items: center;
     justify-content: center;
+    color: #000;
 }
