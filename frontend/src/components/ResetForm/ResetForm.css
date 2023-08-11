@@ -97,16 +97,10 @@
     box-sizing: border-box;
 }
 
-.reset-form__button_type_disabled {
-    background: #9B9B9B;
-}
-
-.reset-form__button_type_disabled:focus {
-    background: #9B9B9B;
-}
-
+.reset-form__button_type_disabled,
+.reset-form__button_type_disabled:hover,
 .reset-form__button_type_disabled:active {
-    background: #9B9B9B;
+    background: linear-gradient(180deg, rgba(206, 142, 192, 0.50) 0%, rgba(194, 139, 228, 0.31) 77.16%);
 }
 
 @media screen and (max-width: 1080px) {
