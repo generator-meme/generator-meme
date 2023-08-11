@@ -209,7 +209,7 @@
     position: relative;
 }
 
-.authentication__temporarily-inactive:hover .in-progress {
+.authentication__temporarily-inactive:hover .prompt {
     display: flex;
 }
 

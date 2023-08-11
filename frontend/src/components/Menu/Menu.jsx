@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Menu.css";
-import InProgress from "../InProgress/InProgress";
+import Prompt from "../Prompt/Prompt";
 
 const Menu = ({ options }) => {
   const [isHover, setIsHover] = useState(null);
@@ -26,7 +26,9 @@ const Menu = ({ options }) => {
             >
               {el.name}
             </button>
-            {el.inProgress && isHover === el.name && <InProgress />}
+            {el.inProgress && isHover === el.name && (
+              <Prompt text={"В РАЗРАБОТКЕ"} />
+            )}
           </li>
         );
       })}
