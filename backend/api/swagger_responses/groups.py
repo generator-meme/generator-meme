@@ -78,7 +78,7 @@ class GroupRetrive(BaseSwaggerSchema):
     operation_description = """Доступен всем пользователям."""
     request_body = None
     responses = {
-        200: openapi.Response("Success response", GroupSerializer),
+        200: openapi.Response("Success response", GroupFullSerializer),
         404: DEFAULT_RESPONSES[404]
     }
 
