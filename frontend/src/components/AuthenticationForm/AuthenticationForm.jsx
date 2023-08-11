@@ -5,7 +5,7 @@ import { formPrompts, inputPattern } from "../../utils/constants";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
-import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
+// import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
 import InProgress from "../InProgress/InProgress";
 
@@ -230,12 +230,12 @@ function AuthenticationForm({ info, handleSubmit }) {
               <Link to="/api/auth/social/login/vk-oauth2" reloadDocument>
                 <Vkontakte className="authentication__icon" />
               </Link>
-              <div className="authentication__temporarily-inactive">
+              {/* <div className="authentication__temporarily-inactive"> // пока решено не реализовывать, тк не дает email, телефон
                 <Telegram
                   className="authentication__icon" // если будем полключать - обернуть в ссылку, убрать обертку и компонент inProgress
                 />
                 <InProgress />
-              </div>
+              </div> */}
               <Link to="/api/auth/social/login/yandex-oauth2" reloadDocument>
                 <Yandex className="authentication__icon" />
               </Link>
