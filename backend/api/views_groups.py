@@ -22,13 +22,16 @@ from api.serializers_groups import (ChangeRoleSerializer, EnterGroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
-from api.swagger_responses.groups import (
-    GroupGet, GroupPost, GroupRetrive, GroupPartialUpdate, GroupDestroy,
-    GroupAddmemePost, GroupAddmemeDelete, GroupAdduserDelete,
-    GroupAdduserPost, GroupAddusertobanPost, GroupAddusertobanDelete,
-    GroupChangeownerPost, GroupChangeuserrolePost, GroupEnterPost,
-    GroupEnterDelete
-)
+from api.swagger_responses.groups import (GroupGet, GroupPost, GroupRetrive,
+                                          GroupPartialUpdate, GroupDestroy,
+                                          GroupAddmemePost, GroupAddmemeDelete,
+                                          GroupAdduserDelete, GroupAdduserPost,
+                                          GroupAddusertobanPost,
+                                          GroupAddusertobanDelete,
+                                          GroupChangeownerPost,
+                                          GroupChangeuserrolePost,
+                                          GroupEnterPost,
+                                          GroupEnterDelete)
 from api.viewsets import ListRetriveViewSet, ListViewSet
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
