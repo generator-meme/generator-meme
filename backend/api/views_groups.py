@@ -37,7 +37,6 @@ from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
 
-
 User = get_user_model()
 
 
