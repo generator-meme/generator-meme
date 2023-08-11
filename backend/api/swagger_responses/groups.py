@@ -1,6 +1,6 @@
-from drf_yasg import openapi
-from drf_yasg.openapi import Parameter, Responses
 from typing import Optional, List
+
+from drf_yasg import openapi
 
 from api.serializers_groups import (ChangeRoleSerializer, GroupFullSerializer,
                                     GroupSerializer, GroupWriteSerializer,
@@ -42,8 +42,8 @@ class BaseSwaggerSchema:
     operation_description: str
     request_body: Optional[openapi.Schema]
     methods: List[str]
-    manual_parameters: Optional[List[Parameter]]
-    responses: Responses
+    manual_parameters: Optional[List[openapi.Parameter]]
+    responses: openapi.Responses
 
 
 class GroupGet(BaseSwaggerSchema):
@@ -53,11 +53,12 @@ class GroupGet(BaseSwaggerSchema):
     GET доступен всем"""
     request_body = None
     manual_parameters = [
-        Parameter('name', openapi.IN_QUERY, description="Поикс по имени",
-                  type=openapi.TYPE_STRING),
-        Parameter('description', openapi.IN_QUERY,
-                  description="Поикс по описанию",
-                  type=openapi.TYPE_STRING),
+        openapi.Parameter('name', openapi.IN_QUERY,
+                          description="Поикс по имени",
+                          type=openapi.TYPE_STRING),
+        openapi.Parameter('description', openapi.IN_QUERY,
+                          description="Поикс по описанию",
+                          type=openapi.TYPE_STRING),
     ]
     responses = {200: GroupSerializer(many=True), }
 
