@@ -204,13 +204,13 @@ class GroupUserSerializer(serializers.ModelSerializer):
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Пользователь уже в группе.'}
+                {'user': 'Пользователь уже в группе.'}
             )
         if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupBannedUser_error':
+                {'user':
                  'Пользователь забаннен и не может быть добавлен в группу.'}
             )
         return data
@@ -248,13 +248,13 @@ class EnterGroupSerializer(serializers.ModelSerializer):
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Вы уже в группе.'}
+                {'user': 'Вы уже в группе.'}
             )
         if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupBannedUser_error':
+                {'user':
                  'Вы забаннены и не можете вступить в группу. '
                  'Обратитесь к Администраторам группы'}
             )
@@ -323,6 +323,7 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
             'added_by',
             'meme',
         )
+
         model = GroupMeme
 
     def validate(self, data):
@@ -358,21 +359,21 @@ class GroupUserDeleteSerializer(serializers.Serializer):
         )
         if not group_user.exists():
             raise ValidationError(
-                {'GroupUser_exists_error':
+                {'user':
                  'Данного пользователя нет в группе.'}
             )
         if (request.user != group_user[0].user
                 and group_user[0].role.is_admin
                 and request.user != group_user[0].owner):
             raise ValidationError(
-                {"Owner_error":
+                {"user":
                  "Пользователя со статусом 'Администратор' может "
                  "удалить только владелец группы."},
             )
         if request.user == group_user[0].group.owner and (
                 group_user[0].user == group_user[0].group.owner):
             raise ValidationError(
-                {"Owner_error":
+                {"user":
                  "Владелец группы не может удалить себя из списка "
                  "пользователей. Вначале передайте группу другому "
                  "пользователю!"}
