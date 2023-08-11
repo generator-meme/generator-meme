@@ -11,7 +11,7 @@ import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 import Menu from "../Menu/Menu.jsx";
 import { setIsLoggedOut } from "../../services/actions/userActions";
-import InProgress from "../InProgress/InProgress";
+import Prompt from "../Prompt/Prompt";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -84,14 +84,14 @@ const Header = () => {
                 onClick={(e) => e.preventDefault()}
               >
                 <Like className="header__button_type_like" />
-                <InProgress />
+                <Prompt text={"В РАЗРАБОТКЕ"} />
               </button>
               <button
                 className="header__button"
                 onClick={(e) => e.preventDefault()}
               >
                 <Bell className="header__button_type_bell" />
-                <InProgress />
+                <Prompt text={"В РАЗРАБОТКЕ"} />
               </button>
               <button
                 className="header__button"
