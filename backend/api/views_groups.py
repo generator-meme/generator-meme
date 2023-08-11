@@ -22,11 +22,6 @@ from api.serializers_groups import (ChangeRoleSerializer, EnterGroupSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
                                     NewOwnerSerializer,
                                     UserGroupReadSerializer)
-from api.viewsets import ListRetriveViewSet, ListViewSet
-from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
-                           GroupUser)
-from memes.models import Meme
-
 from api.swagger_responses.groups import (
     GroupGet, GroupPost, GroupRetrive, GroupPartialUpdate, GroupDestroy,
     GroupAddmemePost, GroupAddmemeDelete, GroupAdduserDelete,
@@ -34,6 +29,10 @@ from api.swagger_responses.groups import (
     GroupChangeownerPost, GroupChangeuserrolePost, GroupEnterPost,
     GroupEnterDelete
 )
+from api.viewsets import ListRetriveViewSet, ListViewSet
+from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
+                           GroupUser)
+from memes.models import Meme
 
 
 User = get_user_model()
