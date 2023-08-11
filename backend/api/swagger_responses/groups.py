@@ -3,10 +3,9 @@ from drf_yasg.openapi import Parameter, Responses
 
 from typing import List, Optional
 
-from api.serializers_groups import (
-    ChangeRoleSerializer, GroupFullSerializer,
-    GroupSerializer, GroupWriteSerializer, NewOwnerSerializer,
-)
+from api.serializers_groups import (ChangeRoleSerializer, GroupFullSerializer,
+                                    GroupSerializer, GroupWriteSerializer,
+                                    NewOwnerSerializer)
 
 
 def generate_400_response(fields: List[str]):
