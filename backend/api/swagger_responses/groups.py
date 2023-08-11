@@ -1,7 +1,6 @@
 from drf_yasg import openapi
 from drf_yasg.openapi import Parameter, Responses
-
-from typing import List, Optional
+from typing import Optional, List
 
 from api.serializers_groups import (ChangeRoleSerializer, GroupFullSerializer,
                                     GroupSerializer, GroupWriteSerializer,
