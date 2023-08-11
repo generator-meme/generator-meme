@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -27,6 +26,15 @@ from api.viewsets import ListRetriveViewSet, ListViewSet
 from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
                            GroupUser)
 from memes.models import Meme
+
+from api.swagger_responses.groups import (
+    GroupGet, GroupPost, GroupRetrive, GroupPartialUpdate, GroupDestroy,
+    GroupAddmemePost, GroupAddmemeDelete, GroupAdduserDelete,
+    GroupAdduserPost, GroupAddusertobanPost, GroupAddusertobanDelete,
+    GroupChangeownerPost, GroupChangeuserrolePost, GroupEnterPost,
+    GroupEnterDelete
+)
+
 
 User = get_user_model()
 
@@ -58,6 +66,45 @@ class GroupViewSet(viewsets.ModelViewSet):
             return GroupSerializer
         return GroupWriteSerializer
 
+    @swagger_auto_schema(
+        operation_description=GroupGet.operation_description,
+        request_body=GroupGet.request_body,
+        manual_parameters=GroupGet.manual_parameters,
+        responses=GroupGet.responses
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request)
+
+    @swagger_auto_schema(
+        operation_description=GroupPost.operation_description,
+        request_body=GroupPost.request_body[0],
+        responses=GroupPost.responses
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request)
+
+    @swagger_auto_schema(
+        operation_description=GroupRetrive.operation_description,
+        responses=GroupRetrive.responses
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request)
+
+    @swagger_auto_schema(
+        operation_description=GroupPartialUpdate.operation_description,
+        request_body=GroupPartialUpdate.request_body[0],
+        responses=GroupPartialUpdate.responses
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request)
+
+    @swagger_auto_schema(
+        operation_description=GroupDestroy.operation_description,
+        responses=GroupDestroy.responses
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request)
+
     def get_permissions(self):
         permission_classes = [IsAuthenticated, ]
 
@@ -79,9 +126,10 @@ class GroupViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(owner=user)
+        name = self.request.data.get('name').strip()
         group = Group.objects.get(
             owner=self.request.user,
-            name=self.request.data.get('name')
+            name=name
         )
         GroupUser.objects.create(
             group=group,
@@ -91,17 +139,15 @@ class GroupViewSet(viewsets.ModelViewSet):
         )
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
-            },
-            required=['user', ],
-        ),
-        methods=[
-            'post',
-            'delete',
-        ],
+        operation_description=GroupAdduserPost.operation_description,
+        request_body=GroupAdduserPost.request_body[0],
+        method='post',
+        responses=GroupAdduserPost.responses
+    )
+    @swagger_auto_schema(
+        operation_description=GroupAdduserDelete.operation_description,
+        method='delete',
+        responses=GroupAdduserDelete.responses
     )
     @action(detail=True,
             methods=['post',
@@ -148,14 +194,15 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            nullable=True,
-        ),
-        methods=[
-            'post',
-            'delete',
-        ],
+        operation_description=GroupEnterPost.operation_description,
+        request_body=GroupEnterPost.request_body,
+        method='post',
+        responses=GroupEnterPost.responses
+    )
+    @swagger_auto_schema(
+        operation_description=GroupEnterDelete.operation_description,
+        method='delete',
+        responses=GroupEnterDelete.responses
     )
     @action(detail=True,
             methods=['post', 'delete'],
@@ -202,17 +249,15 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
-            },
-            required=['user', ],
-        ),
-        methods=[
-            'post',
-            'delete',
-        ],
+        operation_description=GroupAddusertobanPost.operation_description,
+        request_body=GroupAdduserPost.request_body[0],
+        method='post',
+        responses=GroupAdduserPost.responses
+    )
+    @swagger_auto_schema(
+        operation_description=GroupAddusertobanDelete.operation_description,
+        method='delete',
+        responses=GroupAdduserDelete.responses
     )
     @action(
         detail=True,
@@ -255,17 +300,17 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'meme': openapi.Schema(type=openapi.TYPE_STRING),
-            },
-            required=['meme', ],
-        ),
-        methods=[
-            'post',
-            'delete',
-        ],
+        operation_description=GroupAddmemePost.operation_description,
+        request_body=GroupAddmemePost.request_body[0],
+        method='post',
+        responses=GroupAddmemePost.responses
+
+    )
+    @swagger_auto_schema(
+        operation_description=GroupAddmemeDelete.operation_description,
+        method='delete',
+        responses=GroupAddmemeDelete.responses
+
     )
     @action(
         detail=True,
@@ -315,9 +360,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        request_body=NewOwnerSerializer,
-        method='post',
-        responses={201: 'Успешная смена владельца'},
+        operation_description=GroupChangeownerPost.operation_description,
+        request_body=GroupChangeownerPost.request_body,
+        responses=GroupChangeownerPost.responses,
     )
     @action(
         detail=True,
@@ -362,9 +407,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        request_body=ChangeRoleSerializer,
-        method='post',
-        responses={201: 'Успешная смена роли'},
+        operation_description=GroupChangeuserrolePost.operation_description,
+        request_body=GroupChangeuserrolePost.request_body,
+        responses=GroupChangeuserrolePost.responses,
     )
     @action(
         detail=True,
