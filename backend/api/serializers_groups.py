@@ -364,7 +364,7 @@ class GroupUserDeleteSerializer(serializers.Serializer):
             )
         if (request.user != group_user[0].user
                 and group_user[0].role.is_admin
-                and request.user != group_user[0].owner):
+                and request.user != group_user[0].group.owner):
             raise ValidationError(
                 {"user":
                  "Пользователя со статусом 'Администратор' может "
@@ -425,7 +425,9 @@ class NewOwnerSerializer(serializers.Serializer):
         if not GroupUser.objects.filter(group=current_group,
                                         user_id=new_owner_id).exists():
             raise ValidationError(
-                {'user_id': 'Новый владелец не состоит в этой группе.'}
+                {'user_id': 'Пользователь не состоит в этой группе. Выберите '
+                            'в качестве нового владельца пользователя из '
+                            'группы.'}
             )
         return data
 
