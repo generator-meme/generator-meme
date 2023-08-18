@@ -229,3 +229,5 @@ DRF_LOGGER_INTERVAL = 10
 DRF_API_LOGGER_TIMEDELTA = 180
 # формат ссылки на ручку
 DRF_API_LOGGER_PATH_TYPE = 'FULL_PATH'
+# регистрируемые статусы
+DRF_API_LOGGER_STATUS_CODES = ['400', '401', '403', '404', '405', '500', '503']
