@@ -17,6 +17,8 @@ from api.serializers_groups import (ChangeRoleSerializer, EnterGroupSerializer,
                                     GroupFullSerializer,
                                     GroupMemeDeleteSerializer,
                                     GroupMemeWriteSerializer,
+                                    GroupMemeLikeDeleteSerializer,
+                                    GroupMemeLikePostSerializer,
                                     GroupRoleSerializer, GroupSerializer,
                                     GroupUserDeleteSerializer,
                                     GroupUserSerializer, GroupWriteSerializer,
@@ -33,8 +35,8 @@ from api.swagger_responses.groups import (GroupAddmemeDelete, GroupAddmemePost,
                                           GroupPartialUpdate, GroupPost,
                                           GroupRetrive)
 from api.viewsets import ListRetriveViewSet, ListViewSet
-from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
-                           GroupUser)
+from groups.models import (Group, GroupBannedUser, GroupMeme, GroupMemeLike,
+                           GroupRole, GroupUser)
 from memes.models import Meme
 
 User = get_user_model()
@@ -449,6 +451,79 @@ class GroupViewSet(viewsets.ModelViewSet):
             user_in_group_object.save()
 
         return Response(status=status.HTTP_201_CREATED)
+
+    # @swagger_auto_schema(
+    #     operation_description=GroupAddusertobanPost.operation_description,
+    #     request_body=GroupAdduserPost.request_body[0],
+    #     method='post',
+    #     responses=GroupAdduserPost.responses
+    # )
+    # @swagger_auto_schema(
+    #     operation_description=GroupAddusertobanDelete.operation_description,
+    #     method='delete',
+    #     responses=GroupAdduserDelete.responses
+    # )
+    @action(
+        detail=True,
+        methods=[
+            'post',
+            'delete',
+        ],
+        permission_classes_by_action={
+            'POST': [IsAuthenticated, IsInGroup],
+            'DELETE': [IsAuthenticated, IsInGroup],
+        }
+    )
+    def like_meme(self, request, pk):
+        """Поставить/удалить лайк мему в группе
+        POST и DELETE доступны участнику группы."""
+        current_group = get_object_or_404(Group, pk=pk)
+        self.check_object_permissions(request, current_group)
+
+        if request.method != 'POST':
+            serializer = GroupMemeLikeDeleteSerializer(
+                data={
+                    'meme_id': request.data.get('meme_id')
+                },
+                context={
+                    'user': request.user,
+                    'current_group': current_group,
+                }
+            )
+            serializer.is_valid(raise_exception=True)
+            current_group_meme = get_object_or_404(
+                GroupMeme,
+                meme_id=request.data.get('meme_id'),
+                group=current_group,
+            )
+            action_model = get_object_or_404(
+                GroupMemeLike,
+                user=request.user,
+                group_meme=current_group_meme,
+            )
+            self.perform_destroy(action_model)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        serializer = GroupMemeLikePostSerializer(
+            data={
+                'meme_id': request.data.get('meme_id')
+            },
+            context={
+                'user': request.user,
+                'current_group': current_group,
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        current_group_meme = get_object_or_404(
+            GroupMeme,
+            meme_id=request.data.get('meme_id'),
+            group=current_group,
+        )
+        GroupMemeLike.objects.create(
+            group_meme=current_group_meme,
+            user=request.user,
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserGroupsViewSet(ListViewSet):
