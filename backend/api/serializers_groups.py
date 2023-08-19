@@ -97,6 +97,7 @@ class GroupMemeSerializer(serializers.ModelSerializer):
         return False
 
     def get_author(self, obj):
+        """Получение информации об авторе мема."""
         author = obj.meme.author
         if author is None:
             return None
@@ -104,6 +105,7 @@ class GroupMemeSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_template(self, obj):
+        """Получение информации о шаблоне мема."""
         template = obj.meme.template
         if template is None:
             return None
@@ -517,7 +519,7 @@ class UserGroupReadSerializer(serializers.ModelSerializer):
         return self.context['request'].user == obj.group.owner
 
 
-class GroupMemeLikePostSerializer(serializers.ModelSerializer):
+class GroupMemeLikeSerializer(serializers.ModelSerializer):
     """Сериализатор лайка мема в группе."""
 
     meme_id = serializers.UUIDField(required=True)
@@ -529,9 +531,8 @@ class GroupMemeLikePostSerializer(serializers.ModelSerializer):
         model = GroupMeme
 
     def validate(self, data):
-        """Валидирует данные при записи лайка."""
+        """Валидирует данные при операциях с лайками."""
         current_group = self.context['current_group']
-        user = self.context['user']
 
         if not GroupMeme.objects.filter(
             meme_id=data.get('meme_id'),
@@ -540,6 +541,18 @@ class GroupMemeLikePostSerializer(serializers.ModelSerializer):
             raise ValidationError(
                 {'meme_id': 'Мема с таким ID в группе нет.'}
             )
+        return data
+
+
+class GroupMemeLikePostSerializer(GroupMemeLikeSerializer):
+    """Сериализатор добавления лайка мема в группе."""
+
+    def validate(self, data):
+        """Валидирует данные при записи лайка."""
+        validated_data = super().validate(data)
+
+        current_group = self.context['current_group']
+        user = self.context['user']
 
         if GroupMemeLike.objects.filter(
                 group_meme__meme_id=data.get('meme_id'),
@@ -550,32 +563,18 @@ class GroupMemeLikePostSerializer(serializers.ModelSerializer):
                 {'meme_id': 'Вы уже лайкнули этот мем.'}
             )
 
-        return data
+        return validated_data
 
 
-class GroupMemeLikeDeleteSerializer(serializers.ModelSerializer):
-    """Сериализатор лайка мема в группе."""
-
-    meme_id = serializers.UUIDField(required=True)
-
-    class Meta:
-        fields = (
-            'meme_id',
-        )
-        model = GroupMeme
+class GroupMemeLikeDeleteSerializer(GroupMemeLikeSerializer):
+    """Сериализатор удаления лайка мема в группе."""
 
     def validate(self, data):
         """Валидирует данные при записи лайка."""
+        validated_data = super().validate(data)
+
         current_group = self.context['current_group']
         user = self.context['user']
-
-        if not GroupMeme.objects.filter(
-            meme_id=data.get('meme_id'),
-            group=current_group,
-        ).exists():
-            raise ValidationError(
-                {'meme_id': 'Мема с таким ID в группе нет.'}
-            )
 
         if not GroupMemeLike.objects.filter(
                 group_meme__meme_id=data.get('meme_id'),
@@ -586,4 +585,4 @@ class GroupMemeLikeDeleteSerializer(serializers.ModelSerializer):
                 {'meme_id': 'Этот мем вы не лайкали.'}
             )
 
-        return data
+        return validated_data
