@@ -555,7 +555,7 @@ class GroupMemeLikePostSerializer(GroupMemeLikeSerializer):
         user = self.context['user']
 
         if GroupMemeLike.objects.filter(
-                group_meme__meme_id=data.get('meme_id'),
+                group_meme__meme_id=validated_data.get('meme_id'),
                 group_meme__group=current_group,
                 user=user,
         ).exists():
@@ -577,7 +577,7 @@ class GroupMemeLikeDeleteSerializer(GroupMemeLikeSerializer):
         user = self.context['user']
 
         if not GroupMemeLike.objects.filter(
-                group_meme__meme_id=data.get('meme_id'),
+                group_meme__meme_id=validated_data.get('meme_id'),
                 group_meme__group=current_group,
                 user=user,
         ).exists():
