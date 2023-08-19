@@ -32,6 +32,8 @@ from api.swagger_responses.groups import (GroupAddmemeDelete, GroupAddmemePost,
                                           GroupChangeuserrolePost,
                                           GroupDestroy, GroupEnterDelete,
                                           GroupEnterPost, GroupGet,
+                                          GroupMemeLikeDelete,
+                                          GroupMemeLikePost,
                                           GroupPartialUpdate, GroupPost,
                                           GroupRetrive)
 from api.viewsets import ListRetriveViewSet, ListViewSet
@@ -452,17 +454,17 @@ class GroupViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_201_CREATED)
 
-    # @swagger_auto_schema(
-    #     operation_description=GroupAddusertobanPost.operation_description,
-    #     request_body=GroupAdduserPost.request_body[0],
-    #     method='post',
-    #     responses=GroupAdduserPost.responses
-    # )
-    # @swagger_auto_schema(
-    #     operation_description=GroupAddusertobanDelete.operation_description,
-    #     method='delete',
-    #     responses=GroupAdduserDelete.responses
-    # )
+    @swagger_auto_schema(
+        operation_description=GroupMemeLikePost.operation_description,
+        request_body=GroupMemeLikePost.request_body[0],
+        method='post',
+        responses=GroupMemeLikePost.responses
+    )
+    @swagger_auto_schema(
+        operation_description=GroupMemeLikeDelete.operation_description,
+        method='delete',
+        responses=GroupMemeLikeDelete.responses
+    )
     @action(
         detail=True,
         methods=[
@@ -478,9 +480,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         """Поставить/удалить лайк мему в группе
         POST и DELETE доступны участнику группы."""
         current_group = get_object_or_404(Group, pk=pk)
+
         self.check_object_permissions(request, current_group)
 
-        if request.method != 'POST':
+        if request.method == 'DELETE':
             serializer = GroupMemeLikeDeleteSerializer(
                 data={
                     'meme_id': request.data.get('meme_id')
@@ -523,7 +526,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             group_meme=current_group_meme,
             user=request.user,
         )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class UserGroupsViewSet(ListViewSet):

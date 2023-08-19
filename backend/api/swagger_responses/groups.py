@@ -256,3 +256,45 @@ class GroupEnterDelete(BaseSwaggerSchema):
         403: DEFAULT_RESPONSES[403],
         404: DEFAULT_RESPONSES[404]
     }
+
+
+class GroupMemeLikePost(BaseSwaggerSchema):
+    operation_description = (
+        """Добавить лайк мему в групппе. Доступен любому
+        авторизованному участнику группы."""
+    )
+    request_body = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'meme_id': openapi.Schema(type=openapi.TYPE_STRING,
+                                      field='UUIDField'),
+        },
+        required=['meme_id', ],
+    ),
+    responses = {
+        201: openapi.Response("Success response"),
+        400: generate_400_response(['meme_id', ]),
+        403: DEFAULT_RESPONSES[403],
+        404: DEFAULT_RESPONSES[404]
+    }
+
+
+class GroupMemeLikeDelete(BaseSwaggerSchema):
+    operation_description = (
+        """Убрать свой лайк у мема в групппе. Доступен любому
+        авторизованному участнику группы."""
+    )
+    request_body = openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'meme_id': openapi.Schema(type=openapi.TYPE_STRING,
+                                      field='UUIDField'),
+        },
+        required=['meme_id', ],
+    ),
+    responses = {
+        204: DEFAULT_RESPONSES[204],
+        400: generate_400_response(['meme_id', ]),
+        403: DEFAULT_RESPONSES[403],
+        404: DEFAULT_RESPONSES[404]
+    }
