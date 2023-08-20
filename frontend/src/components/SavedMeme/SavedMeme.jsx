@@ -95,7 +95,14 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
         />
       )}
 
-      <div className="saved-meme__container">
+      <div
+        className="saved-meme__container"
+        onClick={() => {
+          if (isDownloadDropdownOpen) {
+            closeDropDownMenuWhenChouse();
+          }
+        }}
+      >
         <img
           className="saved-meme__image"
           ref={memeRef}
@@ -107,6 +114,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             <button
               className="btn"
               style={{
+                lineHeight: 1.2,
                 width: "414px",
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
@@ -138,12 +146,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             </button>
           </div>
           {isDownloadDropdownOpen ? (
-            <div
-              className="download-options"
-              onClick={() => {
-                closeDropDownMenuWhenChouse();
-              }}
-            >
+            <div className="download-options">
               <div
                 className="download-option"
                 onClick={() => {

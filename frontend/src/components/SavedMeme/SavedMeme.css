@@ -9,7 +9,6 @@
   padding: 62px 0 0;
   width: 100%;
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   column-gap: 60px;
   align-items: center;
@@ -65,17 +64,17 @@
   position: relative;
   display: flex;
   margin-bottom: 29px;
+  height: 74px;
 }
 
 .download-options {
   margin-top: 82px;
   width: 500px;
-  /* padding: 20px; */
   border-radius: 10px;
   background-color: #ffff;
   position: absolute;
   z-index: 2;
-  padding: 10px;
+  padding: 30px 20px;
   box-sizing: border-box;
 }
 
@@ -85,11 +84,12 @@
   margin-bottom: 12px;
   color: #000;
   font-size: 20px;
-  font-weight: 600;
   font-family: "Montserrat";
+  padding: 10px 20px;
 }
-
 .download-option:hover {
+  border-radius: 20px;
+  border: 1px solid #9d0095;
   cursor: pointer;
 }
 
@@ -98,5 +98,21 @@
 }
 
 .download-option img {
-  margin-right: 5px;
+  margin-right: 10px;
+}
+.download-option span {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  min-height: 40px;
+}
+
+@media (max-width: 1080px) {
+  .saved-meme__container {
+    display: flex;
+    flex-direction: column;
+  }
+  .saved-meme-btns-wrapper {
+    padding-top: 30px;
+  }
 }
