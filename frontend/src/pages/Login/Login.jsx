@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
+import AuthenticationForm from "../../components/AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
 import { setCookie } from "../../utils/cookie";
 import { setIsLoggedIn } from "../../services/actions/userActions";

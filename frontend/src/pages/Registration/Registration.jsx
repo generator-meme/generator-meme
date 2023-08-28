@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Registration.css";
 import { useNavigate } from "react-router-dom";
-import AuthenticationForm from "../AuthenticationForm/AuthenticationForm";
+import AuthenticationForm from "../../components/AuthenticationForm/AuthenticationForm";
 import { authorisation } from "../../utils/autorisation";
 
 function Registration() {

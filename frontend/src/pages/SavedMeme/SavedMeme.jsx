@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./SavedMeme.module.css";
-import Navigation from "../Navigation/Navigation";
+import Navigation from "../../components/Navigation/Navigation";
 import { useState } from "react";
 import icWhatsapp from "../../images/icons/ic-whatsapp.svg";
 import icTelegram from "../../images/icons/ic-telegram.svg";
@@ -16,14 +16,14 @@ import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
 import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ColorRing } from "react-loader-spinner";
+
 import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
 import {
   TelegramShareButton,
   ViberShareButton,
   WhatsappShareButton,
 } from "react-share";
-import Prompt from "../Prompt/Prompt";
+import Prompt from "../../components/Prompt/Prompt";
 
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -179,6 +179,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             <button className={`btn ${styles.saved_meme__btn_save}`}>
               сохранить в ЛК
             </button>
+
             <div className={styles.saved_meme_share_btns_container}>
               <div className={styles.icon}>
                 <WhatsappShareButton url={document.location.href}>

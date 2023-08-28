@@ -1,25 +1,25 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Main from "./components/Main/Main";
-import Footer from "./components/Footer/Footer";
-import CanvasPreloader from "./components/CanvasPreloader/CanvasPreloader";
-import SavedMeme from "./components/SavedMeme/SavedMeme";
-import Team from "./components/Team/Team";
-import api from "./utils/api";
 import "./App.css";
-import { optionsList, checkEmailMessage } from "./utils/constants.js";
-import InfoTooltip from "./components/InfoTooltip/InfoTooltip";
-import Registration from "./components/Registration/Registration";
-import Login from "./components/Login/Login";
-import ResetPassordConfirm from "./components/ResetPassordConfirm/ResetPassordConfirm";
-import ResetPassword from "./components/ResetPassword/ResetPassword";
-import CheckEmailMessage from "./components/CheckEmailMessage/CheckEmailMessage";
-import AuthActivation from "./components/AuthActivation/AuthActivation";
-import AuthUsingSocialNetworks from "./components/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUserInfo } from "./services/actions/userActions";
-import Preloader from "./components/Preloader/Preloader";
+import api from "../../utils/api";
+import { loadUserInfo } from "../../services/actions/userActions";
+import Header from "../Header/Header";
+import Main from "../../pages/Main/Main";
+import Team from "../../pages/Team/Team";
+import CanvasPreloader from "../../pages/CanvasPreloader/CanvasPreloader";
+import SavedMeme from "../../pages/SavedMeme/SavedMeme";
+import Registration from "../../pages/Registration/Registration";
+import Login from "../../pages/Login/Login";
+import AuthUsingSocialNetworks from "../../pages/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
+import CheckEmailMessage from "../../pages/CheckEmailMessage/CheckEmailMessage";
+import { optionsList, checkEmailMessage } from "../../utils/constants";
+import AuthActivation from "../../pages/AuthActivation/AuthActivation";
+import ResetPassword from "../../pages/ResetPassword/ResetPassword";
+import ResetPassordConfirm from "../../pages/ResetPassordConfirm/ResetPassordConfirm";
+import Footer from "../Footer/Footer";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import Preloader from "../Preloader/Preloader";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -70,6 +70,7 @@ const App = () => {
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;
+
     dispatch(loadUserInfo());
     setIsTokenChecked(true);
   }, [isLoggedIn, dispatch, userInfo]);

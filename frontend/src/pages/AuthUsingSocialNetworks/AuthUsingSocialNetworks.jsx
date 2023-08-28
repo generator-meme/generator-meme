@@ -1,5 +1,5 @@
 import React from "react";
-import EmptyPage from "../EmptyPage/EmptyPage";
+import EmptyPage from "../../components/EmptyPage/EmptyPage";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../../utils/cookie";

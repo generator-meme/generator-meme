@@ -1,5 +1,5 @@
 import React from "react";
-import ResetForm from "../ResetForm/ResetForm";
+import ResetForm from "../../components/ResetForm/ResetForm";
 import { authorisation } from "../../utils/autorisation";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { inputPattern } from "../../utils/constants";
