@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Canvas from "../Canvas/Canvas";
+import Canvas from "../../components/Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
 import { useSelector } from "react-redux";
 
