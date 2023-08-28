@@ -18,6 +18,7 @@ export const savedMemeReducer = (state = initialState, action) => {
       return { ...state, getMemeRequest: true };
     }
     case GET_MEME_SUCCESS: {
+      console.log(action.payload);
       return {
         ...state,
         meme: action.payload,

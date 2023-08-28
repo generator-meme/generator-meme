@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./SavedMeme.css";
+import styles from "./SavedMeme.module.css";
 import Navigation from "../Navigation/Navigation";
 import { useState } from "react";
 import icWhatsapp from "../../images/icons/ic-whatsapp.svg";
@@ -23,15 +23,19 @@ import {
   ViberShareButton,
   WhatsappShareButton,
 } from "react-share";
+import Prompt from "../Prompt/Prompt";
 
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
-  const { isLoading, meme } = useSelector((state) => state.savedMeme);
+  const { meme } = useSelector((state) => state.saveMeme);
+  const a = useSelector((state) => state.saveMeme);
+  console.log(a);
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const memeRef = useRef(null);
+  const isPreloaderActive = useSelector((state) => state.preloader);
 
   const writeToCanvas = (src) => {
     return new Promise((res) => {
@@ -75,144 +79,156 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
     dispatch(getMemeByIdAction(id));
   }, []);
 
-  if (isLoading) {
-    return <ColorRing></ColorRing>;
-  }
   const closeDropDownMenuWhenChouse = () => {
     setTimeout(() => {
       setIsDownloadDropdownOpen(false);
     }, 200);
   };
-  return (
-    <main className="saved-meme">
-      {location.state === null ? null : (
-        <Navigation
-          isSavedMeme={isSavedMeme}
-          id={
-            currentMeme?.id ||
-            JSON.parse(localStorage.getItem("currentMeme")).id
-          }
-        />
-      )}
 
-      <div
-        className="saved-meme__container"
-        onClick={() => {
-          if (isDownloadDropdownOpen) {
-            closeDropDownMenuWhenChouse();
-          }
-        }}
-      >
-        <img
-          className="saved-meme__image"
-          ref={memeRef}
-          src={meme.image}
-          alt="Мем."
-        />
-        <div className="saved-meme-btns-wrapper">
-          <div className="dropdown-btn-wrapper">
-            <button
-              className="btn"
-              style={{
-                lineHeight: 1.2,
-                width: "414px",
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                marginRight: "5px",
-                fontSize: "20px",
-              }}
-              onClick={() => {
-                handleDownloadMeme();
-              }}
-            >
-              скачать мем
-            </button>
-            <button
-              onClick={() => setIsDownloadDropdownOpen(!isDownloadDropdownOpen)}
-              className="btn"
-              style={{
-                width: "80px",
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-              }}
-            >
-              <img
-                src={icDropdown}
-                alt="icon dropdown"
-                style={{
-                  transform: isDownloadDropdownOpen ? "rotate(180deg)" : "none",
-                }}
-              />
-            </button>
-          </div>
-          {isDownloadDropdownOpen ? (
-            <div className="download-options">
-              <div
-                className="download-option"
+  return (
+    !!meme && (
+      <main className={styles.saved_meme}>
+        {location.state === null ? null : (
+          <Navigation
+            isSavedMeme={isSavedMeme}
+            id={
+              currentMeme?.id ||
+              JSON.parse(localStorage.getItem("currentMeme")).id
+            }
+          />
+        )}
+
+        <div
+          className={styles.saved_meme__container}
+          onClick={() => {
+            if (isDownloadDropdownOpen) {
+              closeDropDownMenuWhenChouse();
+            }
+          }}
+        >
+          <img
+            className={styles.saved_meme__image}
+            ref={memeRef}
+            src={meme.image}
+            alt="Мем."
+          />
+          <div className={styles.saved_meme_btns_wrapper}>
+            <div className={styles.dropdown_btn_wrapper}>
+              <button
+                className={`btn ${styles.saved_meme_btn}`}
+                style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                 onClick={() => {
                   handleDownloadMeme();
                 }}
               >
-                <img src={icDownloadToPc} alt="icon download to pc" />
-                <span>Скачать на устройство</span>
-              </div>
-              <div className="download-option">
-                <img src={icGoogleDrive} alt="icon google drive" />
-                <span>Загрузить на Google Drive</span>
-              </div>
-              <div className="download-option">
-                <img src={icDropbox} alt="icon dropbox" />
-                <span>Загрузить на Dropbox</span>
-              </div>
-              <div className="download-option">
-                <img src={icYandexDisc} alt="icon yandex disc" />
-                <span>Загрузить на Яндекс Диск</span>
-              </div>
+                скачать мем
+              </button>
+              <button
+                onClick={() =>
+                  setIsDownloadDropdownOpen(!isDownloadDropdownOpen)
+                }
+                className={`btn ${styles.saved_meme_arrow_btn}`}
+                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              >
+                <img
+                  src={icDropdown}
+                  alt="icon dropdown"
+                  style={{
+                    transform: isDownloadDropdownOpen
+                      ? "rotate(180deg)"
+                      : "none",
+                  }}
+                />
+              </button>
             </div>
-          ) : null}
+            {isDownloadDropdownOpen ? (
+              <div className={styles.download_options}>
+                <div
+                  className={styles.download_option}
+                  onClick={() => {
+                    handleDownloadMeme();
+                  }}
+                >
+                  <img src={icDownloadToPc} alt="icon download to pc" />
+                  <span>Скачать на устройство</span>
+                </div>
+                <div
+                  className={styles.download_option}
+                  style={{ color: "#9B9B9B" }}
+                >
+                  <img src={icGoogleDrive} alt="icon google drive" />
+                  <span>Загрузить на Google Drive</span>
+                </div>
+                <div
+                  className={styles.download_option}
+                  style={{ color: "#9B9B9B" }}
+                >
+                  <img src={icDropbox} alt="icon dropbox" />
+                  <span>Загрузить на Dropbox</span>
+                </div>
+                <div
+                  className={styles.download_option}
+                  style={{ color: "#9B9B9B" }}
+                >
+                  <img src={icYandexDisc} alt="icon yandex disc" />
+                  <span>Загрузить на Яндекс Диск</span>
+                </div>
+              </div>
+            ) : null}
 
-          <button className="btn saved-meme__btn-save">сохранить в ЛК</button>
-          <div className="saved-meme-share-btns-container">
-            <div>
-              <WhatsappShareButton url={document.location.href}>
-                <img src={icWhatsapp} alt="icon whatsapp" />
-              </WhatsappShareButton>
-            </div>
-            <div>
-              <TelegramShareButton url={document.location.href}>
-                <img src={icTelegram} alt="icon telegram" />
-              </TelegramShareButton>
-            </div>
-            <div>
-              <ViberShareButton url={document.location.href}>
-                <img src={icViber} alt="icon viber" />
-              </ViberShareButton>
-            </div>
-            <div>
-              <img src={icNotWorkedAddGroup} alt="icon group" />
-            </div>
-            <div>
-              <img
-                src={icGlobal}
-                alt="icon global"
-                onClick={() => {
-                  copyURL();
-                }}
-              />
-            </div>
-            <div>
-              <img
-                onClick={() => {
-                  copyToClipboard(memeRef.current.src);
-                }}
-                src={icNote}
-                alt="icon note"
-              />
+            <button className={`btn ${styles.saved_meme__btn_save}`}>
+              сохранить в ЛК
+            </button>
+            <div className={styles.saved_meme_share_btns_container}>
+              <div className={styles.icon}>
+                <WhatsappShareButton url={document.location.href}>
+                  <img src={icWhatsapp} alt="icon whatsapp" />
+                </WhatsappShareButton>
+              </div>
+              <div className={styles.icon}>
+                <TelegramShareButton url={document.location.href}>
+                  <img src={icTelegram} alt="icon telegram" />
+                </TelegramShareButton>
+              </div>
+              <div className={styles.icon}>
+                <ViberShareButton url={document.location.href}>
+                  <img src={icViber} alt="icon viber" />
+                </ViberShareButton>
+              </div>
+              <div className={styles.icon}>
+                <img
+                  src={icNotWorkedAddGroup}
+                  alt="icon group"
+                  style={{ opacity: "50%" }}
+                />
+
+                <Prompt text={"В РАЗРАБОТКЕ"}></Prompt>
+              </div>
+              <div className={styles.icon}>
+                <img
+                  src={icGlobal}
+                  alt="icon global"
+                  onClick={() => {
+                    copyURL();
+                  }}
+                />
+                <Prompt text={"ПОДЕЛИТЬСЯ URL"}></Prompt>
+              </div>
+              <div className={styles.icon}>
+                <img
+                  onClick={() => {
+                    copyToClipboard(memeRef.current.src);
+                  }}
+                  src={icNote}
+                  alt="icon note"
+                />
+                <Prompt text={"СКОПИРОВАТЬ В БУФЕР ОБМЕНА"}></Prompt>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    )
   );
 }
 

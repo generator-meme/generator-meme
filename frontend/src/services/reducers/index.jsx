@@ -7,7 +7,7 @@ import { preloaderReducer } from "./preloaderReducer";
 
 const rootReducer = combineReducers({
   canvasData: canvasReducer,
-  savedMeme: savedMemeReducer,
+  saveMeme: savedMemeReducer,
   setCurrentMeme: currentMemeReducer,
   user: userReducer,
   preloader: preloaderReducer,

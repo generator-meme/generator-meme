@@ -23,7 +23,7 @@ import Preloader from "./components/Preloader/Preloader";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
-  const { meme } = useSelector((state) => state.savedMeme);
+  const { meme } = useSelector((state) => state.saveMeme);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
