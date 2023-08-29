@@ -2,8 +2,9 @@ from uuid import uuid4
 
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework.serializers import (BooleanField, ModelSerializer,
-                                        PrimaryKeyRelatedField, UUIDField,
+from rest_framework.serializers import (ModelSerializer,
+                                        PrimaryKeyRelatedField,
+                                        SerializerMethodField, UUIDField,
                                         ValidationError)
 
 from api.serializers_users import UsersSerializer
@@ -39,7 +40,7 @@ class TemplateReadSerializer(ModelSerializer):
 
     id = UUIDField(read_only=True, default=uuid4)
     tag = TagSerializer(many=True, read_only=True)
-    is_favorited = BooleanField(read_only=True)
+    is_favorited = SerializerMethodField()
     category = CategorySerializer(read_only=True,)
 
     class Meta:
@@ -54,6 +55,10 @@ class TemplateReadSerializer(ModelSerializer):
             'is_favorited',
             'published_at',
         )
+
+    def get_is_favorited(self, obj):
+        user = self.context['request'].user
+        return Favorite.objects.filter(template=obj, user=user).exists()
 
 
 class TemplateWriteSerializer(ModelSerializer):
