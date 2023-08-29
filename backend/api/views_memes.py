@@ -108,7 +108,8 @@ class TemplateViewSet(viewsets.ModelViewSet):
             return TemplateReadSerializer
         return TemplateWriteSerializer
 
-    @action(detail=True, methods=['post', 'delete'])
+    @action(detail=True, methods=['post', 'delete'],
+            permission_classes=[IsAuthenticated])
     def favorite(self, request, pk):
         '''Добавляет шаблон в избранные'''
         return create_delete_relation(
