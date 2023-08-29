@@ -58,7 +58,9 @@ class TemplateReadSerializer(ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context['request'].user
-        return Favorite.objects.filter(template=obj, user=user).exists()
+        if user.is_authenticated:
+            return Favorite.objects.filter(template=obj, user=user).exists()
+        return False
 
 
 class TemplateWriteSerializer(ModelSerializer):
