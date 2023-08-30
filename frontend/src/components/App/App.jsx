@@ -20,6 +20,7 @@ import ResetPassordConfirm from "../../pages/ResetPassordConfirm/ResetPassordCon
 import Footer from "../Footer/Footer";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import Preloader from "../Preloader/Preloader";
+import { getCookie } from "../../utils/cookie";
 
 const App = () => {
   const [memes, setMemes] = useState([]);
@@ -58,15 +59,18 @@ const App = () => {
   };
 
   useEffect(() => {
+    if (!isTokenChecked) return;
+    const savedToken = getCookie("token");
     api
-      .getTemplates()
+      .getTemplates(savedToken)
       .then((res) => {
+        console.log("memes are downloaded");
         setMemes(res);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [isLoggedIn, isTokenChecked]);
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;

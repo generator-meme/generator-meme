@@ -1,0 +1,24 @@
+.like__container {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.like__button {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.like__container:hover .prompt {
+    display: flex;
+}
+
+.like_is-liked {
+    fill: #F60816;
+}

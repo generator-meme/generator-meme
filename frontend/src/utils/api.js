@@ -20,13 +20,41 @@ class Api {
         });
   }
 
-  getTemplates() {
-    return fetch(`${this._baseUrl}/templates/`, {
-      method: "GET",
-      body: JSON.stringify(),
-      headers: this._headers,
-    }).then(this._errorHandler);
+  getTemplates(
+    savedToken,
+    tags = "",
+    categories = "",
+    isFavorited = "",
+    ordering = ""
+  ) {
+    return fetch(
+      `${this._baseUrl}/templates/?tag=${tags}&category=${categories}&is_favorited=${isFavorited}&ordering=${ordering}`,
+      {
+        method: "GET",
+        body: JSON.stringify(),
+        headers:
+          savedToken.length > 0
+            ? {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${savedToken}`, // prettier-ignore
+              }
+            : this._headers,
+      }
+    ).then(this._errorHandler);
   }
+  // getTemplates(savedToken) {
+  //   return fetch(`${this._baseUrl}/templates/`, {
+  //     method: "GET",
+  //     body: JSON.stringify(),
+  //     headers:
+  //       savedToken.length > 0
+  //         ? {
+  //             "Content-Type": "application/json",
+  //             "Authorization": `Token ${savedToken}`, // prettier-ignore
+  //           }
+  //         : this._headers,
+  //   }).then(this._errorHandler);
+  // }
   getTags() {
     return fetch(`${this._baseUrl}/tags/`, {
       method: "GET",
@@ -90,7 +118,25 @@ class Api {
     });
   }
 
-  copyNewMeme() {}
+  addTemplateToFavorites(templateId, token) {
+    return fetch(`${this._baseUrl}/templates/${templateId}/favorite/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkReponce);
+  }
+
+  removeTemplateFromFavorites(templateId, token) {
+    return fetch(`${this._baseUrl}/templates/${templateId}/favorite/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({
