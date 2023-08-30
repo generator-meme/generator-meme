@@ -137,8 +137,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
@@ -229,3 +229,5 @@ DRF_LOGGER_INTERVAL = 10
 DRF_API_LOGGER_TIMEDELTA = 180
 # формат ссылки на ручку
 DRF_API_LOGGER_PATH_TYPE = 'FULL_PATH'
+# регистрируемые статусы
+DRF_API_LOGGER_STATUS_CODES = ['400', '401', '403', '404', '405', '500', '503']

@@ -5,8 +5,8 @@ from rest_framework.fields import CurrentUserDefault, SerializerMethodField
 
 from api.serializers_memes import TemplateReadSerializer
 from api.serializers_users import UsersSerializer
-from groups.models import (Group, GroupBannedUser, GroupMeme, GroupRole,
-                           GroupUser)
+from groups.models import (Group, GroupBannedUser, GroupMeme, GroupMemeLike,
+                           GroupRole, GroupUser)
 
 User = get_user_model()
 
@@ -62,6 +62,8 @@ class GroupMemeSerializer(serializers.ModelSerializer):
     added_by = UsersSerializer(read_only=True)
     created_at = serializers.ReadOnlyField(source='meme.created_at')
     template = serializers.SerializerMethodField(source='meme.template')
+    likes_count = serializers.SerializerMethodField()
+    is_user_like = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
@@ -71,11 +73,31 @@ class GroupMemeSerializer(serializers.ModelSerializer):
             'created_at',
             'added_by',
             'added_at',
-            'template'
+            'template',
+            'likes_count',
+            'is_user_like',
         )
         model = GroupMeme
 
+    def get_likes_count(self, obj: GroupMeme):
+        """Получение количества лайков мема в группе."""
+        return obj.likes.count()
+
+    def get_is_user_like(self, obj: GroupMeme):
+        """Проверка на лайк от запрашивающего информацию
+        пользователя."""
+        request = self.context.get('request')
+
+        if request and request.user.is_authenticated:
+            return GroupMemeLike.objects.filter(
+                group_meme=obj,
+                user=request.user
+            ).exists()
+
+        return False
+
     def get_author(self, obj):
+        """Получение информации об авторе мема."""
         author = obj.meme.author
         if author is None:
             return None
@@ -83,6 +105,7 @@ class GroupMemeSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_template(self, obj):
+        """Получение информации о шаблоне мема."""
         template = obj.meme.template
         if template is None:
             return None
@@ -204,13 +227,13 @@ class GroupUserSerializer(serializers.ModelSerializer):
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Пользователь уже в группе.'}
+                {'user': 'Пользователь уже в группе.'}
             )
         if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupBannedUser_error':
+                {'user':
                  'Пользователь забаннен и не может быть добавлен в группу.'}
             )
         return data
@@ -248,13 +271,13 @@ class EnterGroupSerializer(serializers.ModelSerializer):
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupUser_exists_error': 'Вы уже в группе.'}
+                {'user': 'Вы уже в группе.'}
             )
         if GroupBannedUser.objects.filter(
                 user=data.get('user'), group=data.get('group')
         ).exists():
             raise ValidationError(
-                {'GroupBannedUser_error':
+                {'user':
                  'Вы забаннены и не можете вступить в группу. '
                  'Обратитесь к Администраторам группы'}
             )
@@ -323,6 +346,7 @@ class GroupMemeWriteSerializer(serializers.ModelSerializer):
             'added_by',
             'meme',
         )
+
         model = GroupMeme
 
     def validate(self, data):
@@ -358,21 +382,21 @@ class GroupUserDeleteSerializer(serializers.Serializer):
         )
         if not group_user.exists():
             raise ValidationError(
-                {'GroupUser_exists_error':
+                {'user':
                  'Данного пользователя нет в группе.'}
             )
         if (request.user != group_user[0].user
                 and group_user[0].role.is_admin
-                and request.user != group_user[0].owner):
+                and request.user != group_user[0].group.owner):
             raise ValidationError(
-                {"Owner_error":
+                {"user":
                  "Пользователя со статусом 'Администратор' может "
                  "удалить только владелец группы."},
             )
         if request.user == group_user[0].group.owner and (
                 group_user[0].user == group_user[0].group.owner):
             raise ValidationError(
-                {"Owner_error":
+                {"user":
                  "Владелец группы не может удалить себя из списка "
                  "пользователей. Вначале передайте группу другому "
                  "пользователю!"}
@@ -424,7 +448,9 @@ class NewOwnerSerializer(serializers.Serializer):
         if not GroupUser.objects.filter(group=current_group,
                                         user_id=new_owner_id).exists():
             raise ValidationError(
-                {'user_id': 'Новый владелец не состоит в этой группе.'}
+                {'user_id': 'Пользователь не состоит в этой группе. Выберите '
+                            'в качестве нового владельца пользователя из '
+                            'группы.'}
             )
         return data
 
@@ -491,3 +517,72 @@ class UserGroupReadSerializer(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         """Проверяет, является ли пользователь владельцем группы."""
         return self.context['request'].user == obj.group.owner
+
+
+class GroupMemeLikeSerializer(serializers.ModelSerializer):
+    """Сериализатор лайка мема в группе."""
+
+    meme_id = serializers.UUIDField(required=True)
+
+    class Meta:
+        fields = (
+            'meme_id',
+        )
+        model = GroupMeme
+
+    def validate(self, data):
+        """Валидирует данные при операциях с лайками."""
+        current_group = self.context['current_group']
+
+        if not GroupMeme.objects.filter(
+            meme_id=data.get('meme_id'),
+            group=current_group,
+        ).exists():
+            raise ValidationError(
+                {'meme_id': 'Мема с таким ID в группе нет.'}
+            )
+        return data
+
+
+class GroupMemeLikePostSerializer(GroupMemeLikeSerializer):
+    """Сериализатор добавления лайка мема в группе."""
+
+    def validate(self, data):
+        """Валидирует данные при записи лайка."""
+        validated_data = super().validate(data)
+
+        current_group = self.context['current_group']
+        user = self.context['user']
+
+        if GroupMemeLike.objects.filter(
+                group_meme__meme_id=validated_data.get('meme_id'),
+                group_meme__group=current_group,
+                user=user,
+        ).exists():
+            raise ValidationError(
+                {'meme_id': 'Вы уже лайкнули этот мем.'}
+            )
+
+        return validated_data
+
+
+class GroupMemeLikeDeleteSerializer(GroupMemeLikeSerializer):
+    """Сериализатор удаления лайка мема в группе."""
+
+    def validate(self, data):
+        """Валидирует данные при записи лайка."""
+        validated_data = super().validate(data)
+
+        current_group = self.context['current_group']
+        user = self.context['user']
+
+        if not GroupMemeLike.objects.filter(
+                group_meme__meme_id=validated_data.get('meme_id'),
+                group_meme__group=current_group,
+                user=user,
+        ).exists():
+            raise ValidationError(
+                {'meme_id': 'Этот мем вы не лайкали.'}
+            )
+
+        return validated_data
