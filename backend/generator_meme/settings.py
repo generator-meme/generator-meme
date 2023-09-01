@@ -29,12 +29,14 @@ INSTALLED_APPS = [
     'drf_yasg',
     'social_django',
     'django_filters',
+    'ws',
     'api',
     'memes',
     'users',
     'team',
     'groups',
     'drf_api_logger',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +76,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'generator_meme.wsgi.application'
+# WSGI_APPLICATION = 'generator_meme.wsgi.application'
+ASGI_APPLICATION = 'generator_meme.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(os.getenv('POSTGRES_HOST'), 6379)],
+        },
+    },
+}
+
 
 DATABASES = {
     'default': {
