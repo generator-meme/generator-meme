@@ -14,10 +14,13 @@
   align-items: center;
   box-sizing: border-box;
 }
+.saved_meme__container div:last-child {
+}
 
 .saved_meme__image {
-  width: auto;
+  width: 100%;
   height: auto;
+
   object-fit: cover;
   object-position: center;
   max-height: 556px;
@@ -56,11 +59,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-}
-
-.saved_meme_share_btns_container > div {
-  display: inline-block;
-  margin-right: 25px;
 }
 
 .saved_meme_share_btns_container div:hover {
@@ -125,8 +123,11 @@
   transform: scale(1);
   transition: transform 0.2s linear;
   cursor: pointer;
+  display: inline-block;
+  margin-right: 25px;
 }
-.icon > img {
+
+.icon_img {
   width: 60px;
   height: 60px;
 }
@@ -156,20 +157,47 @@
     padding-top: 30px;
   }
 }
+@media screen and (max-width: 520px) {
+  .download_options {
+    margin-top: 48px;
+    padding: 10px 20px;
+    width: 100%;
+  }
+  .saved_meme_btns_wrapper {
+    position: relative;
+  }
+  .dropdown_btn_wrapper {
+    height: 44px;
+  }
 
-@media screen and (max-width: 376px) {
+  .saved_meme_share_btns_container div:last-child > div {
+    border-radius: 20px 0px 20px 20px;
+    left: -209%;
+  }
+  .download_option {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 375px) {
   .saved_meme {
-    width: 375px;
+    width: 100%;
   }
   .saved_meme__container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 30px 0 0;
+    box-sizing: border-box;
   }
   .saved_meme_btns_wrapper {
-    max-width: 375px;
+    width: 80%;
     padding-top: 30px;
+    position: relative;
+  }
+  .dropdown_btn_wrapper {
+    margin-bottom: 0;
   }
   .saved_meme_arrow_btn {
     height: 44px;
@@ -180,12 +208,32 @@
   }
   .saved_meme_btn {
     height: 44px;
+    width: 290px;
   }
   .saved_meme_share_btns_container {
-    width: 100%;
+    min-width: 300px;
   }
   .icon {
-    max-width: 40px;
-    max-height: 40px;
+    margin-right: 10px;
+  }
+  .saved_meme__image {
+    max-width: 335px;
+  }
+  .icon_img {
+    width: 40px;
+    height: 40px;
+  }
+  .download_options {
+    margin-top: 44px;
+    width: 100%;
+    padding: 20px 20px;
+  }
+  .download_option {
+    padding: 0;
+    font-size: 15px;
+  }
+  .saved_meme_share_btns_container div:last-child > div {
+    border-radius: 20px 0px 20px 20px;
+    left: -350%;
   }
 }
