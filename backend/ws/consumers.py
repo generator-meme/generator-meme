@@ -59,6 +59,9 @@ class GroupConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name
         )
+        if self.params['owner'] == self.user:
+            GROUP_MEME_WS_DATA[self.room_group_name] = {}
+
 
     # Receive message from WebSocket
     async def receive(self, text_data=None, bytes_data=None):
@@ -86,7 +89,6 @@ class GroupConsumer(AsyncWebsocketConsumer):
         self.params = await update_params(self.params)
         data = await prepare_first_data(self.params, self.user, self.group)
         await self.send(json.dumps(data))
-        sync_to_async(print(data))
 
     async def like(self, event):
         data = await prepare_like_data(self.params, self.user, self.group)
