@@ -28,7 +28,7 @@ import Prompt from "../../components/Prompt/Prompt";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
   const a = useSelector((state) => state.saveMeme);
-  console.log(a);
+
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
@@ -178,66 +178,66 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             <button className={`btn ${styles.saved_meme__btn_save}`}>
               сохранить в ЛК
             </button>
-          </div>
-          <div className={styles.saved_meme_share_btns_container}>
-            <div className={styles.icon}>
-              <WhatsappShareButton url={document.location.href}>
+            <div className={styles.saved_meme_share_btns_container}>
+              <div className={styles.icon}>
+                <WhatsappShareButton url={document.location.href}>
+                  <img
+                    className={styles.icon_img}
+                    src={icWhatsapp}
+                    alt="icon whatsapp"
+                  />
+                </WhatsappShareButton>
+              </div>
+              <div className={styles.icon}>
+                <TelegramShareButton url={document.location.href}>
+                  <img
+                    className={styles.icon_img}
+                    src={icTelegram}
+                    alt="icon telegram"
+                  />
+                </TelegramShareButton>
+              </div>
+              <div className={styles.icon}>
+                <ViberShareButton url={document.location.href}>
+                  <img
+                    className={styles.icon_img}
+                    src={icViber}
+                    alt="icon viber"
+                  />
+                </ViberShareButton>
+              </div>
+              <div className={styles.icon}>
                 <img
                   className={styles.icon_img}
-                  src={icWhatsapp}
-                  alt="icon whatsapp"
+                  src={icNotWorkedAddGroup}
+                  alt="icon group"
+                  style={{ opacity: "50%" }}
                 />
-              </WhatsappShareButton>
-            </div>
-            <div className={styles.icon}>
-              <TelegramShareButton url={document.location.href}>
-                <img
-                  className={styles.icon_img}
-                  src={icTelegram}
-                  alt="icon telegram"
-                />
-              </TelegramShareButton>
-            </div>
-            <div className={styles.icon}>
-              <ViberShareButton url={document.location.href}>
-                <img
-                  className={styles.icon_img}
-                  src={icViber}
-                  alt="icon viber"
-                />
-              </ViberShareButton>
-            </div>
-            <div className={styles.icon}>
-              <img
-                className={styles.icon_img}
-                src={icNotWorkedAddGroup}
-                alt="icon group"
-                style={{ opacity: "50%" }}
-              />
 
-              <Prompt text={"В РАЗРАБОТКЕ"}></Prompt>
-            </div>
-            <div className={styles.icon}>
-              <img
-                className={styles.icon_img}
-                src={icGlobal}
-                alt="icon global"
-                onClick={() => {
-                  copyURL();
-                }}
-              />
-              <Prompt text={"ПОДЕЛИТЬСЯ URL"}></Prompt>
-            </div>
-            <div className={styles.icon}>
-              <img
-                className={styles.icon_img}
-                onClick={() => {
-                  copyToClipboard(memeRef.current.src);
-                }}
-                src={icNote}
-                alt="icon note"
-              />
-              <Prompt text={"СКОПИРОВАТЬ В БУФЕР ОБМЕНА"}></Prompt>
+                <Prompt text={"В РАЗРАБОТКЕ"}></Prompt>
+              </div>
+              <div className={styles.icon}>
+                <img
+                  className={styles.icon_img}
+                  src={icGlobal}
+                  alt="icon global"
+                  onClick={() => {
+                    copyURL();
+                  }}
+                />
+                <Prompt text={"ПОДЕЛИТЬСЯ URL"}></Prompt>
+              </div>
+              <div className={styles.icon}>
+                <img
+                  className={styles.icon_img}
+                  onClick={() => {
+                    copyToClipboard(memeRef.current.src);
+                  }}
+                  src={icNote}
+                  alt="icon note"
+                />
+                <Prompt text={"СКОПИРОВАТЬ В БУФЕР ОБМЕНА"}></Prompt>
+              </div>
             </div>
           </div>
         </div>

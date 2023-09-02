@@ -37,11 +37,13 @@
 .saved_meme_btns_wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  position: relative;
 }
 
 .saved_meme_btn {
   line-height: 1.2;
-  width: 414px;
+  width: 100%;
   margin-right: 5px;
   font-size: 20px;
 }
@@ -77,7 +79,7 @@
 
 .download_options {
   margin-top: 82px;
-  width: 500px;
+  width: 100%;
   border-radius: 10px;
   background-color: #ffff;
   position: absolute;
@@ -156,6 +158,58 @@
   .saved_meme_btns_wrapper {
     padding-top: 30px;
   }
+  .download_option {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 1080px) and (min-width: 570px) {
+  .icon_img {
+    width: 60px;
+    height: 60px;
+  }
+  .saved_meme_share_btns_container {
+    justify-content: center;
+  }
+}
+@media (max-width: 1080px) and (min-width: 630px) {
+  .saved_meme_btns_wrapper {
+    width: 80%;
+  }
+}
+@media (max-width: 630px) and (min-width: 570px) {
+  .saved_meme_share_btns_container div:last-child > div {
+    border-radius: 20px 0px 20px 20px;
+    left: -150%;
+  }
+}
+@media (max-width: 570px) and (min-width: 520px) {
+  .dropdown_btn_wrapper {
+    height: 44px;
+  }
+  .icon_img {
+    width: 40px;
+    height: 40px;
+  }
+  .saved_meme_btns_wrapper {
+    width: 100%;
+    position: relative;
+  }
+  /* .download_options {
+    margin-top: 48px;
+    padding: 10px 20px;
+    width: 100%;
+  } */
+  .icon {
+    margin-right: 25px;
+  }
+  .download_options {
+    margin-top: 44px;
+    width: 100%;
+    padding: 20px 20px;
+  }
+  .download_option {
+    margin-bottom: 0;
+  }
 }
 @media screen and (max-width: 520px) {
   .download_options {
@@ -179,6 +233,24 @@
   }
 }
 
+@media (max-width: 520px) and (min-width: 375px) {
+  .icon {
+    margin-right: 20px;
+  }
+  .icon_img {
+    width: 40px;
+    height: 40px;
+  }
+  .download_options {
+    margin-top: 44px;
+    width: 100%;
+    padding: 20px 20px;
+  }
+  .download_option {
+    padding: 0;
+    font-size: 15px;
+  }
+}
 @media screen and (max-width: 375px) {
   .saved_meme {
     width: 100%;
@@ -192,23 +264,20 @@
     box-sizing: border-box;
   }
   .saved_meme_btns_wrapper {
-    width: 80%;
+    width: 100%;
     padding-top: 30px;
     position: relative;
   }
   .dropdown_btn_wrapper {
-    margin-bottom: 0;
+    margin-bottom: 7px;
   }
   .saved_meme_arrow_btn {
     height: 44px;
   }
-  .saved_meme_arrow_btn > img {
-    height: 18px;
-    width: 12px;
-  }
+
   .saved_meme_btn {
     height: 44px;
-    width: 290px;
+    /* width: 290px; */
   }
   .saved_meme_share_btns_container {
     min-width: 300px;
