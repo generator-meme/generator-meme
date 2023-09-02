@@ -1,14 +1,8 @@
-import base64
 import json
-import secrets
-from datetime import datetime
 
-from asgiref.sync import async_to_sync, sync_to_async
 from channels.db import database_sync_to_async
-from channels.generic.websocket import WebsocketConsumer, \
-    AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
-from django.core.files.base import ContentFile
 from django.db.models import Exists, OuterRef
 
 from groups.models import Group, GroupMeme, GroupMemeLike, GroupUser, Meme
@@ -53,7 +47,6 @@ class GroupConsumer(AsyncWebsocketConsumer):
         await self.accept()
         await self.send(json.dumps(data))
 
-
     async def disconnect(self, close_code):
         # Leave room group
         await self.channel_layer.group_discard(
@@ -62,10 +55,8 @@ class GroupConsumer(AsyncWebsocketConsumer):
         if self.params['owner'] == self.user:
             GROUP_MEME_WS_DATA[self.room_group_name] = {}
 
-
     # Receive message from WebSocket
     async def receive(self, text_data=None, bytes_data=None):
-        # parse the json data into dictionary object
 
         text_data_json = json.loads(text_data)
         # chat_type = text_data_json['type']
@@ -93,8 +84,6 @@ class GroupConsumer(AsyncWebsocketConsumer):
     async def like(self, event):
         data = await prepare_like_data(self.params, self.user, self.group)
         await self.send(json.dumps(data))
-
-
 
 
 @database_sync_to_async
@@ -165,6 +154,7 @@ def prepare_like_data(connection_params, user, group):
     data['is_liked'] = is_liked
     return data
 
+
 @database_sync_to_async
 def prepare_first_data(connection_params, user, group):
     data = {
@@ -177,8 +167,8 @@ def prepare_first_data(connection_params, user, group):
         "is_liked": "",  # True or False
     }
     meme = connection_params['memes_list'][
-            connection_params['current_meme_index']
-        ]
+        connection_params['current_meme_index']
+    ]
     like_counter = GroupMemeLike.objects.filter(
         group_meme__meme=meme,
         group_meme__group=group
@@ -215,4 +205,3 @@ async def update_by_type(text_data_json, params, group, user):
         if text_data_json['message'] == 'like':
             await do_like(params, user, group)
     return params
-
