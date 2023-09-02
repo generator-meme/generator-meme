@@ -83,7 +83,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(os.getenv('POSTGRES_HOST'), 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
