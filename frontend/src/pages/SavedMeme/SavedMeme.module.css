@@ -30,7 +30,12 @@
 .saved_meme__btn_save {
   width: 100%;
   /* margin-top: 50px; */
-  color: #1e1d1d;
+  background: linear-gradient(
+    180deg,
+    rgba(206, 142, 192, 0.5) 0%,
+    rgba(194, 139, 228, 0.31) 77.16%
+  );
+
   font-size: 20px;
   line-height: 1.2;
 }
@@ -59,7 +64,7 @@
   margin-top: 32px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -126,7 +131,7 @@
   transition: transform 0.2s linear;
   cursor: pointer;
   display: inline-block;
-  margin-right: 25px;
+  margin-right: 15px;
 }
 
 .icon_img {
