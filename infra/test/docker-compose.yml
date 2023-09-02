@@ -30,6 +30,12 @@ services:
     env_file:
       - ./.env
 
+  ws:
+    image: ilovememes/generator-meme-ws:test
+    restart: always
+    env_file:
+      - ./.env
+
   testnginx:
     image: nginx:1.19.3
     restart: always
@@ -48,7 +54,7 @@ services:
       - testbackend
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
-  testredis:
+  redis:
     image: 'redis:7.2'
     restart: always
     expose:
