@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'generator_meme.wsgi.application'
+WSGI_APPLICATION = 'generator_meme.wsgi.application'
 ASGI_APPLICATION = 'generator_meme.asgi.application'
 
 CHANNEL_LAYERS = {
