@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import cat from "../../images/cat.png";
 // import help from '../../images/help.png'
 import "./Main.css";
-import MemesBox from "../MemesBox/MemesBox.jsx";
+import MemesBox from "../../components/MemesBox/MemesBox";
 import { useNavigate } from "react-router-dom";
-import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
+import ScrollPositionSaver from "../../components/ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
-import { SearchPanel } from "../SearchPanel/SearchPanel";
+import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 import { useDispatch } from "react-redux";
 import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
@@ -52,20 +52,19 @@ const Main = ({ memes, setIsNewMeme }) => {
         <div className="main__text-box">
           <p className="main__text-advice">
             Выберите шаблон для создания мема или загрузите&nbsp;
-          
-          <form className="main__form">
-            <label className="main__label">
-              свое изображение
-              <input
-                ref={file}
-                type="file"
-                accept="image/png, image/jpeg, image/gif"
-                name="file"
-                onChange={(event) => onChange(event)}
-                className="main__invisible-input"
-              />
-            </label>
-          </form>
+            <form className="main__form">
+              <label className="main__label">
+                свое изображение
+                <input
+                  ref={file}
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif"
+                  name="file"
+                  onChange={(event) => onChange(event)}
+                  className="main__invisible-input"
+                />
+              </label>
+            </form>
           </p>
         </div>
       </section>

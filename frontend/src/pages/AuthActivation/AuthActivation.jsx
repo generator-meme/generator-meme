@@ -1,5 +1,5 @@
 import React from "react";
-import EmptyPage from "../EmptyPage/EmptyPage";
+import EmptyPage from "../../components/EmptyPage/EmptyPage";
 import { authorisation } from "../../utils/autorisation";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";

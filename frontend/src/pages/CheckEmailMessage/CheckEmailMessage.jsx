@@ -1,6 +1,6 @@
 import React from "react";
 import "./CheckEmailMessage.css";
-import ButtonBack from "../ButtonBack/ButtonBack";
+import ButtonBack from "../../components/ButtonBack/ButtonBack";
 import { useNavigate } from "react-router-dom";
 
 function CheckEmailMessage({ info }) {

@@ -25,9 +25,11 @@ body {
 }
 
 .btn {
-  background: linear-gradient(180deg,
-      #ce8ec0 0%,
-      rgba(194, 139, 228, 0.63) 77.16%);
+  background: linear-gradient(
+    180deg,
+    #ce8ec0 0%,
+    rgba(194, 139, 228, 0.63) 77.16%
+  );
   border-radius: 20px;
   cursor: pointer;
   border: none;
@@ -39,9 +41,11 @@ body {
 }
 
 .btn:hover {
-  background: linear-gradient(180deg,
-      rgba(148, 27, 219, 0.662831) 39.06%,
-      rgba(171, 95, 218, 0.63) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(148, 27, 219, 0.662831) 39.06%,
+    rgba(171, 95, 218, 0.63) 100%
+  );
 }
 
 .btn:active {

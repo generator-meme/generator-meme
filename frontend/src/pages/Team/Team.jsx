@@ -1,9 +1,8 @@
 import "./Team.css";
-import Navigation from "../Navigation/Navigation";
+import Navigation from "../../components/Navigation/Navigation";
 import Teammates from "../../utils/Teammates";
 
 const Team = () => {
-  
   const renderTeam = (teamGroup) => {
     return (
       <div className="team__group">
@@ -14,7 +13,9 @@ const Team = () => {
               <li className="team__group-member">
                 <span className="member__description">{person.desc}</span>
                 <a
-                  className={`member__name ${person.link === '' ? 'member__name--no-link': ''}`}
+                  className={`member__name ${
+                    person.link === "" ? "member__name--no-link" : ""
+                  }`}
                   href={person.link}
                   target="_blank"
                 >
@@ -31,7 +32,7 @@ const Team = () => {
     <section className="team">
       <Navigation isSavedMeme={false} id="team" isTeam={true} />
       <div className="team__container">
-        {Teammates.map(teamGroup => renderTeam(teamGroup))}
+        {Teammates.map((teamGroup) => renderTeam(teamGroup))}
       </div>
     </section>
   );
