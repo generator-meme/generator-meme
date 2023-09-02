@@ -11,5 +11,4 @@ RUN pip install -r requirements.txt --no-cache-dir
 
 COPY . .
 
-CMD ["gunicorn", "--bind", "0:8000", "generator_meme.wsgi:application"]
-CMD ["daphne", "-b", "::", "-p", "9000", "generator_meme.asgi:application"]
+CMD gunicorn --bind 0:8000 generator_meme.wsgi:application; daphne -b :: -p 9000 generator_meme.asgi:application
