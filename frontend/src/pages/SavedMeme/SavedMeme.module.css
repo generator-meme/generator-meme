@@ -154,7 +154,12 @@
   width: 100%;
   text-align: center;
 }
-
+@media screen and (min-width: 1080px) {
+  .saved_meme_btns_wrapper {
+    width: 500px;
+    min-width: 500px;
+  }
+}
 @media screen and (max-width: 1080px) {
   .saved_meme__container {
     display: flex;
