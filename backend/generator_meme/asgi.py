@@ -13,7 +13,7 @@ from ws.tokenauth_middleware import TokenAuthMiddleware
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'generator_meme.settings')
 
 application = ProtocolTypeRouter({
-    "http": django_asgi_app,
+    # "http": django_asgi_app,
     "websocket": AllowedHostsOriginValidator(
         TokenAuthMiddleware(URLRouter(routing.websocket_urlpatterns)))
 })
