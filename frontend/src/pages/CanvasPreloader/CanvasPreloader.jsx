@@ -8,7 +8,6 @@ const CanvasPreloader = ({
   handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
-  memes,
   setImageNotFoundOpen,
 }) => {
   const navigate = useNavigate();
@@ -125,7 +124,6 @@ const CanvasPreloader = ({
       handleCreateNewMeme={handleCreateNewMeme}
       setIsNewMeme={setIsNewMeme}
       isNewMeme={isNewMeme}
-      memes={memes}
       imageSizes={imageSizes}
       image={image}
       canvasSizes={canvasSizes}

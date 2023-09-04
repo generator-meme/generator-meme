@@ -20,15 +20,9 @@ class Api {
         });
   }
 
-  getTemplates(
-    savedToken,
-    tags = "",
-    categories = "",
-    isFavorited = "",
-    ordering = ""
-  ) {
+  getTemplates(savedToken, options) {
     return fetch(
-      `${this._baseUrl}/templates/?tag=${tags}&category=${categories}&is_favorited=${isFavorited}&ordering=${ordering}`,
+      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorited}&ordering=${options.ordering}`,
       {
         method: "GET",
         body: JSON.stringify(),
@@ -69,13 +63,13 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
-  getfilteredTemplates(id) {
-    return fetch(`${this._baseUrl}/templates/?tag=${id}`, {
-      method: "GET",
-      body: JSON.stringify(),
-      headers: this._headers,
-    }).then(this._errorHandler);
-  }
+  // getfilteredTemplates(id) {
+  //   return fetch(`${this._baseUrl}/templates/?tag=${id}`, {
+  //     method: "GET",
+  //     body: JSON.stringify(),
+  //     headers: this._headers,
+  //   }).then(this._errorHandler);
+  // }
 
   createNewMem(memeUrl, memeId) {
     return fetch(`${this._baseUrl}/memes/`, {
@@ -136,6 +130,14 @@ class Api {
         "Authorization": `Token ${token}`, // prettier-ignore
       },
     }).then(this._checkReponce);
+  }
+
+  getCategories() {
+    return fetch(`${this._baseUrl}/categories/`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
   }
 }
 

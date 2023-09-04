@@ -20,10 +20,10 @@ import ResetPassordConfirm from "../../pages/ResetPassordConfirm/ResetPassordCon
 import Footer from "../Footer/Footer";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import Preloader from "../Preloader/Preloader";
-import { getCookie } from "../../utils/cookie";
+import { loadCategoriesOptions } from "../../services/actions/filtrationActions";
+import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 
 const App = () => {
-  const [memes, setMemes] = useState([]);
   const { meme } = useSelector((state) => state.saveMeme);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
@@ -60,17 +60,8 @@ const App = () => {
 
   useEffect(() => {
     if (!isTokenChecked) return;
-    const savedToken = getCookie("token");
-    api
-      .getTemplates(savedToken)
-      .then((res) => {
-        console.log("memes are downloaded");
-        setMemes(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [isLoggedIn, isTokenChecked]);
+    dispatch(loadAllMemeTemplates());
+  }, [isLoggedIn, isTokenChecked, dispatch]);
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;
@@ -79,17 +70,17 @@ const App = () => {
     setIsTokenChecked(true);
   }, [isLoggedIn, dispatch, userInfo]);
 
+  useEffect(() => {
+    dispatch(loadCategoriesOptions());
+  }, [dispatch]);
+
   if (!isTokenChecked) return null;
 
   return (
     <div className="page">
       <Header />
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
-        />
+        <Route exact path="/" element={<Main setIsNewMeme={setIsNewMeme} />} />
         <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
@@ -98,7 +89,6 @@ const App = () => {
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
               isNewMeme={isNewMeme}
-              memes={memes}
               setImageNotFoundOpen={setImageNotFoundOpen}
             />
           }
