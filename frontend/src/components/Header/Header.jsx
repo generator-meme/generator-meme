@@ -99,7 +99,6 @@ const Header = () => {
             <>
               <button className="header__button" onClick={handleOnFavorited}>
                 <Like className="header__button_type_like" />
-                {/* <Prompt text={"В РАЗРАБОТКЕ"} /> */}
               </button>
               {/* <button> // закомм - тк реализация будет позже
                 className="header__button"

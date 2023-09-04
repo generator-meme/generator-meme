@@ -36,19 +36,7 @@ class Api {
       }
     ).then(this._errorHandler);
   }
-  // getTemplates(savedToken) {
-  //   return fetch(`${this._baseUrl}/templates/`, {
-  //     method: "GET",
-  //     body: JSON.stringify(),
-  //     headers:
-  //       savedToken.length > 0
-  //         ? {
-  //             "Content-Type": "application/json",
-  //             "Authorization": `Token ${savedToken}`, // prettier-ignore
-  //           }
-  //         : this._headers,
-  //   }).then(this._errorHandler);
-  // }
+
   getTags() {
     return fetch(`${this._baseUrl}/tags/`, {
       method: "GET",
@@ -63,13 +51,6 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
-  // getfilteredTemplates(id) {
-  //   return fetch(`${this._baseUrl}/templates/?tag=${id}`, {
-  //     method: "GET",
-  //     body: JSON.stringify(),
-  //     headers: this._headers,
-  //   }).then(this._errorHandler);
-  // }
 
   createNewMem(memeUrl, memeId) {
     return fetch(`${this._baseUrl}/memes/`, {

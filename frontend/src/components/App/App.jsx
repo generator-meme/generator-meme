@@ -22,6 +22,7 @@ import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import Preloader from "../Preloader/Preloader";
 import { loadCategoriesOptions } from "../../services/actions/filtrationActions";
 import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
+import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
 
 const App = () => {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -37,9 +38,7 @@ const App = () => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
-        // console.log(memeUrl, memeId);
         setNewMeme(res);
-
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
@@ -50,9 +49,7 @@ const App = () => {
   const handleDownloadNewMeme = () => {
     api
       .downloadNewMem(meme.id)
-      .then((res) => {
-        // console.log(res, newMeme.id);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
@@ -61,6 +58,12 @@ const App = () => {
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
+  }, [isLoggedIn, isTokenChecked, dispatch]);
+
+  useEffect(() => {
+    if (isTokenChecked && isLoggedIn) {
+      dispatch(loadFavoriteTemplates());
+    }
   }, [isLoggedIn, isTokenChecked, dispatch]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Meme.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 import LikeTemplate from "../LikeTemplate/LikeTemplate";
@@ -33,7 +33,7 @@ function Meme({ elem, setIsNewMeme }) {
         создать мем
       </button>
       <div onClick={onClick} className="meme__image-hover"></div>
-      <LikeTemplate isFavorited={elem.is_favorited} id={elem.id} />
+      <LikeTemplate id={elem.id} />
       {elem.tag.length > 0 && (
         <div className="meme__tags-container">
           <ul

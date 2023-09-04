@@ -6,6 +6,7 @@ import { userReducer } from "./userReducer";
 import { preloaderReducer } from "./preloaderReducer";
 import { filtrationReducer } from "./filtrationReducer";
 import { memeTemplatesReducer } from "./allMemeTemplatesReducer";
+import { favoriteTemplatesReducer } from "./favoriteTemplatesReducer";
 
 const rootReducer = combineReducers({
   canvasData: canvasReducer,
@@ -15,5 +16,6 @@ const rootReducer = combineReducers({
   preloader: preloaderReducer,
   filtration: filtrationReducer,
   allMemeTemplates: memeTemplatesReducer,
+  favoriteTemplates: favoriteTemplatesReducer,
 });
 export default rootReducer;
