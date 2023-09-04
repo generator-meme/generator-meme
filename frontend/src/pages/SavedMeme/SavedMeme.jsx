@@ -16,7 +16,7 @@ import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
 import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import vector_387 from "../../images/vector_387.svg";
 import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
 import {
   TelegramShareButton,
@@ -28,14 +28,13 @@ import Prompt from "../../components/Prompt/Prompt";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
   const a = useSelector((state) => state.saveMeme);
-  console.log(a);
+
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const memeRef = useRef(null);
-  const isPreloaderActive = useSelector((state) => state.preloader);
 
   const writeToCanvas = (src) => {
     return new Promise((res) => {
@@ -131,7 +130,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
                 style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               >
                 <img
-                  src={icDropdown}
+                  src={vector_387}
                   alt="icon dropdown"
                   style={{
                     transform: isDownloadDropdownOpen
@@ -179,25 +178,37 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             <button className={`btn ${styles.saved_meme__btn_save}`}>
               сохранить в ЛК
             </button>
-
             <div className={styles.saved_meme_share_btns_container}>
               <div className={styles.icon}>
                 <WhatsappShareButton url={document.location.href}>
-                  <img src={icWhatsapp} alt="icon whatsapp" />
+                  <img
+                    className={styles.icon_img}
+                    src={icWhatsapp}
+                    alt="icon whatsapp"
+                  />
                 </WhatsappShareButton>
               </div>
               <div className={styles.icon}>
                 <TelegramShareButton url={document.location.href}>
-                  <img src={icTelegram} alt="icon telegram" />
+                  <img
+                    className={styles.icon_img}
+                    src={icTelegram}
+                    alt="icon telegram"
+                  />
                 </TelegramShareButton>
               </div>
               <div className={styles.icon}>
                 <ViberShareButton url={document.location.href}>
-                  <img src={icViber} alt="icon viber" />
+                  <img
+                    className={styles.icon_img}
+                    src={icViber}
+                    alt="icon viber"
+                  />
                 </ViberShareButton>
               </div>
               <div className={styles.icon}>
                 <img
+                  className={styles.icon_img}
                   src={icNotWorkedAddGroup}
                   alt="icon group"
                   style={{ opacity: "50%" }}
@@ -207,6 +218,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
               </div>
               <div className={styles.icon}>
                 <img
+                  className={styles.icon_img}
                   src={icGlobal}
                   alt="icon global"
                   onClick={() => {
@@ -217,6 +229,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
               </div>
               <div className={styles.icon}>
                 <img
+                  className={styles.icon_img}
                   onClick={() => {
                     copyToClipboard(memeRef.current.src);
                   }}
