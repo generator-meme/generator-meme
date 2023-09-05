@@ -104,11 +104,10 @@ def check_user_in_group(user, group):
 
 @database_sync_to_async
 def get_group_memes(group):
-    memes = Meme.objects.filter(Exists(GroupMeme.objects.filter(
+    return Meme.objects.filter(Exists(GroupMeme.objects.filter(
         group=group,
         meme=OuterRef("pk")
     ))).all()
-    return memes
 
 
 @database_sync_to_async
@@ -194,12 +193,12 @@ def update_params(params):
 
 async def update_by_type(text_data_json, params, group, user):
     if text_data_json['type'] == 'direction':
-        if text_data_json['message'] == 'next' \
-                and not params['last'][0]:
+        if (text_data_json['message'] == 'next'
+                and not params['last'][0]):
             params['current_meme_index'] += 1
 
-        if text_data_json['message'] == 'previous' \
-                and not params['first'][0]:
+        if (text_data_json['message'] == 'previous'
+                and not params['first'][0]):
             params['current_meme_index'] -= 1
     if text_data_json['type'] == 'like':
         if text_data_json['message'] == 'like':
