@@ -218,7 +218,7 @@ const Canvas = ({
       const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
       setTextsValues(oldTextsValues);
     }
-  }, []);
+  }, [setIsNewMeme, isNewMeme]);
 
   useEffect(() => {
     localStorage.setItem("textsValues", JSON.stringify(textsValues));

@@ -43,7 +43,7 @@ function Login() {
     ) {
       setAbridgedVersion(true);
     }
-  }, []);
+  }, [location.state?.from?.pathname]);
 
   return (
     <AuthenticationForm

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef } from "react";
 import cat from "../../images/cat.png";
 // import help from '../../images/help.png'
 import "./Main.css";

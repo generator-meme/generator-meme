@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./InfoTooltip.css";
 
 function InfoTooltip({ title, buttonText, onButtonClick }) {

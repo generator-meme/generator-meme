@@ -23,6 +23,7 @@ import Preloader from "../Preloader/Preloader";
 import { loadCategoriesOptions } from "../../services/actions/filtrationActions";
 import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
+import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
 
 const App = () => {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -33,6 +34,9 @@ const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, userInfo } = useSelector((state) => state.user);
   const isPreloaderActive = useSelector((state) => state.preloader);
+  const { categories, areFavorite, ordering } = useSelector(
+    selectFiltrationOptions
+  );
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -58,7 +62,7 @@ const App = () => {
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
-  }, [isLoggedIn, isTokenChecked, dispatch]);
+  }, [isLoggedIn, isTokenChecked, dispatch, categories, areFavorite, ordering]); // запрос при изменении любого параметра (кроме tags)
 
   useEffect(() => {
     if (isTokenChecked && isLoggedIn) {

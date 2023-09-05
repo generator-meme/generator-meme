@@ -31,7 +31,7 @@ export const loadFavoriteTemplates = () => async (dispatch) => {
     const favoriteFiltrationOptions = {
       tags: "",
       categories: "",
-      areFavorited: true,
+      areFavorite: true,
       ordering: "",
     };
     const favoriteTemplates = await api.getTemplates(

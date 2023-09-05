@@ -51,7 +51,7 @@ export const SearchPanel = () => {
       setIsFocusSearchPanel(false);
       return;
     }
-  }, [searchValue]);
+  }, [searchValue, isFocusSearchPanel]);
 
   useEffect(() => {
     if (inputChar === " " && isMobile) {
@@ -61,7 +61,7 @@ export const SearchPanel = () => {
       setSearchValue(" ");
       // setInputChar("");
     }
-  }, [inputChar, searchValue]);
+  }, [inputChar, searchValue, tagArray]);
 
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
@@ -103,7 +103,7 @@ export const SearchPanel = () => {
 
   useEffect(() => {
     dispatch(setTagsOptions(createStringToSearch()));
-  }, [tagArray, dispatch, createStringToSearch]);
+  }, [tagArray, dispatch, createStringToSearch, tags]);
 
   useEffect(() => {
     if (stringToSearch && stringToSearch.indexOf("unknownTag") !== -1) {

@@ -3,7 +3,6 @@ import "./Preloader.css";
 const Preloader = () => {
   return (
     <>
-      {console.log("hi")}
       <div className="preloader__container">
         <p className="preloader__text">Загрузка...</p>
       </div>

@@ -99,7 +99,7 @@ function FontFamilyOptions({
             className="font-family__option"
             id={option}
             role="option"
-            aria-selected={textValues.selectedOption == index}
+            aria-selected={textValues.selectedOption === index}
             tabIndex={0}
             onKeyDown={handleKeyDown(index)}
             onClick={() => {

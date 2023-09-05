@@ -12,7 +12,6 @@ import { logOut } from "../../services/actions/userActions";
 // import Prompt from "../Prompt/Prompt"; // для фичей в разработке
 import { setFavorite } from "../../services/actions/filtrationActions";
 import { setectCurrentFavorite } from "../../services/selectors/filtrationSelectors";
-import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -43,7 +42,6 @@ const Header = () => {
       if (!areFavorite || areFavorite === "") {
         dispatch(setFavorite());
       }
-      dispatch(loadAllMemeTemplates());
     } catch (err) {
       console.log(err);
     }

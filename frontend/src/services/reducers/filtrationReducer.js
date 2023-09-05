@@ -1,9 +1,10 @@
 import {
   GET_CATEGORIES_OPTIONS,
-  SET_CATEGORIES_OPTIONS,
+  // SET_CATEGORIES_OPTIONS,
   SET_TAGS_OPTIONS,
   SET_FAVORITE,
   REMOVE_FAVORITE,
+  SET_ORDERING,
 } from "../actions/filtrationActions";
 
 const initialState = {
@@ -39,11 +40,11 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         categoriesOptions: options,
       };
-    // case SET_CATEGORIES_OPTIONS: // пока не активно, при подключении фильтра - подправить
+    // case SET_CATEGORIES_OPTIONS: // проверить при подключении категорий
     //   return {
     //     ...state,
     //     filtrationOptions: {
-    //       ...options,
+    //       ...state.filtrationOptions,
     //       categories: payload,
     //     },
     //   };
@@ -68,6 +69,15 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
           ...state.filtrationOptions,
           areFavorite: state.favoriteOptions.empty,
           ordering: state.orderingOptions.popular,
+        },
+      };
+    case SET_ORDERING:
+      return {
+        ...state,
+        filtrationOptions: {
+          ...state.filtrationOptions,
+          areFavorite: state.favoriteOptions.empty,
+          ordering: payload,
         },
       };
     default:
