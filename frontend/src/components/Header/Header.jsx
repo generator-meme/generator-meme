@@ -42,6 +42,7 @@ const Header = () => {
       if (!areFavorite || areFavorite === "") {
         dispatch(setFavorite());
       }
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
