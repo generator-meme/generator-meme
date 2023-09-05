@@ -2,6 +2,7 @@ import {
   GET_FAVORITE_TEMPLATES,
   ADD_TO_FAVORITE_TEMPLATES,
   DELETE_FROM_FAVORITE_TEMPLATES,
+  CLEAN_FAVORITE_TEMPLATES,
 } from "../actions/favoriteTemplatesActions";
 
 export const favoriteTemplatesReducer = (state = [], { type, payload }) => {
@@ -14,6 +15,8 @@ export const favoriteTemplatesReducer = (state = [], { type, payload }) => {
     case DELETE_FROM_FAVORITE_TEMPLATES:
       const removedTemplateId = payload;
       return state.filter((template) => template.id !== removedTemplateId);
+    case CLEAN_FAVORITE_TEMPLATES:
+      return [];
     default:
       return state;
   }

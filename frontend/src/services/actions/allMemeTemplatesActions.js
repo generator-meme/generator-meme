@@ -19,6 +19,7 @@ export const loadAllMemeTemplates = () => async (dispatch, getState) => {
     const currentFiltrationOptions = getState().filtration.filtrationOptions;
     const templates = await api.getTemplates(
       savedToken,
+      // savedToken !== "" ? savedToken : null,
       currentFiltrationOptions
     );
     dispatch(getAllMemeTemplates(templates));

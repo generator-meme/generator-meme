@@ -7,13 +7,11 @@ import { ReactComponent as Like } from "../../images/header/like-black.svg";
 // import { ReactComponent as Bell } from "../../images/header/bell.svg"; // для уведомлений - реализация позже
 import { ReactComponent as Avatar } from "../../images/header/avatar.svg";
 import { ReactComponent as Burger } from "../../images/header/burger.svg";
-import { getCookie, deleteCookie } from "../../utils/cookie";
-import { authorisation } from "../../utils/autorisation";
 import Menu from "../Menu/Menu.jsx";
-import { setIsLoggedOut } from "../../services/actions/userActions";
+import { logOut } from "../../services/actions/userActions";
 // import Prompt from "../Prompt/Prompt"; // для фичей в разработке
-import { setFavorited } from "../../services/actions/filtrationActions";
-import { setectCurrentFavorited } from "../../services/selectors/filtrationSelectors";
+import { setFavorite } from "../../services/actions/filtrationActions";
+import { setectCurrentFavorite } from "../../services/selectors/filtrationSelectors";
 import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 
 const Header = () => {
@@ -26,15 +24,12 @@ const Header = () => {
   const myMainMenu = useRef(null);
   const myExtraMenu = useRef(null);
   const userData = useSelector((state) => state.user.userInfo);
-  const areFavorited = useSelector(setectCurrentFavorited);
+  const areFavorite = useSelector(setectCurrentFavorite);
 
   const handleLogOut = async (e) => {
     e.stopPropagation();
     try {
-      const savedToken = getCookie("token");
-      await authorisation.logOut(savedToken);
-      deleteCookie("token");
-      dispatch(setIsLoggedOut());
+      await dispatch(logOut());
       setMyMainMenuIsOpen(false);
       navigate("/login");
     } catch (err) {
@@ -45,16 +40,14 @@ const Header = () => {
   const handleOnFavorited = (e) => {
     try {
       e.preventDefault();
-      if (!areFavorited || areFavorited === "") {
-        dispatch(setFavorited());
+      if (!areFavorite || areFavorite === "") {
+        dispatch(setFavorite());
       }
       dispatch(loadAllMemeTemplates());
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log(areFavorited, "favotited");
 
   useEffect(() => {
     if (myMainMenuIsOpen || myExtraMenuIsOpen) {

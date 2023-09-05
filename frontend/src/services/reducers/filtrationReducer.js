@@ -2,12 +2,13 @@ import {
   GET_CATEGORIES_OPTIONS,
   SET_CATEGORIES_OPTIONS,
   SET_TAGS_OPTIONS,
-  SET_FAVORITED,
+  SET_FAVORITE,
+  REMOVE_FAVORITE,
 } from "../actions/filtrationActions";
 
 const initialState = {
   categoriesOptions: {},
-  favoritedOptions: {
+  favoriteOptions: {
     true: true,
     false: false,
     empty: "",
@@ -21,7 +22,7 @@ const initialState = {
   filtrationOptions: {
     tags: "",
     categories: "",
-    areFavorited: "",
+    areFavorite: "",
     ordering: "",
   },
 };
@@ -51,13 +52,22 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         filtrationOptions: { ...state.filtrationOptions, tags: payload },
       };
-    case SET_FAVORITED:
+    case SET_FAVORITE:
       return {
         ...state,
         filtrationOptions: {
           ...state.filtrationOptions,
-          areFavorited: "true",
-          ordering: "",
+          areFavorite: state.favoriteOptions.true,
+          ordering: state.orderingOptions.popular,
+        },
+      };
+    case REMOVE_FAVORITE:
+      return {
+        ...state,
+        filtrationOptions: {
+          ...state.filtrationOptions,
+          areFavorite: state.favoriteOptions.empty,
+          ordering: state.orderingOptions.popular,
         },
       };
     default:

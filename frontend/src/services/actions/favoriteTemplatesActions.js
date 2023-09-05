@@ -4,6 +4,7 @@ import api from "../../utils/api";
 export const GET_FAVORITE_TEMPLATES = "GET_FAVORITE_TEMPLATES";
 export const ADD_TO_FAVORITE_TEMPLATES = "ADD_TO_FAVORITE_TEMPLATES";
 export const DELETE_FROM_FAVORITE_TEMPLATES = "DELETE_FROM_FAVORITE_TEMPLATES";
+export const CLEAN_FAVORITE_TEMPLATES = "CLEAN_FAVORITE_TEMPLATES";
 
 export const getFavoriteTemplates = (favoritedTemplates) => ({
   type: GET_FAVORITE_TEMPLATES,
@@ -18,6 +19,10 @@ export const addFavoriteTemplate = (newFavorite) => ({
 const removeFromFavoriteTemplates = (removedTemplateId) => ({
   type: DELETE_FROM_FAVORITE_TEMPLATES,
   payload: removedTemplateId,
+});
+
+export const cleanFavoriteTemplates = () => ({
+  type: CLEAN_FAVORITE_TEMPLATES,
 });
 
 export const loadFavoriteTemplates = () => async (dispatch) => {

@@ -21,6 +21,7 @@ const LikeTemplate = ({ id }) => {
   }, [favoriteTemplates, id]);
 
   const handleOnLikeClick = async (e) => {
+    if (!isLoggedIn) return;
     try {
       e.preventDefault();
       if (isFavorite) {

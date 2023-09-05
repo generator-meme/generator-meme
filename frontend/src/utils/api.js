@@ -22,7 +22,7 @@ class Api {
 
   getTemplates(savedToken, options) {
     return fetch(
-      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorited}&ordering=${options.ordering}`,
+      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}`,
       {
         method: "GET",
         body: JSON.stringify(),
