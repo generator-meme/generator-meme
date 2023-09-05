@@ -24,6 +24,7 @@
   object-position: center;
   /* max-height: 556px; */
   border-radius: 20px;
+  max-width: 675px;
 }
 
 .saved_meme__btn_save {
