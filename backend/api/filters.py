@@ -21,6 +21,7 @@ class MultiValueCharFilter(filters.BaseCSVFilter, filters.CharFilter):
 class TemplateFilter(filters.FilterSet):
     """Фильтр для вью шаблонов мемов."""
     tag = MultiValueCharFilter(lookup_expr='exact')
+    is_favorited = filters.BooleanFilter()
 
     class Meta:
         model = Template

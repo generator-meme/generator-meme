@@ -1,5 +1,5 @@
 import {
-  GET_CURRENT_MEME,
+  // GET_CURRENT_MEME,
   SET_CURRENT_MEME,
 } from "../actions/currentMemeAction";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./ExtraImage.css";
 import { useLatest } from "react-use";
 import { move, pickup } from "../../utils/canvasElementsFunctions";
@@ -36,24 +36,30 @@ const ExtraImage = ({
     }
   };
 
-  const onMove = (e) => {
-    if (latestImageValues.current.isMoving) {
-      move(e, latestImageValues.current, setImages);
-      // console.log("move image");
-    }
-  };
+  const onMove = useCallback(
+    (e) => {
+      if (latestImageValues.current.isMoving) {
+        move(e, latestImageValues.current, setImages);
+        // console.log("move image");
+      }
+    },
+    [latestImageValues, setImages]
+  );
 
-  const drop = (e) => {
-    if (latestImageValues.current.isMoving) {
-      setImages({
-        ...latestImageValues.current,
-        isMoving: false,
-        startTop: latestImageValues.current.top,
-        startLeft: latestImageValues.current.left,
-      });
-      // console.log("drop image");
-    }
-  };
+  const drop = useCallback(
+    (e) => {
+      if (latestImageValues.current.isMoving) {
+        setImages({
+          ...latestImageValues.current,
+          isMoving: false,
+          startTop: latestImageValues.current.top,
+          startLeft: latestImageValues.current.left,
+        });
+        // console.log("drop image");
+      }
+    },
+    [latestImageValues, setImages]
+  );
 
   useEffect(() => {
     window.addEventListener("mousemove", onMove);
@@ -67,7 +73,7 @@ const ExtraImage = ({
       window.removeEventListener("mouseup", drop);
       window.removeEventListener("touchend", drop, { passive: true });
     };
-  }, []);
+  }, [drop, onMove]);
 
   useEffect(() => {
     if (picture.current !== null) {
@@ -85,7 +91,7 @@ const ExtraImage = ({
         observer.unobserve(pictureObserved);
       };
     }
-  }, []);
+  }, [latestImageValues, setImages]);
 
   return (
     <div

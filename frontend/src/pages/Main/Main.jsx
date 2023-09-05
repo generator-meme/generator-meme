@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef } from "react";
 import cat from "../../images/cat.png";
 // import help from '../../images/help.png'
 import "./Main.css";
@@ -10,16 +10,11 @@ import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 import { useDispatch } from "react-redux";
 import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
-const Main = ({ memes, setIsNewMeme }) => {
+const Main = ({ setIsNewMeme }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
-  const [filterMemes, setFilterMemes] = useState(memes);
-
-  useEffect(() => {
-    setFilterMemes(memes);
-  }, [memes]);
 
   const onChange = (event) => {
     if (event.target.files[0].size > 400000) {
@@ -69,13 +64,9 @@ const Main = ({ memes, setIsNewMeme }) => {
         </div>
       </section>
       <section className="search">
-        <SearchPanel
-          setFilterMemes={setFilterMemes}
-          initMemes={memes}
-        ></SearchPanel>
+        <SearchPanel></SearchPanel>
       </section>
       <MemesBox
-        memes={filterMemes}
         numberOfVisibleMems={numberOfVisibleMems}
         setNumberOfVisibleMems={setNumberOfVisibleMems}
         setIsNewMeme={setIsNewMeme}

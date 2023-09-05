@@ -41,7 +41,7 @@ function ResetForm({ info, handleSubmit }) {
       setIsValid(false);
     }
     return setIsSubmitted(false);
-  }, [isSubmitted]);
+  }, [info.inputName, isSubmitted]);
 
   return (
     <main className="reset-form">

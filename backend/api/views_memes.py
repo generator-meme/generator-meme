@@ -59,6 +59,14 @@ class MemeViewSet(viewsets.ModelViewSet):
 
 class TemplateViewSet(viewsets.ModelViewSet):
     """Шаблоны мемов.
+
+    Ниже описание параметров для GET запроса на endpoint /templates/.
+
+    Необязательный параметр is_favorited со значением 'true' вернет только
+    те шаблоны, которые пользователь добавил в избранное, значение 'false'
+    выдаст только недобавленные в избранное шаблоны, любое другое значение
+    или его отсутствие выдаст все шаблоны без учета добавления в избранное.
+
     Сортировка шаблонов задается параметром ordering:
     - если параметр не задан, то по умолчанию выше будут шаблоны,
     которые чаще других использовались для создания мема
@@ -108,7 +116,8 @@ class TemplateViewSet(viewsets.ModelViewSet):
             return TemplateReadSerializer
         return TemplateWriteSerializer
 
-    @action(detail=True, methods=['post', 'delete'])
+    @action(detail=True, methods=['post', 'delete'],
+            permission_classes=[IsAuthenticated])
     def favorite(self, request, pk):
         '''Добавляет шаблон в избранные'''
         return create_delete_relation(

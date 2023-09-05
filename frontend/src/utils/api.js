@@ -20,13 +20,23 @@ class Api {
         });
   }
 
-  getTemplates() {
-    return fetch(`${this._baseUrl}/templates/`, {
-      method: "GET",
-      body: JSON.stringify(),
-      headers: this._headers,
-    }).then(this._errorHandler);
+  getTemplates(savedToken, options) {
+    return fetch(
+      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}`,
+      {
+        method: "GET",
+        body: JSON.stringify(),
+        headers:
+          savedToken.length > 0
+            ? {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${savedToken}`, // prettier-ignore
+              }
+            : this._headers,
+      }
+    ).then(this._errorHandler);
   }
+
   getTags() {
     return fetch(`${this._baseUrl}/tags/`, {
       method: "GET",
@@ -36,13 +46,6 @@ class Api {
   }
   getTagsWithQueryName(name) {
     return fetch(`${this._baseUrl}/tags/?name=${name}`, {
-      method: "GET",
-      body: JSON.stringify(),
-      headers: this._headers,
-    }).then(this._errorHandler);
-  }
-  getfilteredTemplates(id) {
-    return fetch(`${this._baseUrl}/templates/?tag=${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: this._headers,
@@ -90,7 +93,33 @@ class Api {
     });
   }
 
-  copyNewMeme() {}
+  addTemplateToFavorites(templateId, token) {
+    return fetch(`${this._baseUrl}/templates/${templateId}/favorite/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkReponce);
+  }
+
+  removeTemplateFromFavorites(templateId, token) {
+    return fetch(`${this._baseUrl}/templates/${templateId}/favorite/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, // prettier-ignore
+      },
+    }).then(this._checkReponce);
+  }
+
+  getCategories() {
+    return fetch(`${this._baseUrl}/categories/`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
 }
 
 const api = new Api({
