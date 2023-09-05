@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLatest } from "react-use";
 import "./TextareaCanvas.css";
 import TextareaAutosize from "react-textarea-autosize";

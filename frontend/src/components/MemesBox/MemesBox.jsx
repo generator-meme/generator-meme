@@ -3,18 +3,16 @@ import "./MemesBox.css";
 import arrowUp from "../../images/arrow-up.svg";
 import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
 
 const MemesBox = ({
-  memes,
-  saveNumberOfVisibleMemes,
   numberOfVisibleMems,
   setNumberOfVisibleMems,
   setIsNewMeme,
 }) => {
-  // console.log(memes);
+  const memeTemplates = useSelector(selectAllMemeTemplates);
   const [scrollTop, setScrollTop] = useState(null);
-  const dispatch = useDispatch();
 
   const fullHeight = Math.max(
     document.body.scrollHeight,
@@ -43,20 +41,20 @@ const MemesBox = ({
 
   return (
     <>
-      {memes.length > 0 && (
+      {memeTemplates.length > 0 && (
         <section
           className="memesbox"
           aria-label="Box of memes"
           id="memes-start"
         >
           <ul className="memesbox__container">
-            {memes.slice(0, numberOfVisibleMems).map((elem) => {
+            {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
               return (
                 <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
               );
             })}
           </ul>
-          {memes.length > numberOfVisibleMems && (
+          {memeTemplates.length > numberOfVisibleMems && (
             <button onClick={addMemes} className="memesbox__btn-show-more btn">
               показать больше
             </button>

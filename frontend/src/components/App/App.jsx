@@ -20,9 +20,12 @@ import ResetPassordConfirm from "../../pages/ResetPassordConfirm/ResetPassordCon
 import Footer from "../Footer/Footer";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import Preloader from "../Preloader/Preloader";
+import { loadCategoriesOptions } from "../../services/actions/filtrationActions";
+import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
+import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
+import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
 
 const App = () => {
-  const [memes, setMemes] = useState([]);
   const { meme } = useSelector((state) => state.saveMeme);
   const [newMeme, setNewMeme] = useState(null);
   const [isNewMeme, setIsNewMeme] = useState(false);
@@ -31,14 +34,15 @@ const App = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, userInfo } = useSelector((state) => state.user);
   const isPreloaderActive = useSelector((state) => state.preloader);
+  const { categories, areFavorite, ordering } = useSelector(
+    selectFiltrationOptions
+  );
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
-        // console.log(memeUrl, memeId);
         setNewMeme(res);
-
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
@@ -49,24 +53,22 @@ const App = () => {
   const handleDownloadNewMeme = () => {
     api
       .downloadNewMem(meme.id)
-      .then((res) => {
-        // console.log(res, newMeme.id);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
   };
 
   useEffect(() => {
-    api
-      .getTemplates()
-      .then((res) => {
-        setMemes(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (!isTokenChecked) return;
+    dispatch(loadAllMemeTemplates());
+  }, [isLoggedIn, isTokenChecked, dispatch, categories, areFavorite, ordering]); // запрос при изменении любого параметра (кроме tags)
+
+  useEffect(() => {
+    if (isTokenChecked && isLoggedIn) {
+      dispatch(loadFavoriteTemplates());
+    }
+  }, [isLoggedIn, isTokenChecked, dispatch]);
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;
@@ -75,17 +77,17 @@ const App = () => {
     setIsTokenChecked(true);
   }, [isLoggedIn, dispatch, userInfo]);
 
+  useEffect(() => {
+    dispatch(loadCategoriesOptions());
+  }, [dispatch]);
+
   if (!isTokenChecked) return null;
 
   return (
     <div className="page">
       <Header />
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={<Main memes={memes} setIsNewMeme={setIsNewMeme} />}
-        />
+        <Route exact path="/" element={<Main setIsNewMeme={setIsNewMeme} />} />
         <Route path="/team" element={<Team />} />
         <Route
           path="/:id"
@@ -94,7 +96,6 @@ const App = () => {
               handleCreateNewMeme={handleCreateNewMeme}
               setIsNewMeme={setIsNewMeme}
               isNewMeme={isNewMeme}
-              memes={memes}
               setImageNotFoundOpen={setImageNotFoundOpen}
             />
           }

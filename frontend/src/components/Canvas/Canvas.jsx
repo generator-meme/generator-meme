@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
@@ -12,21 +13,20 @@ import {
 } from "./canvasFunctions";
 
 import Fieldset from "../Fieldset/Fieldset";
-import { useSelector } from "react-redux";
 import { getCanvasSettings } from "../../utils/canvasData";
+import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
 
 const Canvas = ({
-  // currentMeme,
   handleCreateNewMeme,
   setIsNewMeme,
   isNewMeme,
-  memes,
   imageSizes,
   image,
   canvasSizes,
   fontSize,
   outsideTextHeight,
 }) => {
+  const memeTemplates = useSelector(selectAllMemeTemplates);
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
@@ -55,7 +55,7 @@ const Canvas = ({
   const createMeme = () => {
     let id =
       currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
-    const template = memes.some((item) => {
+    const template = memeTemplates.some((item) => {
       return item.id === id;
     });
     if (template) {
@@ -218,7 +218,7 @@ const Canvas = ({
       const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
       setTextsValues(oldTextsValues);
     }
-  }, []);
+  }, [setIsNewMeme, isNewMeme]);
 
   useEffect(() => {
     localStorage.setItem("textsValues", JSON.stringify(textsValues));

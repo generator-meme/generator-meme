@@ -1,10 +1,17 @@
 import styles from "./SearchPanel.module.css";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../../utils/api";
 import { Tag } from "../Tag/Tag";
 import { isMobile } from "react-device-detect";
+import { setTagsOptions } from "../../services/actions/filtrationActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setectCurrentTagsString } from "../../services/selectors/filtrationSelectors";
+import {
+  loadAllMemeTemplates,
+  setAllMemeTemplatesEmpty,
+} from "../../services/actions/allMemeTemplatesActions";
 
-export const SearchPanel = ({ setFilterMemes, initMemes }) => {
+export const SearchPanel = () => {
   const [searchValue, setSearchValue] = useState("");
   const [inputChar, setInputChar] = useState("");
   const [tagArray, setTagArray] = useState([]);
@@ -12,6 +19,9 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
   const [tags, setTags] = useState([]);
+  const dispatch = useDispatch();
+  const stringToSearch = useSelector(setectCurrentTagsString);
+
   useEffect(() => {
     api
       .getTags()
@@ -41,7 +51,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
       setIsFocusSearchPanel(false);
       return;
     }
-  }, [searchValue]);
+  }, [searchValue, isFocusSearchPanel]);
 
   useEffect(() => {
     if (inputChar === " " && isMobile) {
@@ -51,7 +61,7 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
       setSearchValue(" ");
       // setInputChar("");
     }
-  }, [inputChar, searchValue]);
+  }, [inputChar, searchValue, tagArray]);
 
   const handleSpace = (e) => {
     if (searchValue.trim() !== "" && e.keyCode === 32) {
@@ -75,7 +85,8 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
   const whiteColorOfSuggestPanel = {
     backgroundColor: "#fff",
   };
-  const stringToSearch = useMemo(() => {
+
+  const createStringToSearch = useCallback(() => {
     const tempTags = tags;
     const tagIdArray = tagArray.map((tagName) => {
       let tempTag;
@@ -88,7 +99,11 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
       return tempTag.id;
     });
     return tagIdArray.join(",");
-  }, [tagArray]);
+  }, [tags, tagArray]);
+
+  useEffect(() => {
+    dispatch(setTagsOptions(createStringToSearch()));
+  }, [tagArray, dispatch, createStringToSearch, tags]);
 
   useEffect(() => {
     if (stringToSearch && stringToSearch.indexOf("unknownTag") !== -1) {
@@ -101,15 +116,10 @@ export const SearchPanel = ({ setFilterMemes, initMemes }) => {
     e.stopPropagation();
     setIsFocusSearchPanel(false);
     try {
-      if (tagArray.length === 0) {
-        setFilterMemes(initMemes);
-
-        return;
-      } else if (stringToSearch && !isUnknownFlag) {
-        const filteredMem = await api.getfilteredTemplates(stringToSearch);
-        setFilterMemes(filteredMem);
+      if (isUnknownFlag) {
+        dispatch(setAllMemeTemplatesEmpty());
       } else {
-        setFilterMemes([]);
+        dispatch(loadAllMemeTemplates());
       }
     } catch {
       console.log("err");

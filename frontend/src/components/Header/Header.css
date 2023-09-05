@@ -57,7 +57,7 @@
   color: #7657CD;
 }
 
-/* .header__button:hover .header__button_type_like path, */
+.header__button:hover .header__button_type_like path,
 .header__button:hover .header__button_type_burger path {
   stroke: #AD27DC;
 }
@@ -68,10 +68,6 @@
 }
 
 /*разработка*/
-.header__button:hover .header__button_type_like path {
-  stroke: rgba(155, 155, 155, 0.50);
-}
-
 .header__button:hover .header__button_type_bell path {
   fill: rgba(155, 155, 155, 0.50);
   ;
