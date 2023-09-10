@@ -16,12 +16,14 @@ const Team = () => {
   const renderTeam = (teamGroup) => {
     return (
       <div className="team__group">
-        <span className="team__group-name">{teamGroup.groupName}</span>
+        <span className="team__group-name">{teamGroup.name}</span>
         <ul className="team__group-members-list">
           {teamGroup.teammates.map((person) => {
             return (
               <li className="team__group-member">
-                <span className="member__description">{person.desc}</span>
+                <span className="member__description">
+                  {person.description}
+                </span>
                 <a
                   className={`member__name ${
                     person.link === "" ? "member__name--no-link" : ""
