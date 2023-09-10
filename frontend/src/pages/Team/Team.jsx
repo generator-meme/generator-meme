@@ -1,8 +1,18 @@
 import "./Team.css";
 import Navigation from "../../components/Navigation/Navigation";
-import Teammates from "../../utils/Teammates";
+// import Teammates from "../../utils/Teammates";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getTeamAction } from "../../services/actions/teamAction";
 
 const Team = () => {
+  const dispatch = useDispatch();
+  const { team } = useSelector((state) => state.team);
+
+  useEffect(() => {
+    dispatch(getTeamAction());
+  }, []);
+
   const renderTeam = (teamGroup) => {
     return (
       <div className="team__group">
@@ -29,12 +39,14 @@ const Team = () => {
     );
   };
   return (
-    <section className="team">
-      <Navigation isSavedMeme={false} id="team" isTeam={true} />
-      <div className="team__container">
-        {Teammates.map((teamGroup) => renderTeam(teamGroup))}
-      </div>
-    </section>
+    !!team && (
+      <section className="team">
+        <Navigation isSavedMeme={false} id="team" isTeam={true} />
+        <div className="team__container">
+          {team.map((teamGroup) => renderTeam(teamGroup))}
+        </div>
+      </section>
+    )
   );
 };
 export default Team;
