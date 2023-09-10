@@ -21,7 +21,7 @@ const Team = () => {
           {teamGroup.teammates.map((person) => {
             return (
               <li className="team__group-member">
-                <span className="member__description">{person.desc}</span>
+                <span className="member__description">{person.description}</span>
                 <a
                   className={`member__name ${
                     person.link === "" ? "member__name--no-link" : ""
