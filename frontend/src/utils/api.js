@@ -120,6 +120,13 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
+  getTeam() {
+    return fetch(`${this._baseUrl}/team/`, {
+      method: "GET",
+      body: JSON.stringify(),
+      headers: this._headers,
+    }).then(this._errorHandler);
+  }
 }
 
 const api = new Api({

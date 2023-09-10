@@ -27,8 +27,6 @@ import Prompt from "../../components/Prompt/Prompt";
 
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
-  const a = useSelector((state) => state.saveMeme);
-
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
