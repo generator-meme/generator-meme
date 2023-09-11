@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../SearchPanel/SearchPanel";
-
+import FilterSection from '../SortPanel/SortPanel.jsx';
 const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
   const navigate = useNavigate();
   const file = useRef();
@@ -72,6 +72,11 @@ const Main = ({ memes, setCurrentMeme, setIsNewMeme, tags }) => {
           setFilterMemes={setFilterMemes}
           initMemes={memes}
         ></SearchPanel>
+      </section>
+      <section className="filter">
+        <FilterSection>
+         
+        </FilterSection>
       </section>
       <MemesBox
         memes={filterMemes}

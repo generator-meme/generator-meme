@@ -1,8 +1,8 @@
 import  "./SortPanel.css";
 import React from 'react';
-import sort from '../../images/sort1.png'
+import sort from '../../images/sort.svg'
 
-const ButtonSection = () => {
+const FilterSection = () => {
   const handleButtonClick = (buttonNumber) => {
     console.log(`Кнопка ${buttonNumber} нажата`);
     // Здесь можно добавить дополнительную логику обработки нажатия кнопки
@@ -10,22 +10,22 @@ const ButtonSection = () => {
 
   return (
     <section>
-      <div className="container">
-      <div className="button-section-container">
+      <div className="filter">
+      <div className="filter-section-container">
         <button className="button" onClick={() => handleButtonClick(1)}>Популярные</button>
         <button className="button" onClick={() => handleButtonClick(2)}>Новинки</button>
         <button className="button" onClick={() => handleButtonClick(3)}>Рандом</button>
-        <button className="button">Избранное</button>
+        <button className="button" onClick={() => handleButtonClick(3)}>Избранное</button>
       </div>
-      <img className="sort" src={sort1.png} alt="Категории шаблонов."/>
+      <img className="sort" src={sort.svg} alt="Категории шаблонов."/>
       <PopupContainer isVisible={showPopup}>
-        <Button>Все шаблоны</Button>
-        <Button>Картинки</Button>
-        <Button>Комиксы</Button>
+        <button>Все шаблоны</button>
+        <button>Картинки</button>
+        <button>Комиксы</button>
       </PopupContainer>
       </div>
     </section>
   );
 };
 
-export default ButtonSection;
+export default FilterSection;
