@@ -15,7 +15,7 @@ const initialState = {
 export const savedMemeReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_MEME_REQUEST: {
-      return { ...state, getMemeRequest: true };
+      return { ...state, getMemeRequest: true, meme: null };
     }
     case GET_MEME_SUCCESS: {
       console.log(action.payload);
