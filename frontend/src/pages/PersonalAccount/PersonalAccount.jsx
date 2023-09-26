@@ -11,7 +11,9 @@ const PersonalAccount = () => {
   const userData = useSelector((state) => state.user.userInfo);
   //   const [isMenuOpened, setMenuOpened] = useState(false);
 
-  const [ ref, isComponentVisible, setIsComponentVisible ] =
+  
+
+  const [ref, isComponentVisible, setIsComponentVisible] =
     useComponentVisible(false);
 
   const handleComponentVisibility = () => {
@@ -56,6 +58,15 @@ const PersonalAccount = () => {
           >
             Редактировать профиль
           </button>
+        </div>
+      </div>
+      <div className="meme_collection">
+        <h2>Коллекция мемов</h2>
+        <div className='memes_container'>
+
+        </div>
+        <div className='pages'>
+
         </div>
       </div>
       <div ref={ref}>

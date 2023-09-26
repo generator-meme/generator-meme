@@ -120,6 +120,19 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
+  addMemeToMyCollection(meme_url, token){
+    return fetch(`${this._baseUrl}/memes/my-collection/add/`, {
+      method: "POST",
+      body: JSON.stringify({
+        meme: meme_url,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, 
+      },
+    }).then(this._checkReponce);
+  }
+  
 }
 
 const api = new Api({

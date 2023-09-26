@@ -47,6 +47,7 @@ const ChangeDataForm = ({ info }) => {
     setNewName(value);
   };
 
+
   const onFormSubmit = (event) => {
     if (isValid) {
       if (info === "name") {
