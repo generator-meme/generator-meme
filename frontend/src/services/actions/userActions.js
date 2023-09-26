@@ -4,8 +4,6 @@ import { cleanFavoriteTemplates } from "./favoriteTemplatesActions";
 import { removeFavorite } from "./filtrationActions";
 
 export const SET_IS_LOGGED_IN = "SET_IS_LOGGED_IN";
-export const SET_NEW_USERNAME = "SET_NEW_USERNAME";
-
 export const SET_IS_LOGGET_OUT = "SET_IS_LOGGET_OUT";
 export const GET_USER_INFO = "GET_USER_INFO";
 
@@ -21,11 +19,6 @@ const getUserInfo = (info) => ({
   type: GET_USER_INFO,
   payload: info,
 });
-
-export const setNewUsername = (newUserName) =>({
-  type:SET_NEW_USERNAME,
-  payload:newUserName,
-})
 
 export const loadUserInfo = () => async (dispatch) => {
   try {
@@ -49,6 +42,3 @@ export const logOut = () => async (dispatch) => {
     console.log(err, "checkTokenError");
   }
 };
-
-
-
