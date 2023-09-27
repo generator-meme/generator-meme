@@ -127,6 +127,28 @@ class Api {
       headers: this._headers,
     }).then(this._errorHandler);
   }
+  addMemeToMyCollection(meme_url, token){
+    return fetch(`${this._baseUrl}/memes/my-collection/add/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, 
+      },
+      body: JSON.stringify({
+        meme: meme_url,
+      }),
+    }).then(this._checkReponce);
+  }
+  getMemesInMyCollection(template_tag = "/*/", limit = 4,offset=0,only_my="true", token){
+    return fetch(`${this._baseUrl}/memes/my-collection/?template_tag=${template_tag}&limit=${limit}&offset=${offset}&only_my='${only_my}'`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, 
+      },
+      body: JSON.stringify(),
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({

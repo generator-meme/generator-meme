@@ -11,6 +11,8 @@ import CanvasPreloader from "../../pages/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "../../pages/SavedMeme/SavedMeme";
 import Registration from "../../pages/Registration/Registration";
 import Login from "../../pages/Login/Login";
+import ChangeDataForm from "../ChangeDataForm/ChangeDataForm"
+import PersonalAccount from "../../pages/PersonalAccount/PersonalAccount"
 import AuthUsingSocialNetworks from "../../pages/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import CheckEmailMessage from "../../pages/CheckEmailMessage/CheckEmailMessage";
 import { optionsList, checkEmailMessage } from "../../utils/constants";
@@ -87,6 +89,9 @@ const App = () => {
     <div className="page">
       <Header />
       <Routes>
+        <Route path="/me" element={<PersonalAccount/>} />
+        <Route path="/me/name-change" element={<ChangeDataForm info={"name"}/>} />
+        <Route path="/me/pass-change" element={<ChangeDataForm info={"pass"}/>} />
         <Route exact path="/" element={<Main setIsNewMeme={setIsNewMeme} />} />
         <Route path="/team" element={<Team />} />
         <Route

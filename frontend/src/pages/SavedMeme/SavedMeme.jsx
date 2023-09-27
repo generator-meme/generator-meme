@@ -24,7 +24,8 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import Prompt from "../../components/Prompt/Prompt";
-
+import  api  from "../../utils/api";
+import { getCookie } from "../../utils/cookie";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
   const isSavedMeme = true;
@@ -81,6 +82,18 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       setIsDownloadDropdownOpen(false);
     }, 200);
   };
+
+  const saveMemeToPersonalAccount = async () =>{
+    const savedToken = getCookie("token");
+    const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id
+    try{
+      await api.addMemeToMyCollection(meme_id,savedToken);
+    }catch(err){
+      // const key = Object.keys(err)[0];
+      // const error = err[key][0]
+      console.log(err)
+    }
+  }
 
   return (
     !!meme && (
@@ -173,7 +186,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
               </div>
             ) : null}
 
-            <button className={`btn ${styles.saved_meme__btn_save}`}>
+            <button className={`btn ${styles.saved_meme__btn_save}`} onClick = {()=> saveMemeToPersonalAccount()}>
               сохранить в ЛК
             </button>
             <div className={styles.saved_meme_share_btns_container}>
