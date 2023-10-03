@@ -1,5 +1,4 @@
 .wrap_content {
-  padding: 0 0 116px 0;
   width: 80%;
   max-width: 80%;
   margin: 0 auto;
@@ -64,10 +63,10 @@
   flex-grow: 1;
   outline: none;
   z-index: 3;
-  color: #1E1D1D;
+  color: #1e1d1d;
 }
 .search_input::placeholder {
-  color: #C0C0C0;
+  color: #c0c0c0;
 }
 .button_form {
   min-width: 82px;

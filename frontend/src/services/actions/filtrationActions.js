@@ -31,7 +31,7 @@ export const removeFavorite = () => ({
 });
 
 export const setOrdering = (ordering) => ({
-  type: SET_TAGS_OPTIONS,
+  type: SET_ORDERING,
   payload: ordering,
 });
 

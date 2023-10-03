@@ -37,6 +37,7 @@ const App = () => {
   const { categories, areFavorite, ordering } = useSelector(
     selectFiltrationOptions
   );
+  console.log(categories, areFavorite, ordering);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
@@ -61,6 +62,7 @@ const App = () => {
 
   useEffect(() => {
     if (!isTokenChecked) return;
+    console.log(222);
     dispatch(loadAllMemeTemplates());
   }, [isLoggedIn, isTokenChecked, dispatch, categories, areFavorite, ordering]); // запрос при изменении любого параметра (кроме tags)
 

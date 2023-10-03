@@ -5,6 +5,8 @@ import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
 import { useSelector } from "react-redux";
 import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
+import { Tab } from "../Tab/Tab";
+import burgerIcon from "../../images/icons/burger_icon.svg";
 
 const MemesBox = ({
   numberOfVisibleMems,
@@ -47,13 +49,27 @@ const MemesBox = ({
           aria-label="Box of memes"
           id="memes-start"
         >
-          <ul className="memesbox__container">
-            {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
-              return (
-                <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
-              );
-            })}
-          </ul>
+          <div className="box">
+            <div className="tab_container">
+              <div className="tabs">
+                <Tab text={"Популярные"} param={""}></Tab>
+                <Tab text={"Новинки"} param={"-published_at"}></Tab>
+                <Tab text={"Рандом"} param={"random"}></Tab>
+                <Tab text={"Избранные"}></Tab>
+              </div>
+              <div className="burger_icon">
+                <img src={burgerIcon} alt="BurgerIcon" />
+              </div>
+            </div>
+            <ul className="memesbox__container">
+              {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
+                return (
+                  <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
+                );
+              })}
+            </ul>
+          </div>
+
           {memeTemplates.length > numberOfVisibleMems && (
             <button onClick={addMemes} className="memesbox__btn-show-more btn">
               показать больше

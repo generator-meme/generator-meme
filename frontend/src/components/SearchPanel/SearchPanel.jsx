@@ -17,7 +17,7 @@ export const SearchPanel = () => {
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
-  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
+  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
@@ -48,7 +48,7 @@ export const SearchPanel = () => {
       setIsFocusSearchPanel(true);
       return;
     } else if (!searchValue && isFocusSearchPanel) {
-      setIsFocusSearchPanel(false);
+      // setIsFocusSearchPanel(false);
       return;
     }
   }, [searchValue, isFocusSearchPanel]);
