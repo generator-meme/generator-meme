@@ -1,0 +1,16 @@
+.category_box {
+  padding: 20px;
+  background-color: #fef8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px transparent solid;
+}
+.category_text {
+  font-size: 20px;
+}
+.category_box:hover {
+  border: 1px #ad27dc solid;
+  cursor: pointer;
+  border-radius: 20px;
+}
