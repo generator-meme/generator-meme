@@ -5,6 +5,7 @@
   box-sizing: border-box;
   position: relative;
   overflow: none;
+  padding-bottom: 50px;
 }
 
 .wrap_background_form {
@@ -27,6 +28,7 @@
   justify-content: space-between;
   border: 1px solid #d09bd5;
   border-radius: 20px;
+  z-index: 10;
 }
 
 .form_search_panel {
@@ -85,17 +87,18 @@
   content: url("/src/images/icons/search_icon.svg");
 }
 .suggestions_wrap {
+  background-color: #fff;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  overflow-y: auto;
-  width: 100%;
-  position: sticky;
-  top: 0;
   left: 0;
-  background-color: #ffff;
-  z-index: 2;
+  max-height: 130px;
   overflow-x: hidden;
-  max-height: 100px;
+  overflow-y: auto;
+  position: -webkit-sticky;
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  z-index: 4;
 }
 .suggestions_wrap::-webkit-scrollbar {
   background-clip: padding-box;

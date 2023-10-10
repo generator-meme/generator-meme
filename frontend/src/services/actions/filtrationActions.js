@@ -12,23 +12,29 @@ const getCategoriesOptions = (categories) => ({
   payload: categories,
 });
 
-// export const setCategoriesOptions = (category) => ({ // проверить при подключении категорий
-//   type: SET_CATEGORIES_OPTIONS,
-//   payload: category,
-// });
+export const setCategoriesOptions = (category) => ({
+  type: SET_CATEGORIES_OPTIONS,
+  payload: category,
+});
 
 export const setTagsOptions = (tags) => ({
   type: SET_TAGS_OPTIONS,
   payload: tags,
 });
 
-export const setFavorite = () => ({
-  type: SET_FAVORITE,
-});
+export const setFavorite = () => {
+  console.log("setfavorite");
+  return {
+    type: SET_FAVORITE,
+  };
+};
 
-export const removeFavorite = () => ({
-  type: REMOVE_FAVORITE,
-});
+export const removeFavorite = () => {
+  console.log("removeFavorite");
+  return {
+    type: REMOVE_FAVORITE,
+  };
+};
 
 export const setOrdering = (ordering) => ({
   type: SET_ORDERING,

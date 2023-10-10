@@ -1,22 +1,32 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setOrdering } from "../../services/actions/filtrationActions";
-import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
+import {
+  removeFavorite,
+  setFavorite,
+  setOrdering,
+} from "../../services/actions/filtrationActions";
+import { setectCurrentFavorite } from "../../services/selectors/filtrationSelectors";
 import styles from "./Tab.module.css";
 export const Tab = ({ text, param }) => {
-  const { categories, areFavorite, ordering } = useSelector(
-    selectFiltrationOptions
-  );
+  const areFavorite = useSelector(setectCurrentFavorite);
+  const [isSelectedTab, setIsSelectedTab] = useState(false);
   const dispatch = useDispatch();
-  console.log(categories, areFavorite, ordering);
+
+  const clickHandle = () => {
+    if (param === null) {
+      areFavorite ? dispatch(removeFavorite()) : dispatch(setFavorite());
+      setIsSelectedTab(!isSelectedTab);
+      return;
+    } else {
+      dispatch(setOrdering(param));
+    }
+  };
+
   return (
-    <div
-      className={styles.tab_box}
-      onClick={() => {
-        console.log(111, param);
-        dispatch(setOrdering(param));
-      }}
-    >
-      <p>{text}</p>
+    <div className={styles.tab_box} onClick={clickHandle}>
+      <p style={isSelectedTab ? { color: "#AC52D1" } : { color: "#000000" }}>
+        {text}
+      </p>
     </div>
   );
 };

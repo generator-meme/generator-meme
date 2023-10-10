@@ -146,11 +146,11 @@ export const SearchPanel = () => {
     <div className={styles.wrap_content}>
       <div
         className={styles.wrap_background_form}
-        style={
-          isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
-            ? whiteColorOfSuggestPanel
-            : yellowColorOfSuggestPanel
-        }
+        // style={
+        //   isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
+        //     ? whiteColorOfSuggestPanel
+        //     : yellowColorOfSuggestPanel
+        // }
       >
         <div className={styles.wrap_search_panel}>
           <form className={styles.form_search_panel} onSubmit={submitToSearch}>

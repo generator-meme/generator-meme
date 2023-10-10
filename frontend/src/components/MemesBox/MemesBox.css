@@ -108,6 +108,11 @@
 }
 .burger_icon {
   justify-self: end;
+  position: relative;
+}
+.svg:hover {
+  filter: invert(54%) sepia(92%) saturate(3146%) hue-rotate(245deg)
+    brightness(83%) contrast(97%);
 }
 @media (max-width: 1480px) and (min-width: 1081px) {
   .box {
