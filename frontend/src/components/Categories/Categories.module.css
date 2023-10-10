@@ -1,0 +1,23 @@
+.categories_box {
+  box-sizing: border-box;
+  position: absolute;
+  top: 90px;
+  right: 0;
+  min-width: 330px;
+  border: 1px solid #ad27dc;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  background-color: #fffced;
+}
+.categories_content_wrap {
+  padding: 71px 88px;
+  min-width: 185px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  flex-direction: column;
+}
