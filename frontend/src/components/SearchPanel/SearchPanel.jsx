@@ -78,14 +78,6 @@ export const SearchPanel = () => {
     setSearchValue(e.target.value.trim());
   };
 
-  const yellowColorOfSuggestPanel = {
-    backgroundColor: "#FCFDB5",
-    overflowY: "hidden",
-  };
-  const whiteColorOfSuggestPanel = {
-    backgroundColor: "#fff",
-  };
-
   const createStringToSearch = useCallback(() => {
     const tempTags = tags;
     const tagIdArray = tagArray.map((tagName) => {

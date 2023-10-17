@@ -8,7 +8,7 @@ import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplate
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
-import { setCategoriesOptions } from "../../services/actions/filtrationActions";
+import { setOrdering } from "../../services/actions/filtrationActions";
 
 const MemesBox = ({
   numberOfVisibleMems,
@@ -44,6 +44,22 @@ const MemesBox = ({
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const [tabs, setTabs] = useState([
+    { text: "Популярные", isOn: true, param: "", id: 1 },
+    { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
+    { text: "Рандом", isOn: false, param: "random", id: 3 },
+  ]);
+  const clichHandleTab = (params) => {
+    dispatch(setOrdering(params.param));
+    const tempTabs = tabs.map((tab) => {
+      if (tab.id === params.id) {
+        return { ...tab, isOn: true };
+      } else {
+        return { ...tab, isOn: false };
+      }
+    });
+    setTabs(tempTabs);
+  };
 
   return (
     <>
@@ -56,10 +72,20 @@ const MemesBox = ({
           <div className="box">
             <div className="tab_container">
               <div className="tabs">
-                <Tab text={"Популярные"} param={""}></Tab>
-                <Tab text={"Новинки"} param={"-published_at"}></Tab>
-                <Tab text={"Рандом"} param={"random"}></Tab>
-                <Tab text={"Избранные"} param={null}></Tab>
+                {tabs.map((tab) => {
+                  return (
+                    <button
+                      className={`tab_button ${tab.isOn ? "tab_isOn" : ""}`}
+                      id={tab.id}
+                      onClick={() => {
+                        clichHandleTab(tab);
+                      }}
+                    >
+                      {tab.text}
+                    </button>
+                  );
+                })}
+                <Tab></Tab>
               </div>
               <div
                 className="burger_icon"

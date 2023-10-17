@@ -106,6 +106,23 @@
 .tabs:first-child {
   padding: 0;
 }
+.tab_button {
+  padding-right: 30px;
+  font-size: 25px;
+  background-color: inherit;
+  border: none;
+  font-family: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+.tab_button:hover {
+  color: #ac52d1;
+  cursor: pointer;
+}
+.tab_isOn {
+  color: #ac52d1;
+}
+
 .burger_icon {
   justify-self: end;
   position: relative;
