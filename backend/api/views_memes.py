@@ -155,7 +155,9 @@ class CollectionViewSet(ListViewSet):
     принимает параметр "only_my" = "true" для
     отображения авторских мемов;
     Параметр ordering принимает значения 'added_at' и '-added_at'
-    для сортировки по дате добавления в коллекцию."""
+    для сортировки по дате добавления в коллекцию.
+    Параметр template_tag принимает строку из id тегов
+    через запятую без пробелов.'"""
 
     pagination_class = CollectionPagination
     permission_classes = (IsAuthenticated, )
