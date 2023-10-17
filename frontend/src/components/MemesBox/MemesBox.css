@@ -27,7 +27,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 1.2;
-  color: #1E1D1D;
+  color: #1e1d1d;
 }
 
 .memesbox__up {
@@ -77,23 +77,82 @@
 }
 
 .memesbox__up-text {
-    margin: 0;
-    padding: 0;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 26px;
-    color: #1E1D1D;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 26px;
+  color: #1e1d1d;
 }
-
+.tab_container {
+  align-items: center;
+  display: grid;
+  justify-content: space-between;
+  padding: 0 47px 20px;
+  grid-template-columns: 15fr 1fr;
+  height: 70px;
+}
+.box {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+}
+.tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: flex-start;
+}
+.tabs:first-child {
+  padding: 0;
+}
+.burger_icon {
+  justify-self: end;
+  position: relative;
+}
+.svg:hover {
+  filter: invert(54%) sepia(92%) saturate(3146%) hue-rotate(245deg)
+    brightness(83%) contrast(97%);
+}
 @media (max-width: 1480px) and (min-width: 1081px) {
-    .memebox__container {padding: 31px, 29px, 43px, 0;}
+  .box {
+    padding: 31px, 29px, 43px, 0;
+  }
+
+  /* .tabs {
+    padding: 30px 0 30px 87px;
+  } */
 }
-@media (max-width: 1080px)and (min-width: 521px) {
-    .memebox__container {padding: 83px, 74px, 115px, 0;}
+@media (max-width: 1080px) and (min-width: 521px) {
+  .box {
+    padding: 83px, 74px, 115px, 0;
+  }
+  .tab_container {
+    height: 60px;
+  }
+  .tabs {
+    padding: 83px;
+  }
 }
 @media (max-width: 520px) and (min-width: 376px) {
-    .memebox__container {padding: 42px, 40px, 85px, 0;}
+  .box {
+    padding: 42px, 40px, 85px, 0;
+  }
+  .tab_container {
+    height: 30px;
+  }
+  .tabs {
+    padding: 42px;
+  }
 }
 @media (max-width: 375px) {
-    .memebox__container {padding: 15px, 15px, 77px, 0;}
+  .box {
+    padding: 15px, 15px, 77px, 0;
+  }
+  /* .tab_container {
+    padding: 15px, 15px, 77px, 0;
+  } */
+  .tabs {
+    padding: 15px;
+  }
 }

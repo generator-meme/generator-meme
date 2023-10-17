@@ -1,6 +1,6 @@
 import {
   GET_CATEGORIES_OPTIONS,
-  // SET_CATEGORIES_OPTIONS,
+  SET_CATEGORIES_OPTIONS,
   SET_TAGS_OPTIONS,
   SET_FAVORITE,
   REMOVE_FAVORITE,
@@ -8,7 +8,7 @@ import {
 } from "../actions/filtrationActions";
 
 const initialState = {
-  categoriesOptions: {},
+  categoriesOptions: [],
   favoriteOptions: {
     true: true,
     false: false,
@@ -31,23 +31,23 @@ const initialState = {
 export const filtrationReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_CATEGORIES_OPTIONS:
-      const options = {};
-      for (let elem of payload) {
-        const { id, name } = elem;
-        options[name] = id;
-      }
+      // const options = {};
+      // for (let elem of payload) {
+      //   const { id, name } = elem;
+      //   options[name] = id;
+      // }
       return {
         ...state,
-        categoriesOptions: options,
+        categoriesOptions: payload,
       };
-    // case SET_CATEGORIES_OPTIONS: // проверить при подключении категорий
-    //   return {
-    //     ...state,
-    //     filtrationOptions: {
-    //       ...state.filtrationOptions,
-    //       categories: payload,
-    //     },
-    //   };
+    case SET_CATEGORIES_OPTIONS:
+      return {
+        ...state,
+        filtrationOptions: {
+          ...state.filtrationOptions,
+          categories: payload,
+        },
+      };
     case SET_TAGS_OPTIONS:
       return {
         ...state,
@@ -59,7 +59,7 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         filtrationOptions: {
           ...state.filtrationOptions,
           areFavorite: state.favoriteOptions.true,
-          ordering: state.orderingOptions.popular,
+          // ordering: state.orderingOptions.popular,
         },
       };
     case REMOVE_FAVORITE:
@@ -68,7 +68,7 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         filtrationOptions: {
           ...state.filtrationOptions,
           areFavorite: state.favoriteOptions.empty,
-          ordering: state.orderingOptions.popular,
+          // ordering: state.orderingOptions.popular,
         },
       };
     case SET_ORDERING:
@@ -76,7 +76,7 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         filtrationOptions: {
           ...state.filtrationOptions,
-          areFavorite: state.favoriteOptions.empty,
+          areFavorite: state.filtrationOptions.areFavorite,
           ordering: payload,
         },
       };

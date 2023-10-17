@@ -17,7 +17,7 @@ export const SearchPanel = () => {
   const [tagArray, setTagArray] = useState([]);
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
-  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(true);
+  const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
@@ -48,7 +48,7 @@ export const SearchPanel = () => {
       setIsFocusSearchPanel(true);
       return;
     } else if (!searchValue && isFocusSearchPanel) {
-      setIsFocusSearchPanel(false);
+      // setIsFocusSearchPanel(false);
       return;
     }
   }, [searchValue, isFocusSearchPanel]);
@@ -146,11 +146,11 @@ export const SearchPanel = () => {
     <div className={styles.wrap_content}>
       <div
         className={styles.wrap_background_form}
-        style={
-          isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
-            ? whiteColorOfSuggestPanel
-            : yellowColorOfSuggestPanel
-        }
+        // style={
+        //   isFocusSearchPanel && !(tagsBasedOnInputValue.length === 0)
+        //     ? whiteColorOfSuggestPanel
+        //     : yellowColorOfSuggestPanel
+        // }
       >
         <div className={styles.wrap_search_panel}>
           <form className={styles.form_search_panel} onSubmit={submitToSearch}>
