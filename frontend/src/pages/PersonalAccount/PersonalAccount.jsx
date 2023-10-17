@@ -1,10 +1,8 @@
-import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { getCookie } from "../../utils/cookie";
 import "./PersonalAccount.css";
 import { useDispatch, useSelector } from "react-redux";
 import useComponentVisible from "./useComponentVisible";
-import api from '../../utils/api'
+import MemeCollection from '../../components/MemeCollection/MemeCollection'
 const PersonalAccount = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -12,21 +10,7 @@ const PersonalAccount = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userData = useSelector((state) => state.user.userInfo);
   //   const [isMenuOpened, setMenuOpened] = useState(false);
-  const [savedMemes, setSavedMemes] = useState({})
-const ShowFirstPageOfSavedMemes = async ()=>{
-  const savedToken = getCookie("token");
-  const result = await api.getMemesInMyCollection('',20,0,'true',savedToken)
-  console.log(savedToken)
-  setSavedMemes(result)
-  console.log(result)
-}
-  useEffect(()=>{
-    ShowFirstPageOfSavedMemes()
-  },[])
-
-  const [ref, isComponentVisible, setIsComponentVisible] =
-    useComponentVisible(false);
-
+  const [ref, isComponentVisible, setIsComponentVisible] = useComponentVisible(false);
   const handleComponentVisibility = () => {
     // const page = document.getElementsByClassName("page");
     // page.classList.remove("contrast-effect");
@@ -54,8 +38,7 @@ const ShowFirstPageOfSavedMemes = async ()=>{
       console.log(err);
     }
   };
-  //вынести в отдельный компонент
-  //{/* {userData.username} */}
+
   return (
     <div className="personal_account">
       <div id="dim"></div>
@@ -71,24 +54,7 @@ const ShowFirstPageOfSavedMemes = async ()=>{
           </button>
         </div>
       </div>
-      <div className="meme_collection">
-        <h1>Коллекция мемов</h1>
-        <div className="search">
-            строка поиска
-        </div>
-        <div className='memes_container'>
-          {savedMemes?.results?.map((res)=>(
-          <>
-          <div className='meme'>
-            <img className="saved_meme_img" src={res.meme.image } alt="" />
-          </div>
-          </>
-          ))}
-        </div>
-        <div className='pages'>
-
-        </div>
-      </div>
+      <MemeCollection/>
       <div ref={ref}>
         {isComponentVisible && (
           <div className="change_me_info">

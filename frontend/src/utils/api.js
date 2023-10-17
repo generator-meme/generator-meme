@@ -149,6 +149,18 @@ class Api {
       body: JSON.stringify(),
     }).then(this._checkReponce);
   }
+  deleteMemeFromMyCollection(meme_id, token){
+    return fetch(`${this._baseUrl}/memes/my-collection/delete/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`, 
+      },
+      body: JSON.stringify({
+        meme: meme_id,
+      }),
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({
