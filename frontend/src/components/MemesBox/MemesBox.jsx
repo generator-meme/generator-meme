@@ -50,7 +50,6 @@ const MemesBox = ({
     { text: "Рандом", isOn: false, param: "random", id: 3 },
   ]);
   const clichHandleTab = (params) => {
-    console.log(params);
     dispatch(setOrdering(params.param));
     const tempTabs = tabs.map((tab) => {
       if (tab.id === params.id) {
