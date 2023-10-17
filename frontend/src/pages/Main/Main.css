@@ -27,7 +27,7 @@
   font-weight: 400;
   font-size: 40px;
   line-height: 1.18;
-  color: #1E1D1D;
+  color: #1e1d1d;
   z-index: 2;
   text-align: center;
 }
@@ -51,12 +51,12 @@
 }
 
 .main__label:hover {
-  color: #AC52D1;
+  color: #ac52d1;
   opacity: 0.51;
 }
 
 .main__label:hover:active {
-  color: #7657CD;
+  color: #7657cd;
   opacity: 1;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .search {
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 @media (max-width: 2080px) {
@@ -141,7 +141,6 @@
   .main__label {
     font-size: 27px;
   }
-
 }
 
 @media (max-width: 1080px) {
@@ -178,8 +177,7 @@
   }
 }
 
-@media (max-width: 1020px)and (min-width: 800px) {
-
+@media (max-width: 1020px) and (min-width: 800px) {
   .main__text-advice,
   .main__label {
     font-size: calc(20px + ((100vw - 840px) / 55));
@@ -192,10 +190,9 @@
   }
 
   .main__text-box {
-    padding-top: 30px
+    padding-top: 30px;
   }
 }
-
 
 @media (max-width: 800px) {
   .main__form {
@@ -225,7 +222,6 @@
     max-height: 27px;
   }
 }
-
 
 @media (max-width: 520px) and (min-width: 376px) {
   .main__text-box {
@@ -258,7 +254,6 @@
   .main__label {
     font-size: 20px;
   }
-
 }
 
 @media (max-width: 375px) {
@@ -283,7 +278,7 @@
 
   .main__text-advice {
     font-size: 20px;
-    margin-left: 20px
+    margin-left: 20px;
   }
 
   .main__label {
