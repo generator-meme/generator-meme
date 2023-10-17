@@ -1,12 +1,29 @@
 .tab_box {
   padding-right: 30px;
-}
-.tab_box p {
   font-size: 25px;
 }
+
 .tab_box p:hover {
   color: #ac52d1;
   cursor: pointer;
+}
+.switch_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+.switch_panel {
+  border-radius: 30px;
+  border: 1px solid #808080;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 3px 15px;
+}
+.img_switch {
+  transition: all;
+  transform: translateX(-10px);
 }
 @media (max-width: 520px) and (min-width: 376px) {
   .tab_box p {

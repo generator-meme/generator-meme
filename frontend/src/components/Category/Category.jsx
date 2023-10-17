@@ -1,14 +1,16 @@
-import { useDispatch } from "react-redux";
-import { setCategoriesOptions } from "../../services/actions/filtrationActions";
 import styles from "./Category.module.css";
-export const Category = ({ text, number }) => {
-  const dispatch = useDispatch();
-  const clickHandle = (id) => {
-    dispatch(setCategoriesOptions(id));
-  };
+export const Category = ({ text, click, isOn }) => {
   return (
-    <div className={styles.category_box}>
-      <p className={styles.category_text} onClick={() => clickHandle(number)}>
+    <div
+      className={styles.category_box}
+      style={isOn ? { borderColor: "#ad27dc" } : null}
+    >
+      <p
+        className={styles.category_text}
+        onClick={() => {
+          click();
+        }}
+      >
         {text}
       </p>
     </div>
