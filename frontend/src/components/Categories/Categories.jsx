@@ -45,7 +45,6 @@ export const Categories = ({ isHidden }) => {
               id={item.id}
               isOn={item.isOn}
               click={() => {
-                console.log(item.id);
                 clickHandle(item.id);
               }}
             ></Category>
