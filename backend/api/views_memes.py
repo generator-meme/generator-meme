@@ -153,13 +153,16 @@ class CategoryViewSet(ListRetriveViewSet):
 class CollectionViewSet(ListViewSet):
     """Пользовательская коллекция мемов,
     принимает параметр "only_my" = "true" для
-    отображения авторских мемов."""
+    отображения авторских мемов;
+    Параметр ordering принимает значения 'added_at' и '-added_at'
+    для сортировки по дате добавления в коллекцию."""
 
     pagination_class = CollectionPagination
     permission_classes = (IsAuthenticated, )
     serializer_class = CollectionReadSerializer
-    filter_backends = [DjangoFilterBackend, ]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = CollectionFilter
+    ordering_fields = ('added_at', )
 
     def get_queryset(self):
         user = self.request.user
