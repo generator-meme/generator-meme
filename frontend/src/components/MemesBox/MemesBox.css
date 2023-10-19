@@ -140,7 +140,11 @@
     padding: 30px 0 30px 87px;
   } */
 }
-@media (max-width: 1080px) and (min-width: 521px) {
+
+@media (max-width: 1080px) and (min-width: 835px) {
+  .memesbox__up {
+    right: 90px;
+  }
   .box {
     padding: 83px, 74px, 115px, 0;
   }
@@ -149,6 +153,43 @@
   }
   .tabs {
     padding: 83px;
+  }
+}
+@media (max-width: 836px) and (min-width: 521px) {
+  .box {
+    padding: 83px, 74px, 115px, 0;
+  }
+  .tab_container {
+    height: 60px;
+  }
+  .tabs {
+    padding: 83px;
+  }
+}
+@media (max-width: 870px) and (min-width: 375px) {
+  .box {
+    padding: 83px, 74px, 115px, 0;
+  }
+  .tab_container {
+    height: 60px;
+    align-items: center;
+    display: inline-flex;
+    justify-content: space-evenly;
+    padding-bottom: 45px;
+  }
+  .tabs {
+    row-gap: 15px;
+    align-items: center;
+    display: flex;
+    justify-content: start;
+    justify-self: flex-start;
+    width: 310px;
+    flex-wrap: wrap;
+    column-gap: 30px;
+  }
+  .tab_button {
+    font-size: 16px;
+    padding-right: 0;
   }
 }
 @media (max-width: 520px) and (min-width: 376px) {
