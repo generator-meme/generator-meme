@@ -5,7 +5,7 @@
   box-sizing: border-box;
   position: relative;
   overflow: none;
-  padding-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .wrap_background_form {
@@ -96,9 +96,11 @@
   overflow-y: auto;
   position: -webkit-sticky;
   position: absolute;
-  top: 60px;
+  top: 100%;
   width: 100%;
   z-index: 4;
+  padding-top: 25px;
+  transform: translateY(-15px);
 }
 .suggestions_wrap::-webkit-scrollbar {
   background-clip: padding-box;

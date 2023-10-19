@@ -20,14 +20,33 @@ export const Categories = ({ isHidden }) => {
   }, [categories]);
 
   const clickHandle = (id) => {
+    let flagOnAllShablonOn = false; //флаг необходим для отслеживания повторного нажатия на выбранную категорию
     const tempArray = tempCategories.map((item) => {
       if (item.id === id) {
+        if (item.isOn === true) {
+          flagOnAllShablonOn = true;
+          return { ...item, isOn: false };
+        }
         return { ...item, isOn: true };
       } else {
         return { ...item, isOn: false };
       }
     });
-    setTempCategories(tempArray);
+
+    if (flagOnAllShablonOn) {
+      const tempArr = tempArray.map((item) => {
+        if (item.id === "") {
+          return { id: "", name: "Все шаблоны", isOn: true };
+        } else return item;
+      });
+
+      setTempCategories(tempArr);
+      flagOnAllShablonOn = false;
+      dispatch(setCategoriesOptions(""));
+      return;
+    } else {
+      setTempCategories(tempArray);
+    }
     dispatch(setCategoriesOptions(id));
   };
 
