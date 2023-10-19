@@ -31,3 +31,11 @@
     font-size: 16px;
   }
 }
+@media (max-width: 870px) and (min-width: 375px) {
+  .tab_box p {
+    font-size: 16px;
+  }
+  .tab_box {
+    padding-left: 0;
+  }
+}
