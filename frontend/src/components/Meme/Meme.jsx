@@ -24,16 +24,19 @@ function Meme({ elem, setIsNewMeme }) {
 
   return (
     <li className="meme">
-      <img
-        className="meme__image"
-        src={elem.image}
-        alt={`${elem.name} шаблон.`}
-      />
-      <button onClick={onClick} className="meme__create-btn">
-        создать мем
-      </button>
-      <div onClick={onClick} className="meme__image-hover"></div>
-      <LikeTemplate id={elem.id} />
+      <div className="meme__box-image">
+        <img
+          className="meme__image"
+          src={elem.image}
+          alt={`${elem.name} шаблон.`}
+        />
+        <button onClick={onClick} className="meme__create-btn">
+          создать мем
+        </button>
+        <div onClick={onClick} className="meme__image-hover"></div>
+        <LikeTemplate id={elem.id} />
+      </div>
+
       {elem.tag.length > 0 && (
         <div className="meme__tags-container">
           <ul
