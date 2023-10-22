@@ -131,6 +131,12 @@
   filter: invert(54%) sepia(92%) saturate(3146%) hue-rotate(245deg)
     brightness(83%) contrast(97%);
 }
+
+@media (max-width: 1080px) and (min-width: 200px) {
+  .memesbox__container {
+    grid-template-columns: none;
+  }
+}
 @media (max-width: 1480px) and (min-width: 1081px) {
   .box {
     padding: 31px, 29px, 43px, 0;
@@ -141,7 +147,7 @@
   } */
 }
 
-@media (max-width: 1080px) and (min-width: 835px) {
+@media (max-width: 1080px) and (min-width: 865px) {
   .memesbox__up {
     right: 90px;
   }
@@ -155,62 +161,60 @@
     padding: 83px;
   }
 }
-@media (max-width: 836px) and (min-width: 521px) {
+@media (max-width: 864px) and (min-width: 521px) {
   .box {
     padding: 83px, 74px, 115px, 0;
   }
   .tab_container {
     height: 60px;
   }
-  .tabs {
-    padding: 83px;
-  }
-}
-@media (max-width: 870px) and (min-width: 375px) {
-  .box {
-    padding: 83px, 74px, 115px, 0;
-  }
-  .tab_container {
-    height: 60px;
-    align-items: center;
-    display: inline-flex;
-    justify-content: space-evenly;
-    padding-bottom: 45px;
-  }
-  .tabs {
-    row-gap: 15px;
-    align-items: center;
-    display: flex;
-    justify-content: start;
-    justify-self: flex-start;
-    width: 310px;
-    flex-wrap: wrap;
-    column-gap: 30px;
-  }
+
   .tab_button {
     font-size: 16px;
-    padding-right: 0;
+  }
+}
+@media (max-width: 610px) and (min-width: 376px) {
+  .box {
+    padding: 83px, 74px, 115px, 0;
+  }
+  .tab_container {
+    height: 60px;
+  }
+
+  .tab_button {
+    padding: 0;
+    font-size: 16px;
+  }
+  .tabs {
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 20px;
+  }
+}
+@media (max-width: 430px) and (min-width: 376px) {
+  .tabs {
+    row-gap: 7px;
+    column-gap: 7px;
   }
 }
 @media (max-width: 520px) and (min-width: 376px) {
   .box {
     padding: 42px, 40px, 85px, 0;
   }
-  .tab_container {
-    height: 30px;
-  }
+
   .tabs {
-    padding: 42px;
+    /* padding: 42px; */
   }
 }
+
 @media (max-width: 375px) {
   .box {
-    padding: 15px, 15px, 77px, 0;
+    /* padding: 15px, 15px, 77px, 0; */
   }
   /* .tab_container {
     padding: 15px, 15px, 77px, 0;
   } */
   .tabs {
-    padding: 15px;
+    /* padding: 15px; */
   }
 }
