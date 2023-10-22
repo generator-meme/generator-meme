@@ -9,37 +9,41 @@
 
 .meme__image {
   position: relative;
-  height: 360px;
-  width: 453px;
+  height: inherit;
+  width: 100%;
   object-fit: cover;
   object-position: center;
   border-radius: 20px;
 }
 
 .meme__image-hover {
-  background: linear-gradient(0deg, rgba(66, 14, 92, 0.36), rgba(66, 14, 92, 0.36));
+  background: linear-gradient(
+    0deg,
+    rgba(66, 14, 92, 0.36),
+    rgba(66, 14, 92, 0.36)
+  );
   position: absolute;
   top: 0;
   border-radius: 20px;
-  height: 360px;
-  width: 453px;
+  height: 100%;
+  width: inherit;
   z-index: 1;
   opacity: 0;
-  transition: .1s ease;
+  transition: 0.1s ease;
 }
 
 .meme__image-hover:hover {
-  transition: .1s ease;
+  transition: 0.1s ease;
   opacity: 1;
   cursor: pointer;
 }
 
-.meme:hover>.meme__create-btn {
-  background-color: #FCFF70;
+.meme:hover > .meme__create-btn {
+  background-color: #fcff70;
 }
 
 .meme__create-btn:active {
-  background-color: #F8FD22;
+  background-color: #f8fd22;
 }
 
 .meme__like {
@@ -51,11 +55,11 @@
 }
 
 .meme__create-btn {
-  color: #1E1D1D;
+  color: #1e1d1d;
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  background-color: #FDFFA1;
+  background-color: #fdffa1;
   width: 184px;
   height: 54px;
   border: none;
@@ -64,14 +68,14 @@
   cursor: pointer;
   z-index: 3;
   position: absolute;
-  top: 286px;
+  bottom: 35px;
 }
 
 .meme__create-btn:hover {
-  background-color: #F8FD22;
+  background-color: #f8fd22;
 }
 
-.meme__create-btn:hover~.meme__image-hover {
+.meme__create-btn:hover ~ .meme__image-hover {
   opacity: 1;
 }
 
@@ -91,7 +95,7 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 21px;
-  color: #1E1D1D;
+  color: #1e1d1d;
   align-self: flex-start;
   padding: 0;
   max-height: 48px;
@@ -110,25 +114,72 @@
   padding: 0;
   background-color: transparent;
   border: none;
-  font-family: 'Rubik';
+  font-family: "Rubik";
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
-  color: #1E1D1D;
+  color: #1e1d1d;
   cursor: pointer;
 }
-@media (max-width: 1480px) and (min-width: 1081px) {
-  .meme {max-width: 453px; max-height: 360px;}
-  }
-
-@media (max-width: 1080px)and (min-width: 521px) {
-  .meme {max-width: 440px; max-height: 360px;}
+.meme__box-image {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 360px;
+  width: 453px;
 }
-@media (max-width: 520px) and (min-width: 376px) {
-  .meme {max-width: 440px; max-height: 360px;}
+@media (max-width: 1480px) and (min-width: 1081px) {
+  .meme {
+    max-width: 453px;
+    max-height: 360px;
+  }
+  .meme__box-image {
+    max-width: 453px;
+    max-height: 360px;
+  }
+}
+
+@media (max-width: 1080px) and (min-width: 521px) {
+  .meme {
+    max-width: 440px;
+    max-height: 360px;
+  }
+  .meme__box-image {
+    max-width: 440px;
+    max-height: 360px;
+  }
+}
+@media (max-width: 520px) and (min-width: 480px) {
+  .meme {
+    max-width: 440px;
+    max-height: 360px;
+  }
+  .meme__box-image {
+    max-width: 440px;
+    max-height: 360px;
+  }
+}
+@media (max-width: 479px) and (min-width: 376px) {
+  .meme {
+    max-width: 345px;
+    max-height: 300px;
+  }
+  .meme__box-image {
+    width: 345px;
+    height: 300px;
+  }
 }
 
 @media (max-width: 375px) {
-  .meme {max-width: 345px; max-height: 300px;}
+  .meme {
+    max-width: 345px;
+    max-height: 300px;
+  }
+  .meme__box-image {
+    max-width: 345px;
+    max-height: 300px;
+  }
 }
