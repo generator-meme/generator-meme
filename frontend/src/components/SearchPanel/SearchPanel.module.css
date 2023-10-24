@@ -28,7 +28,7 @@
   justify-content: space-between;
   border: 1px solid #d09bd5;
   border-radius: 20px;
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 .form_search_panel {
