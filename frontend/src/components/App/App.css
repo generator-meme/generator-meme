@@ -8,6 +8,8 @@ body {
 }
 
 .page {
+  overflow: hidden;
+
   max-width: 1600px;
   min-width: 320px;
   margin: 0 auto 0;
