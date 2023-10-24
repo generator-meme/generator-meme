@@ -5,6 +5,7 @@
   align-items: center;
   position: relative;
   row-gap: 10px;
+  max-width: 440px;
 }
 
 .meme__image {
@@ -80,8 +81,8 @@
 }
 
 .meme__tags-container {
-  height: 96px;
-  position: relative;
+  /* height: 96px;
+  position: relative; */
   width: 100%;
 }
 
@@ -107,6 +108,8 @@
   max-height: 96px;
   position: absolute;
   top: 0;
+  max-width: 457px;
+  width: 80%;
 }
 
 .meme__bth-see-more {
@@ -132,10 +135,10 @@
   width: 453px;
 }
 @media (max-width: 1480px) and (min-width: 1081px) {
-  .meme {
+  /* .meme {
     max-width: 453px;
     max-height: 360px;
-  }
+  } */
   .meme__box-image {
     max-width: 453px;
     max-height: 360px;
@@ -143,30 +146,30 @@
 }
 
 @media (max-width: 1080px) and (min-width: 521px) {
-  .meme {
+  /* .meme {
     max-width: 440px;
     max-height: 360px;
-  }
+  } */
   .meme__box-image {
     max-width: 440px;
     max-height: 360px;
   }
 }
 @media (max-width: 520px) and (min-width: 480px) {
-  .meme {
+  /* .meme {
     max-width: 440px;
     max-height: 360px;
-  }
+  } */
   .meme__box-image {
     max-width: 440px;
     max-height: 360px;
   }
 }
 @media (max-width: 479px) and (min-width: 376px) {
-  .meme {
+  /* .meme {
     max-width: 345px;
     max-height: 300px;
-  }
+  } */
   .meme__box-image {
     width: 345px;
     height: 300px;
@@ -174,10 +177,10 @@
 }
 
 @media (max-width: 375px) {
-  .meme {
+  /* .meme {
     max-width: 345px;
     max-height: 300px;
-  }
+  } */
   .meme__box-image {
     max-width: 345px;
     max-height: 300px;
