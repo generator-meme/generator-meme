@@ -81,8 +81,8 @@
 }
 
 .meme__tags-container {
-  /* height: 96px;
-  position: relative; */
+  height: 96px;
+  position: relative;
   width: 100%;
 }
 
@@ -109,7 +109,7 @@
   position: absolute;
   top: 0;
   max-width: 457px;
-  width: 80%;
+  /* width: 80%; */
 }
 
 .meme__bth-see-more {
