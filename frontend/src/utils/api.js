@@ -139,8 +139,8 @@ class Api {
       }),
     }).then(this._checkReponce);
   }
-  getMemesInMyCollection(template_tag = "/*/", limit = 4,offset=0,only_my="true", token){
-    return fetch(`${this._baseUrl}/memes/my-collection/?template_tag=${template_tag}&limit=${limit}&offset=${offset}&only_my='${only_my}'`, {
+  getMemesInMyCollection(template_tag = "/*/", limit = 4,offset=0,only_my="true", token, ordering = '-added_at'){
+    return fetch(`${this._baseUrl}/memes/my-collection/?template_tag=${template_tag}&limit=${limit}&offset=${offset}&only_my='${only_my}'&ordering=${ordering}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

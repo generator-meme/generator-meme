@@ -10,6 +10,7 @@ import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
 export default function MemeCollection() {
   const [savedMemes, setSavedMemes] = useState({});
   const [search, setSearch] = useState("");
+  const [searchID, setSearchID] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   var isTagsShown = false;
   var sortByDate = false;
@@ -28,8 +29,7 @@ export default function MemeCollection() {
         break;
       case window.screen.width <= 1080 && window.screen.width > 750:
         memes_per_page = 2 * memesPerPageGloabl;
-        isTagsShown = true;
-
+        isTagsShown = false;
         break;
       case window.screen.width <= 750 && window.screen.width > 350:
         memes_per_page = 4 * memesPerPageGloabl;
@@ -64,12 +64,12 @@ export default function MemeCollection() {
     //  const [ toReverseMemes, setToReverseMemes] = useState(false);
     setToReverseMemes(!toReverseMemes);
     ShowFirstPageOfSavedMemes(
-      search,
+      searchID,
       (currentPage - 1) * memesPerPage,
-      toReverseMemes // спросить в обратную сторону почему offset=-1 не работает
+      toReverseMemes ? "-added_at" : "added_at"
     );
-    const svgArr = document.getElementById("transformed");
 
+    const svgArr = document.getElementById("transformed");
     if (toReverseMemes) {
       svgArr.style.transform = "rotate(180deg)";
       svgArr.style.color = "#AC52D1";
@@ -81,12 +81,12 @@ export default function MemeCollection() {
   const deleteMemeFromCollection = async (meme_id) => {
     const savedToken = getCookie("token");
     await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
-    ShowFirstPageOfSavedMemes(search, (currentPage - 1) * memesPerPage);
+    ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
   };
   const ShowFirstPageOfSavedMemes = async (
     search_text = "",
     offset = 0,
-    reverse = false
+    ordering = "-added_at"
   ) => {
     const savedToken = getCookie("token");
     const result = await api.getMemesInMyCollection(
@@ -94,23 +94,27 @@ export default function MemeCollection() {
       memesPerPage,
       offset,
       "true",
-      savedToken
+      savedToken,
+      ordering
     );
     setSavedMemes(result);
-    if (reverse) {
-      const reversedMemesObj = Object.assign({}, result);
-      reversedMemesObj.results = [...result?.results].reverse();
-      setSavedMemes(reversedMemesObj);
-    }
   };
   const goToPage = (e, page) => {
     e.preventDefault();
     ShowFirstPageOfSavedMemes(search, (page - 1) * memesPerPage);
     setCurrentPage(page);
   };
-  const SortEverything = (e) => {
+  const SortEverything = async (e) => {
     e.preventDefault();
-    ShowFirstPageOfSavedMemes(search, 0);
+    if (search !== "") {
+      const template = await api.getTagsWithQueryName(search);
+      const template_query = template?.map((tag) =>
+        setSearchID(...(tag?.id + ","))
+      );
+    }
+    // console.log(template,template_query)
+    // setSearchID(template_query);
+    ShowFirstPageOfSavedMemes(searchID, 0);
   };
 
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
