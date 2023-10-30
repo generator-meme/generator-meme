@@ -69,7 +69,7 @@
   cursor: pointer;
   z-index: 3;
   position: absolute;
-  bottom: 35px;
+  bottom: 15px;
 }
 
 .meme__create-btn:hover {
@@ -182,7 +182,7 @@
     max-height: 300px;
   } */
   .meme__box-image {
-    max-width: 345px;
-    max-height: 300px;
+    height: 220px;
+    width: 270px;
   }
 }

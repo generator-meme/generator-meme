@@ -14,9 +14,10 @@
   min-height: 30px;
   padding: 8px;
   box-sizing: border-box;
+  z-index: 50;
 }
 
-.prompt>span {
+.prompt > span {
   /* white-space: nowrap; */
   font-family: "Rubik";
   font-size: 9px;

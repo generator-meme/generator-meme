@@ -9,6 +9,7 @@ import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
 import { setOrdering } from "../../services/actions/filtrationActions";
+import Prompt from "../Prompt/Prompt";
 
 const MemesBox = ({
   numberOfVisibleMems,
@@ -85,6 +86,7 @@ const MemesBox = ({
                     </button>
                   );
                 })}
+
                 <Tab></Tab>
               </div>
               <div

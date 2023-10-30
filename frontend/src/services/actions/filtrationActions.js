@@ -23,14 +23,12 @@ export const setTagsOptions = (tags) => ({
 });
 
 export const setFavorite = () => {
-  console.log("setfavorite");
   return {
     type: SET_FAVORITE,
   };
 };
 
 export const removeFavorite = () => {
-  console.log("removeFavorite");
   return {
     type: REMOVE_FAVORITE,
   };

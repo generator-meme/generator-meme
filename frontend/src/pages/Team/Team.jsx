@@ -13,12 +13,12 @@ const Team = () => {
     dispatch(getTeamAction());
   }, []);
 
-  const renderTeam = (teamGroup) => {
+  const renderTeam = (team) => {
     return (
       <div className="team__group">
-        <span className="team__group-name">{teamGroup.name}</span>
+        <span className="team__group-name">{team.name}</span>
         <ul className="team__group-members-list">
-          {teamGroup.teammates.map((person) => {
+          {team.teammates.map((person) => {
             return (
               <li className="team__group-member">
                 <span className="member__description">
@@ -41,11 +41,11 @@ const Team = () => {
     );
   };
   return (
-    !!Teammates && (
+    !!team && (
       <section className="team">
         <Navigation isSavedMeme={false} id="team" isTeam={true} />
         <div className="team__container">
-          {Teammates.map((teamGroup) => renderTeam(teamGroup))}
+          {team.map((teamGroup) => renderTeam(teamGroup))}
 
           {/* <div className="team__container__grid-two">
             <div className="img_container">
