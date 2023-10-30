@@ -215,7 +215,15 @@
   /* .tab_container {
     padding: 15px, 15px, 77px, 0;
   } */
+
   .tabs {
-    /* padding: 15px; */
+    flex-wrap: wrap;
+    row-gap: 7px;
+    column-gap: 7px;
+    justify-content: start;
+  }
+  .tab_button {
+    font-size: 16px;
+    padding: 0;
   }
 }

@@ -30,3 +30,8 @@
     padding: 60px 70px;
   }
 }
+@media (max-width: 375px) {
+  .categories_box {
+    min-width: 275px;
+  }
+}
