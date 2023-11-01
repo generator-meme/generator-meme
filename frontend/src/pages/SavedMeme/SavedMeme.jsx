@@ -71,17 +71,27 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       console.log(e);
     }
   };
-  const setImageInMeta = (src)=>{
+  const setImageInMeta = (src, width, height)=>{
     document.querySelector('meta[name="meme_image"]').setAttribute("content", src);
+    document.querySelector('meta[name="meme_image_url"]').setAttribute("content", src);
+    document.querySelector('meta[name="meme_image_width"]').setAttribute("content", width);
+    document.querySelector('meta[name="meme_image_height"]').setAttribute("content", height);
   }
 
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
   }, []);
-  useEffect(()=>{
-    setImageInMeta(meme?.image)
+  useEffect(()=> {
+    const img = new Image();
+    img.src = meme?.image;
+    img.onload = ()=>{
+      const width = img.naturalWidth;
+      const height = img.naturalHeight
+      setImageInMeta(meme?.image,width,height)
+    }
+
     return ()=>{
-      setImageInMeta("./logo192.jpg")
+      setImageInMeta("./logo192.jpg","1200","630")
     }
   },[meme])
 
