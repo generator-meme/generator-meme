@@ -37,6 +37,16 @@ services:
     env_file:
       - ./.env
 
+  redis:
+    image: 'redis:7.2'
+    restart: always
+    expose:
+      - "6379"
+    volumes:
+      - ./data/redisdata/:/data'
+    depends_on:
+      - postgres
+
   nginx:
     image: nginx:1.19.3
     restart: always
