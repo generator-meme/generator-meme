@@ -75,16 +75,75 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
   }, []);
-  useEffect(() => {
-    document.querySelector('meta[name="meme_image"]').setAttribute("content", meme?.image);
-    document.querySelector('meta[name="twitter:image"]').setAttribute("content", meme?.image);
-    document.querySelector('meta[name="twitter_url"]').setAttribute("content", meme?.image);
-    
-    return () => {
-      document.querySelector('meta[name="meme_image"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
-      document.querySelector('meta[name="twitter:image"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
-      document.querySelector('meta[name="twitter_url"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
 
+  const setImageInMeta = async (src, width, height) => {
+    const image = await writeToCanvasCustomParam(src, width, height);
+    let reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = function () {
+      document
+        .querySelector('meta[name="meme_image"]')
+        .setAttribute("content", reader.result);
+      document
+        .querySelector('meta[name="twitter:image"]')
+        .setAttribute("content", reader.result);
+      document
+        .querySelector('meta[name="twitter_url"]')
+        .setAttribute("content", reader.result);
+    }
+
+
+  };
+
+  const writeToCanvasCustomParam = (src, width, height) => {
+    return new Promise((res) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.src = src;
+
+      img.onload = () => {
+        const imgRatio = img.width / img.height;
+        const canvasRatio = width / height;
+        let newWidth, newHeight, offsetX, offsetY;
+  
+        if (imgRatio > canvasRatio) {
+          newWidth = width;
+          newHeight = width / imgRatio;
+          offsetX = 0;
+          offsetY = (height - newHeight) / 2;
+        } else {
+          newWidth = height * imgRatio;
+          newHeight = height;
+          offsetX = (width - newWidth) / 2;
+          offsetY = 0;
+        }
+  
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
+        canvas.toBlob((blob) => {
+          res(blob);
+        }, "image/png");
+      };
+    });
+  };
+  useEffect(() => {
+    // document.querySelector('meta[name="meme_image"]').setAttribute("content", meme?.image);
+    // document.querySelector('meta[name="twitter:image"]').setAttribute("content", meme?.image);
+    // document.querySelector('meta[name="twitter_url"]').setAttribute("content", meme?.image);
+    setImageInMeta(meme?.image, 1200, 627);
+
+    return () => {
+      document
+        .querySelector('meta[name="meme_image"]')
+        .setAttribute("content", "%PUBLIC_URL%/logo.png");
+      document
+        .querySelector('meta[name="twitter:image"]')
+        .setAttribute("content", "%PUBLIC_URL%/logo.png");
+      document
+        .querySelector('meta[name="twitter_url"]')
+        .setAttribute("content", "%PUBLIC_URL%/logo.png");
     };
   }, [meme]);
 
