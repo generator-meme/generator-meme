@@ -76,13 +76,15 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
     dispatch(getMemeByIdAction(id));
   }, []);
   useEffect(() => {
-    document
-      .querySelector('meta[name="meme_image"]')
-      .setAttribute("content", meme?.image);
+    document.querySelector('meta[name="meme_image"]').setAttribute("content", meme?.image);
+    document.querySelector('meta[name="twitter:image"]').setAttribute("content", meme?.image);
+    document.querySelector('meta[name="twitter_url"]').setAttribute("content", meme?.image);
+    
     return () => {
-      document
-        .querySelector('meta[name="meme_image"]')
-        .setAttribute("content", "%PUBLIC_URL%/logo.png");
+      document.querySelector('meta[name="meme_image"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
+      document.querySelector('meta[name="twitter:image"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
+      document.querySelector('meta[name="twitter_url"]').setAttribute("content", "%PUBLIC_URL%/logo.png");
+
     };
   }, [meme]);
 
