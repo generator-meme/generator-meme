@@ -71,10 +71,19 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       console.log(e);
     }
   };
+  const setImageInMeta = (src)=>{
+    document.querySelector('meta[name="meme_image"]').setAttribute("content", src);
+  }
 
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
   }, []);
+  useEffect(()=>{
+    setImageInMeta(meme?.image)
+    return ()=>{
+      setImageInMeta("./logo192.jpg")
+    }
+  },[meme])
 
   const closeDropDownMenuWhenChouse = () => {
     setTimeout(() => {
