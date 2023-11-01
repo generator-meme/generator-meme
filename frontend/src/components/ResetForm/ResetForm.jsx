@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./ResetForm.css";
-import { useNavigate } from "react-router-dom";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import ButtonBack from "../ButtonBack/ButtonBack";
 
 function ResetForm({ info, handleSubmit }) {
-  const [values, setValues] = useState({ name: "", email: "", password: "" });
+  const [values, setValues] = useState({ [info.inputName]: "" });
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const navigate = useNavigate();
 
   const onChange = (event) => {
     // данные формы и валидация
@@ -34,21 +31,17 @@ function ResetForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
-    handleSubmit(event, values.email, values.password, setValues, values.name);
+    handleSubmit(event, values[info.inputName], setValues, setErrors);
     setIsSubmitted(true);
   };
 
   useEffect(() => {
     if (isSubmitted) {
-      setValues(() => ({
-        name: "",
-        email: "",
-        password: "",
-      }));
+      setValues(() => ({ [info.inputName]: "" }));
       setIsValid(false);
     }
     return setIsSubmitted(false);
-  }, [isSubmitted]);
+  }, [info.inputName, isSubmitted]);
 
   return (
     <main className="reset-form">
@@ -70,12 +63,7 @@ function ResetForm({ info, handleSubmit }) {
                   ? "reset-form__input_type_error"
                   : ""
               }`}
-              pattern={
-                info.inputName === "password"
-                  ? "[^А-Я^а-я]{5,16}"
-                  : "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
-              }
-              //   placeholder={}
+              pattern={info.pattern}
               required
             />
             <FormPrompt

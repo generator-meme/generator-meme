@@ -2,12 +2,15 @@ from django.urls import include, path
 from djoser.views import UserViewSet
 from rest_framework import routers
 
+from api import view_token
 from api.views_groups import GroupRoleViewSet, GroupViewSet, UserGroupsViewSet
-from api.views_memes import (CategoryViewSet, MemeViewSet, TagViewSet,
-                             TemplateViewSet)
+from api.views_memes import (CategoryViewSet, CollectionViewSet, MemeViewSet,
+                             TagViewSet, TemplateViewSet)
 from api.views_team import TeamGroupViewSet
 
 router = routers.DefaultRouter()
+router.register('memes/my-collection', CollectionViewSet,
+                basename='collection')
 router.register('memes', MemeViewSet, basename='memes')
 router.register('templates', TemplateViewSet, basename='templates')
 router.register('tags', TagViewSet, basename='tags')
@@ -40,5 +43,6 @@ selected_user_routes = list(filter(is_route_selected, user_router.urls))
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', include('djoser.urls.authtoken')),
+    path('auth/social/token', view_token.set_token, name='set_token'),
     path('auth/social/', include('social_django.urls', namespace='social'))
 ] + selected_user_routes

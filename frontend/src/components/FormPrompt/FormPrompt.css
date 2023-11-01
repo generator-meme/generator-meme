@@ -19,3 +19,15 @@
 .authentication__input-prompt_type_error {
     color: #F50000;
 }
+
+@media screen and (max-width: 1080px) {
+    .authentication__input-prompt {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .authentication__input-prompt {
+        font-size: 12px;
+    }
+}

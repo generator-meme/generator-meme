@@ -10,9 +10,14 @@ services:
     depends_on:
       - backend
 
+  redis:
+    image: 'redis:7.2'
+    restart: always
+    expose:
+      - "6379"
+
   postgres:
     image: postgres:14.4-alpine
-    restart: always
     volumes:
       - meme_data:/var/lib/postgresql/data/
     env_file:
@@ -20,14 +25,14 @@ services:
     ports:
       - "5432:5432"
 
-  pgadmin:
-    container_name: pgadmin
-    restart: always
-    image: dpage/pgadmin4
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    env_file:
-      - ./.env
+  # pgadmin:
+  #   container_name: pgadmin
+  #   restart: always
+  #   image: dpage/pgadmin4
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin
+  #   env_file:
+  #     - ./.env
 
   backend:
     build:
@@ -65,5 +70,5 @@ volumes:
   static_value:
   media_value:
   meme_data:
-  pgadmin_data:
+  # pgadmin_data:
   email_dev_data:

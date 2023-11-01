@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
 from groups.models import Group
-from memes.models import Tag, Template
+from memes.models import Tag, Template, UserCollection
 
 
 class MultiValueCharFilter(filters.BaseCSVFilter, filters.CharFilter):
@@ -21,12 +21,25 @@ class MultiValueCharFilter(filters.BaseCSVFilter, filters.CharFilter):
 class TemplateFilter(filters.FilterSet):
     """Фильтр для вью шаблонов мемов."""
     tag = MultiValueCharFilter(lookup_expr='exact')
+    is_favorited = filters.BooleanFilter()
 
     class Meta:
         model = Template
         fields = [
             'tag',
             'category',
+        ]
+
+
+class CollectionFilter(filters.FilterSet):
+    """Фильтр для пользовательской коллекции мемов."""
+    template_tag = MultiValueCharFilter(lookup_expr='exact',
+                                        field_name='meme__template__tag')
+
+    class Meta:
+        model = UserCollection
+        fields = [
+            'template_tag',
         ]
 
 

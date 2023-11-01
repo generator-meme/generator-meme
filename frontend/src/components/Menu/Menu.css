@@ -1,0 +1,61 @@
+.menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    row-gap: 20px;
+    border-radius: 20px;
+    border: 1px solid #9D0095;
+    background-color: #FDFDFD;
+    min-height: 98px;
+    list-style: none;
+    box-sizing: border-box;
+    z-index: 3;
+    min-width: 183px;
+}
+
+.menu__option {
+    text-decoration: none;
+    position: relative;
+}
+
+.menu__button {
+    border: none;
+    background-color: transparent;
+    font-family: "Rubik";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    color: #1E1D1D;
+    width: 100%;
+    text-align: start;
+}
+
+.menu__button:hover {
+    color: #AC52D1;
+}
+
+.menu__button:active {
+    color: #7657CD;
+}
+
+.menu__button:hover~.prompt {
+    display: flex;
+}
+
+@media screen and (max-width: 500px) {
+    .menu {
+        padding: 15px;
+        row-gap: 15px;
+        border-radius: 10px;
+        min-height: 83px;
+        min-width: 134px;
+    }
+}

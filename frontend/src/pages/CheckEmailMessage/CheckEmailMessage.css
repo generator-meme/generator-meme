@@ -1,0 +1,116 @@
+.check-email {
+    margin: 0;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: calc(100% - 55px - 110px);
+    min-height: calc(100vh - 55px - 110px);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.check-email__container {
+    margin: 0;
+    padding: 70px 70px 60px;
+    max-width: 735px;
+    width: 50vw;
+    min-height: 377px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 40px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    border: 3px solid #CF92C6;
+    background: #FDFDFD;
+}
+
+.check-email__heading {
+    color: #000;
+    text-align: center;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    max-width: 426px;
+}
+
+.check-email__text {
+    color: #000;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.check-email__button {
+    width: 100%;
+}
+
+@media screen and (max-width: 1080px) {
+    .check-email {
+        padding: 104px 0;
+        height: calc(100% - 55px - 92px);
+        min-height: calc(100vh - 55px - 92px);
+    }
+
+    .check-email__container {
+        padding: 60px 40px 45px;
+        max-width: 680px;
+        width: 63vw;
+        min-height: 352px;
+        row-gap: 30px;
+    }
+
+    .check-email__heading {
+        max-width: 424px;
+    }
+
+    .check-email__button {
+        margin-top: 30px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .check-email__container {
+        padding: 40px 40px;
+        max-width: calc(100% - 150px);
+        width: calc(100% - 150px);
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .check-email {
+        padding: 109px 15px 0;
+        background-color: #FFF;
+        height: calc(100% - 55px - 72px);
+        min-height: calc(100vh - 55px - 72px);
+    }
+
+    .check-email__container {
+        padding: 30px 27px;
+        max-width: 100%;
+        width: 100%;
+        min-height: 250px;
+        row-gap: 20px;
+    }
+
+    .check-email__heading {
+        max-width: 267px;
+        font-size: 20px;
+    }
+
+    .check-email__text {
+        font-size: 16px;
+    }
+
+    .check-email__button {
+        margin-top: 20px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+}

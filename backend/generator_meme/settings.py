@@ -29,12 +29,14 @@ INSTALLED_APPS = [
     'drf_yasg',
     'social_django',
     'django_filters',
+    'ws',
     'api',
     'memes',
     'users',
     'team',
     'groups',
     'drf_api_logger',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -65,12 +67,27 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'api.context_processors.analytics.templates_statistics',
+                'api.context_processors.analytics.users_statistics',
+                'api.context_processors.analytics.meme_statistics',
+                'api.context_processors.analytics.group_statistics',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'generator_meme.wsgi.application'
+ASGI_APPLICATION = 'generator_meme.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+
 
 DATABASES = {
     'default': {
@@ -89,6 +106,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 5,
+        },
+    },
+    {
+        'NAME': 'users.validators.MaximumLengthValidator',
+        'OPTIONS': {
+            'max_length': 16,
+        },
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -125,6 +151,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
@@ -141,7 +168,6 @@ else:
     EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = 465
-
 
 DJOSER = {
     "HIDE_USER": True,
@@ -175,10 +201,12 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_KEY')
-SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_YANDEX_OAUTH2_SECRET')
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = os.getenv(
+    'SOCIAL_AUTH_YANDEX_OAUTH2_SECRET')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv(
+    'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SOCIAL_AUTH_TELEGRAM_BOT_TOKEN = os.getenv('SOCIAL_AUTH_TELEGRAM_BOT_TOKEN')
 
@@ -186,13 +214,22 @@ SOCIAL_AUTH_TELEGRAM_BOT_TOKEN = os.getenv('SOCIAL_AUTH_TELEGRAM_BOT_TOKEN')
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_core.pipeline.social_auth.associate_by_email',
-# )
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api/auth/social/token'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_TELEGRAM_OAUTH2_SCOPE = ['email', ]
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 # записывать логи
 # документация https://pypi.org/project/drf-api-logger/
@@ -205,3 +242,5 @@ DRF_LOGGER_INTERVAL = 10
 DRF_API_LOGGER_TIMEDELTA = 180
 # формат ссылки на ручку
 DRF_API_LOGGER_PATH_TYPE = 'FULL_PATH'
+# регистрируемые статусы
+DRF_API_LOGGER_STATUS_CODES = ['400', '401', '403', '404', '405', '500', '503']

@@ -24,13 +24,13 @@
   color: #1083DD;
 }
 
-@media screen and (max-width: 1140px) {
+@media screen and (max-width: 1080px) {
   .footer {
     min-height: 92px;
   }
 }
 
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 520px) {
   .footer {
     min-height: 72px;
   }

@@ -88,10 +88,15 @@ class GroupMeme(models.Model):
         on_delete=models.CASCADE,
         related_name='group_meme_added_by'
     )
-
     added_at = models.DateTimeField(
         verbose_name='Дата добавления мема в группу',
         auto_now_add=True
+    )
+    likes = models.ManyToManyField(
+        User,
+        verbose_name="Лайки",
+        through='GroupMemeLike',
+        related_name='meme_groups_like',
     )
 
     class Meta:
@@ -201,5 +206,32 @@ class GroupBannedUser(models.Model):
             models.UniqueConstraint(
                 fields=('group', 'user'),
                 name='unique_group_user_ban',
+            ),
+        )
+
+
+class GroupMemeLike(models.Model):
+    """Модель лайка мема в группе."""
+
+    group_meme = models.ForeignKey(
+        GroupMeme,
+        on_delete=models.CASCADE,
+        related_name='meme_likes',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='group_likes',
+    )
+    added_at = models.DateTimeField(
+        verbose_name='Дата добавления лайка',
+        auto_now_add=True
+    )
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('group_meme', 'user'),
+                name='unique_group_meme_like',
             ),
         )

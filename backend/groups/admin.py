@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 from django.utils.html import format_html
 
 from groups.models import Group, GroupRole
@@ -37,6 +38,25 @@ class GroupAdmin(admin.ModelAdmin):
     def show_firm_url(self, obj):
         return format_html("<a href='{url}'>Редактировать</a>", url=obj.id)
 
+    def get_queryset(self, request):
+        groups = Group.objects.all()
+        return groups.annotate(
+            users_count=Count('group_users__user', distinct=True),
+            memes_count=Count('group_memes__meme', distinct=True),
+        )
+
+    @admin.display(
+        description='Пользователи',
+    )
+    def users_count(self, obj):
+        return obj.users_count
+
+    @admin.display(
+        description='Мемы',
+    )
+    def memes_count(self, obj):
+        return obj.memes_count
+
     fields = (
         'name',
         'description',
@@ -54,6 +74,8 @@ class GroupAdmin(admin.ModelAdmin):
         'owner',
         'description',
         'created_at',
+        'users_count',
+        'memes_count',
         'show_firm_url',
     )
     list_editable = (

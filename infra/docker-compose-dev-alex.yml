@@ -19,6 +19,13 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: 'redis:7.2'
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redisdata:/data'
+
 #  backend:
 #    build:
 #      context: ../backend
@@ -53,3 +60,4 @@ volumes:
 #  static_value:
 #  media_value:
   meme_data:
+  redisdata:

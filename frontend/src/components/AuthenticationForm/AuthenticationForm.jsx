@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./AuthenticationForm.css";
 import { Link, useNavigate } from "react-router-dom";
-import { formPrompts } from "../../utils/constants";
+import { formPrompts, inputPattern } from "../../utils/constants";
 import FormPrompt from "../FormPrompt/FormPrompt";
 import AuthenticationInputValid from "../AuthenticationInputValid/AuthenticationInputValid";
 import { ReactComponent as Vkontakte } from "../../images/authenticationPage/vkontakte.svg";
-import { ReactComponent as Telegram } from "../../images/authenticationPage/telegram.svg";
-import { ReactComponent as Google } from "../../images/authenticationPage/google-copy.svg";
 import { ReactComponent as Yandex } from "../../images/authenticationPage/yandex.svg";
+import Prompt from "../Prompt/Prompt";
 
 function AuthenticationForm({ info, handleSubmit }) {
   const [values, setValues] = useState({ name: "", email: "", password: "" });
@@ -15,13 +14,6 @@ function AuthenticationForm({ info, handleSubmit }) {
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isDirectedFromThisSite, setIsDirectedFromThisSite] = useState(true);
-
-  // useEffect(() => {
-  //   if (document.referrer === "") {
-  //     setIsDirectedFromThisSite(false);
-  //   }
-  // }, []);
 
   const navigate = useNavigate();
 
@@ -47,7 +39,14 @@ function AuthenticationForm({ info, handleSubmit }) {
   };
 
   const onSubmit = (event) => {
-    handleSubmit(event, values.email, values.password, setValues, values.name);
+    handleSubmit(
+      event,
+      values.email,
+      values.password,
+      setValues,
+      setErrors,
+      values.name
+    );
     setIsSubmitted(true);
   };
 
@@ -65,13 +64,13 @@ function AuthenticationForm({ info, handleSubmit }) {
 
   return (
     <main className="authentication">
-      <div
-        className="authentication__container"
-        style={{
-          rowGap: info.isItSignIn ? 10 : 30,
-        }}
-      >
-        <h2 className="authentication__title">{info.title}</h2>
+      <div className="authentication__container">
+        <h2
+          className="authentication__title"
+          style={{ paddingBottom: info.isItSignIn ? 0 : 20 }}
+        >
+          {info.title}
+        </h2>
         <form
           className="authentication__form"
           onSubmit={onSubmit}
@@ -87,7 +86,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               <input
                 type="text"
                 name="name"
-                pattern="[A-Za-z0-9]{3,40}"
+                pattern={inputPattern.name}
                 value={values.name}
                 onChange={onChange}
                 className={`authentication__input ${
@@ -118,7 +117,7 @@ function AuthenticationForm({ info, handleSubmit }) {
               value={values.email}
               onChange={onChange}
               name="email"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$"
+              pattern={inputPattern.email}
               className={`authentication__input ${
                 errors.email?.length > 1
                   ? "authentication__input_type_error"
@@ -148,7 +147,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             <input
               type="text"
               value={values.password}
-              pattern="[^А-Я^а-я]{5,16}"
+              pattern={inputPattern.password}
               onChange={onChange}
               name="password"
               className={`authentication__input ${
@@ -214,7 +213,7 @@ function AuthenticationForm({ info, handleSubmit }) {
             {info.buttonText}
           </button>
         </form>
-        {!info.isItSignIn && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <button
             className={`btn authentication__button`}
             style={{ margin: 0 }}
@@ -223,14 +222,22 @@ function AuthenticationForm({ info, handleSubmit }) {
             зарегистрироваться
           </button>
         )}
-        {!info.isItSignIn && isDirectedFromThisSite && (
+        {!info.isItSignIn && !info.abridgedVersion && (
           <div className="authentication__login-container">
             <p className="authentication__login-text">Войти с помощью</p>
             <div className="authentication__login-icons">
-              <Vkontakte />
-              <Telegram />
-              <Yandex />
-              <Google />
+              <Link to="/api/auth/social/login/vk-oauth2" reloadDocument>
+                <Vkontakte className="authentication__icon" />
+              </Link>
+              <Link to="/api/auth/social/login/yandex-oauth2" reloadDocument>
+                <Yandex className="authentication__icon" />
+              </Link>
+              <div
+                // не ReactComponent, как остальные, тк проблемы с svg, некорректно масштабируется для мобильной версии
+                className="authentication__icon google authentication__temporarily-inactive" // если будем полключать - обернуть в ссылку, удалить последний класс, удалить inProgress
+              >
+                <Prompt text={"В РАЗРАБОТКЕ"} />
+              </div>
             </div>
           </div>
         )}
