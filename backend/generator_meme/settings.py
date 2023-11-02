@@ -184,10 +184,12 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": True,
     "EMAIL": {
         "activation": "users.email.Activation",
+
     }
 }
 
 SITE_NAME = "ilovememes"
+
 DOMAIN = os.getenv('DOMAIN')
 
 # SOCIAL_AUTH_JSONFIELD_ENABLED = True
