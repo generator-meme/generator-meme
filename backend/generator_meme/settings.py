@@ -181,10 +181,13 @@ DJOSER = {
     },
     'PASSWORD_RESET_CONFIRM_URL': 'reset/password/confirm/{uid}/{token}',
     "ACTIVATION_URL": "activate/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": True
+    "SEND_ACTIVATION_EMAIL": True,
+    "EMAIL": {
+        "activation": "users.email.Activation",
+    }
 }
 
-SITE_NAME = "Generator-meme"
+SITE_NAME = "ilovememes"
 DOMAIN = os.getenv('DOMAIN')
 
 # SOCIAL_AUTH_JSONFIELD_ENABLED = True
