@@ -184,7 +184,6 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": True,
     "EMAIL": {
         "activation": "users.email.Activation",
-
     }
 }
 
