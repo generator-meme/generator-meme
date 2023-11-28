@@ -109,7 +109,8 @@ class GroupMemeSerializer(serializers.ModelSerializer):
         template = obj.meme.template
         if template is None:
             return None
-        serializer = TemplateReadSerializer(read_only=True, instance=template)
+        serializer = TemplateReadSerializer(read_only=True, instance=template,
+                                            context=self.context)
         return serializer.data
 
 

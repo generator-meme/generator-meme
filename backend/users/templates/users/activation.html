@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Активация аккаунта {{ site_name }}{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}Осталось совсем немного, чтобы завершить регистрацию
+    на {{ site_name }}.{% endblocktrans %}
+
+{% trans "Пожалуйста, перейдите по ссылке, чтобы активировать учетную запись:" %}
+{{ protocol }}://{{ domain }}/{{ url|safe }}
+
+
+{% trans "Желаем классных мемов!" %}
+
+{% blocktrans %}Команда {{ site_name }}{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>{% blocktrans %}Осталось совсем немного, чтобы завершить регистрацию
+    на {{ site_name }}.{% endblocktrans %}</p>
+
+<p>{% trans "Пожалуйста, перейдите по ссылке, чтобы активировать учетную запись:" %}</p>
+<p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+<br><br>
+<p>{% trans "Желаем классных мемов!" %}</p>
+
+<p>{% blocktrans %}Команда {{ site_name }}{% endblocktrans %}</p>
+
+
+{% endblock html_body %}

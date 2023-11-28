@@ -8,10 +8,12 @@ import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplate
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
+
 import {
   addRandomId,
   setOrdering,
 } from "../../services/actions/filtrationActions";
+
 import Prompt from "../Prompt/Prompt";
 
 const MemesBox = ({
