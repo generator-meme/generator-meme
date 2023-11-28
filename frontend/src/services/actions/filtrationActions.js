@@ -6,6 +6,7 @@ export const SET_TAGS_OPTIONS = "SET_TAGS_OPTIONS";
 export const SET_FAVORITE = "SET_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SET_ORDERING = "SET_ORDERING";
+export const ADD_RANDOM_ID = "ADD_RANDOM_ID";
 
 const getCategoriesOptions = (categories) => ({
   type: GET_CATEGORIES_OPTIONS,
@@ -37,6 +38,9 @@ export const removeFavorite = () => {
 export const setOrdering = (ordering) => ({
   type: SET_ORDERING,
   payload: ordering,
+});
+export const addRandomId = () => ({
+  type: ADD_RANDOM_ID,
 });
 
 export const loadCategoriesOptions = () => async (dispatch) => {
