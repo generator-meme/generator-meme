@@ -5,9 +5,11 @@ import {
   SET_FAVORITE,
   REMOVE_FAVORITE,
   SET_ORDERING,
+  ADD_RANDOM_ID,
 } from "../actions/filtrationActions";
 
 const initialState = {
+  random: 1,
   categoriesOptions: [],
   favoriteOptions: {
     true: true,
@@ -79,6 +81,11 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
           areFavorite: state.filtrationOptions.areFavorite,
           ordering: payload,
         },
+      };
+    case ADD_RANDOM_ID:
+      return {
+        ...state,
+        random: state.random + 1,
       };
     default:
       return state;

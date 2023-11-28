@@ -8,7 +8,12 @@ import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplate
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
-import { setOrdering } from "../../services/actions/filtrationActions";
+
+import {
+  addRandomId,
+  setOrdering,
+} from "../../services/actions/filtrationActions";
+
 import Prompt from "../Prompt/Prompt";
 
 const MemesBox = ({
@@ -50,7 +55,16 @@ const MemesBox = ({
     { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
     { text: "Рандом", isOn: false, param: "random", id: 3 },
   ]);
+  const [randomTab, setRandomTab] = useState({
+    text: "Рандом",
+    isOn: false,
+    param: "random",
+    id: 3,
+  });
   const clichHandleTab = (params) => {
+    if (params.param === "random") {
+      dispatch(addRandomId());
+    }
     dispatch(setOrdering(params.param));
     const tempTabs = tabs.map((tab) => {
       if (tab.id === params.id) {
@@ -76,7 +90,9 @@ const MemesBox = ({
                 {tabs.map((tab) => {
                   return (
                     <button
-                      className={`tab_button ${tab.isOn ? "tab_isOn" : ""}`}
+                      className={`tab_button ${
+                        tab.param === "random" ? "" : tab.isOn ? "tab_isOn" : ""
+                      }`}
                       id={tab.id}
                       onClick={() => {
                         clichHandleTab(tab);
