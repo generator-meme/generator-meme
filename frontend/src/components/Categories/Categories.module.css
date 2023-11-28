@@ -22,11 +22,16 @@
   flex-direction: column;
 }
 
-@media (max-width: 1480px) and (min-width: 1081px) {
+@media (max-width: 1980px) and (min-width: 1081px) {
   .categories_box {
     top: 90px;
   }
   .categories_content_wrap {
-    padding: 71px 88px;
+    padding: 60px 70px;
+  }
+}
+@media (max-width: 375px) {
+  .categories_box {
+    min-width: 275px;
   }
 }

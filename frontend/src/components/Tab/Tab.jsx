@@ -8,49 +8,45 @@ import {
 import { setectCurrentFavorite } from "../../services/selectors/filtrationSelectors";
 import styles from "./Tab.module.css";
 import on_off from "../../images/on_off.svg";
+import Prompt from "../Prompt/Prompt";
 export const Tab = () => {
   const areFavorite = useSelector(setectCurrentFavorite);
-
+  const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const clickHandle = () => {
-    areFavorite ? dispatch(removeFavorite()) : dispatch(setFavorite());
+    if (isLoggedIn) {
+      areFavorite ? dispatch(removeFavorite()) : dispatch(setFavorite());
+      return;
+    }
     return;
   };
 
   return (
     <div className={styles.tab_box} onClick={clickHandle}>
       <div className={styles.switch_box}>
-        <p style={{ color: `${areFavorite ? "#1E1D1D" : "#9b9b9b"}` }}>
+        <p className={`${areFavorite ? styles.text_on : styles.text_off}`}>
           Избранные
         </p>
         <div
-          className={styles.switch_panel}
-          style={
-            areFavorite
-              ? {
-                  borderColor: "#47A30F",
-                }
-              : null
-          }
+          className={`${styles.switch_panel} ${
+            areFavorite ? styles.border_color : ""
+          }`}
         >
           <img
-            className={styles.img_switch}
+            className={`${styles.img_switch} ${
+              areFavorite ? styles.switch_toggle : ""
+            }`}
             src={on_off}
             alt="ON-OFF"
-            style={
-              areFavorite
-                ? {
-                    filter:
-                      "invert(50%) sepia(14%) saturate(6225%) hue-rotate(63deg) brightness(95%) contrast(88%)",
-                    transform: "translateX(10px)",
-                    borderColor: "#47A30F",
-                  }
-                : null
-            }
           />
         </div>
       </div>
+      {isLoggedIn ? (
+        <></>
+      ) : (
+        <Prompt text={"ДОСТУПНО ЗАРЕГИСТРИРОВАННЫМ ПОЛЬЗОВАТЕЛЯМ"}></Prompt>
+      )}
     </div>
   );
 };
