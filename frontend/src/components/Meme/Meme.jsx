@@ -68,7 +68,7 @@ function Meme({ elem, setIsNewMeme }) {
             })}
           </ul>
 
-          {!isMore && allTagsHeight > 48 && (
+          {!isMore && allTagsHeight > 24 && (
             <button
               onClick={(e) => setIsMore(true)}
               className="meme__bth-see-more"
