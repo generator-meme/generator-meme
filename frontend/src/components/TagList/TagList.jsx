@@ -8,10 +8,6 @@ export const TagList = ({ elem }) => {
   const [addStyle, setAddState] = useState(null);
   useEffect(() => {
     if (allTags.current) {
-      console.log(
-        allTags.current.clientHeight !== allTags.current.scrollHeight,
-        allTags.current.scrollHeight
-      );
       setAllTagsHeight(
         allTags.current.clientHeight !== allTags.current.scrollHeight
       );
