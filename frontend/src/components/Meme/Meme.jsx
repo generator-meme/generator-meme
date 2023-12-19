@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 import LikeTemplate from "../LikeTemplate/LikeTemplate";
-import { TagList } from "../TagList/TagList";
+import { TagLists } from "../TagLists/TagLists";
 
 function Meme({ elem, setIsNewMeme }) {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ function Meme({ elem, setIsNewMeme }) {
         <div onClick={onClick} className="meme__image-hover"></div>
         <LikeTemplate id={elem.id} />
       </div>
-      <TagList elem={elem}></TagList>
+      <TagLists elem={elem}></TagLists>
     </li>
   );
 }

@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./TagList.module.css";
+import styles from "./TagLists.module.css";
 
-export const TagList = ({ elem }) => {
+export const TagLists = ({ elem }) => {
   const [isMore, setIsMore] = useState(false);
   const [allTagsHeight, setAllTagsHeight] = useState(false);
   const allTags = useRef(null);
   const [addStyle, setAddState] = useState(null);
   useEffect(() => {
     if (allTags.current) {
-      console.log(
-        allTags.current.clientHeight !== allTags.current.scrollHeight,
-        allTags.current.scrollHeight
-      );
       setAllTagsHeight(
         allTags.current.clientHeight !== allTags.current.scrollHeight
       );
