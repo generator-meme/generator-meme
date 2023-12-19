@@ -5,7 +5,7 @@
 .team__container {
   margin-top: 40px;
   padding-bottom: 11px;
-  /* background-image: url("../../images/teamPage/bgc.svg"); */
+  background-image: url("../../images/teamPage/bgc.svg");
   background-repeat: no-repeat;
   background-position: 100% 0%;
 }
@@ -52,7 +52,7 @@
   .team__container {
     margin-top: 40px;
     padding-bottom: 11px;
-    /* background-image: url("../../images/teamPage/cat_medium.svg"); */
+    background-image: none;
     background-repeat: no-repeat;
     background-position: 100% 140%;
   }
@@ -61,7 +61,7 @@
   .team__container {
     margin-top: 40px;
     padding-bottom: 11px;
-    /* background-image: url("../../images/teamPage/cat_medium.svg"); */
+    background-image: none;
     background-repeat: no-repeat;
     background-position: 100% 140%;
   }

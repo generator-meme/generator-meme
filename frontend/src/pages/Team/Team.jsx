@@ -1,12 +1,13 @@
 import "./Team.css";
 import Navigation from "../../components/Navigation/Navigation";
+import Teammates from "../../utils/Teammates";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTeamAction } from "../../services/actions/teamAction";
 
 const Team = () => {
   const dispatch = useDispatch();
-  const { team } = useSelector((state) => state.team);
+  // const { team } = useSelector((state) => state.team);
 
   useEffect(() => {
     dispatch(getTeamAction());
@@ -40,11 +41,17 @@ const Team = () => {
     );
   };
   return (
-    !!team && (
+    !!Teammates && (
       <section className="team">
         <Navigation isSavedMeme={false} id="team" isTeam={true} />
         <div className="team__container">
-          {team.map((teamGroup) => renderTeam(teamGroup))}
+          {Teammates.map((teamGroup) => renderTeam(teamGroup))}
+
+          {/* <div className="team__container__grid-two">
+            <div className="img_container">
+              <img className="cat_img" src={cat} alt="cat" />
+            </div>
+          </div> */}
         </div>
       </section>
     )
