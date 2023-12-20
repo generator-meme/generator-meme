@@ -42,7 +42,7 @@ export const TagLists = ({ elem }) => {
             }}
             className={styles.meme__bth_see_more}
           >
-            смотреть больше
+            больше тегов
           </button>
         )}
       </div>
