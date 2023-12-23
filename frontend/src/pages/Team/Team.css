@@ -43,6 +43,7 @@
   font-size: 14px;
   line-height: 17px;
   text-decoration: underline;
+  padding-left: 10px;
 }
 .member__name--no-link {
   text-decoration: none;
