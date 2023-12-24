@@ -12,17 +12,17 @@ export default function MemeCollection() {
   const [search, setSearch] = useState("");
   const [searchID, setSearchID] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  var isTagsShown = false;
-  var sortByDate = false;
+  let isTagsShown = false;
+  let sortByDate = false;
   const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
   // const debouncedValue = useDebounce(search); //на случай если появится желание сделать отправку на сервер без кнопки "Сортировать"
-  var amountOfPages = 1;
+  let amountOfPages = 1;
   // const [amountOfPages, setAmountOfPages] = useState(1)
   // const [pages, setPages] = useState([])
   const [toReverseMemes, setToReverseMemes] = useState(false);
-  var pages = [];
+  let pages = [];
   const adjustWidth = () => {
-    var memes_per_page = 9 * memesPerPageGloabl;
+    let memes_per_page = 9 * memesPerPageGloabl;
     switch (true) {
       case window.screen.width <= 1480 && window.screen.width > 1080:
         memes_per_page = 4 * memesPerPageGloabl;
@@ -41,9 +41,9 @@ export default function MemeCollection() {
     }
     return memes_per_page;
   };
-  var memesPerPage = adjustWidth();
+  let memesPerPage = adjustWidth();
   amountOfPages = Math.ceil(savedMemes?.count / memesPerPage);
-  // var new_pages = [];
+  // let new_pages = [];
   for (let i = 1; i <= amountOfPages; i++) {
     pages.push(i);
   }
@@ -118,7 +118,7 @@ export default function MemeCollection() {
   };
 
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
-  // var pages = [];
+  // let pages = [];
   const [pages, setPages] = useState([]) */
 
   //  setMemesPerPage(adjustWidth())

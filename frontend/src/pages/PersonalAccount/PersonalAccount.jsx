@@ -1,8 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import "./PersonalAccount.css";
+import styles from "./PersonalAccount.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import useComponentVisible from "./useComponentVisible";
-import MemeCollection from '../../components/MemeCollection/MemeCollection'
+import MemeCollection from "../../components/MemeCollection/MemeCollection";
 const PersonalAccount = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -10,7 +10,8 @@ const PersonalAccount = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userData = useSelector((state) => state.user.userInfo);
   //   const [isMenuOpened, setMenuOpened] = useState(false);
-  const [ref, isComponentVisible, setIsComponentVisible] = useComponentVisible(false);
+  const [ref, isComponentVisible, setIsComponentVisible] =
+    useComponentVisible(false);
   const handleComponentVisibility = () => {
     // const page = document.getElementsByClassName("page");
     // page.classList.remove("contrast-effect");
@@ -54,7 +55,7 @@ const PersonalAccount = () => {
           </button>
         </div>
       </div>
-      <MemeCollection/>
+      <MemeCollection />
       <div ref={ref}>
         {isComponentVisible && (
           <div className="change_me_info">

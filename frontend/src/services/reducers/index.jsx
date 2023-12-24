@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { canvasReducer } from "./canvasReducer";
 import { currentMemeReducer } from "./currentMemeReducer";
 import { savedMemeReducer } from "./savedMemeReducer";
 import { userReducer } from "./userReducer";
@@ -10,7 +9,6 @@ import { favoriteTemplatesReducer } from "./favoriteTemplatesReducer";
 import { teamReducer } from "./teamReducer";
 
 const rootReducer = combineReducers({
-  canvasData: canvasReducer,
   saveMeme: savedMemeReducer,
   setCurrentMeme: currentMemeReducer,
   user: userReducer,
