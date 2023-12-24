@@ -2,16 +2,21 @@ import api from "../../utils/api";
 import "./MemeColection.css";
 import Tag from "./Tag";
 import { getCookie } from "../../utils/cookie";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useReducer } from "react";
 import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
 import button_delete from "../../images/cross-delete.png";
 import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllMyMemeCollections } from "../../services/actions/allMemeCollectionActions";
 
 export default function MemeCollection() {
   const [savedMemes, setSavedMemes] = useState({});
   const [search, setSearch] = useState("");
   const [searchID, setSearchID] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
+  const a = useSelector((state) => state.allMyCollectionMemes.myMemes);
+  console.log(a);
   let isTagsShown = false;
   let sortByDate = false;
   const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
@@ -49,6 +54,10 @@ export default function MemeCollection() {
   }
   // pages = new_pages;
 
+  useEffect(() => {
+    dispatch(getAllMyMemeCollections());
+  }, []);
+
   const handleChangeSearch = (e) => {
     const search_string = e.target.value;
     const query_string = search_string.replaceAll(" ", ",");
@@ -80,10 +89,12 @@ export default function MemeCollection() {
   };
   const deleteMemeFromCollection = async (meme_id) => {
     const savedToken = getCookie("token");
+    console.log();
     await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
     ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
   };
   const ShowFirstPageOfSavedMemes = async (
+    //делает запрос на сервер для подгрузки коллекции мемов
     search_text = "",
     offset = 0,
     ordering = "-added_at"
@@ -97,25 +108,35 @@ export default function MemeCollection() {
       savedToken,
       ordering
     );
+    console.log(result);
     setSavedMemes(result);
   };
+  // подгружает вторую подборку мемов в зависимости от offset
   const goToPage = (e, page) => {
+    console.log(page);
     e.preventDefault();
     ShowFirstPageOfSavedMemes(search, (page - 1) * memesPerPage);
     setCurrentPage(page);
   };
+
   const SortEverything = async (e) => {
+    //не пойму как действует сортировка
     e.preventDefault();
     if (search !== "") {
+      console.log(search);
       const template = await api.getTagsWithQueryName(search);
-      const template_query = template?.map((tag) =>
-        setSearchID(...(tag?.id + ","))
-      );
+      console.log(template);
+      const template_query = template?.map((tag) => {
+        console.log("fff");
+        setSearchID(...(tag?.id + ","));
+      });
     }
     // console.log(template,template_query)
     // setSearchID(template_query);
-    ShowFirstPageOfSavedMemes(searchID, 0);
+    console.log(searchID);
+    // s
   };
+  console.log(searchID);
 
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
   // let pages = [];
@@ -123,9 +144,10 @@ export default function MemeCollection() {
 
   //  setMemesPerPage(adjustWidth())
   useEffect(() => {
+    console.log("ferst");
     ShowFirstPageOfSavedMemes();
     //
-  }, []);
+  }, [searchID, currentPage]);
 
   return (
     <div className="meme_collection">
@@ -163,7 +185,7 @@ export default function MemeCollection() {
       </div>
 
       <div className="memes_container">
-        {savedMemes?.results?.map((res) => (
+        {a?.map((res) => (
           <>
             <div className="one_meme">
               <button

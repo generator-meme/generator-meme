@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import styles from "./PersonalAccount.module.css";
+import "./PersonalAccount.css";
 import { useDispatch, useSelector } from "react-redux";
 import useComponentVisible from "./useComponentVisible";
 import MemeCollection from "../../components/MemeCollection/MemeCollection";

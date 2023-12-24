@@ -45,21 +45,7 @@
 }
 
 .page {
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
   background-color: white;
-  background-size: contain;
-  box-sizing: border-box;
-  font-family: Rubik, sans-serif;
-  margin: 0 auto;
-  max-width: 1600px;
-  min-width: 320px;
-  background-color: #fcfdb5;
-
-  padding: 0;
 }
 
 .change_me_info {

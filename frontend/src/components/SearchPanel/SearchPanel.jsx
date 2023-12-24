@@ -19,6 +19,7 @@ export const SearchPanel = () => {
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
   const [tags, setTags] = useState([]);
+  console.log(tags);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
@@ -34,6 +35,7 @@ export const SearchPanel = () => {
   useEffect(() => {
     const getTagsOnInputChange = async (name) => {
       try {
+        console.log(name);
         const tagsArray = await api.getTagsWithQueryName(name);
         setTagsBasedOnInputValue(tagsArray);
       } catch {
