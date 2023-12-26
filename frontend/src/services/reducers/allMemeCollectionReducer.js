@@ -10,7 +10,7 @@ const initialState = {
 export const allMyMemesCollectionReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_MEME_COLLECTIONS:
-      return { ...state, myMemes: action.payload.results };
+      return { ...state, myMemes: action.payload };
     case SET_ALL_MEME_COLLECTIONS_EMPTY:
       return [];
     default:

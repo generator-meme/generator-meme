@@ -31,13 +31,10 @@ export const setAllMemeCollectionsEmpty = () => ({
 export const getAllMyMemeCollections = () => {
   return function (dispatch) {
     const savedToken = getCookie("token");
-    console.log(savedToken);
     const currentFiltrationOptions = store.getState().collectionFiltration;
-    console.log(currentFiltrationOptions);
     api
       .getMemesInMyCollection(savedToken, currentFiltrationOptions)
       .then((res) => {
-        console.log(res);
         dispatch(getAllMemeCollections(res));
       })
       .catch((err) => console.log(err));

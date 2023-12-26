@@ -18,24 +18,13 @@ export const SearchPanel = () => {
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
-  const [tags, setTags] = useState([]);
-  console.log(tags);
+  const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
   useEffect(() => {
-    api
-      .getTags()
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
     const getTagsOnInputChange = async (name) => {
       try {
-        console.log(name);
         const tagsArray = await api.getTagsWithQueryName(name);
         setTagsBasedOnInputValue(tagsArray);
       } catch {
@@ -82,7 +71,10 @@ export const SearchPanel = () => {
 
   const createStringToSearch = useCallback(() => {
     const tempTags = tags;
+    console.log(tempTags);
+
     const tagIdArray = tagArray.map((tagName) => {
+      console.log(tagName);
       let tempTag;
       tempTag = tempTags.find((tag) => {
         return tag.name === tagName;
@@ -92,6 +84,7 @@ export const SearchPanel = () => {
       }
       return tempTag.id;
     });
+
     return tagIdArray.join(",");
   }, [tags, tagArray]);
 

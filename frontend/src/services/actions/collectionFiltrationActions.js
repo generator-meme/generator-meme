@@ -16,10 +16,13 @@ export const addOffset = (offset) => ({
   payload: offset,
 });
 
-export const searchTag = (text) => ({
-  type: SEARCH_TAG,
-  payload: text,
-});
+export const searchTag = (text) => {
+  console.log("i am in action", text);
+  return {
+    type: SEARCH_TAG,
+    payload: text,
+  };
+};
 export const addOrdering = (ordering) => ({
   type: ADD_ORDERING,
   payload: ordering,

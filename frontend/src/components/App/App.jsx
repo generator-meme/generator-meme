@@ -27,6 +27,7 @@ import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesAct
 import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
 import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
 import { selectRandom } from "../../services/selectors/filtrationSelectors";
+import { getTagsAction } from "../../services/actions/getTagsAction";
 
 const App = () => {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -65,9 +66,11 @@ const App = () => {
         console.log(err);
       });
   };
+  useEffect(() => {
+    dispatch(getTagsAction());
+  }, []);
 
   useEffect(() => {
-    console.log("hi");
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
   }, [
