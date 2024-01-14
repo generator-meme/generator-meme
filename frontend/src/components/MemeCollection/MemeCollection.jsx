@@ -17,6 +17,7 @@ import {
   changeFlag,
   clearQueryParam,
   searchTag,
+  addOrdering,
 } from "../../services/actions/collectionFiltrationActions";
 
 export default function MemeCollection() {
@@ -31,13 +32,9 @@ export default function MemeCollection() {
     (state) => state.collectionFiltration.queryParam
   );
   const { flag } = useSelector((state) => state.collectionFiltration);
-
-  let isTagsShown = false;
-
-  let sortByDate = false;
-
+  let isTagsShown = true;
+  let sortByDate = true;
   const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
-
   // const debouncedValue = useDebounce(search); //на случай если появится желание сделать отправку на сервер без кнопки "Сортировать"
   let amountOfPages = 1;
   // const [amountOfPages, setAmountOfPages] = useState(1)
@@ -110,12 +107,11 @@ export default function MemeCollection() {
       dispatch(setAllMemeCollectionsEmpty());
     }
   };
-  // const deleteMemeFromMyCollection = async (meme_id) => {
-  //   const savedToken = getCookie("token");
-  //   await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
-  //   // ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
-  // };
-
+  const reverseMemes = () => {
+    if (ordering === "added_at") {
+      dispatch(addOrdering("-added_at"));
+    } else dispatch(addOrdering("added_at"));
+  };
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
   // let pages = [];
   const [pages, setPages] = useState([]) */
@@ -134,7 +130,7 @@ export default function MemeCollection() {
         <div className="search-component">
           <input
             onChange={handleChangeSearch}
-            // value={search}
+            value={search}
             id="search-input"
             className="text-style"
             placeholder="Поиск"
@@ -149,7 +145,7 @@ export default function MemeCollection() {
         {sortByDate && (
           <button
             className="sortByDate btn-no-bg"
-            // onClick={(e) => reverseMemes(e)}
+            onClick={(e) => reverseMemes(e)}
           >
             По дате
             <div id="transformed">
@@ -169,9 +165,6 @@ export default function MemeCollection() {
               <button
                 onClick={(e) => {
                   dispatch(deleteMemeFromMyCollection(res.meme.id));
-                  // setTimeout(() => {
-                  //   dispatch(changeFlag());
-                  // }, 50);
                 }}
                 className="delete-btn btn-no-bg"
               >
