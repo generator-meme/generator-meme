@@ -2,7 +2,14 @@ import api from "../../utils/api";
 import "./MemeColection.css";
 import Tag from "./Tag";
 import { getCookie } from "../../utils/cookie";
-import { useState, useEffect, useCallback, useMemo, useReducer } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+} from "react";
 import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
 import button_delete from "../../images/cross-delete.png";
 import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
@@ -32,6 +39,8 @@ export default function MemeCollection() {
     (state) => state.collectionFiltration.queryParam
   );
   const { flag } = useSelector((state) => state.collectionFiltration);
+  const [reverse, setReverse] = useState(false);
+  const arrayRef = useRef(null);
   let isTagsShown = true;
   let sortByDate = true;
   const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
@@ -108,9 +117,10 @@ export default function MemeCollection() {
     }
   };
   const reverseMemes = () => {
-    if (ordering === "added_at") {
-      dispatch(addOrdering("-added_at"));
-    } else dispatch(addOrdering("added_at"));
+    setReverse(!reverse);
+    ordering === "added_at"
+      ? dispatch(addOrdering("-added_at"))
+      : dispatch(addOrdering("added_at"));
   };
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
   // let pages = [];
@@ -122,6 +132,7 @@ export default function MemeCollection() {
   //   ShowFirstPageOfSavedMemes();
   //   //
   // }, [searchID, currentPage]);
+  const arrayStyle = reverse ? "reverse_array" : "unreverse_array";
 
   return (
     <div className="meme_collection">
@@ -148,7 +159,7 @@ export default function MemeCollection() {
             onClick={(e) => reverseMemes(e)}
           >
             По дате
-            <div id="transformed">
+            <div className={`${arrayStyle}`}>
               <ArrowDown />
             </div>
           </button>
