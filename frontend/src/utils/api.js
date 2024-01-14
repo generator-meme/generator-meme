@@ -11,6 +11,11 @@ class Api {
 
     return Promise.reject(`Ошибка: ${res.status}`);
   }
+  _errorHa(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+  }
 
   _checkReponce(res) {
     console.log(res);
@@ -177,7 +182,7 @@ class Api {
       body: JSON.stringify({
         meme: meme_id,
       }),
-    }).then(this._checkReponce);
+    }).then(this._errorHa);
   }
 }
 

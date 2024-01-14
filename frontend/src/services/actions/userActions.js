@@ -21,10 +21,10 @@ const getUserInfo = (info) => ({
   payload: info,
 });
 
-export const setNewUsername = (newUserName) =>({
-  type:SET_NEW_USERNAME,
-  payload:newUserName,
-})
+export const setNewUsername = (newUserName) => ({
+  type: SET_NEW_USERNAME,
+  payload: newUserName,
+});
 
 export const loadUserInfo = () => async (dispatch) => {
   try {

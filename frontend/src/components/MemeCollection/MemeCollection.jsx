@@ -7,8 +7,17 @@ import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
 import button_delete from "../../images/cross-delete.png";
 import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllMyMemeCollections } from "../../services/actions/allMemeCollectionActions";
-import { searchTag } from "../../services/actions/collectionFiltrationActions";
+import {
+  deleteMemeFromCollection,
+  deleteMemeFromMyCollection,
+  getAllMyMemeCollections,
+  setAllMemeCollectionsEmpty,
+} from "../../services/actions/allMemeCollectionActions";
+import {
+  changeFlag,
+  clearQueryParam,
+  searchTag,
+} from "../../services/actions/collectionFiltrationActions";
 
 export default function MemeCollection() {
   const [savedMemes, setSavedMemes] = useState({});
@@ -17,14 +26,11 @@ export default function MemeCollection() {
   const [currentPage, setCurrentPage] = useState(1);
   const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
-
   const myMemes = useSelector((state) => state.allMyCollectionMemes.myMemes);
-
   const { template_tag, offset, ordering, only_my, limit } = useSelector(
-    (state) => state.collectionFiltration
+    (state) => state.collectionFiltration.queryParam
   );
-
-  console.log(template_tag, offset, ordering, only_my, limit);
+  const { flag } = useSelector((state) => state.collectionFiltration);
 
   let isTagsShown = false;
 
@@ -70,95 +76,45 @@ export default function MemeCollection() {
 
   useEffect(() => {
     dispatch(getAllMyMemeCollections());
-  }, [template_tag, offset, ordering, only_my, limit, dispatch]);
+  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
 
-  const createStringToSearch = useCallback(() => {
+  const stringToSearch = () => {
+    if (search === "") {
+      return "";
+    }
     const tempTags = tags;
-    const tagIdArray = tempTags.map((tagName) => {
-      let tempTag;
-      tempTag = tempTags.find((tag) => {
-        return tag.name === tagName;
-      });
-      if (!tempTag) {
-        return "unknownTag";
-      }
-      return tempTag.id;
+    const tagId = tempTags.find((tag) => {
+      return tag.name === search;
     });
-
-    return tagIdArray.join(",");
-  }, [tags, tagArray]);
+    return tagId ? tagId.id : "noID";
+  };
 
   const handleChangeSearch = (e) => {
     const search_string = e.target.value;
     const query_string = search_string.replaceAll(" ", ",");
-    console.log(query_string);
     setSearch(query_string);
   };
-  // const showMore = (e) => {
-  //   e.preventDefault();
-  //   setMemesPerPageGlobal((memesPerPage *= 2));
-  //   ShowFirstPageOfSavedMemes();
-  // };
-  // const reverseMemes = (e) => {
-  //   e.preventDefault();
-  //   //  const [ toReverseMemes, setToReverseMemes] = useState(false);
-  //   setToReverseMemes(!toReverseMemes);
-  //   ShowFirstPageOfSavedMemes(
-  //     searchID,
-  //     (currentPage - 1) * memesPerPage,
-  //     toReverseMemes ? "-added_at" : "added_at"
-  //   );
-
-  //   const svgArr = document.getElementById("transformed");
-  //   if (toReverseMemes) {
-  //     svgArr.style.transform = "rotate(180deg)";
-  //     svgArr.style.color = "#AC52D1";
-  //   } else {
-  //     svgArr.style.transform = "rotate(0deg)";
-  //     svgArr.style.color = "black";
-  //   }
-  // };
-  // const deleteMemeFromCollection = async (meme_id) => {
-  //   const savedToken = getCookie("token");
-  //   console.log();
-  //   await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
-  //   ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
-  // };
-  // const ShowFirstPageOfSavedMemes = async (
-  //   //делает запрос на сервер для подгрузки коллекции мемов
-  //   search_text = "",
-  //   offset = 0,
-  //   ordering = "-added_at"
-  // ) => {
-  //   const savedToken = getCookie("token");
-  //   const result = await api.getMemesInMyCollection(
-  //     search_text,
-  //     memesPerPage,
-  //     offset,
-  //     "true",
-  //     savedToken,
-  //     ordering
-  //   );
-  //   console.log(result);
-  //   setSavedMemes(result);
-  // };
-  // подгружает вторую подборку мемов в зависимости от offset
-  // const goToPage = (e, page) => {
-  //   e.preventDefault();
-  //   ShowFirstPageOfSavedMemes(search, (page - 1) * memesPerPage);
-  //   setCurrentPage(page);
-  // };
 
   const SortEverything = (e) => {
-    //не пойму как действует сортировка
     e.preventDefault();
-    if (search !== "") {
-      dispatch(searchTag(search));
-    }
+    const searchString = stringToSearch();
 
-    // s
+    if (searchString === "") {
+      dispatch(clearQueryParam());
+      dispatch(changeFlag()); //триггер для вызова useEffect
+      return;
+    }
+    if (searchString !== "noID") {
+      dispatch(searchTag(searchString));
+    } else {
+      dispatch(setAllMemeCollectionsEmpty());
+    }
   };
-  console.log(searchID);
+  // const deleteMemeFromMyCollection = async (meme_id) => {
+  //   const savedToken = getCookie("token");
+  //   await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
+  //   // ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
+  // };
 
   /*  const [amountOfPages, setAmountOfPages] = useState(1)
   // let pages = [];
@@ -211,7 +167,12 @@ export default function MemeCollection() {
           <>
             <div className="one_meme">
               <button
-                // onClick={(e) => deleteMemeFromCollection(res.meme.id)}
+                onClick={(e) => {
+                  dispatch(deleteMemeFromMyCollection(res.meme.id));
+                  // setTimeout(() => {
+                  //   dispatch(changeFlag());
+                  // }, 50);
+                }}
                 className="delete-btn btn-no-bg"
               >
                 <img className="cross" src={button_delete} alt="delete" />
@@ -248,3 +209,58 @@ export default function MemeCollection() {
     </div>
   );
 }
+const handleReverseMemesCollection = () => {};
+// const showMore = (e) => {
+//   e.preventDefault();
+//   setMemesPerPageGlobal((memesPerPage *= 2));
+//   ShowFirstPageOfSavedMemes();
+// };
+// const reverseMemes = (e) => {
+//   e.preventDefault();
+//   //  const [ toReverseMemes, setToReverseMemes] = useState(false);
+//   setToReverseMemes(!toReverseMemes);
+//   ShowFirstPageOfSavedMemes(
+//     searchID,
+//     (currentPage - 1) * memesPerPage,
+//     toReverseMemes ? "-added_at" : "added_at"
+//   );
+
+//   const svgArr = document.getElementById("transformed");
+//   if (toReverseMemes) {
+//     svgArr.style.transform = "rotate(180deg)";
+//     svgArr.style.color = "#AC52D1";
+//   } else {
+//     svgArr.style.transform = "rotate(0deg)";
+//     svgArr.style.color = "black";
+//   }
+// };
+// const deleteMemeFromCollection = async (meme_id) => {
+//   const savedToken = getCookie("token");
+//   console.log();
+//   await api.deleteMemeFromMyCollection(meme_id, savedToken); //удаление перманетно, до появления корзины
+//   ShowFirstPageOfSavedMemes(searchID, (currentPage - 1) * memesPerPage);
+// };
+// const ShowFirstPageOfSavedMemes = async (
+//   //делает запрос на сервер для подгрузки коллекции мемов
+//   search_text = "",
+//   offset = 0,
+//   ordering = "-added_at"
+// ) => {
+//   const savedToken = getCookie("token");
+//   const result = await api.getMemesInMyCollection(
+//     search_text,
+//     memesPerPage,
+//     offset,
+//     "true",
+//     savedToken,
+//     ordering
+//   );
+//   console.log(result);
+//   setSavedMemes(result);
+// };
+// подгружает вторую подборку мемов в зависимости от offset
+// const goToPage = (e, page) => {
+//   e.preventDefault();
+//   ShowFirstPageOfSavedMemes(search, (page - 1) * memesPerPage);
+//   setCurrentPage(page);
+// };

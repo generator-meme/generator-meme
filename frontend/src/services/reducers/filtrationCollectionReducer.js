@@ -3,9 +3,21 @@ import {
   ADD_LIMIT,
   ADD_OFFSET,
   ADD_ORDERING,
+  CHANGE_FLAG,
+  CLEAR_QUERY_PARAM,
 } from "../actions/collectionFiltrationActions";
 
 const initialState = {
+  queryParam: {
+    template_tag: "",
+    offset: 0,
+    ordering: "-added_at",
+    only_my: "true",
+    limit: 9,
+  },
+  flag: false,
+};
+const initQueryParam = {
   template_tag: "",
   offset: 0,
   ordering: "-added_at",
@@ -16,24 +28,39 @@ const initialState = {
 export const filtrationCollectionReducer = (state = initialState, action) => {
   switch (action.type) {
     case SEARCH_TAG: {
-      return { ...state, template_tag: action.payload };
+      return {
+        ...state,
+        queryParam: { ...state.queryParam, template_tag: action.payload },
+      };
     }
     case ADD_LIMIT: {
       return {
         ...state,
-        limit: action.payload,
+        queryParam: { ...state.queryParam, limit: action.payload },
       };
     }
     case ADD_OFFSET: {
       return {
         ...state,
-        offset: action.payload,
+        queryParam: { ...state.queryParam, offset: action.payload },
       };
     }
     case ADD_ORDERING: {
       return {
         ...state,
-        ordering: action.payload,
+        queryParam: { ...state.queryParam, ordering: action.payload },
+      };
+    }
+    case CHANGE_FLAG: {
+      return {
+        ...state,
+        flag: !state.flag,
+      };
+    }
+    case CLEAR_QUERY_PARAM: {
+      return {
+        ...state,
+        queryParam: { ...initQueryParam },
       };
     }
     default:
