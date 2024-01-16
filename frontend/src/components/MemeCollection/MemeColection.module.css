@@ -1,6 +1,6 @@
-* {
+/* * {
   font-family: "Rubik";
-}
+} */
 
 .meme_collection {
   border: 1px solid #9d0095;
@@ -13,26 +13,26 @@
   width: 45vw;
 }
 
-.header-row {
+.header_row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.btn-no-bg {
+.btn_no_bg {
   outline: none;
   background-color: transparent;
   border: none;
 }
 
-.search-component {
+.search_component {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-#search-input {
+.search_input {
   border: 1px solid #9d0095;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -43,7 +43,7 @@
   z-index: 1;
 }
 
-#search-input:focus {
+.search_input:focus {
   outline: none;
   border: 1px solid #9d0095;
   border-top-left-radius: 20px;
@@ -51,12 +51,12 @@
   border-right: 1px solid transparent;
 }
 
-.text-style {
+.text_style {
   font-size: 16px;
   font-weight: 400px;
 }
 
-.search-button {
+.search_button {
   position: relative;
   z-index: 1;
   left: -17px;
@@ -81,7 +81,7 @@
   align-items: center;
 }
 
-#transformed {
+.transformed {
   transform: rotate(0);
 }
 
@@ -93,7 +93,7 @@
   justify-content: stretch;
 }
 
-.delete-btn {
+.delete_btn {
   /* position: relative;
     top: 40px;
     left: 88px; */
@@ -126,10 +126,10 @@
   height: 16px;
 }
 .reverse_array {
-  transform: rotate(180deg);
+  transform: rotate(0);
 }
 .unreverse_array {
-  transform: rotate(0);
+  transform: rotate(180deg);
 }
 
 /* бесконечность — 1480 : 3*3 */
@@ -150,7 +150,7 @@
     aspect-ratio: 284/226;
   }
 
-  #search-input {
+  #search_input {
     width: 131px;
   }
 }
@@ -182,7 +182,7 @@
     width: auto;
   }
 
-  .search-button {
+  .search_button {
     top: 2px;
   }
 }
@@ -212,14 +212,14 @@
     aspect-ratio: 165/117;
   }
 
-  .header-row {
+  .header_row {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 20px;
   }
 
-  #search-input {
+  #search_input {
     border: 1px solid #9d0095;
     border-bottom-left-radius: 20px;
     border-right-color: transparent;
@@ -227,7 +227,7 @@
     width: 100%;
   }
 
-  .search-button {
+  .search_button {
     top: 2px;
   }
 }

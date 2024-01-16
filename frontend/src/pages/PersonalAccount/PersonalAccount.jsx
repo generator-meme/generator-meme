@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import "./PersonalAccount.css";
+import styles from "./PersonalAccount.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import useComponentVisible from "./useComponentVisible";
 import MemeCollection from "../../components/MemeCollection/MemeCollection";
@@ -41,15 +41,15 @@ const PersonalAccount = () => {
   };
 
   return (
-    <div className="personal_account">
+    <div className={styles.personal_account}>
       <div id="dim"></div>
-      <div className="personal_info_all">
+      <div className={styles.personal_info_all}>
         <h1>Личная информация</h1>
-        <div className="personal_info_change">
+        <div className={styles.personal_info_change}>
           <h2>Имя пользователя</h2>
           <button
             onClick={() => handleComponentVisibility()}
-            className="btn_change"
+            className={styles.btn_change}
           >
             Редактировать профиль
           </button>
@@ -58,13 +58,19 @@ const PersonalAccount = () => {
       <MemeCollection />
       <div ref={ref}>
         {isComponentVisible && (
-          <div className="change_me_info">
+          <div className={styles.change_me_info}>
             <h4>Имя пользователя</h4>
-            <button className="btn_change" onClick={(e) => handleName(e)}>
+            <button
+              className={styles.btn_change}
+              onClick={(e) => handleName(e)}
+            >
               Изменить
             </button>
             <h4>Пароль</h4>
-            <button className="btn_change" onClick={(e) => handlePass(e)}>
+            <button
+              className={styles.btn_change}
+              onClick={(e) => handlePass(e)}
+            >
               Изменить
             </button>
           </div>

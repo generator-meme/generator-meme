@@ -1,5 +1,6 @@
 import api from "../../utils/api";
-import "./MemeColection.css";
+import styles from "./MemeColection.module.css";
+
 import Tag from "./Tag";
 import { getCookie } from "../../utils/cookie";
 import {
@@ -26,6 +27,7 @@ import {
   searchTag,
   addOrdering,
 } from "../../services/actions/collectionFiltrationActions";
+import { TagLists } from "../TagLists/TagLists";
 
 export default function MemeCollection() {
   const [savedMemes, setSavedMemes] = useState({});
@@ -40,7 +42,6 @@ export default function MemeCollection() {
   );
   const { flag } = useSelector((state) => state.collectionFiltration);
   const [reverse, setReverse] = useState(false);
-  const arrayRef = useRef(null);
   let isTagsShown = true;
   let sortByDate = true;
   const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
@@ -49,7 +50,7 @@ export default function MemeCollection() {
   // const [amountOfPages, setAmountOfPages] = useState(1)
   // const [pages, setPages] = useState([])
 
-  const [toReverseMemes, setToReverseMemes] = useState(false);
+  const [toReverseMemes, setToReverseMemes] = useState(true);
 
   let pages = [];
   const adjustWidth = () => {
@@ -132,22 +133,21 @@ export default function MemeCollection() {
   //   ShowFirstPageOfSavedMemes();
   //   //
   // }, [searchID, currentPage]);
-  const arrayStyle = reverse ? "reverse_array" : "unreverse_array";
+  console.log(myMemes?.results);
 
   return (
-    <div className="meme_collection">
-      <div className="header-row">
+    <div className={styles.meme_collection}>
+      <div className={styles.header_row}>
         <h1>Коллекция мемов</h1>
-        <div className="search-component">
+        <div className={styles.search_component}>
           <input
             onChange={handleChangeSearch}
             value={search}
-            id="search-input"
-            className="text-style"
+            className={`${styles.text_style} ${styles.search_input}`}
             placeholder="Поиск"
           />
           <button
-            className="search-button btn-no-bg"
+            className={`${styles.search_button} ${styles.btn_no_bg}`}
             onClick={(e) => SortEverything(e)}
           >
             <SearchButton />
@@ -155,43 +155,57 @@ export default function MemeCollection() {
         </div>
         {sortByDate && (
           <button
-            className="sortByDate btn-no-bg"
+            className={`${styles.sortByDate} ${styles.btn_no_bg}`}
             onClick={(e) => reverseMemes(e)}
           >
             По дате
-            <div className={`${arrayStyle}`}>
+            <div
+              className={
+                reverse ? styles.unreverse_array : styles.reverse_array
+              }
+            >
               <ArrowDown />
             </div>
           </button>
         )}
         {!isTagsShown && (
-          <div className="btn-no-bg text-style">Сортировать</div>
+          <div className={`${styles.text_style} ${styles.btn_no_bg}`}>
+            Сортировать
+          </div>
         )}
       </div>
 
-      <div className="memes_container">
+      <div className={styles.memes_container}>
         {myMemes?.results?.map((res) => (
           <>
-            <div className="one_meme">
+            <div className={styles.one_meme}>
               <button
                 onClick={(e) => {
                   dispatch(deleteMemeFromMyCollection(res.meme.id));
                 }}
-                className="delete-btn btn-no-bg"
+                className={`${styles.delete_btn} ${styles.btn_no_bg}`}
               >
-                <img className="cross" src={button_delete} alt="delete" />
+                <img
+                  className={styles.cross}
+                  src={button_delete}
+                  alt="delete"
+                />
               </button>
-              <img className="saved_meme_img" src={res.meme.image} alt="" />
-              <Tag meme={res.meme} />
+              <img
+                className={styles.saved_meme_img}
+                src={res.meme.image}
+                alt=""
+              />
+              <TagLists elem={res.meme.template}></TagLists>
             </div>
           </>
         ))}
       </div>
       {!sortByDate ? (
-        <div className="pages">
+        <div className={styles.pages}>
           {pages.map((page) => (
             <button
-              className="btn-no-bg"
+              className={styles.btn_no_bg}
               // onClick={(e) => goToPage(e, page)}
             >
               {page}
@@ -202,7 +216,7 @@ export default function MemeCollection() {
         <>
           {savedMemes?.count >= memesPerPage && (
             <button
-              className="pages btn-no-bg"
+              className={`${styles.btn_no_bg}  ${styles.pages}`}
               // onClick={(e) => showMore(e)}
             >
               Показать больше
