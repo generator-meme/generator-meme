@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./TagLists.module.css";
 
 export const TagLists = ({ elem }) => {
+  console.log(elem);
   const [isMore, setIsMore] = useState(false);
   const [allTagsHeight, setAllTagsHeight] = useState(false);
   const allTags = useRef(null);

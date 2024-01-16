@@ -24,7 +24,7 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import Prompt from "../../components/Prompt/Prompt";
-import  api  from "../../utils/api";
+import api from "../../utils/api";
 import { getCookie } from "../../utils/cookie";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -80,6 +80,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const setImageInMeta = async (src, width, height) => {
     const image = await writeToCanvasCustomParam(src, width, height);
     let reader = new FileReader();
+    console.log(reader);
     reader.readAsDataURL(image);
     reader.onload = function () {
       document
@@ -91,9 +92,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       document
         .querySelector('meta[name="twitter_url"]')
         .setAttribute("content", reader.result);
-    }
-
-
+    };
   };
 
   const writeToCanvasCustomParam = (src, width, height) => {
@@ -107,7 +106,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
         const imgRatio = img.width / img.height;
         const canvasRatio = width / height;
         let newWidth, newHeight, offsetX, offsetY;
-  
+
         if (imgRatio > canvasRatio) {
           newWidth = width;
           newHeight = width / imgRatio;
@@ -119,7 +118,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
           offsetX = (width - newWidth) / 2;
           offsetY = 0;
         }
-  
+
         canvas.width = width;
         canvas.height = height;
         ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
@@ -154,17 +153,17 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
     }, 200);
   };
 
-  const saveMemeToPersonalAccount = async () =>{
+  const saveMemeToPersonalAccount = async () => {
     const savedToken = getCookie("token");
-    const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id
-    try{
-      await api.addMemeToMyCollection(meme_id,savedToken);
-    }catch(err){
+    const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id;
+    try {
+      await api.addMemeToMyCollection(meme_id, savedToken);
+    } catch (err) {
       // const key = Object.keys(err)[0];
       // const error = err[key][0]
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   return (
     !!meme && (
@@ -257,7 +256,10 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
               </div>
             ) : null}
 
-            <button className={`btn ${styles.saved_meme__btn_save}`} onClick = {()=> saveMemeToPersonalAccount()}>
+            <button
+              className={`btn ${styles.saved_meme__btn_save}`}
+              onClick={() => saveMemeToPersonalAccount()}
+            >
               сохранить в ЛК
             </button>
             <div className={styles.saved_meme_share_btns_container}>

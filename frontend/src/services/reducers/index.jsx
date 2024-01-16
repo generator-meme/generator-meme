@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { canvasReducer } from "./canvasReducer";
 import { currentMemeReducer } from "./currentMemeReducer";
 import { savedMemeReducer } from "./savedMemeReducer";
 import { userReducer } from "./userReducer";
@@ -8,9 +7,11 @@ import { filtrationReducer } from "./filtrationReducer";
 import { memeTemplatesReducer } from "./allMemeTemplatesReducer";
 import { favoriteTemplatesReducer } from "./favoriteTemplatesReducer";
 import { teamReducer } from "./teamReducer";
+import { filtrationCollectionReducer } from "./FiltrationCollectionReducer";
+import { allMyMemesCollectionReducer } from "./allMemeCollectionReducer";
+import { getTagsReducer } from "./getTagsReducer";
 
 const rootReducer = combineReducers({
-  canvasData: canvasReducer,
   saveMeme: savedMemeReducer,
   setCurrentMeme: currentMemeReducer,
   user: userReducer,
@@ -19,5 +20,8 @@ const rootReducer = combineReducers({
   allMemeTemplates: memeTemplatesReducer,
   favoriteTemplates: favoriteTemplatesReducer,
   team: teamReducer,
+  collectionFiltration: filtrationCollectionReducer,
+  allMyCollectionMemes: allMyMemesCollectionReducer,
+  getTags: getTagsReducer,
 });
 export default rootReducer;

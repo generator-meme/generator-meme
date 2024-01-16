@@ -12,6 +12,7 @@ class Authorisation {
   }
 
   signIn(name, email, password) {
+    console.log(name, email, password);
     return fetch(`${this._baseUrl}/users/`, {
       method: "POST",
       headers: this._headers,
@@ -33,6 +34,7 @@ class Authorisation {
     }).then(this._checkResponse);
   }
   logIn(email, password) {
+    console.log(email, password);
     return fetch(`${this._baseUrl}/token/login/`, {
       method: "POST",
       //   credentials: "include", // для tokena внутри httpOnly cookie, если потом будет реализовывать
@@ -86,30 +88,30 @@ class Authorisation {
       },
     }).then(this._checkResponse);
   }
-  changeName(newName, email,savedToken){
+  changeName(newName, email, savedToken) {
     return fetch(`${this._baseUrl}/users/me/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Authorization":`Token ${savedToken}`,
+        Authorization: `Token ${savedToken}`,
       },
       body: JSON.stringify({
         username: newName,
-        email:email,
+        email: email,
       }),
     }).then(this._checkResponse);
   }
 
-  setPassword(curr_pass, new_pass, token){
+  setPassword(curr_pass, new_pass, token) {
     return fetch(`${this._baseUrl}/users/set_password/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization":`Token ${token}`,
+        Authorization: `Token ${token}`,
       },
       body: JSON.stringify({
         new_password: new_pass,
-        current_password:curr_pass,
+        current_password: curr_pass,
       }),
     }).then(this._checkResponse);
   }
