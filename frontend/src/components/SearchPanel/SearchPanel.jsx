@@ -18,23 +18,24 @@ export const SearchPanel = () => {
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
-  const [tags, setTags] = useState([]);
+  const tags = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
-  useEffect(() => {
-    api
-      .getTags()
-      .then((data) => {
-        setTags(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   api
+  //     .getTags()
+  //     .then((data) => {
+  //       setTags(data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   useEffect(() => {
     const getTagsOnInputChange = async (name) => {
       try {
         const tagsArray = await api.getTagsWithQueryName(name);
+
         setTagsBasedOnInputValue(tagsArray);
       } catch {
         console.log("err");

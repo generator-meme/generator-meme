@@ -35,6 +35,14 @@ const Header = () => {
       console.log(err);
     }
   };
+  const navToPersonalAccount = (e) => {
+    try{
+      e.preventDefault();
+      navigate("/me");
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   const handleOnFavorited = (e) => {
     try {
@@ -132,8 +140,8 @@ const Header = () => {
               options={[
                 {
                   name: "Личный\u00A0кабинет",
-                  onClick: (e) => e.preventDefault(),
-                  inProgress: true,
+                  onClick: (e) => navToPersonalAccount(e),
+                  inProgress: false,
                 },
                 {
                   name: "Выйти",
