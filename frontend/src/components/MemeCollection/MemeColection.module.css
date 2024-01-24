@@ -25,6 +25,9 @@
   background-color: transparent;
   border: none;
 }
+.btn_no_bg:hover {
+  cursor: pointer;
+}
 
 .search_component {
   display: flex;

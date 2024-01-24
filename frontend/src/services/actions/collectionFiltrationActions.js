@@ -8,6 +8,8 @@ export const ADD_ORDERING = "ADD_ORDERING";
 export const ADD_LIMIT = "ADD_LIMIT";
 export const CHANGE_FLAG = "CHANGE_FLAG";
 export const CLEAR_QUERY_PARAM = "CLEAR_QUERY_PARAM";
+export const ADD_PAGE = "ADD_PAGE";
+export const GET_PAGES = "GET_PAGES";
 
 export const addLimit = (limit) => ({
   type: ADD_LIMIT,
@@ -36,5 +38,18 @@ export const clearQueryParam = () => {
   console.log("clear");
   return {
     type: CLEAR_QUERY_PARAM,
+  };
+};
+export const addPage = (page) => {
+  console.log(page);
+  return {
+    type: ADD_PAGE,
+    payload: page,
+  };
+};
+export const getPage = (pageArray) => {
+  return {
+    type: GET_PAGES,
+    payload: pageArray,
   };
 };
