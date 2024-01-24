@@ -257,7 +257,8 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             ) : null}
 
             <button
-              className={`btn ${styles.saved_meme__btn_save}`}
+              className={`btn ${styles.saved_meme_btn}`}
+              // className={`btn ${styles.saved_meme__btn_save}`}
               onClick={() => saveMemeToPersonalAccount()}
             >
               сохранить в ЛК
