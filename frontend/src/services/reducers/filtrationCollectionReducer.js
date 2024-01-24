@@ -5,6 +5,8 @@ import {
   ADD_ORDERING,
   CHANGE_FLAG,
   CLEAR_QUERY_PARAM,
+  ADD_PAGE,
+  GET_PAGES,
 } from "../actions/collectionFiltrationActions";
 
 const initialState = {
@@ -16,6 +18,8 @@ const initialState = {
     limit: 9,
   },
   flag: false,
+  page: 0,
+  pageArray: [],
 };
 const initQueryParam = {
   template_tag: "",
@@ -55,6 +59,18 @@ export const filtrationCollectionReducer = (state = initialState, action) => {
       return {
         ...state,
         flag: !state.flag,
+      };
+    }
+    case ADD_PAGE: {
+      return {
+        ...state,
+        page: action.payload,
+      };
+    }
+    case GET_PAGES: {
+      return {
+        ...state,
+        pageArray: [...action.payload],
       };
     }
     case CLEAR_QUERY_PARAM: {

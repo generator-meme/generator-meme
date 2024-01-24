@@ -1,6 +1,9 @@
 import api from "../../utils/api";
 import styles from "./MemeColection.module.css";
-
+import {
+  addPage,
+  getPage,
+} from "../../services/actions/collectionFiltrationActions";
 import Tag from "./Tag";
 import { getCookie } from "../../utils/cookie";
 import {
@@ -16,7 +19,6 @@ import button_delete from "../../images/cross-delete.png";
 import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteMemeFromCollection,
   deleteMemeFromMyCollection,
   getAllMyMemeCollections,
   setAllMemeCollectionsEmpty,
@@ -26,14 +28,14 @@ import {
   clearQueryParam,
   searchTag,
   addOrdering,
+  addLimit,
+  addOffset,
 } from "../../services/actions/collectionFiltrationActions";
 import { TagLists } from "../TagLists/TagLists";
+import { PaginationList } from "../PaginationList/PaginationList";
 
 export default function MemeCollection() {
-  const [savedMemes, setSavedMemes] = useState({});
   const [search, setSearch] = useState("");
-  const [searchID, setSearchID] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const myMemes = useSelector((state) => state.allMyCollectionMemes.myMemes);
@@ -44,46 +46,78 @@ export default function MemeCollection() {
   const [reverse, setReverse] = useState(false);
   let isTagsShown = true;
   let sortByDate = true;
-  const [memesPerPageGloabl, setMemesPerPageGlobal] = useState(1);
-  // const debouncedValue = useDebounce(search); //на случай если появится желание сделать отправку на сервер без кнопки "Сортировать"
-  let amountOfPages = 1;
-  // const [amountOfPages, setAmountOfPages] = useState(1)
-  // const [pages, setPages] = useState([])
+  const [page, setPage] = useState(1);
+  const [widthScreen, setWidthScreen] = useState(window.screen.width);
 
-  const [toReverseMemes, setToReverseMemes] = useState(true);
+  useEffect(() => {
+    dispatch(getAllMyMemeCollections());
+  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
 
-  let pages = [];
-  const adjustWidth = () => {
-    let memes_per_page = 9 * memesPerPageGloabl;
+  useEffect(() => {
+    let pageArray = [];
+    const pageC = Math.ceil(myMemes?.count / memesPerPage);
+    for (let i = 1; i <= pageC; i++) {
+      pageArray.push(i);
+    }
+    if (!pageArray) {
+      return [];
+    }
+    let tempPages = pageArray;
+    const slicedArrayes = sliceArrayIntoGroups(tempPages, 5);
+    dispatch(getPage(slicedArrayes));
+  }, [myMemes]);
+
+  const memesPerPage = useMemo(() => {
+    let memes_per_page = 9 * page;
     switch (true) {
       case window.screen.width <= 1480 && window.screen.width > 1080:
-        memes_per_page = 4 * memesPerPageGloabl;
+        memes_per_page = 4 * page;
         break;
       case window.screen.width <= 1080 && window.screen.width > 750:
-        memes_per_page = 2 * memesPerPageGloabl;
-        isTagsShown = false;
+        memes_per_page = 2 * page;
+        // isTagsShown = false;
         break;
       case window.screen.width <= 750 && window.screen.width > 350:
-        memes_per_page = 4 * memesPerPageGloabl;
-        isTagsShown = true;
-        sortByDate = true;
+        memes_per_page = 4 * page;
+        // isTagsShown = true;
+        // sortByDate = true;
         break;
       default:
         break;
     }
     return memes_per_page;
-  };
-  let memesPerPage = adjustWidth();
-  amountOfPages = Math.ceil(savedMemes?.count / memesPerPage);
-  // let new_pages = [];
-  for (let i = 1; i <= amountOfPages; i++) {
-    pages.push(i);
-  }
-  // pages = new_pages;
+  }, []);
 
-  useEffect(() => {
-    dispatch(getAllMyMemeCollections());
-  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
+  function sliceArrayIntoGroups(arr, size) {
+    if (arr.length === 0) {
+      return arr;
+    }
+    return [arr.slice(0, size), ...sliceArrayIntoGroups(arr.slice(size), size)];
+  }
+
+  // const pageCount = useMemo(() => {
+  //   let pageArray = [];
+  //   const pageC = Math.ceil(myMemes?.count / memesPerPage);
+  //   for (let i = 1; i <= pageC; i++) {
+  //     pageArray.push(i);
+  //   }
+  //   return pageArray;
+  // }, [myMemes]);
+
+  // const pageCount2dArray = useMemo(() => {
+  //   let pageArray = [];
+  //   const pageC = Math.ceil(myMemes?.count / memesPerPage);
+  //   for (let i = 1; i <= pageC; i++) {
+  //     pageArray.push(i);
+  //   }
+  //   if (!pageArray) {
+  //     return [];
+  //   }
+  //   let tempPages = pageArray;
+  //   const slicedArrayes = sliceArrayIntoGroups(tempPages, 5);
+
+  //   return slicedArrayes;
+  // }, [myMemes]);
 
   const stringToSearch = () => {
     if (search === "") {
@@ -123,17 +157,11 @@ export default function MemeCollection() {
       ? dispatch(addOrdering("-added_at"))
       : dispatch(addOrdering("added_at"));
   };
-  /*  const [amountOfPages, setAmountOfPages] = useState(1)
-  // let pages = [];
-  const [pages, setPages] = useState([]) */
 
-  //  setMemesPerPage(adjustWidth())
-  // useEffect(() => {
-
-  //   ShowFirstPageOfSavedMemes();
-  //   //
-  // }, [searchID, currentPage]);
-  console.log(myMemes?.results);
+  const goToPage = (e, page) => {
+    e.preventDefault();
+    dispatch(addOffset((page - 1) * limit));
+  };
 
   return (
     <div className={styles.meme_collection}>
@@ -174,7 +202,6 @@ export default function MemeCollection() {
           </div>
         )}
       </div>
-
       <div className={styles.memes_container}>
         {myMemes?.results?.map((res) => (
           <>
@@ -201,32 +228,26 @@ export default function MemeCollection() {
           </>
         ))}
       </div>
-      {!sortByDate ? (
-        <div className={styles.pages}>
-          {pages.map((page) => (
-            <button
-              className={styles.btn_no_bg}
-              // onClick={(e) => goToPage(e, page)}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-      ) : (
-        <>
-          {savedMemes?.count >= memesPerPage && (
-            <button
-              className={`${styles.btn_no_bg}  ${styles.pages}`}
-              // onClick={(e) => showMore(e)}
-            >
-              Показать больше
-            </button>
-          )}
-        </>
-      )}
+
+      <PaginationList
+        // pages={pageCount2dArray}
+        goToPage={goToPage}
+      ></PaginationList>
     </div>
   );
 }
+
+<>
+  {/* {savedMemes?.count >= memesPerPage && (
+      <button
+        className={`${styles.btn_no_bg}  ${styles.pages}`}
+        // onClick={(e) => showMore(e)}
+      >
+        Показать больше
+      </button>
+    )} */}
+</>;
+
 const handleReverseMemesCollection = () => {};
 // const showMore = (e) => {
 //   e.preventDefault();
