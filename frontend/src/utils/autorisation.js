@@ -12,7 +12,6 @@ class Authorisation {
   }
 
   signIn(name, email, password) {
-    console.log(name, email, password);
     return fetch(`${this._baseUrl}/users/`, {
       method: "POST",
       headers: this._headers,
@@ -34,7 +33,6 @@ class Authorisation {
     }).then(this._checkResponse);
   }
   logIn(email, password) {
-    console.log(email, password);
     return fetch(`${this._baseUrl}/token/login/`, {
       method: "POST",
       //   credentials: "include", // для tokena внутри httpOnly cookie, если потом будет реализовывать

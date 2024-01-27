@@ -74,6 +74,7 @@ export const filtrationCollectionReducer = (state = initialState, action) => {
       };
     }
     case CLEAR_QUERY_PARAM: {
+      console.log("in clear");
       return {
         ...state,
         queryParam: { ...initQueryParam },

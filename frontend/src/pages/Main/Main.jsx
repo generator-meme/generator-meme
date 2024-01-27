@@ -23,8 +23,9 @@ const Main = ({ setIsNewMeme }) => {
     }
     const currentFile = event.target.files[0];
     if (event.target.closest("form").checkValidity()) {
+      //возвращает сам элемент или родителя с таким селектором
       const myCurrentMeme = {
-        id: uuidv4(),
+        id: uuidv4(), // added id
         image: URL.createObjectURL(currentFile),
       };
       dispatch({ type: SET_CURRENT_MEME, payload: myCurrentMeme });

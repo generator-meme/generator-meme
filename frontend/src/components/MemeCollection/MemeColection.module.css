@@ -134,6 +134,9 @@
 .unreverse_array {
   transform: rotate(180deg);
 }
+.saved_meme_img:hover {
+  cursor: pointer;
+}
 
 /* бесконечность — 1480 : 3*3 */
 /* 1480 — 1080 : 2*2  - десктоп мини */

@@ -17,7 +17,11 @@ import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import vector_387 from "../../images/vector_387.svg";
-import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
+import {
+  blockSaveButtonToCollection,
+  BLOCK_SAVE_BUTTON_TO_COLLECTION,
+  getMemeByIdAction,
+} from "../../services/actions/savedMemeActions";
 import {
   TelegramShareButton,
   ViberShareButton,
@@ -27,13 +31,19 @@ import Prompt from "../../components/Prompt/Prompt";
 import api from "../../utils/api";
 import { getCookie } from "../../utils/cookie";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
-  const { meme } = useSelector((state) => state.saveMeme);
+  const { meme, blockSaveButton } = useSelector((state) => state.saveMeme);
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const memeRef = useRef(null);
+  console.log(
+    currentMeme,
+    location.state,
+    meme,
+    localStorage.getItem("currentMeme")
+  );
 
   const writeToCanvas = (src) => {
     return new Promise((res) => {
@@ -80,7 +90,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const setImageInMeta = async (src, width, height) => {
     const image = await writeToCanvasCustomParam(src, width, height);
     let reader = new FileReader();
-    console.log(reader);
+
     reader.readAsDataURL(image);
     reader.onload = function () {
       document
@@ -154,6 +164,9 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   };
 
   const saveMemeToPersonalAccount = async () => {
+    if (blockSaveButton) {
+      return;
+    }
     const savedToken = getCookie("token");
     const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id;
     try {
@@ -163,7 +176,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       // const error = err[key][0]
       console.log(err);
     }
-  };
+  }; //revrite in actions
 
   return (
     !!meme && (
@@ -257,9 +270,17 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
             ) : null}
 
             <button
-              className={`btn ${styles.saved_meme_btn}`}
+              className={`btn ${styles.saved_meme_btn} ${
+                blockSaveButton ? "btn_blocked" : null
+              }`}
               // className={`btn ${styles.saved_meme__btn_save}`}
-              onClick={() => saveMemeToPersonalAccount()}
+              onClick={() => {
+                if (blockSaveButton) {
+                  return;
+                }
+                saveMemeToPersonalAccount();
+                dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+              }}
             >
               сохранить в ЛК
             </button>

@@ -21,7 +21,6 @@ export const addOffset = (offset) => ({
 });
 
 export const searchTag = (text) => {
-  console.log("i am in action", text);
   return {
     type: SEARCH_TAG,
     payload: text,
@@ -35,7 +34,6 @@ export const changeFlag = () => ({
   type: CHANGE_FLAG,
 });
 export const clearQueryParam = () => {
-  console.log("clear");
   return {
     type: CLEAR_QUERY_PARAM,
   };
