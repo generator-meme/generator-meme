@@ -220,7 +220,7 @@
 
   .header_row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
     gap: 20px;
   }

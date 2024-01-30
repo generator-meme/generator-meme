@@ -23,7 +23,6 @@ export const TagLists = ({ elem }) => {
             styles.meme__tags + " " + `${isMore ? styles.meme__tags_more : ""}`
           }
           style={{ ...addStyle }}
-          onClick={(e) => setIsMore(false)}
         >
           {elem.tag.map((tag, index) => {
             return (

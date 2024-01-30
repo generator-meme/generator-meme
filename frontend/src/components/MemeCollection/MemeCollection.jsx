@@ -41,7 +41,7 @@ export default function MemeCollection() {
   const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const myMemes = useSelector((state) => state.allMyCollectionMemes.myMemes);
-  console.log(myMemes);
+
   const { template_tag, offset, ordering, only_my, limit } = useSelector(
     (state) => state.collectionFiltration.queryParam
   );
@@ -49,41 +49,26 @@ export default function MemeCollection() {
   const [reverse, setReverse] = useState(false);
   let isTagsShown = true;
   let sortByDate = true;
-  const [page, setPage] = useState(1);
+  // const { page, pageArray, indexOfPageNumber } = useSelector(
+  //   (state) => state.collectionFiltration
+  // );
+  // const [page, setPage] = useState(1);
   const [widthScreen, setWidthScreen] = useState(window.screen.width);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getAllMyMemeCollections());
-  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
-
-  useEffect(() => {
-    let pageArray = [];
-    const pageC = Math.ceil(myMemes?.count / memesPerPage);
-    for (let i = 1; i <= pageC; i++) {
-      pageArray.push(i);
-    }
-    if (!pageArray) {
-      return [];
-    }
-    let tempPages = pageArray;
-    const slicedArrayes = sliceArrayIntoGroups(tempPages, 5);
-    dispatch(getPage(slicedArrayes));
-    // dispatch(addPage(0));
-  }, [myMemes]);
-
   const memesPerPage = useMemo(() => {
-    let memes_per_page = 9 * page;
+    let memes_per_page = 4;
+
     switch (true) {
       case window.screen.width <= 1480 && window.screen.width > 1080:
-        memes_per_page = 4 * page;
+        memes_per_page = 4;
         break;
       case window.screen.width <= 1080 && window.screen.width > 750:
-        memes_per_page = 2 * page;
+        memes_per_page = 2;
         // isTagsShown = false;
         break;
       case window.screen.width <= 750 && window.screen.width > 350:
-        memes_per_page = 4 * page;
+        memes_per_page = 4;
         // isTagsShown = true;
         // sortByDate = true;
         break;
@@ -92,6 +77,37 @@ export default function MemeCollection() {
     }
     return memes_per_page;
   }, []);
+  console.log(memesPerPage);
+
+  useEffect(() => {
+    dispatch(getAllMyMemeCollections());
+  }, [
+    template_tag,
+    offset,
+    ordering,
+    only_my,
+    limit,
+    dispatch,
+    flag,
+    memesPerPage,
+  ]);
+
+  useEffect(() => {
+    let pageArray = [];
+    const pageC = Math.ceil(myMemes?.count / memesPerPage);
+    if (pageC === 0) {
+      return [];
+    }
+    for (let i = 1; i <= pageC; i++) {
+      pageArray.push(i);
+    }
+    const slicedArrayes = sliceArrayIntoGroups(pageArray, 5);
+    dispatch(getPage(slicedArrayes));
+  }, [myMemes]);
+
+  useEffect(() => {
+    dispatch(addLimit(memesPerPage));
+  }, [dispatch, memesPerPage]);
 
   function sliceArrayIntoGroups(arr, size) {
     if (arr.length === 0) {
@@ -110,21 +126,22 @@ export default function MemeCollection() {
     });
     return tagId ? tagId.id : "noID";
   };
+  //get id of Tag from all tags in templates
 
   const handleChangeSearch = (e) => {
     const search_string = e.target.value;
-    const query_string = search_string.replaceAll(" ", ",");
+    const query_string = search_string.replaceAll(" ", ",").toLocaleLowerCase();
     setSearch(query_string);
   };
+  // to remove , and '' from search string
 
   const SortEverything = (e) => {
     e.preventDefault();
     const searchString = stringToSearch();
-    dispatch(clearQueryParam());
-    console.log(limit, offset);
     if (searchString === "") {
-      dispatch(changeFlag()); //триггер для вызова useEffect
-      console.log("in empty search");
+      dispatch(clearQueryParam());
+      dispatch(changeFlag()); // to get allMycollections with initial
+      //query parametrs in api.getMemesInMyCollection;
       return;
     }
     if (searchString !== "noID") {
@@ -134,25 +151,31 @@ export default function MemeCollection() {
       dispatch(setAllMemeCollectionsEmpty());
     }
     dispatch(addPage(0));
-    // console.log(page * limit);
-    // dispatch(addLimit(addOffset(page * limit)));
   };
+  // function to search of tags
+
   const reverseMemes = () => {
     setReverse(!reverse);
     ordering === "added_at"
       ? dispatch(addOrdering("-added_at"))
       : dispatch(addOrdering("added_at"));
   };
+  //added ordering by date in query in api.getMemesInMyCollection
 
-  const goToPage = (e, page) => {
-    console.log((page - 1) * limit);
+  const goToPage = (e, numberOfPage) => {
     e.preventDefault();
-    dispatch(addOffset((page - 1) * limit));
+    if (stringToSearch() === "noID") {
+      return;
+    }
+    dispatch(addOffset((numberOfPage - 1) * limit));
   };
+  //add offset to query in api.getMemesInMyCollection
 
   const handleGoToMeme = (id) => {
     navigate(`/saved/${id}`);
   };
+  // go to saved meme
+
   return (
     <div className={styles.meme_collection}>
       <div className={styles.header_row}>

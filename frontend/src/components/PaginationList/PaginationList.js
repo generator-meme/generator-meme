@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addPage } from "../../services/actions/collectionFiltrationActions";
+import {
+  addPage,
+  changeNumberPage,
+} from "../../services/actions/collectionFiltrationActions";
 import styles from "./PaginationList.module.css";
 export const PaginationList = ({ goToPage }) => {
-  const { page, pageArray } = useSelector(
+  const { page, pageArray, indexOfPageNumber } = useSelector(
     (state) => state.collectionFiltration
   );
-  console.log(page);
-  const [isActive, setIsActive] = useState(0);
   const dispatch = useDispatch();
-  const myMemes = useSelector((state) => state.allMyCollectionMemes.myMemes);
-  useEffect(() => {}, [pageArray]);
-  console.log(isActive);
+
   const arr = useMemo(() => {
     if (pageArray.length < page + 1) {
       return [];
@@ -20,20 +19,20 @@ export const PaginationList = ({ goToPage }) => {
   }, [pageArray, page]);
 
   const decrementOfArrayIndex = (e) => {
-    console.log(JSON.stringify(page));
-    if (page === 0) {
-      goToPage(e, 5);
+    if (page === 0 || pageArray.length === 0) {
       return;
     }
     dispatch(addPage(page - 1));
     goToPage(e, (page - 1) * 5 + 5);
+    dispatch(changeNumberPage(4));
   };
   const incrementOfArrayIndex = (e) => {
-    if (pageArray.length === page + 1) {
+    if (pageArray.length === page + 1 || pageArray.length === 0) {
       return;
     }
     dispatch(addPage(page + 1));
     goToPage(e, (page + 1) * 5 + 1);
+    dispatch(changeNumberPage(0));
   };
 
   return (
@@ -44,14 +43,11 @@ export const PaginationList = ({ goToPage }) => {
             <button
               key={index}
               className={`${styles.btn_no_bg} ${
-                isActive === index ? styles.text_bold : null
+                indexOfPageNumber === index ? styles.text_bold : null
               }`}
               onClick={(e) => {
-                if (numberOfPage >= 5) {
-                  setIsActive(0);
-                }
                 goToPage(e, numberOfPage);
-                setIsActive(numberOfPage - page * 5 - 1);
+                dispatch(changeNumberPage(numberOfPage - page * 5 - 1));
               }}
             >
               {numberOfPage}
