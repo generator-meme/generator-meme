@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
@@ -15,6 +15,10 @@ import {
 import Fieldset from "../Fieldset/Fieldset";
 import { getCanvasSettings } from "../../utils/canvasData";
 import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
+import {
+  unBlockSaveButtonToCollection,
+  UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
+} from "../../services/actions/savedMemeActions";
 
 const Canvas = ({
   handleCreateNewMeme,
@@ -39,6 +43,8 @@ const Canvas = ({
     )
   );
   const { currentMeme } = useSelector((state) => state.setCurrentMeme);
+  const dispatch = useDispatch();
+  const [flag, setFlag] = useState(false);
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -63,6 +69,7 @@ const Canvas = ({
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
       ).finally(() => {
+        dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
         navigate(
           `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
           { state: JSON.parse(localStorage.getItem("createdMeme")).id }

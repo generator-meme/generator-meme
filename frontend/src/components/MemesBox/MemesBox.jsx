@@ -55,12 +55,7 @@ const MemesBox = ({
     { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
     { text: "Рандом", isOn: false, param: "random", id: 3 },
   ]);
-  const [randomTab, setRandomTab] = useState({
-    text: "Рандом",
-    isOn: false,
-    param: "random",
-    id: 3,
-  });
+
   const clichHandleTab = (params) => {
     if (params.param === "random") {
       dispatch(addRandomId());

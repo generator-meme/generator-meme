@@ -7,6 +7,7 @@ import {
   CLEAR_QUERY_PARAM,
   ADD_PAGE,
   GET_PAGES,
+  CHANGE_NUMBER_PAGE,
 } from "../actions/collectionFiltrationActions";
 
 const initialState = {
@@ -15,18 +16,19 @@ const initialState = {
     offset: 0,
     ordering: "-added_at",
     only_my: "true",
-    limit: 9,
+    limit: 4,
   },
   flag: false,
   page: 0,
   pageArray: [],
+  indexOfPageNumber: 0,
 };
 const initQueryParam = {
   template_tag: "",
   offset: 0,
   ordering: "-added_at",
   only_my: "true",
-  limit: 9,
+  limit: 4,
 };
 
 export const filtrationCollectionReducer = (state = initialState, action) => {
@@ -74,9 +76,15 @@ export const filtrationCollectionReducer = (state = initialState, action) => {
       };
     }
     case CLEAR_QUERY_PARAM: {
+      console.log("in clear");
+      return {
+        ...initialState,
+      };
+    }
+    case CHANGE_NUMBER_PAGE: {
       return {
         ...state,
-        queryParam: { ...initQueryParam },
+        indexOfPageNumber: action.payload,
       };
     }
     default:

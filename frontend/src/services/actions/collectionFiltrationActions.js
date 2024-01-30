@@ -10,6 +10,7 @@ export const CHANGE_FLAG = "CHANGE_FLAG";
 export const CLEAR_QUERY_PARAM = "CLEAR_QUERY_PARAM";
 export const ADD_PAGE = "ADD_PAGE";
 export const GET_PAGES = "GET_PAGES";
+export const CHANGE_NUMBER_PAGE = "CHANGE_NUMBER_PAGE";
 
 export const addLimit = (limit) => ({
   type: ADD_LIMIT,
@@ -21,7 +22,6 @@ export const addOffset = (offset) => ({
 });
 
 export const searchTag = (text) => {
-  console.log("i am in action", text);
   return {
     type: SEARCH_TAG,
     payload: text,
@@ -35,7 +35,6 @@ export const changeFlag = () => ({
   type: CHANGE_FLAG,
 });
 export const clearQueryParam = () => {
-  console.log("clear");
   return {
     type: CLEAR_QUERY_PARAM,
   };
@@ -51,5 +50,12 @@ export const getPage = (pageArray) => {
   return {
     type: GET_PAGES,
     payload: pageArray,
+  };
+};
+export const changeNumberPage = (numberPage) => {
+  console.log("in changeNumberPage");
+  return {
+    type: CHANGE_NUMBER_PAGE,
+    payload: numberPage,
   };
 };

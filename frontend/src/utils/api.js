@@ -18,7 +18,6 @@ class Api {
   }
 
   _checkReponce(res) {
-    console.log(res);
     return res.ok
       ? res.json()
       : res.json().then((err) => {
@@ -157,9 +156,6 @@ class Api {
       ordering: "-added_at",
     }
   ) {
-    console.log(
-      `/memes/my-collection/?template_tag=${option.template_tag}&limit=${option.limit}&offset=${option.offset}&only_my='${option.only_my}'&ordering=${option.ordering}`
-    );
     return fetch(
       `${this._baseUrl}/memes/my-collection/?template_tag=${option.template_tag}&limit=${option.limit}&offset=${option.offset}&only_my='${option.only_my}'&ordering=${option.ordering}`,
       {

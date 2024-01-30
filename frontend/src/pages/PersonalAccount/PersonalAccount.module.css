@@ -71,8 +71,78 @@
     display: flex;
     flex-direction: column;
   }
+  .personal_info_change > h2 {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .personal_info_all {
+    width: fit-content;
+    border: 1px solid #9d0095;
+    border-radius: 20px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 35px;
+    margin-right: 0px;
+    margin-top: 29px;
+    padding: 30px 30px 41px 15px;
+  }
+  .personal_info_all > h1 {
+    box-sizing: border-box;
+    font-size: 25px;
+    font-weight: 500;
+    display: inline-flex;
+  }
 }
 @media screen and (max-width: 750px) {
+  .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .personal_info_all {
+    width: fit-content;
+    border: 1px solid #9d0095;
+    border-radius: 20px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 35px;
+    margin-right: 0px;
+    margin-top: 29px;
+    padding: 30px 30px 41px 15px;
+  }
+  .personal_info_all > h1 {
+    box-sizing: border-box;
+    font-size: 25px;
+    font-weight: 500;
+    display: inline-flex;
+  }
+
+  .change_me_info {
+    align-items: flex-start;
+    background-color: #fff;
+    border: 1px solid #9d0095;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    left: 50%;
+    padding-bottom: 39px;
+    padding-left: 30px;
+    padding-top: 30px;
+    position: absolute;
+    top: 210px;
+    width: 226px;
+    z-index: 11;
+    transform: translate(-50%, 0%);
+  }
+  .personal_info_change > h2 {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+@media screen and (max-width: 375px) {
   .personal_account {
     display: flex;
     flex-direction: column;
