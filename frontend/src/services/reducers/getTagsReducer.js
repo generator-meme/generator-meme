@@ -15,7 +15,6 @@ export const getTagsReducer = (state = initialState, action) => {
       return { ...state };
     }
     case GET_TAGS_SUCCESS: {
-      console.log(action.payload);
       return {
         ...state,
         tags: action.payload,

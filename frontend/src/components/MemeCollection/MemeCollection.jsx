@@ -1,19 +1,9 @@
-import api from "../../utils/api";
 import styles from "./MemeColection.module.css";
 import {
   addPage,
   getPage,
 } from "../../services/actions/collectionFiltrationActions";
-import Tag from "./Tag";
-import { getCookie } from "../../utils/cookie";
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useReducer,
-  useRef,
-} from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
 import button_delete from "../../images/cross-delete.png";
 import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
@@ -25,7 +15,6 @@ import {
 } from "../../services/actions/allMemeCollectionActions";
 import {
   changeFlag,
-  clearQueryParam,
   searchTag,
   addOrdering,
   addLimit,
@@ -35,86 +24,51 @@ import { TagLists } from "../TagLists/TagLists";
 import { PaginationList } from "../PaginationList/PaginationList";
 import { useNavigate } from "react-router-dom";
 import { BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
+import { useGetWidthHook } from "./useGetWidthHook";
+import { getArrayOfNumberPages } from "../../utils/memeCollectionUtils";
 
 export default function MemeCollection() {
   const [search, setSearch] = useState("");
   const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const myMemes = useSelector((state) => state.allMyCollectionMemes.myMemes);
-
   const { template_tag, offset, ordering, only_my, limit } = useSelector(
     (state) => state.collectionFiltration.queryParam
   );
   const { flag } = useSelector((state) => state.collectionFiltration);
   const [reverse, setReverse] = useState(false);
-  let isTagsShown = true;
-  let sortByDate = true;
-  // const { page, pageArray, indexOfPageNumber } = useSelector(
-  //   (state) => state.collectionFiltration
-  // );
-  // const [page, setPage] = useState(1);
-  const [widthScreen, setWidthScreen] = useState(window.screen.width);
   const navigate = useNavigate();
+  const widthOfWindow = useGetWidthHook();
 
-  const memesPerPage = useMemo(() => {
-    let memes_per_page = 4;
+  const [arrayOfPages, setArrayOfPages] = useState([]);
 
-    switch (true) {
-      case window.screen.width <= 1480 && window.screen.width > 1080:
-        memes_per_page = 4;
-        break;
-      case window.screen.width <= 1080 && window.screen.width > 750:
-        memes_per_page = 2;
-        // isTagsShown = false;
-        break;
-      case window.screen.width <= 750 && window.screen.width > 350:
-        memes_per_page = 4;
-        // isTagsShown = true;
-        // sortByDate = true;
-        break;
-      default:
-        break;
-    }
-    return memes_per_page;
+  const limitOnPage = useMemo(() => {
+    if (widthOfWindow <= 1480 && widthOfWindow > 1080) {
+      return 4;
+    } else if (widthOfWindow <= 1080 && widthOfWindow > 750) {
+      return 2;
+    } else if (widthOfWindow <= 750 && widthOfWindow > 350) {
+      return 4;
+    } else return 9;
   }, []);
-  console.log(memesPerPage);
 
   useEffect(() => {
-    dispatch(getAllMyMemeCollections());
-  }, [
-    template_tag,
-    offset,
-    ordering,
-    only_my,
-    limit,
-    dispatch,
-    flag,
-    memesPerPage,
-  ]);
+    dispatch(addLimit(limitOnPage));
+  }, [limitOnPage]);
 
   useEffect(() => {
-    let pageArray = [];
-    const pageC = Math.ceil(myMemes?.count / memesPerPage);
-    if (pageC === 0) {
-      return [];
+    const blockPages = Math.ceil(myMemes?.count / limit);
+    if (!myMemes || myMemes.count === 0 || blockPages === 0) {
+      setArrayOfPages([]);
+      return;
     }
-    for (let i = 1; i <= pageC; i++) {
-      pageArray.push(i);
-    }
-    const slicedArrayes = sliceArrayIntoGroups(pageArray, 5);
-    dispatch(getPage(slicedArrayes));
+    const slicedArrayes = getArrayOfNumberPages([], blockPages);
+    setArrayOfPages(slicedArrayes);
   }, [myMemes]);
 
   useEffect(() => {
-    dispatch(addLimit(memesPerPage));
-  }, [dispatch, memesPerPage]);
-
-  function sliceArrayIntoGroups(arr, size) {
-    if (arr.length === 0) {
-      return arr;
-    }
-    return [arr.slice(0, size), ...sliceArrayIntoGroups(arr.slice(size), size)];
-  }
+    dispatch(getAllMyMemeCollections());
+  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
 
   const stringToSearch = () => {
     if (search === "") {
@@ -130,7 +84,7 @@ export default function MemeCollection() {
 
   const handleChangeSearch = (e) => {
     const search_string = e.target.value;
-    const query_string = search_string.replaceAll(" ", ",").toLocaleLowerCase();
+    const query_string = search_string.toLocaleLowerCase().trim();
     setSearch(query_string);
   };
   // to remove , and '' from search string
@@ -138,19 +92,14 @@ export default function MemeCollection() {
   const SortEverything = (e) => {
     e.preventDefault();
     const searchString = stringToSearch();
-    if (searchString === "") {
-      dispatch(clearQueryParam());
-      dispatch(changeFlag()); // to get allMycollections with initial
-      //query parametrs in api.getMemesInMyCollection;
+    if (searchString === "noID") {
+      dispatch(setAllMemeCollectionsEmpty());
       return;
-    }
-    if (searchString !== "noID") {
+    } else {
       dispatch(searchTag(searchString));
       dispatch(addPage(0));
-    } else {
-      dispatch(setAllMemeCollectionsEmpty());
+      dispatch(changeFlag());
     }
-    dispatch(addPage(0));
   };
   // function to search of tags
 
@@ -194,26 +143,24 @@ export default function MemeCollection() {
             <SearchButton />
           </button>
         </div>
-        {sortByDate && (
-          <button
-            className={`${styles.sortByDate} ${styles.btn_no_bg}`}
-            onClick={(e) => reverseMemes(e)}
+
+        <button
+          className={`${styles.sortByDate} ${styles.btn_no_bg}`}
+          onClick={(e) => reverseMemes(e)}
+        >
+          По дате
+          <div
+            className={reverse ? styles.unreverse_array : styles.reverse_array}
           >
-            По дате
-            <div
-              className={
-                reverse ? styles.unreverse_array : styles.reverse_array
-              }
-            >
-              <ArrowDown />
-            </div>
-          </button>
-        )}
-        {!isTagsShown && (
-          <div className={`${styles.text_style} ${styles.btn_no_bg}`}>
-            Сортировать
+            <ArrowDown />
           </div>
-        )}
+        </button>
+
+        {
+          // <div className={`${styles.text_style} ${styles.btn_no_bg}`}>
+          //   Сортировать
+          // </div>
+        }
       </div>
       <div className={styles.memes_container}>
         {myMemes?.results?.map((res) => {
@@ -248,7 +195,10 @@ export default function MemeCollection() {
         })}
       </div>
 
-      <PaginationList goToPage={goToPage}></PaginationList>
+      <PaginationList
+        goToPage={goToPage}
+        arrayOfPages={arrayOfPages}
+      ></PaginationList>
     </div>
   );
 }

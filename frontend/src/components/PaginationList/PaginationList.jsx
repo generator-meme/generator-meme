@@ -1,25 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addPage,
   changeNumberPage,
 } from "../../services/actions/collectionFiltrationActions";
 import styles from "./PaginationList.module.css";
-export const PaginationList = ({ goToPage }) => {
-  const { page, pageArray, indexOfPageNumber } = useSelector(
+export const PaginationList = ({ goToPage, arrayOfPages }) => {
+  const { page, indexOfPageNumber } = useSelector(
     (state) => state.collectionFiltration
   );
   const dispatch = useDispatch();
 
   const arr = useMemo(() => {
-    if (pageArray.length < page + 1) {
+    if (arrayOfPages?.length < page + 1) {
       return [];
     }
-    return pageArray[page];
-  }, [pageArray, page]);
+    return arrayOfPages[page];
+  }, [arrayOfPages, page]);
 
   const decrementOfArrayIndex = (e) => {
-    if (page === 0 || pageArray.length === 0) {
+    if (page === 0 || arrayOfPages.length === 0) {
       return;
     }
     dispatch(addPage(page - 1));
@@ -27,7 +27,7 @@ export const PaginationList = ({ goToPage }) => {
     dispatch(changeNumberPage(4));
   };
   const incrementOfArrayIndex = (e) => {
-    if (pageArray.length === page + 1 || pageArray.length === 0) {
+    if (arrayOfPages.length === page + 1 || arrayOfPages.length === 0) {
       return;
     }
     dispatch(addPage(page + 1));
@@ -38,8 +38,8 @@ export const PaginationList = ({ goToPage }) => {
   return (
     <div className={styles.pagination_container}>
       <div className={styles.pages}>
-        {pageArray.length !== 0 &&
-          arr.map((numberOfPage, index) => (
+        {arrayOfPages?.length !== 0 &&
+          arr?.map((numberOfPage, index) => (
             <button
               key={index}
               className={`${styles.btn_no_bg} ${

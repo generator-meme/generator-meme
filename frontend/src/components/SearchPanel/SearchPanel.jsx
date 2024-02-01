@@ -22,15 +22,6 @@ export const SearchPanel = () => {
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
-  // useEffect(() => {
-  //   api
-  //     .getTags()
-  //     .then((data) => {
-  //       setTags(data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
-
   useEffect(() => {
     const getTagsOnInputChange = async (name) => {
       try {
