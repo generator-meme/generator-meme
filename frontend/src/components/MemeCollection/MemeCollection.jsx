@@ -53,7 +53,6 @@ export default function MemeCollection() {
   }, []);
 
   useEffect(() => {
-    console.log("in limit");
     dispatch(addLimit(limitOnPage));
   }, [limitOnPage]);
 
