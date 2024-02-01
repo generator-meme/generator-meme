@@ -12,7 +12,7 @@ export const allMyMemesCollectionReducer = (state = initialState, action) => {
     case GET_ALL_MEME_COLLECTIONS:
       return { ...state, myMemes: action.payload };
     case SET_ALL_MEME_COLLECTIONS_EMPTY:
-      return [];
+      return { ...state, myMemes: [] };
     default:
       return state;
   }

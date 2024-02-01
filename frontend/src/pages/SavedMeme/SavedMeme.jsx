@@ -38,12 +38,6 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const memeRef = useRef(null);
-  console.log(
-    currentMeme,
-    location.state,
-    meme,
-    localStorage.getItem("currentMeme")
-  );
 
   const writeToCanvas = (src) => {
     return new Promise((res) => {

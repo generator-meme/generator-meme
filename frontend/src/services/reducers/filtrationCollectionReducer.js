@@ -16,19 +16,12 @@ const initialState = {
     offset: 0,
     ordering: "-added_at",
     only_my: "true",
-    limit: 4,
+    limit: 9,
   },
   flag: false,
   page: 0,
   pageArray: [],
   indexOfPageNumber: 0,
-};
-const initQueryParam = {
-  template_tag: "",
-  offset: 0,
-  ordering: "-added_at",
-  only_my: "true",
-  limit: 4,
 };
 
 export const filtrationCollectionReducer = (state = initialState, action) => {

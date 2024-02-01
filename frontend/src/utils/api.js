@@ -81,7 +81,6 @@ class Api {
       method: "GET",
       headers: this._headers,
     }).then((res) => {
-      console.log(res);
       return new Promise((resolve, reject) => {
         if (res.status < 400) {
           return res.blob().then((blob) => {

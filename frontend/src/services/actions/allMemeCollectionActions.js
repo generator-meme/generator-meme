@@ -23,6 +23,7 @@ export const getAllMyMemeCollections = () => {
     api
       .getMemesInMyCollection(savedToken, currentFiltrationOptions)
       .then((res) => {
+        console.log(res);
         dispatch(getAllMemeCollections(res));
       })
       .catch((err) => console.log(err));
