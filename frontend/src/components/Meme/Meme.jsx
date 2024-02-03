@@ -7,7 +7,6 @@ import LikeTemplate from "../LikeTemplate/LikeTemplate";
 import { TagLists } from "../TagLists/TagLists";
 
 function Meme({ elem, setIsNewMeme }) {
-  console.log(elem);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onClick = () => {

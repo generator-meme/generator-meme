@@ -1,26 +1,17 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./PersonalAccount.module.css";
-import { useDispatch, useSelector } from "react-redux";
 import useComponentVisible from "./useComponentVisible";
 import MemeCollection from "../../components/MemeCollection/MemeCollection";
 const PersonalAccount = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const userData = useSelector((state) => state.user.userInfo);
-  //   const [isMenuOpened, setMenuOpened] = useState(false);
   const [ref, isComponentVisible, setIsComponentVisible] =
     useComponentVisible(false);
   const handleComponentVisibility = () => {
-    // const page = document.getElementsByClassName("page");
-    // page.classList.remove("contrast-effect");
     const dim_element = document.getElementById("dim");
     dim_element.classList.add("dim_filter");
     const note = document.querySelector(".dim_filter");
     note.style.width = window.innerWidth + "px";
     note.style.height = window.innerHeight + "px";
-    // document.body.classList.add("contrast-effect");
     setIsComponentVisible(true);
   };
   const handleName = (e) => {

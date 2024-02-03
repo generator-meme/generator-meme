@@ -12,7 +12,7 @@ export const PaginationList = ({ goToPage, arrayOfPages }) => {
   const dispatch = useDispatch();
 
   const arr = useMemo(() => {
-    if (arrayOfPages?.length < page + 1) {
+    if (arrayOfPages?.length < page + 1 || !arrayOfPages) {
       return [];
     }
     return arrayOfPages[page];

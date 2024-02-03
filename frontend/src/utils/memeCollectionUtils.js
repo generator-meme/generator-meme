@@ -3,10 +3,7 @@ export const getArrayOfNumberPages = (arr, blockPages) => {
   for (let i = 1; i <= blockPages; i++) {
     tempArr.push(i);
   }
-
-  const aa = sliceArrayIntoGroups(tempArr, 5);
-
-  return aa;
+  return sliceArrayIntoGroups(tempArr, 5);
 };
 
 function sliceArrayIntoGroups(arr, size) {

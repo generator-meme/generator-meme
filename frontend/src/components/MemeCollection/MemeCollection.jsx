@@ -40,9 +40,8 @@ export default function MemeCollection() {
   const navigate = useNavigate();
   const widthOfWindow = useGetWidthHook();
 
-  const [arrayOfPages, setArrayOfPages] = useState([]);
-
   const limitOnPage = useMemo(() => {
+    console.log(widthOfWindow);
     if (widthOfWindow <= 1480 && widthOfWindow > 1080) {
       return 4;
     } else if (widthOfWindow <= 1080 && widthOfWindow > 750) {
@@ -54,21 +53,23 @@ export default function MemeCollection() {
 
   useEffect(() => {
     dispatch(addLimit(limitOnPage));
-  }, [limitOnPage]);
+  }, []);
 
-  useEffect(() => {
+  const ArrayOFPages = useMemo(() => {
     const blockPages = Math.ceil(myMemes?.count / limit);
     if (!myMemes || myMemes.count === 0 || blockPages === 0) {
-      setArrayOfPages([]);
-      return;
+      return [];
     }
     const slicedArrayes = getArrayOfNumberPages([], blockPages);
-    setArrayOfPages(slicedArrayes);
+    return slicedArrayes;
   }, [myMemes]);
+
+  // useEffect(() => {}, [myMemes]);
 
   useEffect(() => {
     dispatch(getAllMyMemeCollections());
-  }, [template_tag, offset, ordering, only_my, limit, dispatch, flag]);
+    console.log("in gelAllCollections");
+  }, [template_tag, offset, ordering, only_my, dispatch, flag]);
 
   const stringToSearch = () => {
     if (search === "") {
@@ -197,7 +198,7 @@ export default function MemeCollection() {
 
       <PaginationList
         goToPage={goToPage}
-        arrayOfPages={arrayOfPages}
+        arrayOfPages={ArrayOFPages}
       ></PaginationList>
     </div>
   );
