@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { currentMemeReducer } from "./currentMemeReducer";
 import { savedMemeReducer } from "./savedMemeReducer";
 import { userReducer } from "./userReducer";
 import { preloaderReducer } from "./preloaderReducer";
@@ -10,11 +9,9 @@ import { teamReducer } from "./teamReducer";
 import { filtrationCollectionReducer } from "./filtrationCollectionReducer";
 import { allMyMemesCollectionReducer } from "./allMemeCollectionReducer";
 import { getTagsReducer } from "./getTagsReducer";
-import { tempStoreReducer } from "./tempStoreReducer";
 
 const rootReducer = combineReducers({
   saveMeme: savedMemeReducer,
-  setCurrentMeme: currentMemeReducer,
   user: userReducer,
   preloader: preloaderReducer,
   filtration: filtrationReducer,
@@ -24,6 +21,5 @@ const rootReducer = combineReducers({
   collectionFiltration: filtrationCollectionReducer,
   allMyCollectionMemes: allMyMemesCollectionReducer,
   getTags: getTagsReducer,
-  getTempStore: tempStoreReducer,
 });
 export default rootReducer;
