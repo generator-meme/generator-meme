@@ -24,8 +24,8 @@ import { TagLists } from "../TagLists/TagLists";
 import { PaginationList } from "../PaginationList/PaginationList";
 import { useNavigate } from "react-router-dom";
 import { BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
-import { useGetWidthHook } from "./useGetWidthHook";
 import { getArrayOfNumberPages } from "../../utils/memeCollectionUtils";
+import { useGetWidthHook } from "../../utils/getWidthDevice";
 
 export default function MemeCollection() {
   const [search, setSearch] = useState("");
@@ -46,9 +46,9 @@ export default function MemeCollection() {
       return 4;
     } else if (widthOfWindow <= 1080 && widthOfWindow > 750) {
       return 2;
-    } else if (widthOfWindow <= 750 && widthOfWindow > 350) {
+    } else if (widthOfWindow <= 750 && widthOfWindow > 250) {
       return 4;
-    } else return 9;
+    } else return 4;
   }, []);
 
   useEffect(() => {
@@ -128,78 +128,78 @@ export default function MemeCollection() {
 
   return (
     <div className={styles.meme_collection}>
-      <div className={styles.header_row}>
-        <h1>Коллекция мемов</h1>
-        <div className={styles.search_component}>
-          <input
-            onChange={handleChangeSearch}
-            value={search}
-            className={`${styles.text_style} ${styles.search_input}`}
-            placeholder="Поиск"
-          />
-          <button
-            className={`${styles.search_button} ${styles.btn_no_bg}`}
-            onClick={(e) => SortEverything(e)}
-          >
-            <SearchButton />
-          </button>
-        </div>
+      {
+        <>
+          <div className={styles.header_row}>
+            {widthOfWindow < 375 ? null : <h1>Коллекция мемов</h1>}
+            <div className={styles.search_component}>
+              <input
+                onChange={handleChangeSearch}
+                value={search}
+                className={`${styles.text_style} ${styles.search_input}`}
+                placeholder="Поиск"
+              />
+              <button
+                className={`${styles.search_button} ${styles.btn_no_bg}`}
+                onClick={(e) => SortEverything(e)}
+              >
+                <SearchButton />
+              </button>
+            </div>
 
-        <button
-          className={`${styles.sortByDate} ${styles.btn_no_bg}`}
-          onClick={(e) => reverseMemes(e)}
-        >
-          По дате
-          <div
-            className={reverse ? styles.unreverse_array : styles.reverse_array}
-          >
-            <ArrowDown />
-          </div>
-        </button>
-
-        {
-          // <div className={`${styles.text_style} ${styles.btn_no_bg}`}>
-          //   Сортировать
-          // </div>
-        }
-      </div>
-      <div className={styles.memes_container}>
-        {myMemes?.results?.map((res) => {
-          return (
-            <>
-              <div className={styles.one_meme}>
-                <button
-                  onClick={(e) => {
-                    dispatch(deleteMemeFromMyCollection(res.meme.id));
-                  }}
-                  className={`${styles.delete_btn} ${styles.btn_no_bg}`}
-                >
-                  <img
-                    className={styles.cross}
-                    src={button_delete}
-                    alt="delete"
-                  />
-                </button>
-                <img
-                  className={styles.saved_meme_img}
-                  src={res.meme.image}
-                  alt=""
-                  onClick={() => {
-                    handleGoToMeme(res.meme.id);
-                    dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
-                  }}
-                />
-                <TagLists elem={res.meme.template}></TagLists>
+            <button
+              className={`${styles.sortByDate} ${styles.btn_no_bg}`}
+              onClick={(e) => reverseMemes(e)}
+            >
+              По дате
+              <div
+                className={
+                  reverse ? styles.unreverse_array : styles.reverse_array
+                }
+              >
+                <ArrowDown />
               </div>
-            </>
-          );
-        })}
-      </div>
+            </button>
+          </div>
+          <div className={styles.memes_container}>
+            {myMemes?.results?.map((res) => {
+              return (
+                <>
+                  <div className={styles.one_meme}>
+                    <button
+                      onClick={(e) => {
+                        dispatch(deleteMemeFromMyCollection(res.meme.id));
+                      }}
+                      className={`${styles.delete_btn} ${styles.btn_no_bg}`}
+                    >
+                      <img
+                        className={styles.cross}
+                        src={button_delete}
+                        alt="delete"
+                      />
+                    </button>
+                    <img
+                      className={styles.saved_meme_img}
+                      src={res.meme.image}
+                      alt=""
+                      onClick={() => {
+                        handleGoToMeme(res.meme.id);
+                        dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+                      }}
+                    />
+                    <TagLists elem={res.meme.template}></TagLists>
+                  </div>
+                </>
+              );
+            })}
+          </div>
 
-      <PaginationList
-        goToPage={goToPage}
-        arrayOfPages={ArrayOFPages}
-      ></PaginationList>
+          <PaginationList
+            goToPage={goToPage}
+            arrayOfPages={ArrayOFPages}
+          ></PaginationList>
+        </>
+      }
     </div>
   );
 }

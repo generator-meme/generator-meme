@@ -1,0 +1,26 @@
+.groups_wrap {
+  margin-top: 40px;
+  margin-left: 30px;
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  box-sizing: border-box;
+  /* width: 453px;
+    height: 195px; */
+
+  padding-left: 22px;
+  padding-top: 30px;
+  padding-right: 40px;
+  padding-bottom: 41px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+@media screen and (max-width: 375px) {
+  .groups_wrap {
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+}
