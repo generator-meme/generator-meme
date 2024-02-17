@@ -1,0 +1,14 @@
+.groupname_wrap {
+}
+
+.name {
+  padding: 10px;
+  width: fit-content;
+  position: relative;
+}
+
+.close_icon {
+  position: absolute;
+  right: -15px;
+  top: -2px;
+}

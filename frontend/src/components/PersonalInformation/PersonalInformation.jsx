@@ -39,15 +39,16 @@ export const PersonalInformation = () => {
       console.log(err);
     }
   };
-  console.log(widthOfWindow);
+
   return (
     <>
       {isOpenDropDawn && widthOfWindow > 375 ? (
         <div className={styles.dim_filter}></div>
       ) : null}
       <div className={styles.personal_info_all}>
+        {widthOfWindow > 375 && <h1>Личная информация</h1>}
         <div className={styles.personal_info_change}>
-          <h2>Имя пользователя</h2>
+          <h3>Имя пользователя</h3>
           <button onClick={handleOpenDropDawn} className={styles.btn_change}>
             Редактировать профиль
           </button>

@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
 import { getArrayOfNumberPages } from "../../utils/memeCollectionUtils";
 import { useGetWidthHook } from "../../utils/getWidthDevice";
+import { SearchPanelMobile } from "../searchPanelMobile/SearchPanelMobile";
 
 export default function MemeCollection() {
   const [search, setSearch] = useState("");
@@ -75,6 +76,7 @@ export default function MemeCollection() {
     if (search === "") {
       return "";
     }
+    console.log(search);
     const tempTags = tags;
     const tagId = tempTags.find((tag) => {
       return tag.name === search;
@@ -84,10 +86,12 @@ export default function MemeCollection() {
   //get id of Tag from all tags in templates
 
   const handleChangeSearch = (e) => {
+    console.log("1");
     const search_string = e.target.value;
     const query_string = search_string.toLocaleLowerCase().trim();
     setSearch(query_string);
   };
+  console.log(search);
   // to remove , and '' from search string
 
   const SortEverything = (e) => {
@@ -132,19 +136,12 @@ export default function MemeCollection() {
         <>
           <div className={styles.header_row}>
             {widthOfWindow < 375 ? null : <h1>Коллекция мемов</h1>}
-            <div className={styles.search_component}>
-              <input
-                onChange={handleChangeSearch}
-                value={search}
-                className={`${styles.text_style} ${styles.search_input}`}
-                placeholder="Поиск"
-              />
-              <button
-                className={`${styles.search_button} ${styles.btn_no_bg}`}
-                onClick={(e) => SortEverything(e)}
-              >
-                <SearchButton />
-              </button>
+            <div className={styles.collection_search}>
+              <SearchPanelMobile
+                SortEverything={SortEverything}
+                handleChangeSearch={handleChangeSearch}
+                search={search}
+              ></SearchPanelMobile>
             </div>
 
             <button

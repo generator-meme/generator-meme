@@ -1,13 +1,17 @@
+section {
+  padding: 20px;
+}
 .personal_page {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.2fr;
   background-color: white;
 }
 .personal_account {
   display: flex;
   background-color: white;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 45px;
+  margin-top: 20px;
 }
 .basket {
   display: flex;
@@ -16,6 +20,10 @@
 
 @media screen and (max-width: 1080px) {
   .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+  .personal_page {
     display: flex;
     flex-direction: column;
   }

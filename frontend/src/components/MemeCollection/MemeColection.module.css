@@ -5,7 +5,6 @@
 .meme_collection {
   border: 1px solid #9d0095;
   border-radius: 20px;
-  margin: 40px 30px 0 30px;
   padding: 30px 40px 41px 22px;
   display: flex;
   flex-direction: column;
