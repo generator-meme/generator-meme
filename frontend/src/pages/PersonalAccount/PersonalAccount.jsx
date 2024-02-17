@@ -10,14 +10,17 @@ const PersonalAccount = () => {
     <div className={styles.personal_page}>
       <section>
         <div className={styles.personal_account}>
-          <HocPersonalAccount
-            text={"Личная информация"}
-            child={<PersonalInformation></PersonalInformation>}
-          ></HocPersonalAccount>
-          <HocPersonalAccount
-            text={"Группы"}
-            child={<Groups></Groups>}
-          ></HocPersonalAccount>
+          <div className={styles.module_wrap}>
+            <HocPersonalAccount
+              text={"Личная информация"}
+              child={<PersonalInformation></PersonalInformation>}
+            ></HocPersonalAccount>
+            <HocPersonalAccount
+              text={"Группы"}
+              child={<Groups></Groups>}
+            ></HocPersonalAccount>
+          </div>
+
           <div className={styles.basket}>
             <h2>Корзина</h2>
             <Basket></Basket>

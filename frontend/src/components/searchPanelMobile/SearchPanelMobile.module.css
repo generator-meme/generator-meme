@@ -54,6 +54,9 @@
 }
 .search_button::before {
   content: url("/src/images/icons/lupa.svg");
+  position: absolute;
+  top: 8px;
+  left: 10px;
 }
 @media screen and (max-width: 1480px) {
   .memes_container {
@@ -77,6 +80,9 @@
 @media screen and (max-width: 1080px) {
   .search_button {
     top: 2px;
+  }
+  .wrap_search {
+    width: 100%;
   }
 }
 

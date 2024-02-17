@@ -52,31 +52,31 @@ export const PersonalInformation = () => {
           <button onClick={handleOpenDropDawn} className={styles.btn_change}>
             Редактировать профиль
           </button>
+          {isOpenDropDawn && (
+            <div ref={dropDawnRef} className={styles.change_me_info_wrap}>
+              <div className={styles.change_me_info}>
+                <h3>Имя пользователя</h3>
+                <button
+                  className={styles.btn_change}
+                  onClick={(e) => {
+                    console.log(dropDawnRef);
+                    handleName(e);
+                  }}
+                >
+                  Изменить
+                </button>
+                <h3>Пароль</h3>
+                <button
+                  className={styles.btn_change}
+                  onClick={(e) => handlePass(e)}
+                >
+                  Изменить
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      {isOpenDropDawn && (
-        <div ref={dropDawnRef}>
-          <div className={styles.change_me_info}>
-            <h4>Имя пользователя</h4>
-            <button
-              className={styles.btn_change}
-              onClick={(e) => {
-                console.log(dropDawnRef);
-                handleName(e);
-              }}
-            >
-              Изменить
-            </button>
-            <h4>Пароль</h4>
-            <button
-              className={styles.btn_change}
-              onClick={(e) => handlePass(e)}
-            >
-              Изменить
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 };

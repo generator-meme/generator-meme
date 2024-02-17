@@ -66,7 +66,7 @@ export const Groups = () => {
                 <span>admin</span>
               </div>
               <h1>Пользователи</h1>
-              <div className={styles.my_groups}>
+              <div className={styles.my_groups__info}>
                 {mockArr2.map((name, index) => {
                   return <GroupName name={name} id={index}></GroupName>;
                 })}

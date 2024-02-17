@@ -52,7 +52,30 @@
   display: flex;
   justify-content: flex-end;
 }
-
+.my_groups__info {
+  max-height: 110px;
+  overflow: auto;
+}
+@media screen and (max-width: 1080px) {
+  .groups_wrap {
+    max-height: 375px;
+    min-width: 385px;
+  }
+  .group_info {
+    right: -40px;
+    min-height: 250px;
+  }
+}
+@media screen and (max-width: 780px) {
+  .groups_wrap {
+    padding: 30px 20px;
+    min-width: 350px;
+  }
+  .group_info {
+    min-width: 270px;
+    padding: 25px;
+  }
+}
 @media screen and (max-width: 375px) {
   .groups_wrap {
     margin: 0;

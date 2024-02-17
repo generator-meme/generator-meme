@@ -1,5 +1,6 @@
 section {
   padding: 20px;
+  box-sizing: border-box;
 }
 .personal_page {
   display: grid;
@@ -17,6 +18,11 @@ section {
   display: flex;
   gap: 5px;
 }
+.module_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
 
 @media screen and (max-width: 1080px) {
   .personal_account {
@@ -27,11 +33,28 @@ section {
     display: flex;
     flex-direction: column;
   }
+  .module_wrap {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr 1.2fr;
+  }
+  .basket {
+    position: relative;
+    top: -70px;
+  }
 }
 @media screen and (max-width: 750px) {
   .personal_account {
     display: flex;
     flex-direction: column;
+  }
+}
+@media (max-width: 749px) and (min-width: 376px) {
+  .module_wrap {
+    display: flex;
+  }
+  .basket {
+    position: static;
   }
 }
 @media screen and (max-width: 375px) {
