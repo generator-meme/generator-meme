@@ -1,183 +1,75 @@
-.dim_filter {
-  background-color: rgba(255, 255, 255, 0.407);
-  left: 0;
-  top: 0;
-  position: absolute;
-  z-index: 10;
+section {
+  padding: 20px;
+  box-sizing: border-box;
 }
-
+.personal_page {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  background-color: white;
+  min-height: 710px;
+}
 .personal_account {
   display: flex;
   background-color: white;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 45px;
+  margin-top: 20px;
 }
-
-.personal_info_all {
-  margin-top: 40px;
-  margin-left: 30px;
-  border: 1px solid #9d0095;
-  border-radius: 20px;
-
-  width: 453px;
-  height: 195px;
-
-  padding-left: 22px;
-  padding-top: 30px;
-  padding-right: 40px;
-  padding-bottom: 41px;
-
+.basket {
+  display: flex;
+  gap: 5px;
+}
+.module_wrap {
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 40px;
 }
 
-.personal_info_change {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.btn_change {
-  background: none;
-  border: none;
-  font-family: "Rubik";
-}
-
-.page {
-  background-color: white;
-}
-
-.change_me_info {
-  position: absolute;
-  z-index: 11;
-  left: 350px;
-  top: 210px;
-  border: 1px solid #9d0095;
-  background-color: white;
-  width: 345px;
-  border-radius: 20px;
-  padding-left: 30px;
-  padding-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-  padding-bottom: 39px;
-}
 @media screen and (max-width: 1080px) {
   .personal_account {
     display: flex;
     flex-direction: column;
   }
-  .personal_info_change > h2 {
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .personal_info_all {
-    width: fit-content;
-    border: 1px solid #9d0095;
-    border-radius: 20px;
+  .personal_page {
     display: flex;
-    box-sizing: border-box;
     flex-direction: column;
-    gap: 35px;
-    margin-right: 0px;
-    margin-top: 29px;
-    padding: 30px 30px 41px 15px;
   }
-  .personal_info_all > h1 {
-    box-sizing: border-box;
-    font-size: 25px;
-    font-weight: 500;
-    display: inline-flex;
+  .module_wrap {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr 1.2fr;
+  }
+  .basket {
+    position: relative;
+    top: -70px;
   }
 }
-@media screen and (max-width: 750px) {
-  .personal_account {
-    display: flex;
-    flex-direction: column;
-  }
 
-  .personal_info_all {
-    width: fit-content;
-    border: 1px solid #9d0095;
-    border-radius: 20px;
+@media (max-width: 750px) and (min-width: 376px) {
+  .module_wrap {
     display: flex;
-    box-sizing: border-box;
-    flex-direction: column;
-    gap: 35px;
-    margin-right: 0px;
-    margin-top: 29px;
-    padding: 30px 30px 41px 15px;
   }
-  .personal_info_all > h1 {
-    box-sizing: border-box;
-    font-size: 25px;
-    font-weight: 500;
-    display: inline-flex;
-  }
-
-  .change_me_info {
-    align-items: flex-start;
-    background-color: #fff;
-    border: 1px solid #9d0095;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    left: 50%;
-    padding-bottom: 39px;
-    padding-left: 30px;
-    padding-top: 30px;
-    position: absolute;
-    top: 210px;
-    width: 226px;
-    z-index: 11;
-    transform: translate(-50%, 0%);
-  }
-  .personal_info_change > h2 {
-    font-size: 20px;
-    font-weight: 500;
+  .basket {
+    position: static;
   }
 }
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 376px) {
+  .module_wrap {
+    display: flex;
+    gap: 25px;
+  }
+  .basket {
+    position: static;
+  }
   .personal_account {
-    display: flex;
-    flex-direction: column;
+    gap: 25px;
   }
-
-  .personal_info_all {
-    border: none;
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top: 29px;
-    width: 90%;
-    padding: 30px 30px 41px 15px;
-    /* width: 100%;
-        max-width: 100vw; */
+  section {
+    padding: 12px 20px;
   }
-
-  .change_me_info {
-    align-items: flex-start;
-    background-color: #fff;
-    border: 1px solid #9d0095;
-    border-radius: 20px;
+  .mobile_style {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    left: 50%;
-    padding-bottom: 39px;
-    padding-left: 30px;
-    padding-top: 30px;
-    position: absolute;
-    top: 210px;
-    width: 226px;
-    z-index: 11;
-    transform: translate(-50%, 0%);
+    gap: 20px;
   }
 }

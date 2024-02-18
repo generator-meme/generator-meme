@@ -1,0 +1,11 @@
+.reverse_array {
+  transform: rotate(0);
+}
+.unreverse_array {
+  transform: rotate(180deg);
+}
+.name_dropdown {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
