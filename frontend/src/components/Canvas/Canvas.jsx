@@ -15,10 +15,7 @@ import {
 import Fieldset from "../Fieldset/Fieldset";
 import { getCanvasSettings } from "../../utils/canvasData";
 import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
-import {
-  unBlockSaveButtonToCollection,
-  UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
-} from "../../services/actions/savedMemeActions";
+import { UN_BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
 
 const Canvas = ({
   handleCreateNewMeme,
@@ -42,9 +39,7 @@ const Canvas = ({
       outsideTextHeight
     )
   );
-  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
   const dispatch = useDispatch();
-  const [flag, setFlag] = useState(false);
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -59,8 +54,7 @@ const Canvas = ({
   }, [imageSizes, textsValues, outsideTextHeight]);
 
   const createMeme = () => {
-    let id =
-      currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    let id = JSON.parse(localStorage.getItem("currentMeme")).id;
     const template = memeTemplates.some((item) => {
       return item.id === id;
     });
@@ -235,9 +229,7 @@ const Canvas = ({
     <main className="main-editor">
       <Navigation
         isSavedMeme={false}
-        id={
-          currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id
-        }
+        id={JSON.parse(localStorage.getItem("currentMeme"))?.id}
       />
       <section className="editor" aria-label="Editor">
         <div className="editor__canvas" style={{ width: canvasSizes.width }}>

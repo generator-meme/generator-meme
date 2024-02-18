@@ -1,0 +1,29 @@
+.groupname_wrap {
+}
+
+.name {
+  padding: 10px;
+  width: fit-content;
+  position: relative;
+}
+
+.close_icon {
+  position: absolute;
+  right: -15px;
+  top: -2px;
+}
+
+.name_subgroup {
+  padding: 10px 46px 10px 0px;
+  position: relative;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+.close_icon_subgroup {
+  position: static;
+}

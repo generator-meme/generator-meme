@@ -1,0 +1,121 @@
+.dim_filter {
+  background-color: rgba(255, 255, 255, 0.407);
+
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+}
+
+.personal_info_all {
+  position: relative;
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  box-sizing: border-box;
+  max-width: 450px;
+  padding-left: 22px;
+  padding-top: 30px;
+  padding-right: 40px;
+  padding-bottom: 41px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  max-height: 200px;
+}
+
+.personal_info_change {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.btn_change {
+  background: none;
+  border: none;
+  font-family: "Rubik";
+}
+
+.page {
+  background-color: white;
+}
+
+.change_me_info_wrap {
+  background-color: #fff;
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  left: 70%;
+  top: 65%;
+  padding-bottom: 39px;
+  padding-left: 30px;
+  padding-top: 30px;
+  position: absolute;
+  min-width: 420px;
+  z-index: 11;
+}
+.change_me_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+.reverse_array {
+  transform: rotate(0);
+}
+.unreverse_array {
+  transform: rotate(180deg);
+}
+@media screen and (max-width: 1080px) {
+  .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+  .personal_info_change > h2 {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .personal_info_all {
+    min-width: 300px;
+    max-height: 200px;
+  }
+  .change_me_info_wrap {
+    min-width: 250px;
+    left: 50%;
+  }
+}
+@media screen and (max-width: 750px) {
+  .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .personal_info_all {
+    width: fit-content;
+    margin-top: 29px;
+  }
+}
+
+@media (max-width: 490px) and (min-width: 376px) {
+  .change_me_info_wrap {
+    left: 20%;
+  }
+}
+@media screen and (max-width: 375.5px) {
+  .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .personal_info_all {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+  .change_me_info_wrap {
+    left: 20%;
+    min-width: 200px;
+  }
+}
