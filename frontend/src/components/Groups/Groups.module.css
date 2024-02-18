@@ -76,10 +76,30 @@
     padding: 25px;
   }
 }
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 430px) {
+  .group_info {
+    right: -22px;
+    min-width: 225px;
+  }
+}
+@media screen and (max-width: 375.5px) {
   .groups_wrap {
     margin: 0;
     border: none;
     padding: 0;
+    min-width: auto;
+  }
+  .group_info {
+    min-width: 218px;
+    right: 0%;
+    border-radius: 10px;
+    font-size: 0.8em;
+    min-height: 300px;
+  }
+  .my_groups__info {
+    max-height: 170px;
+  }
+  .my_groups {
+    max-height: 120px;
   }
 }

@@ -42,7 +42,9 @@ export const Groups = () => {
           </div>
         </div>
         <div className={styles.search_group}>
-          <p>Для вступления в группу введите название</p>
+          {widthOfWindow > 375 && (
+            <p>Для вступления в группу введите название</p>
+          )}
           <div className={styles.search_wrap}>
             <SearchPanelMobile></SearchPanelMobile>
           </div>
@@ -56,6 +58,7 @@ export const Groups = () => {
                   name={name}
                   id={index}
                   handleOpenDropDawn={handleOpenDropDawn}
+                  flag={true}
                 ></GroupName>
               );
             })}
@@ -68,7 +71,9 @@ export const Groups = () => {
               <h1>Пользователи</h1>
               <div className={styles.my_groups__info}>
                 {mockArr2.map((name, index) => {
-                  return <GroupName name={name} id={index}></GroupName>;
+                  return (
+                    <GroupName name={name} id={index} flag={false}></GroupName>
+                  );
                 })}
               </div>
             </div>

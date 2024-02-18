@@ -189,7 +189,7 @@
   }
 }
 
-@media (max-width: 751px) and (min-width: 375px) {
+@media (max-width: 751px) and (min-width: 376px) {
   .meme_collection {
     border: none;
     border-radius: 20px;
@@ -232,7 +232,8 @@
   .search_button {
     top: 2px;
   }
-  @media screen and (max-width: 375px) {
+
+  @media screen and (max-width: 375.5px) {
     .meme_collection {
       border: none;
       margin: 0;

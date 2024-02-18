@@ -135,7 +135,7 @@ export default function MemeCollection() {
       {
         <>
           <div className={styles.header_row}>
-            {widthOfWindow < 375 ? null : <h1>Коллекция мемов</h1>}
+            {widthOfWindow <= 375 ? null : <h1>Коллекция мемов</h1>}
             <div className={styles.collection_search}>
               <SearchPanelMobile
                 SortEverything={SortEverything}
@@ -161,32 +161,30 @@ export default function MemeCollection() {
           <div className={styles.memes_container}>
             {myMemes?.results?.map((res) => {
               return (
-                <>
-                  <div className={styles.one_meme}>
-                    <button
-                      onClick={(e) => {
-                        dispatch(deleteMemeFromMyCollection(res.meme.id));
-                      }}
-                      className={`${styles.delete_btn} ${styles.btn_no_bg}`}
-                    >
-                      <img
-                        className={styles.cross}
-                        src={button_delete}
-                        alt="delete"
-                      />
-                    </button>
+                <div className={styles.one_meme}>
+                  <button
+                    onClick={(e) => {
+                      dispatch(deleteMemeFromMyCollection(res.meme.id));
+                    }}
+                    className={`${styles.delete_btn} ${styles.btn_no_bg}`}
+                  >
                     <img
-                      className={styles.saved_meme_img}
-                      src={res.meme.image}
-                      alt=""
-                      onClick={() => {
-                        handleGoToMeme(res.meme.id);
-                        dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
-                      }}
+                      className={styles.cross}
+                      src={button_delete}
+                      alt="delete"
                     />
-                    <TagLists elem={res.meme.template}></TagLists>
-                  </div>
-                </>
+                  </button>
+                  <img
+                    className={styles.saved_meme_img}
+                    src={res.meme.image}
+                    alt=""
+                    onClick={() => {
+                      handleGoToMeme(res.meme.id);
+                      dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+                    }}
+                  />
+                  <TagLists elem={res.meme.template}></TagLists>
+                </div>
               );
             })}
           </div>

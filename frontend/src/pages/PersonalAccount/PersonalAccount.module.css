@@ -43,13 +43,8 @@ section {
     top: -70px;
   }
 }
-@media screen and (max-width: 750px) {
-  .personal_account {
-    display: flex;
-    flex-direction: column;
-  }
-}
-@media (max-width: 749px) and (min-width: 376px) {
+
+@media (max-width: 750px) and (min-width: 376px) {
   .module_wrap {
     display: flex;
   }
@@ -57,19 +52,18 @@ section {
     position: static;
   }
 }
-@media screen and (max-width: 375px) {
-  .personal_page {
-    display: block;
-    background-color: white;
-    padding: 39px 10px;
-    min-height: 710px;
+@media screen and (max-width: 376px) {
+  .module_wrap {
+    display: flex;
+    gap: 25px;
+  }
+  .basket {
+    position: static;
   }
   .personal_account {
-    display: flex;
-    flex-direction: column;
-    gap: 39px;
+    gap: 25px;
   }
-  .mobile_style {
-    padding-top: 39px;
+  section {
+    padding: 12px 20px;
   }
 }
