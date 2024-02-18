@@ -1,4 +1,4 @@
-import styles from "./MemeColection.module.css";
+import styles from "./MemeCollection.module.css";
 import {
   addPage,
   getPage,
@@ -42,7 +42,6 @@ export default function MemeCollection() {
   const widthOfWindow = useGetWidthHook();
 
   const limitOnPage = useMemo(() => {
-    console.log(widthOfWindow);
     if (widthOfWindow <= 1480 && widthOfWindow > 1080) {
       return 4;
     } else if (widthOfWindow <= 1080 && widthOfWindow > 750) {
@@ -69,14 +68,13 @@ export default function MemeCollection() {
 
   useEffect(() => {
     dispatch(getAllMyMemeCollections());
-    console.log("in gelAllCollections");
   }, [template_tag, offset, ordering, only_my, dispatch, flag]);
 
   const stringToSearch = () => {
     if (search === "") {
       return "";
     }
-    console.log(search);
+
     const tempTags = tags;
     const tagId = tempTags.find((tag) => {
       return tag.name === search;
@@ -86,12 +84,11 @@ export default function MemeCollection() {
   //get id of Tag from all tags in templates
 
   const handleChangeSearch = (e) => {
-    console.log("1");
     const search_string = e.target.value;
     const query_string = search_string.toLocaleLowerCase().trim();
     setSearch(query_string);
   };
-  console.log(search);
+
   // to remove , and '' from search string
 
   const SortEverything = (e) => {
@@ -132,69 +129,62 @@ export default function MemeCollection() {
 
   return (
     <div className={styles.meme_collection}>
-      {
-        <>
-          <div className={styles.header_row}>
-            {widthOfWindow <= 375 ? null : <h1>Коллекция мемов</h1>}
-            <div className={styles.collection_search}>
-              <SearchPanelMobile
-                SortEverything={SortEverything}
-                handleChangeSearch={handleChangeSearch}
-                search={search}
-              ></SearchPanelMobile>
-            </div>
+      <div className={styles.header_row}>
+        {widthOfWindow <= 375 ? null : <h1>Коллекция мемов</h1>}
+        <div className={styles.collection_search}>
+          <SearchPanelMobile
+            SortEverything={SortEverything}
+            handleChangeSearch={handleChangeSearch}
+            search={search}
+          ></SearchPanelMobile>
+        </div>
 
-            <button
-              className={`${styles.sortByDate} ${styles.btn_no_bg}`}
-              onClick={(e) => reverseMemes(e)}
-            >
-              По дате
-              <div
-                className={
-                  reverse ? styles.unreverse_array : styles.reverse_array
-                }
+        <button
+          className={`${styles.sortByDate} ${styles.btn_no_bg}`}
+          onClick={(e) => reverseMemes(e)}
+        >
+          По дате
+          <div
+            className={reverse ? styles.unreverse_array : styles.reverse_array}
+          >
+            <ArrowDown />
+          </div>
+        </button>
+      </div>
+      <div className={styles.memes_container}>
+        {myMemes?.results?.map((res) => {
+          return (
+            <div className={styles.one_meme}>
+              <button
+                onClick={(e) => {
+                  dispatch(deleteMemeFromMyCollection(res.meme.id));
+                }}
+                className={`${styles.delete_btn} ${styles.btn_no_bg}`}
               >
-                <ArrowDown />
-              </div>
-            </button>
-          </div>
-          <div className={styles.memes_container}>
-            {myMemes?.results?.map((res) => {
-              return (
-                <div className={styles.one_meme}>
-                  <button
-                    onClick={(e) => {
-                      dispatch(deleteMemeFromMyCollection(res.meme.id));
-                    }}
-                    className={`${styles.delete_btn} ${styles.btn_no_bg}`}
-                  >
-                    <img
-                      className={styles.cross}
-                      src={button_delete}
-                      alt="delete"
-                    />
-                  </button>
-                  <img
-                    className={styles.saved_meme_img}
-                    src={res.meme.image}
-                    alt=""
-                    onClick={() => {
-                      handleGoToMeme(res.meme.id);
-                      dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
-                    }}
-                  />
-                  <TagLists elem={res.meme.template}></TagLists>
-                </div>
-              );
-            })}
-          </div>
-
-          <PaginationList
-            goToPage={goToPage}
-            arrayOfPages={ArrayOFPages}
-          ></PaginationList>
-        </>
-      }
+                <img
+                  className={styles.cross}
+                  src={button_delete}
+                  alt="delete"
+                />
+              </button>
+              <img
+                className={styles.saved_meme_img}
+                src={res.meme.image}
+                alt=""
+                onClick={() => {
+                  handleGoToMeme(res.meme.id);
+                  dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+                }}
+              />
+              <TagLists elem={res.meme.template}></TagLists>
+            </div>
+          );
+        })}
+      </div>
+      <PaginationList
+        goToPage={goToPage}
+        arrayOfPages={ArrayOFPages}
+      ></PaginationList>
     </div>
   );
 }

@@ -6,6 +6,7 @@ section {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   background-color: white;
+  min-height: 710px;
 }
 .personal_account {
   display: flex;
@@ -65,5 +66,10 @@ section {
   }
   section {
     padding: 12px 20px;
+  }
+  .mobile_style {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 }
