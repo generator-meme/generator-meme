@@ -1,0 +1,105 @@
+.groups_wrap {
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  max-width: 520px;
+}
+.create_group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.header_group {
+  display: flex;
+  justify-content: space-between;
+}
+.search_group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.my_groups_wrap {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  position: relative;
+}
+.my_groups {
+  max-height: 80px;
+  overflow: auto;
+}
+.group_info {
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  top: 0;
+  min-height: 270px;
+  min-width: 320px;
+  position: absolute;
+  right: -100px;
+  background-color: white;
+  z-index: 100;
+  padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.group_info__header {
+  display: flex;
+  justify-content: flex-end;
+}
+.my_groups__info {
+  max-height: 110px;
+  overflow: auto;
+}
+@media screen and (max-width: 1080px) {
+  .groups_wrap {
+    max-height: 375px;
+    min-width: 385px;
+  }
+  .group_info {
+    right: -40px;
+    min-height: 250px;
+  }
+}
+@media screen and (max-width: 780px) {
+  .groups_wrap {
+    padding: 30px 20px;
+    min-width: 350px;
+  }
+  .group_info {
+    min-width: 270px;
+    padding: 25px;
+  }
+}
+@media screen and (max-width: 430px) {
+  .group_info {
+    right: -22px;
+    min-width: 225px;
+  }
+}
+@media screen and (max-width: 375.5px) {
+  .groups_wrap {
+    margin: 0;
+    border: none;
+    padding: 0;
+    min-width: auto;
+  }
+  .group_info {
+    min-width: 218px;
+    right: 0%;
+    border-radius: 10px;
+    font-size: 0.8em;
+    min-height: 300px;
+  }
+  .my_groups__info {
+    max-height: 170px;
+  }
+  .my_groups {
+    max-height: 120px;
+  }
+}

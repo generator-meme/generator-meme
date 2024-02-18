@@ -143,7 +143,7 @@ class Api {
       body: JSON.stringify({
         meme: meme_url,
       }),
-    }).then(this._checkReponce);
+    }).then(this._errorHa);
   }
   getMemesInMyCollection(
     token,

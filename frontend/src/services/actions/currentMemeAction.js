@@ -1,2 +1,0 @@
-export const GET_CURRENT_MEME = "GET_CURRENT_MEME";
-export const SET_CURRENT_MEME = "SET_CURRENT_MEME";

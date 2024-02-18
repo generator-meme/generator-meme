@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { currentMemeReducer } from "./currentMemeReducer";
 import { savedMemeReducer } from "./savedMemeReducer";
 import { userReducer } from "./userReducer";
 import { preloaderReducer } from "./preloaderReducer";
@@ -13,7 +12,6 @@ import { getTagsReducer } from "./getTagsReducer";
 
 const rootReducer = combineReducers({
   saveMeme: savedMemeReducer,
-  setCurrentMeme: currentMemeReducer,
   user: userReducer,
   preloader: preloaderReducer,
   filtration: filtrationReducer,
