@@ -15,17 +15,17 @@ export const Groups = () => {
   const mockArr2 = Array(6)
     .fill("Название группы")
     .map((u, i) => "Пользователь");
-  useEffect(() => {
-    const closeDropDown = (e) => {
-      if (!dropDawnRef.current.contains(e.target)) {
-        setIsOpenDropDawn(false);
-      }
-    };
-    document.addEventListener("click", closeDropDown, true);
-    return () => {
-      document.removeEventListener("click", closeDropDown, true);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const closeDropDown = (e) => {
+  //     if (!dropDawnRef.current.contains(e.target)) {
+  //       setIsOpenDropDawn(false);
+  //     }
+  //   };
+  //   document.addEventListener("click", closeDropDown, true);
+  //   return () => {
+  //     document.removeEventListener("click", closeDropDown, true);
+  //   };
+  // }, []);раскомментить при создании групп
 
   const handleOpenDropDawn = () => {
     setIsOpenDropDawn(true);
@@ -57,7 +57,7 @@ export const Groups = () => {
                 <GroupName
                   name={name}
                   id={index}
-                  handleOpenDropDawn={handleOpenDropDawn}
+                  // handleOpenDropDawn={handleOpenDropDawn} раскомментить при создании групп
                   flag={true}
                 ></GroupName>
               );

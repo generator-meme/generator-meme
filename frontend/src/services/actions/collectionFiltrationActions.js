@@ -40,7 +40,6 @@ export const clearQueryParam = () => {
   };
 };
 export const addPage = (page) => {
-  console.log(page);
   return {
     type: ADD_PAGE,
     payload: page,
@@ -53,7 +52,6 @@ export const getPage = (pageArray) => {
   };
 };
 export const changeNumberPage = (numberPage) => {
-  console.log("in changeNumberPage");
   return {
     type: CHANGE_NUMBER_PAGE,
     payload: numberPage,

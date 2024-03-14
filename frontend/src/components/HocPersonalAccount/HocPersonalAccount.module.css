@@ -9,3 +9,7 @@
   gap: 15px;
   align-items: center;
 }
+.hidden_style {
+  position: absolute;
+  visibility: hidden;
+}
