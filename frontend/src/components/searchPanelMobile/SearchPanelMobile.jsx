@@ -4,7 +4,7 @@ export const SearchPanelMobile = (props) => {
   const a = props.search;
   const b = props.handleChangeSearch;
   const c = props.SortEverything;
-  console.log(JSON.stringify(props?.search));
+
   return (
     <div className={styles.wrap_search}>
       <div className={styles.search_component}>

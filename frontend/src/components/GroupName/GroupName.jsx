@@ -6,7 +6,7 @@ export const GroupName = ({ name, handleOpenDropDawn = () => {}, flag }) => {
   return (
     <div
       className={`${styles.name} ' ' ${flag && styles.name_subgroup}`}
-      onClick={() => handleOpenDropDawn()}
+      // onClick={() => handleOpenDropDawn()}раскомментить при создании групп
     >
       <p>{name}</p>
       <div

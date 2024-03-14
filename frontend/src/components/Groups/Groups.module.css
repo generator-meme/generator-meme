@@ -1,4 +1,7 @@
 .groups_wrap {
+  position: absolute;
+  visibility: hidden;
+  /* когда введем группы первые две строчки удалить */
   border: 1px solid #9d0095;
   border-radius: 20px;
   box-sizing: border-box;
