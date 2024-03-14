@@ -124,7 +124,12 @@
 .collection_search {
   width: 40%;
 }
-
+.reverse_array {
+  transform: rotate(0);
+}
+.unreverse_array {
+  transform: rotate(180deg);
+}
 @media screen and (max-width: 1480px) {
   .memes_container {
     display: grid;

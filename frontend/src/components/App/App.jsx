@@ -59,9 +59,7 @@ const App = () => {
   const handleDownloadNewMeme = () => {
     api
       .downloadNewMem(meme.id)
-      .then((res) => {
-        console.log(1);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });

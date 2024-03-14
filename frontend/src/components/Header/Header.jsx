@@ -36,13 +36,13 @@ const Header = () => {
     }
   };
   const navToPersonalAccount = (e) => {
-    try{
+    try {
       e.preventDefault();
       navigate("/me");
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const handleOnFavorited = (e) => {
     try {
@@ -126,13 +126,13 @@ const Header = () => {
               >
                 <Avatar className="header__button_type_avatar" />
               </button>
-              <button
+              {/* <button
                 className="header__button"
                 onClick={() => setMyExtraMenuIsOpen(true)}
                 ref={myExtraMenu}
               >
                 <Burger className="header__button_type_burger" />
-              </button>
+              </button> */}
             </>
           )}
           {myMainMenuIsOpen && (

@@ -47,7 +47,6 @@ const ChangeDataForm = ({ info }) => {
     setNewName(value);
   };
 
-
   const onFormSubmit = (event) => {
     if (isValid) {
       if (info === "name") {
@@ -60,14 +59,14 @@ const ChangeDataForm = ({ info }) => {
   const changePass = async (event) => {
     try {
       event.preventDefault();
-      console.log("started pass request");
+      // console.log("started pass request");
       const savedToken = getCookie("token");
       const userInfo = await authorisation.setPassword(
         newName,
         newPass,
         savedToken
       );
-      console.log("all good");
+      // console.log("all good");
       setIsSubmited(true);
     } catch (err) {
       console.log(err, "checkTokenError");
@@ -86,7 +85,7 @@ const ChangeDataForm = ({ info }) => {
   const changeName = async (event) => {
     try {
       // event.preventDefault();
-      console.log("started name request");
+      // console.log("started name request");
       const email = userData.email;
       const savedToken = getCookie("token");
       const userInfo = await authorisation.changeName(
@@ -95,13 +94,13 @@ const ChangeDataForm = ({ info }) => {
         savedToken
       );
       dispatch(setNewUsername(newName));
-      console.log("all good");
+      // console.log("all good");
       setIsSubmited(true);
     } catch (err) {
       console.log(err, "checkTokenError");
       const key = Object.keys(err)[0];
-      const error = err[key][0]
-      setErrors(error)
+      const error = err[key][0];
+      setErrors(error);
     }
   };
   return (
@@ -122,14 +121,13 @@ const ChangeDataForm = ({ info }) => {
           >
             {({ errors, touched }) => {
               return (
-                <Form className="authentication__form" onSubmit={onFormSubmit}
-                >
+                <Form className="authentication__form" onSubmit={onFormSubmit}>
                   <Field
                     name="name_pass"
                     placeholder={dataForForm.placeholder}
                     onChange={handleChangingNamePass}
                     value={newName}
-                    className={'authentication__input'}
+                    className={"authentication__input"}
                   />
                   {!isValid && newName !== "" ? (
                     <ErrorMessage
@@ -147,7 +145,7 @@ const ChangeDataForm = ({ info }) => {
                         placeholder={dataForForm.placeholderPass}
                         onChange={handleChangingNewPass}
                         value={newPass}
-                        className={'authentication__input'}
+                        className={"authentication__input"}
                       />
                       {!isValid && newPass !== "" ? (
                         <ErrorMessage
@@ -163,7 +161,13 @@ const ChangeDataForm = ({ info }) => {
                       )}
                     </>
                   )}
-                  {errors_back?(<div className="authentication__input-prompt_type_error">{errors_back}</div>):<></>}
+                  {errors_back ? (
+                    <div className="authentication__input-prompt_type_error">
+                      {errors_back}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
 
                   <button className="btn authentication__button" type="submit">
                     сохранить
@@ -172,7 +176,7 @@ const ChangeDataForm = ({ info }) => {
               );
             }}
           </Formik>
-          {isSubmited && (<div>Все супер!</div>)}
+          {isSubmited && <div>Все супер!</div>}
         </div>
       </main>
     </>

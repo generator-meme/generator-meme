@@ -38,6 +38,7 @@ export default function MemeCollection() {
   );
   const { flag } = useSelector((state) => state.collectionFiltration);
   const [reverse, setReverse] = useState(false);
+
   const navigate = useNavigate();
   const widthOfWindow = useGetWidthHook();
 
