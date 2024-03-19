@@ -6,6 +6,7 @@
   position: relative;
   row-gap: 10px;
   max-width: 440px;
+  padding-bottom: 0;
 }
 
 .meme__image {
@@ -99,7 +100,7 @@
   color: #1e1d1d;
   align-self: flex-start;
   padding: 0;
-  max-height: 48px;
+  max-height: 20px;
   overflow: hidden;
   width: 100%;
 }

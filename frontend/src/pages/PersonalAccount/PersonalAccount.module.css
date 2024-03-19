@@ -1,0 +1,75 @@
+section {
+  padding: 20px;
+  box-sizing: border-box;
+}
+.personal_page {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  background-color: white;
+  min-height: 710px;
+}
+.personal_account {
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  gap: 45px;
+  margin-top: 20px;
+}
+.basket {
+  display: flex;
+  gap: 5px;
+}
+.module_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media screen and (max-width: 1080px) {
+  .personal_account {
+    display: flex;
+    flex-direction: column;
+  }
+  .personal_page {
+    display: flex;
+    flex-direction: column;
+  }
+  .module_wrap {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr 1.2fr;
+  }
+  .basket {
+    position: relative;
+    /* top: -70px; когда появятся группы раскомментить */
+  }
+}
+
+@media (max-width: 750px) and (min-width: 376px) {
+  .module_wrap {
+    display: flex;
+  }
+  .basket {
+    position: static;
+  }
+}
+@media screen and (max-width: 376px) {
+  .module_wrap {
+    display: flex;
+    gap: 25px;
+  }
+  .basket {
+    position: static;
+  }
+  .personal_account {
+    gap: 25px;
+  }
+  section {
+    padding: 12px 20px;
+  }
+  .mobile_style {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

@@ -19,7 +19,6 @@ const CanvasPreloader = ({
     width: 657,
     height: 556,
   });
-  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
 
   useEffect(() => {
     // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
@@ -90,16 +89,14 @@ const CanvasPreloader = ({
   }, []);
 
   useEffect(() => {
-    if (!currentMeme && localStorage.getItem("currentMeme") === null) {
+    if (localStorage.getItem("currentMeme") === null) {
       setImageNotFoundOpen(true);
       navigate("/");
       return;
     }
 
     const img = new Image(); // создаем изображеиние только при первом рендере, затем оно будет храниться в стейте
-    if (currentMeme) {
-      img.src = currentMeme.image;
-    } else if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
+    if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
       img.src = JSON.parse(localStorage.getItem("currentMeme")).image;
     }
     img.addEventListener("load", () => {

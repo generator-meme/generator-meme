@@ -35,6 +35,14 @@ const Header = () => {
       console.log(err);
     }
   };
+  const navToPersonalAccount = (e) => {
+    try {
+      e.preventDefault();
+      navigate("/me");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleOnFavorited = (e) => {
     try {
@@ -118,13 +126,13 @@ const Header = () => {
               >
                 <Avatar className="header__button_type_avatar" />
               </button>
-              <button
+              {/* <button
                 className="header__button"
                 onClick={() => setMyExtraMenuIsOpen(true)}
                 ref={myExtraMenu}
               >
                 <Burger className="header__button_type_burger" />
-              </button>
+              </button> */}
             </>
           )}
           {myMainMenuIsOpen && (
@@ -132,8 +140,8 @@ const Header = () => {
               options={[
                 {
                   name: "Личный\u00A0кабинет",
-                  onClick: (e) => e.preventDefault(),
-                  inProgress: true,
+                  onClick: (e) => navToPersonalAccount(e),
+                  inProgress: false,
                 },
                 {
                   name: "Выйти",

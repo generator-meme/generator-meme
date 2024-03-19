@@ -11,6 +11,11 @@ class Api {
 
     return Promise.reject(`Ошибка: ${res.status}`);
   }
+  _errorHa(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+  }
 
   _checkReponce(res) {
     return res.ok
@@ -86,6 +91,7 @@ class Api {
             document.body.appendChild(a);
             a.click();
             a.remove();
+            window.URL.revokeObjectURL(url);
           });
         }
         reject();
@@ -126,6 +132,52 @@ class Api {
       body: JSON.stringify(),
       headers: this._headers,
     }).then(this._errorHandler);
+  }
+  addMemeToMyCollection(meme_url, token) {
+    return fetch(`${this._baseUrl}/memes/my-collection/add/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify({
+        meme: meme_url,
+      }),
+    }).then(this._errorHa);
+  }
+  getMemesInMyCollection(
+    token,
+    option = {
+      template_tag: "/*/",
+      limit: 4,
+      offset: 0,
+      only_my: "true",
+      ordering: "-added_at",
+    }
+  ) {
+    return fetch(
+      `${this._baseUrl}/memes/my-collection/?template_tag=${option.template_tag}&limit=${option.limit}&offset=${option.offset}&only_my='${option.only_my}'&ordering=${option.ordering}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(),
+      }
+    ).then(this._checkReponce);
+  }
+  deleteMemeFromMyCollection(meme_id, token) {
+    return fetch(`${this._baseUrl}/memes/my-collection/delete/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify({
+        meme: meme_id,
+      }),
+    }).then(this._errorHa);
   }
 }
 

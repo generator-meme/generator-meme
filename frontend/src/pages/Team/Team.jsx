@@ -1,10 +1,9 @@
 import "./Team.css";
 import Navigation from "../../components/Navigation/Navigation";
-import Teammates from "../../utils/Teammates";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTeamAction } from "../../services/actions/teamAction";
-import cat from "../../images/teamPage/bgc.svg";
+
 const Team = () => {
   const dispatch = useDispatch();
   const { team } = useSelector((state) => state.team);

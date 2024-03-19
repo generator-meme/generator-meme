@@ -53,6 +53,12 @@ body {
 .btn:active {
   background: rgba(148, 27, 219, 0.76);
 }
+.btn_blocked {
+  background: grey;
+}
+.btn_blocked:hover {
+  background: grey;
+}
 
 @media screen and (max-width: 570px) {
   .btn {

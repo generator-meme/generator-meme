@@ -11,6 +11,8 @@ import CanvasPreloader from "../../pages/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "../../pages/SavedMeme/SavedMeme";
 import Registration from "../../pages/Registration/Registration";
 import Login from "../../pages/Login/Login";
+import ChangeDataForm from "../ChangeDataForm/ChangeDataForm";
+import PersonalAccount from "../../pages/PersonalAccount/PersonalAccount";
 import AuthUsingSocialNetworks from "../../pages/AuthUsingSocialNetworks/AuthUsingSocialNetworks";
 import CheckEmailMessage from "../../pages/CheckEmailMessage/CheckEmailMessage";
 import { optionsList, checkEmailMessage } from "../../utils/constants";
@@ -24,6 +26,8 @@ import { loadCategoriesOptions } from "../../services/actions/filtrationActions"
 import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
 import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
+import { selectRandom } from "../../services/selectors/filtrationSelectors";
+import { getTagsAction } from "../../services/actions/getTagsAction";
 
 const App = () => {
   const { meme } = useSelector((state) => state.saveMeme);
@@ -37,12 +41,14 @@ const App = () => {
   const { categories, areFavorite, ordering } = useSelector(
     selectFiltrationOptions
   );
+  const random = useSelector(selectRandom);
 
   const handleCreateNewMeme = (memeUrl, memeId) => {
     return api
       .createNewMem(memeUrl, memeId)
       .then((res) => {
         setNewMeme(res);
+        console.log(JSON.stringify(res));
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {
@@ -58,11 +64,22 @@ const App = () => {
         console.log(err);
       });
   };
+  useEffect(() => {
+    dispatch(getTagsAction());
+  }, []);
 
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
-  }, [isLoggedIn, isTokenChecked, dispatch, categories, areFavorite, ordering]); // запрос при изменении любого параметра (кроме tags)
+  }, [
+    isLoggedIn,
+    isTokenChecked,
+    dispatch,
+    categories,
+    areFavorite,
+    ordering,
+    random,
+  ]); // запрос при изменении любого параметра (кроме tags)
 
   useEffect(() => {
     if (isTokenChecked && isLoggedIn) {
@@ -87,6 +104,15 @@ const App = () => {
     <div className="page">
       <Header />
       <Routes>
+        <Route path="/me" element={<PersonalAccount />} />
+        <Route
+          path="/me/name-change"
+          element={<ChangeDataForm info={"name"} />}
+        />
+        <Route
+          path="/me/pass-change"
+          element={<ChangeDataForm info={"pass"} />}
+        />
         <Route exact path="/" element={<Main setIsNewMeme={setIsNewMeme} />} />
         <Route path="/team" element={<Team />} />
         <Route

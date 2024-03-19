@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navigation from "../Navigation/Navigation";
 import "./Canvas.css";
 import EditorButtonsList from "../EditorButtonsList/EditorButtonsList";
@@ -15,6 +15,7 @@ import {
 import Fieldset from "../Fieldset/Fieldset";
 import { getCanvasSettings } from "../../utils/canvasData";
 import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
+import { UN_BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
 
 const Canvas = ({
   handleCreateNewMeme,
@@ -38,7 +39,7 @@ const Canvas = ({
       outsideTextHeight
     )
   );
-  const { currentMeme } = useSelector((state) => state.setCurrentMeme);
+  const dispatch = useDispatch();
 
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
@@ -53,8 +54,7 @@ const Canvas = ({
   }, [imageSizes, textsValues, outsideTextHeight]);
 
   const createMeme = () => {
-    let id =
-      currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme")).id;
+    let id = JSON.parse(localStorage.getItem("currentMeme")).id;
     const template = memeTemplates.some((item) => {
       return item.id === id;
     });
@@ -63,6 +63,7 @@ const Canvas = ({
         canvas.current.toDataURL("image/jpeg", 0.92),
         id
       ).finally(() => {
+        dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
         navigate(
           `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
           { state: JSON.parse(localStorage.getItem("createdMeme")).id }
@@ -228,9 +229,7 @@ const Canvas = ({
     <main className="main-editor">
       <Navigation
         isSavedMeme={false}
-        id={
-          currentMeme?.id || JSON.parse(localStorage.getItem("currentMeme"))?.id
-        }
+        id={JSON.parse(localStorage.getItem("currentMeme"))?.id}
       />
       <section className="editor" aria-label="Editor">
         <div className="editor__canvas" style={{ width: canvasSizes.width }}>

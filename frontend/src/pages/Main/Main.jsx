@@ -8,10 +8,8 @@ import ScrollPositionSaver from "../../components/ScrollPositionSaver/ScrollPosi
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 import { useDispatch } from "react-redux";
-import { SET_CURRENT_MEME } from "../../services/actions/currentMemeAction";
 
 const Main = ({ setIsNewMeme }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const file = useRef();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
@@ -23,11 +21,12 @@ const Main = ({ setIsNewMeme }) => {
     }
     const currentFile = event.target.files[0];
     if (event.target.closest("form").checkValidity()) {
+      //возвращает сам элемент или родителя с таким селектором
       const myCurrentMeme = {
-        id: uuidv4(),
+        id: uuidv4(), // added id
         image: URL.createObjectURL(currentFile),
       };
-      dispatch({ type: SET_CURRENT_MEME, payload: myCurrentMeme });
+
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
       navigate(`/${myCurrentMeme.id}`);

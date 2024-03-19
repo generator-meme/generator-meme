@@ -1,0 +1,45 @@
+.meme__tags_container {
+  height: 1.2em;
+  position: relative;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.meme__tags {
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  column-gap: 5px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2em;
+  color: #1e1d1d;
+  align-self: flex-start;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 1.2em;
+}
+
+.meme__tags_more {
+  /* position: absolute;
+      top: 0; */
+  max-width: 457px;
+  /* width: 80%; */
+}
+
+.meme__bth_see_more {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-family: "Rubik";
+  font-style: normal;
+  font-size: 16px;
+  line-height: 19px;
+  color: #1e1d1d;
+  cursor: pointer;
+  padding-bottom: 10px;
+}

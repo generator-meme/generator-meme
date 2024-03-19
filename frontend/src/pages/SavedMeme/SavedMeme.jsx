@@ -17,16 +17,21 @@ import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import vector_387 from "../../images/vector_387.svg";
-import { getMemeByIdAction } from "../../services/actions/savedMemeActions";
+import {
+  blockSaveButtonToCollection,
+  BLOCK_SAVE_BUTTON_TO_COLLECTION,
+  getMemeByIdAction,
+} from "../../services/actions/savedMemeActions";
 import {
   TelegramShareButton,
   ViberShareButton,
   WhatsappShareButton,
 } from "react-share";
 import Prompt from "../../components/Prompt/Prompt";
-
+import api from "../../utils/api";
+import { getCookie } from "../../utils/cookie";
 function SavedMeme({ currentMeme, handleDownloadMeme }) {
-  const { meme } = useSelector((state) => state.saveMeme);
+  const { meme, blockSaveButton } = useSelector((state) => state.saveMeme);
   const isSavedMeme = true;
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
@@ -79,6 +84,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   const setImageInMeta = async (src, width, height) => {
     const image = await writeToCanvasCustomParam(src, width, height);
     let reader = new FileReader();
+
     reader.readAsDataURL(image);
     reader.onload = function () {
       document
@@ -90,9 +96,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       document
         .querySelector('meta[name="twitter_url"]')
         .setAttribute("content", reader.result);
-    }
-
-
+    };
   };
 
   const writeToCanvasCustomParam = (src, width, height) => {
@@ -106,7 +110,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
         const imgRatio = img.width / img.height;
         const canvasRatio = width / height;
         let newWidth, newHeight, offsetX, offsetY;
-  
+
         if (imgRatio > canvasRatio) {
           newWidth = width;
           newHeight = width / imgRatio;
@@ -118,7 +122,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
           offsetX = (width - newWidth) / 2;
           offsetY = 0;
         }
-  
+
         canvas.width = width;
         canvas.height = height;
         ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
@@ -152,6 +156,21 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       setIsDownloadDropdownOpen(false);
     }, 200);
   };
+
+  const saveMemeToPersonalAccount = async () => {
+    if (blockSaveButton) {
+      return;
+    }
+    const savedToken = getCookie("token");
+    const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id;
+    try {
+      await api.addMemeToMyCollection(meme_id, savedToken);
+    } catch (err) {
+      // const key = Object.keys(err)[0];
+      // const error = err[key][0]
+      console.log(err);
+    }
+  }; //revrite in actions
 
   return (
     !!meme && (
@@ -244,7 +263,19 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
               </div>
             ) : null}
 
-            <button className={`btn ${styles.saved_meme__btn_save}`}>
+            <button
+              className={`btn ${styles.saved_meme_btn} ${
+                blockSaveButton ? "btn_blocked" : null
+              }`}
+              // className={`btn ${styles.saved_meme__btn_save}`}
+              onClick={() => {
+                if (blockSaveButton) {
+                  return;
+                }
+                saveMemeToPersonalAccount();
+                dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+              }}
+            >
               сохранить в ЛК
             </button>
             <div className={styles.saved_meme_share_btns_container}>
