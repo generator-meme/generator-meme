@@ -59,11 +59,11 @@ const Header = () => {
   useEffect(() => {
     if (myMainMenuIsOpen || myExtraMenuIsOpen) {
       const hideMenu = (e) => {
-        if (!myMainMenu?.current.contains(e.target) && myMainMenuIsOpen) {
+        if (!myMainMenu?.current?.contains(e.target) && myMainMenuIsOpen) {
           setMyMainMenuIsOpen(false);
         }
 
-        if (!myExtraMenu?.current.contains(e.target) && myExtraMenuIsOpen) {
+        if (!myExtraMenu?.current?.contains(e.target) && myExtraMenuIsOpen) {
           setMyExtraMenuIsOpen(false);
         }
       };
