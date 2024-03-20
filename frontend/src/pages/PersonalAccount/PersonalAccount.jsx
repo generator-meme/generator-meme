@@ -21,10 +21,10 @@ const PersonalAccount = () => {
             ></HocPersonalAccount>
           </div>
 
-          <div className={styles.basket}>
+          {/* <div className={styles.basket}>
             <h2>Корзина</h2>
             <Basket></Basket>
-          </div>
+          </div> */}
         </div>
       </section>
       <section>
