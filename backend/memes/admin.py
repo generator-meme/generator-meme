@@ -86,7 +86,7 @@ class TemplateAdmin(admin.ModelAdmin):
         '=id',
     )
     search_help_text = ('Поиск по идентификатору шаблона (точное совпадение)')
-    list_per_page = 10
+    list_per_page = 50
     actions = [
         'publish',
         'hide',
