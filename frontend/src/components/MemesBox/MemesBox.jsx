@@ -8,6 +8,7 @@ import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplate
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
+import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
 
 import {
   addRandomId,
@@ -17,14 +18,15 @@ import {
 import Prompt from "../Prompt/Prompt";
 
 const MemesBox = ({
-  numberOfVisibleMems,
-  setNumberOfVisibleMems,
+  startOfVisibleMems,
+  setStartOfVisibleMems,
   setIsNewMeme,
 }) => {
   const memeTemplates = useSelector(selectAllMemeTemplates);
   const [scrollTop, setScrollTop] = useState(null);
   const dispatch = useDispatch();
   const [isHidden, setIsHidden] = useState(true);
+  const limit = 21;
 
   const fullHeight = Math.max(
     document.body.scrollHeight,
@@ -36,7 +38,8 @@ const MemesBox = ({
   );
   // console.log(scrollTop);
   const addMemes = () => {
-    setNumberOfVisibleMems(numberOfVisibleMems + 21);
+    setStartOfVisibleMems(startOfVisibleMems + limit);
+    dispatch(loadAllMemeTemplates(startOfVisibleMems));
   };
   const handleScroll = (e) => {
     // e.preventDefault();
@@ -121,7 +124,7 @@ const MemesBox = ({
               </div>
             </div>
             <ul className="memesbox__container">
-              {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
+              {memeTemplates.map((elem) => {
                 return (
                   <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
                 );
@@ -129,7 +132,8 @@ const MemesBox = ({
             </ul>
           </div>
 
-          {memeTemplates.length > numberOfVisibleMems && (
+          {// ADD CONDITION INSTEAD OF memeTemplates.length > numberOfVisibleMems &&
+           (
             <button onClick={addMemes} className="memesbox__btn-show-more btn">
               показать больше
             </button>

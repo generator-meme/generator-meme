@@ -25,9 +25,11 @@ class Api {
         });
   }
 
-  getTemplates(savedToken, options) {
+  getTemplates(savedToken, options, pagination) {
     return fetch(
-      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}`,
+      // Add pagination start and limit to query params
+      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}
+          &start=${pagination.start}&limit=${pagination.limit}`,
       {
         method: "GET",
         body: JSON.stringify(),

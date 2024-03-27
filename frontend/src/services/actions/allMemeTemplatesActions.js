@@ -14,16 +14,22 @@ export const setAllMemeTemplatesEmpty = () => ({
   type: SET_ALL_MEME_TEMPLATES_EMPTY,
 });
 
-export const loadAllMemeTemplates = () => async (dispatch, getState) => {
+export const loadAllMemeTemplates = (start = 0, limit = 21) => async (dispatch, getState) => {
   try {
-    dispatch(setPreloader());
+    if(!start) {
+      dispatch(setPreloader());
+    }
     const savedToken = getCookie("token");
     const currentFiltrationOptions = getState().filtration.filtrationOptions;
+    const pagination = {start, limit}
     const templates = await api.getTemplates(
       savedToken,
-      currentFiltrationOptions
+      currentFiltrationOptions,
+      pagination
     );
-    dispatch(getAllMemeTemplates(templates));
+    
+    const updatedTemplates = getState().allMemeTemplates.concat(templates)
+    dispatch(getAllMemeTemplates(updatedTemplates));
     dispatch(removePreloader());
   } catch (err) {
     dispatch(removePreloader());

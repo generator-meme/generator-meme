@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 const Main = ({ setIsNewMeme }) => {
   const navigate = useNavigate();
   const file = useRef();
-  const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
+  const [startOfVisibleMems, setStartOfVisibleMems] = useState(0);
 
   const onChange = (event) => {
     if (event.target.files[0].size > 400000) {
@@ -37,8 +37,8 @@ const Main = ({ setIsNewMeme }) => {
     <main>
       <ScrollPositionSaver
         pageName={"Main"}
-        numberOfVisibleMems={numberOfVisibleMems}
-        setNumberOfVisibleMems={setNumberOfVisibleMems}
+        numberOfVisibleMems={startOfVisibleMems}
+        setNumberOfVisibleMems={setStartOfVisibleMems}
       />
       <section className="main" aria-label="Main part">
         <img className="main__cat" src={cat} alt="Кот." />
@@ -66,8 +66,8 @@ const Main = ({ setIsNewMeme }) => {
         <SearchPanel></SearchPanel>
       </section>
       <MemesBox
-        numberOfVisibleMems={numberOfVisibleMems}
-        setNumberOfVisibleMems={setNumberOfVisibleMems}
+        startOfVisibleMems={startOfVisibleMems}
+        setStartOfVisibleMems={setStartOfVisibleMems}
         setIsNewMeme={setIsNewMeme}
       />
     </main>
