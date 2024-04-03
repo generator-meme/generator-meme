@@ -4,7 +4,7 @@ import arrowUp from "../../images/arrow-up.svg";
 import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
+import { selectAllMemeTemplates, selectIsMemeTemplateAvalible } from "../../services/selectors/allMemeTemplatesSelectors";
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
@@ -23,6 +23,7 @@ const MemesBox = ({
   setIsNewMeme,
 }) => {
   const memeTemplates = useSelector(selectAllMemeTemplates);
+  const isNewMemeAvalible = useSelector(selectIsMemeTemplateAvalible);
   const [scrollTop, setScrollTop] = useState(null);
   const dispatch = useDispatch();
   const [isHidden, setIsHidden] = useState(true);
@@ -134,8 +135,8 @@ const MemesBox = ({
 
           {// ADD CONDITION INSTEAD OF memeTemplates.length > numberOfVisibleMems &&
            (
-            <button onClick={addMemes} className="memesbox__btn-show-more btn">
-              показать больше
+            <button onClick={addMemes} disabled={!isNewMemeAvalible} className="memesbox__btn-show-more btn">
+              {isNewMemeAvalible ? "показать больше" : "больше мемов нет"}
             </button>
           )}
           <Link
