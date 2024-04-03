@@ -133,7 +133,7 @@ const MemesBox = ({
             </ul>
           </div>
 
-          {// ADD CONDITION INSTEAD OF memeTemplates.length > numberOfVisibleMems &&
+          {
            (
             <button onClick={addMemes} disabled={!isNewMemeAvalible} className="memesbox__btn-show-more btn">
               {isNewMemeAvalible ? "показать больше" : "больше мемов нет"}
