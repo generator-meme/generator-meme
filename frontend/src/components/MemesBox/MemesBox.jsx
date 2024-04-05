@@ -8,7 +8,7 @@ import { selectAllMemeTemplates, selectIsMemeTemplateAvalible } from "../../serv
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
-import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
+import { loadAllMemeTemplates, setAllMemeTemplatesEmpty } from "../../services/actions/allMemeTemplatesActions";
 
 import {
   addRandomId,
@@ -61,6 +61,7 @@ const MemesBox = ({
   ]);
 
   const clichHandleTab = (params) => {
+    dispatch(setAllMemeTemplatesEmpty())
     if (params.param === "random") {
       dispatch(addRandomId());
     }
@@ -73,6 +74,8 @@ const MemesBox = ({
       }
     });
     setTabs(tempTabs);
+    setStartOfVisibleMems(0);
+    dispatch(loadAllMemeTemplates(startOfVisibleMems));
   };
 
   return (

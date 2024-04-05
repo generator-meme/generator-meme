@@ -21,7 +21,7 @@ export const setAvalibleNewMemeToLoad = () => ({
 
 export const loadAllMemeTemplates = (offset = 0, limit = 21) => async (dispatch, getState) => {
   try {
-    if(!(offset > 0)) {
+    if(offset <= 0) {
       dispatch(setPreloader());
     }
     const savedToken = getCookie("token");
