@@ -9,6 +9,7 @@ import { teamReducer } from "./teamReducer";
 import { filtrationCollectionReducer } from "./filtrationCollectionReducer";
 import { allMyMemesCollectionReducer } from "./allMemeCollectionReducer";
 import { getTagsReducer } from "./getTagsReducer";
+import { getGroupsReducer } from "./groupReducer";
 
 const rootReducer = combineReducers({
   saveMeme: savedMemeReducer,
@@ -21,5 +22,6 @@ const rootReducer = combineReducers({
   collectionFiltration: filtrationCollectionReducer,
   allMyCollectionMemes: allMyMemesCollectionReducer,
   getTags: getTagsReducer,
+  getGroups: getGroupsReducer,
 });
 export default rootReducer;

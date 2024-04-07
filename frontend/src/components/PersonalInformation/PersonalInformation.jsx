@@ -13,7 +13,11 @@ export const PersonalInformation = () => {
 
   useEffect(() => {
     const closeDropDown = (e) => {
-      if (!dropDawnRef.current?.contains(e.target)) {
+
+      if (!dropDawnRef?.current?.contains(e.target)) {
+
+    
+ 
         setIsOpenDropDawn(false);
       }
     };
