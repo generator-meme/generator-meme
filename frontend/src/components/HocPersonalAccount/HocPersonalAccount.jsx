@@ -9,7 +9,7 @@ export const HocPersonalAccount = ({ child, text }) => {
   const isGroup = text === "Группы";
   return widthOfWindow <= 375 ? (
     <>
-      <div className={isGroup ? styles.hidden_style : styles.name_dropdown}>
+      <div className={styles.name_dropdown}>
         <h1
           onClick={() => {
             setReverse(!reverse);
