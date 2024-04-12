@@ -25,7 +25,7 @@ const LikeTemplate = ({ id }) => {
     try {
       e.preventDefault();
       if (isFavorite) {
-        console.log("before remove", id, favoriteTemplates.length);
+        // console.log("before remove", id, favoriteTemplates.length);
         await dispatch(removeTemplateFromFavorites(id));
       } else {
         await dispatch(addTemplateToFavorites(id));
