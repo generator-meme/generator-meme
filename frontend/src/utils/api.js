@@ -198,6 +198,15 @@ class Api {
       body: JSON.stringify(),
     }).then(this._checkReponce);
   }
+  getGroupsInfo(id) {
+    return fetch(`${this._baseUrl}/groups/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({

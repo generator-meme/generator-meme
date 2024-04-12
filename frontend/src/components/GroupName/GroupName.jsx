@@ -1,20 +1,41 @@
 import styles from "./GroupName.module.css";
 import { ReactComponent as CloseIcon } from "../../images/close_group.svg";
 import { useGetWidthHook } from "../../utils/getWidthDevice";
-export const GroupName = ({ name, handleOpenDropDawn = () => {}, flag }) => {
+import { useEffect, useState } from "react";
+export const GroupName = ({
+  prop = "",
+  handleOpenDropDawn = () => {},
+  isEnterGroup,
+  name,
+}) => {
+  const [flag, setFlag] = useState(true); //для отрисовки стилей при десктопе и мобилке
   const widthOfWindow = useGetWidthHook();
+
+  useEffect(() => {
+    if (widthOfWindow > 375) {
+      setFlag(false);
+    }
+  }, []);
+
   return (
     <div
-      className={`${styles.name} ' ' ${flag && styles.name_subgroup}`}
-      onClick={() => handleOpenDropDawn()}
+      className={`${styles.name} ' ' ${
+        isEnterGroup || flag ? styles.name_subgroup : null
+      }`}
     >
-      <p>{name}</p>
+      <p
+        onClick={() => {
+          handleOpenDropDawn(prop);
+        }}
+      >
+        {name}
+      </p>
       <div
         className={`${styles.close_icon} ' ' ${
-          flag && styles.close_icon_subgroup
+          isEnterGroup || flag ? styles.close_icon_subgroup : null
         }`}
       >
-        {widthOfWindow > 375 || !flag ? <CloseIcon /> : <p>удалить</p>}
+        {isEnterGroup ? <p>вступить</p> : flag ? <p>удалить</p> : <CloseIcon />}
       </div>
     </div>
   );

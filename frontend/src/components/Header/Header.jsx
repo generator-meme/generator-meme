@@ -63,7 +63,7 @@ const Header = () => {
           setMyMainMenuIsOpen(false);
         }
 
-        if (!myExtraMenu?.current.contains(e.target) && myExtraMenuIsOpen) {
+        if (!myExtraMenu?.current?.contains(e.target) && myExtraMenuIsOpen) {
           setMyExtraMenuIsOpen(false);
         }
       };
