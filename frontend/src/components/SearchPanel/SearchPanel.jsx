@@ -71,6 +71,7 @@ export const SearchPanel = () => {
   };
 
   const createStringToSearch = useCallback(() => {
+    // console.log(tags);
     const tempTags = tags;
     const tagIdArray = tagArray.map((tagName) => {
       let tempTag;
