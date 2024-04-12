@@ -13,7 +13,7 @@ function AuthUsingSocialNetworks() {
     try {
       setCookie("token", token, 7);
       await dispatch(setIsLoggedIn());
-      console.log("получила токен из сторонних сетей");
+      // console.log("получила токен из сторонних сетей");
       navigate("/");
     } catch (err) {
       if (err.detail) {

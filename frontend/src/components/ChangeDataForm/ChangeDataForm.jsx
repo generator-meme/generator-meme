@@ -42,7 +42,7 @@ const ChangeDataForm = ({ info }) => {
     } else {
       isValidLocal = true;
     }
-    console.log(isValidLocal);
+    // console.log(isValidLocal);
     setIsValid(isValidLocal);
     setNewName(value);
   };
