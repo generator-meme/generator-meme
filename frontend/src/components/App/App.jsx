@@ -48,6 +48,7 @@ const App = () => {
       .createNewMem(memeUrl, memeId)
       .then((res) => {
         setNewMeme(res);
+
         localStorage.setItem("createdMeme", JSON.stringify(res));
       })
       .catch((err) => {

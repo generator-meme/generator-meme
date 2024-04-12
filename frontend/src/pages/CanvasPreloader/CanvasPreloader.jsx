@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Canvas from "../../components/Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
 import { useSelector } from "react-redux";
@@ -21,7 +21,8 @@ const CanvasPreloader = ({
   });
 
   useEffect(() => {
-    // масштабирование шаблона в рамки канваса, подстраивание канваса под размеры масштабированной картинки
+    /* масштабирование шаблона в рамки канваса, 
+    подстраивание канваса под размеры масштабированной картинки*/
     if (image) {
       const sizes = contain(
         canvasSizes.width,
@@ -33,10 +34,12 @@ const CanvasPreloader = ({
     }
   }, [image, canvasSizes]);
 
-  const handleOnBeforeUnload = (event) => {
-    event.preventDefault();
-    return (event.returnValue = "");
-  };
+  // const handleOnBeforeUnload = (event) => {
+  //   event.preventDefault();
+  //   setImageNotFoundOpen(true);
+  //   console.log("i am in");
+  //   return (event.returnValue = "Are you shure?");
+  // };
 
   const updateCanvasSisez = () => {
     if (window.innerWidth > 1140) {
@@ -89,11 +92,11 @@ const CanvasPreloader = ({
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("currentMeme") === null) {
-      setImageNotFoundOpen(true);
-      navigate("/");
-      return;
-    }
+    // if (localStorage.getItem("currentMeme") === null) {
+    //   setImageNotFoundOpen(true);
+    //   navigate("/");
+    //   return;
+    // }
 
     const img = new Image(); // создаем изображеиние только при первом рендере, затем оно будет храниться в стейте
     if (JSON.parse(localStorage.getItem("currentMeme")) !== null) {
@@ -103,13 +106,13 @@ const CanvasPreloader = ({
       setImage(img);
     });
 
-    if (localStorage.getItem("currentMeme") === null) {
-      window.addEventListener("beforeunload", handleOnBeforeUnload);
+    // if (localStorage.getItem("currentMeme") === null) {
+    //   window.addEventListener("beforeunload", handleOnBeforeUnload);
 
-      return () => {
-        window.removeEventListener("beforeunload", handleOnBeforeUnload);
-      };
-    }
+    //   return () => {
+    //     window.removeEventListener("beforeunload", handleOnBeforeUnload);
+    //   };
+    // }
   }, []);
 
   if (!image || !imageSizes) {
