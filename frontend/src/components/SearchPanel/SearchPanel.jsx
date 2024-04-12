@@ -72,7 +72,7 @@ export const SearchPanel = () => {
 
   const createStringToSearch = useCallback(() => {
     // console.log(tags);
-    const tempTags = tags.tags;
+    const tempTags = tags;
     const tagIdArray = tagArray.map((tagName) => {
       let tempTag;
       tempTag = tempTags.find((tag) => {
