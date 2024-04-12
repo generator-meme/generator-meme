@@ -18,7 +18,7 @@ export const SearchPanel = () => {
   const [isUnknownFlag, setIsUnknownFlag] = useState(false);
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
-  const tags = useSelector((state) => state.getTags);
+  const { tags } = useSelector((state) => state.getTags);
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
