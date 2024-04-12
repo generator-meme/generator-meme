@@ -28,7 +28,7 @@ const ChangeDataForm = ({ info }) => {
   const handleChangingNewPass = async (event) => {
     const { name, value, validationMessage } = event.target;
     const isValidLocal = await schema.isValid({ new_pass: value });
-    console.log(isValidLocal);
+    // console.log(isValidLocal);
     setIsValid(isValidLocal);
     setNewPass(value);
   };

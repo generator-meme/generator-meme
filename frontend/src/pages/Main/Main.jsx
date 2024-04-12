@@ -26,7 +26,7 @@ const Main = ({ setIsNewMeme }) => {
         id: uuidv4(), // added id
         image: URL.createObjectURL(currentFile),
       };
-      console.log(myCurrentMeme);
+      // console.log(myCurrentMeme);
       setIsNewMeme(true);
       localStorage.removeItem("currentMeme");
       localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme));
