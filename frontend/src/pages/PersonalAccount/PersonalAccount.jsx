@@ -15,10 +15,10 @@ const PersonalAccount = () => {
               text={"Личная информация"}
               child={<PersonalInformation></PersonalInformation>}
             ></HocPersonalAccount>
-            <HocPersonalAccount
+            {/* <HocPersonalAccount
               text={"Группы"}
               child={<Groups></Groups>}
-            ></HocPersonalAccount>
+            ></HocPersonalAccount> */}
           </div>
 
           <div className={styles.basket}>

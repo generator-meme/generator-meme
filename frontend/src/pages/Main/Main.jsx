@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../../components/ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 const Main = ({ setIsNewMeme }) => {
   const navigate = useNavigate();
@@ -26,10 +26,16 @@ const Main = ({ setIsNewMeme }) => {
         id: uuidv4(), // added id
         image: URL.createObjectURL(currentFile),
       };
-
+      console.log(myCurrentMeme);
       setIsNewMeme(true);
-      localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
-      navigate(`/${myCurrentMeme.id}`);
+      localStorage.removeItem("currentMeme");
+      localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme));
+      /*// удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого,
+       изображение пользователя не сможет сохраниться, тк нет запроса на сервер */
+      navigate(
+        `/${myCurrentMeme.id}`
+        //  { state: JSON.parse(myCurrentMeme) }
+      );
     }
   };
 
