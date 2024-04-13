@@ -71,15 +71,7 @@ const App = () => {
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
-  }, [
-    isLoggedIn,
-    isTokenChecked,
-    dispatch,
-    categories,
-    areFavorite,
-    ordering,
-    random,
-  ]); // запрос при изменении любого параметра (кроме tags)
+  }, [isTokenChecked, dispatch, categories, areFavorite, ordering, random]); // запрос при изменении любого параметра (кроме tags)
 
   useEffect(() => {
     if (isTokenChecked && isLoggedIn) {
