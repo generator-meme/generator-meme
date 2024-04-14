@@ -14,23 +14,16 @@ import {
 
 import Fieldset from "../Fieldset/Fieldset";
 import { getCanvasSettings } from "../../utils/canvasData";
-import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
-import {
-  unBlockSaveButtonToCollection,
-  UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
-} from "../../services/actions/savedMemeActions";
+import { UN_BLOCK_SAVE_BUTTON_TO_COLLECTION } from "../../services/actions/savedMemeActions";
+import { createNewMemeAction } from "../../services/actions/memeActions";
 
 const Canvas = ({
-  handleCreateNewMeme,
-  setIsNewMeme,
-  isNewMeme,
   imageSizes,
   image,
   canvasSizes,
   fontSize,
   outsideTextHeight,
 }) => {
-  const memeTemplates = useSelector(selectAllMemeTemplates);
   const canvas = useRef(null);
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
@@ -42,8 +35,9 @@ const Canvas = ({
       outsideTextHeight
     )
   );
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const { isNewMeme, newMeme } = useSelector((state) => state.meme);
   const canvasHeight = useMemo(() => {
     // изменение высоты canvas в зависимости от текста внутри мема или снаружи
     if (imageSizes) {
@@ -56,31 +50,53 @@ const Canvas = ({
     return null;
   }, [imageSizes, textsValues, outsideTextHeight]);
 
-  const createMeme = () => {
-    let id = JSON.parse(localStorage.getItem("currentMeme")).id;
-    const template = memeTemplates.some((item) => {
-      return item.id === id;
-    });
-    if (template) {
-      handleCreateNewMeme(
-        canvas.current.toDataURL("image/jpeg", 0.92),
-        id
-      ).finally(() => {
-        dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
+  // const createMeme = () => {
+  //   let id = JSON.parse(localStorage.getItem("currentMeme")).id;
+  //   const template = memeTemplates.some((item) => {
+  //     return item.id === id;
+  //   });
+  //   if (template) {
+  //     handleCreateNewMeme(
+  //       canvas.current.toDataURL("image/jpeg", 0.92),
+  //       id
+  //     ).finally(() => {
+  //       dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
 
-        navigate(
-          `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
-          { state: JSON.parse(localStorage.getItem("createdMeme")).id }
-        );
-      });
+  //       navigate(
+  //         `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`,
+  //         { state: JSON.parse(localStorage.getItem("createdMeme")).id }
+  //       );
+  //     });
+  //   } else {
+  //     handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
+  //       () => {
+  //         dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
+  //         navigate(
+  //           `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
+  //         );
+  //       }
+  //     );
+  //   }
+  // };
+  useEffect(() => {
+    if (!newMeme) {
+      return;
+    }
+    dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
+    navigate(`/saved/${newMeme.id}`, { state: newMeme.id });
+  }, [newMeme]);
+
+  const createMeme = () => {
+    const currentMeme = JSON.parse(localStorage.getItem("currentMeme"));
+    const id = currentMeme.id;
+    const is_published = currentMeme.is_published;
+    if (is_published) {
+      dispatch(
+        createNewMemeAction(canvas.current.toDataURL("image/jpeg", 0.92), id)
+      );
     } else {
-      handleCreateNewMeme(canvas.current.toDataURL("image/jpeg", 0.92)).finally(
-        () => {
-          dispatch({ type: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION });
-          navigate(
-            `/saved/${JSON.parse(localStorage.getItem("createdMeme")).id}`
-          );
-        }
+      dispatch(
+        createNewMemeAction(canvas.current.toDataURL("image/jpeg", 0.92))
       );
     }
   };
@@ -215,17 +231,17 @@ const Canvas = ({
   }, [images]);
 
   useEffect(() => {
-    setIsNewMeme(false);
+    // dispatch({ type: SET_NEWMEME_FALSE });
     /* true - сразу после выбора нового шаблона, 
     данные из хранилища подгружаться не будут, 
     false - условие для подгрузки данных из хранилища при последующей перезагрузке страницы;*/
-    localStorage.removeItem("createdMeme");
+    // localStorage.removeItem("createdMeme");
 
-    if (!isNewMeme && localStorage.getItem("textsValues") !== null) {
+    if (!isNewMeme) {
       const oldTextsValues = JSON.parse(localStorage.getItem("textsValues"));
       setTextsValues(oldTextsValues);
     }
-  }, [setIsNewMeme, isNewMeme]);
+  }, [isNewMeme, isNewMeme]);
 
   useEffect(() => {
     localStorage.setItem("textsValues", JSON.stringify(textsValues));

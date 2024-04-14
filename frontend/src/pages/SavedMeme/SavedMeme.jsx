@@ -5,20 +5,17 @@ import { useState } from "react";
 import icWhatsapp from "../../images/icons/ic-whatsapp.svg";
 import icTelegram from "../../images/icons/ic-telegram.svg";
 import icViber from "../../images/icons/ic-viber.svg";
-import icGroup from "../../images/icons/ic-group.svg";
 import icGlobal from "../../images/icons/ic-global.svg";
 import icNote from "../../images/icons/ic-note.svg";
-import icDropdown from "../../images/icons/ic-dropdown.svg";
 import icDownloadToPc from "../../images/icons/ic-download-to-pc.svg";
 import icGoogleDrive from "../../images/icons/ic-google-drive.svg";
 import icDropbox from "../../images/icons/ic-dropbox.svg";
 import icYandexDisc from "../../images/icons/ic-yandex-disc.svg";
 import icNotWorkedAddGroup from "../../images/icons/group-add_not_worked_now.svg";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import vector_387 from "../../images/vector_387.svg";
 import {
-  blockSaveButtonToCollection,
   BLOCK_SAVE_BUTTON_TO_COLLECTION,
   getMemeByIdAction,
 } from "../../services/actions/savedMemeActions";
@@ -30,15 +27,20 @@ import {
 import Prompt from "../../components/Prompt/Prompt";
 import api from "../../utils/api";
 import { getCookie } from "../../utils/cookie";
-function SavedMeme({ currentMeme, handleDownloadMeme }) {
+import {
+  CLEARNEWMEME,
+  SET_NEWMEME_FALSE,
+} from "../../services/actions/memeActions";
+function SavedMeme({ handleDownloadMeme }) {
   const { meme, blockSaveButton } = useSelector((state) => state.saveMeme);
-  const isSavedMeme = true;
+  const { isLoggedIn } = useSelector((state) => state.user);
+  const { createdMeme } = useSelector((state) => state.meme);
   const [isDownloadDropdownOpen, setIsDownloadDropdownOpen] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const memeRef = useRef(null);
-
+  const navigate = useNavigate();
   const writeToCanvas = (src) => {
     return new Promise((res) => {
       const canvas = document.createElement("canvas");
@@ -55,6 +57,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       };
     });
   };
+  //write to canvas to download image
 
   const copyURL = async () => {
     try {
@@ -63,7 +66,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       console.error("Failed to copy: ", err);
     }
   };
-
+  //copy URl
   const copyToClipboard = async (src) => {
     const image = await writeToCanvas(src);
     try {
@@ -76,80 +79,13 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
       console.log(e);
     }
   };
+  //copy image to clipboard
 
   useEffect(() => {
     dispatch(getMemeByIdAction(id));
+    dispatch({ type: CLEARNEWMEME });
+    dispatch({ type: SET_NEWMEME_FALSE });
   }, []);
-
-  // const setImageInMeta = async (src, width, height) => {
-  //   const image = await writeToCanvasCustomParam(src, width, height);
-  //   let reader = new FileReader();
-
-  //   reader.readAsDataURL(image);
-  //   reader.onload = function () {
-  //     document
-  //       .querySelector('meta[name="meme_image"]')
-  //       .setAttribute("content", reader.result);
-  //     document
-  //       .querySelector('meta[name="twitter:image"]')
-  //       .setAttribute("content", reader.result);
-  //     document
-  //       .querySelector('meta[name="twitter_url"]')
-  //       .setAttribute("content", reader.result);
-  //   };
-  // };
-
-  // const writeToCanvasCustomParam = (src, width, height) => {
-  //   return new Promise((res) => {
-  //     const canvas = document.createElement("canvas");
-  //     const ctx = canvas.getContext("2d");
-  //     const img = new Image();
-  //     img.src = src;
-
-  //     img.onload = () => {
-  //       const imgRatio = img.width / img.height;
-  //       const canvasRatio = width / height;
-  //       let newWidth, newHeight, offsetX, offsetY;
-
-  //       if (imgRatio > canvasRatio) {
-  //         newWidth = width;
-  //         newHeight = width / imgRatio;
-  //         offsetX = 0;
-  //         offsetY = (height - newHeight) / 2;
-  //       } else {
-  //         newWidth = height * imgRatio;
-  //         newHeight = height;
-  //         offsetX = (width - newWidth) / 2;
-  //         offsetY = 0;
-  //       }
-
-  //       canvas.width = width;
-  //       canvas.height = height;
-  //       ctx.drawImage(img, offsetX, offsetY, newWidth, newHeight);
-  //       canvas.toBlob((blob) => {
-  //         res(blob);
-  //       }, "image/png");
-  //     };
-  //   });
-  // };
-  // useEffect(() => {
-  //   // document.querySelector('meta[name="meme_image"]').setAttribute("content", meme?.image);
-  //   // document.querySelector('meta[name="twitter:image"]').setAttribute("content", meme?.image);
-  //   // document.querySelector('meta[name="twitter_url"]').setAttribute("content", meme?.image);
-  //   setImageInMeta(meme?.image, 1200, 627);
-
-  //   return () => {
-  //     document
-  //       .querySelector('meta[name="meme_image"]')
-  //       .setAttribute("content", "%PUBLIC_URL%/logo.png");
-  //     document
-  //       .querySelector('meta[name="twitter:image"]')
-  //       .setAttribute("content", "%PUBLIC_URL%/logo.png");
-  //     document
-  //       .querySelector('meta[name="twitter_url"]')
-  //       .setAttribute("content", "%PUBLIC_URL%/logo.png");
-  //   };
-  // }, [meme]);
 
   const closeDropDownMenuWhenChouse = () => {
     setTimeout(() => {
@@ -158,30 +94,38 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
   };
 
   const saveMemeToPersonalAccount = async () => {
-    if (blockSaveButton) {
+    if (blockSaveButton || !isLoggedIn) {
       return;
     }
     const savedToken = getCookie("token");
-    const meme_id = JSON.parse(localStorage.getItem("createdMeme")).id;
+    const meme_id = createdMeme.id;
+
     try {
       await api.addMemeToMyCollection(meme_id, savedToken);
     } catch (err) {
-      // const key = Object.keys(err)[0];
-      // const error = err[key][0]
       console.log(err);
     }
-  }; //revrite in actions
+  };
+
+  const handleSaveMemeToMyCollection = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+    if (blockSaveButton) {
+      return;
+    }
+    saveMemeToPersonalAccount();
+    dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+  };
 
   return (
     !!meme && (
       <main className={styles.saved_meme}>
         {location.state === null ? null : (
+          //if redirected from another page then reductor return null
           <Navigation
-            isSavedMeme={isSavedMeme}
-            id={
-              currentMeme?.id ||
-              JSON.parse(localStorage.getItem("currentMeme")).id
-            }
+            isSavedMeme={true}
+            id={JSON.parse(localStorage.getItem("currentMeme")).id}
           />
         )}
 
@@ -268,13 +212,7 @@ function SavedMeme({ currentMeme, handleDownloadMeme }) {
                 blockSaveButton ? "btn_blocked" : null
               }`}
               // className={`btn ${styles.saved_meme__btn_save}`}
-              onClick={() => {
-                if (blockSaveButton) {
-                  return;
-                }
-                saveMemeToPersonalAccount();
-                dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
-              }}
+              onClick={handleSaveMemeToMyCollection}
             >
               сохранить в ЛК
             </button>

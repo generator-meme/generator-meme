@@ -11,6 +11,7 @@ const CanvasPreloader = ({
   setImageNotFoundOpen,
 }) => {
   const navigate = useNavigate();
+
   const [image, setImage] = useState(null);
   const [fontSize, setFontSize] = useState(40);
   const [outsideTextHeight, setOusideTextHeight] = useState(80);

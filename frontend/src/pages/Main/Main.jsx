@@ -7,11 +7,14 @@ import { useNavigate } from "react-router-dom";
 import ScrollPositionSaver from "../../components/ScrollPositionSaver/ScrollPositionSaver";
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_NEWMEME_TRUE } from "../../services/actions/memeActions";
 // import { useDispatch } from "react-redux";
 
 const Main = ({ setIsNewMeme }) => {
   const navigate = useNavigate();
   const file = useRef();
+  const dispatch = useDispatch();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
 
   const onChange = (event) => {
@@ -27,7 +30,7 @@ const Main = ({ setIsNewMeme }) => {
         image: URL.createObjectURL(currentFile),
       };
       // console.log(myCurrentMeme);
-      setIsNewMeme(true);
+      dispatch({ type: SET_NEWMEME_TRUE });
       localStorage.removeItem("currentMeme");
       localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme));
       /*// удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого,
