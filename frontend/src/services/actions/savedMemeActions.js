@@ -8,12 +8,16 @@ export const BLOCK_SAVE_BUTTON_TO_COLLECTION =
 export const UN_BLOCK_SAVE_BUTTON_TO_COLLECTION =
   "UN_BLOCK_SAVE_BUTTON_TO_COLLECTION";
 
-export const unBlockSaveButtonToCollection = () => ({
-  tyle: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
-});
-export const blockSaveButtonToCollection = () => ({
-  tyle: BLOCK_SAVE_BUTTON_TO_COLLECTION,
-});
+export const unBlockSaveButtonToCollection = () => {
+  return {
+    tyle: UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
+  };
+};
+export const blockSaveButtonToCollection = () => {
+  return {
+    tyle: BLOCK_SAVE_BUTTON_TO_COLLECTION,
+  };
+};
 
 export const getMemeByIdAction = (id) => {
   return function (dispatch) {

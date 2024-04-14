@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import api from "../../utils/api";
 import { loadUserInfo } from "../../services/actions/userActions";
 import Header from "../Header/Header";
 import Main from "../../pages/Main/Main";
@@ -30,9 +29,6 @@ import { selectRandom } from "../../services/selectors/filtrationSelectors";
 import { getTagsAction } from "../../services/actions/getTagsAction";
 
 const App = () => {
-  const { meme } = useSelector((state) => state.saveMeme);
-  const [newMeme, setNewMeme] = useState(null);
-  const [isNewMeme, setIsNewMeme] = useState(false);
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
   const [isTokenChecked, setIsTokenChecked] = useState(false);
   const dispatch = useDispatch();
@@ -43,42 +39,16 @@ const App = () => {
   );
   const random = useSelector(selectRandom);
 
-  const handleCreateNewMeme = (memeUrl, memeId) => {
-    return api
-      .createNewMem(memeUrl, memeId)
-      .then((res) => {
-        setNewMeme(res);
-        localStorage.setItem("createdMeme", JSON.stringify(res));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleDownloadNewMeme = () => {
-    api
-      .downloadNewMem(meme.id)
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   useEffect(() => {
+    // localStorage.removeItem("currentMeme");
     dispatch(getTagsAction());
   }, []);
 
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());
-  }, [
-    isLoggedIn,
-    isTokenChecked,
-    dispatch,
-    categories,
-    areFavorite,
-    ordering,
-    random,
-  ]); // запрос при изменении любого параметра (кроме tags)
+  }, [isTokenChecked, dispatch, categories, areFavorite, ordering, random]);
+  // запрос при изменении любого параметра (кроме tags)
 
   useEffect(() => {
     if (isTokenChecked && isLoggedIn) {
@@ -88,7 +58,6 @@ const App = () => {
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;
-
     dispatch(loadUserInfo());
     setIsTokenChecked(true);
   }, [isLoggedIn, dispatch, userInfo]);
@@ -112,28 +81,10 @@ const App = () => {
           path="/me/pass-change"
           element={<ChangeDataForm info={"pass"} />}
         />
-        <Route exact path="/" element={<Main setIsNewMeme={setIsNewMeme} />} />
+        <Route exact path="/" element={<Main />} />
         <Route path="/team" element={<Team />} />
-        <Route
-          path="/:id"
-          element={
-            <CanvasPreloader
-              handleCreateNewMeme={handleCreateNewMeme}
-              setIsNewMeme={setIsNewMeme}
-              isNewMeme={isNewMeme}
-              setImageNotFoundOpen={setImageNotFoundOpen}
-            />
-          }
-        />
-        <Route
-          path="/saved/:id"
-          element={
-            <SavedMeme
-              newMeme={newMeme}
-              handleDownloadMeme={handleDownloadNewMeme}
-            />
-          }
-        />
+        <Route path="/:id" element={<CanvasPreloader />} />
+        <Route path="/saved/:id" element={<SavedMeme />} />
         <Route
           path="/signin"
           element={!isLoggedIn ? <Registration /> : <Navigate to="/" replace />}

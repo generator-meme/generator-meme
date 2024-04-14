@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import cat from "../../images/cat.png";
-// import help from '../../images/help.png'
 import "./Main.css";
 import MemesBox from "../../components/MemesBox/MemesBox";
 import { useNavigate } from "react-router-dom";
@@ -8,10 +7,12 @@ import ScrollPositionSaver from "../../components/ScrollPositionSaver/ScrollPosi
 import { v4 as uuidv4 } from "uuid";
 import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 import { useDispatch } from "react-redux";
+import { SET_NEWMEME_TRUE } from "../../services/actions/memeActions";
 
 const Main = ({ setIsNewMeme }) => {
   const navigate = useNavigate();
   const file = useRef();
+  const dispatch = useDispatch();
   const [numberOfVisibleMems, setNumberOfVisibleMems] = useState(21);
 
   const onChange = (event) => {
@@ -26,9 +27,11 @@ const Main = ({ setIsNewMeme }) => {
         id: uuidv4(), // added id
         image: URL.createObjectURL(currentFile),
       };
-
-      setIsNewMeme(true);
-      localStorage.removeItem("currentMeme"); // удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого, изображение пользователя не сможет сохраниться, тк нет запроса на сервер
+      dispatch({ type: SET_NEWMEME_TRUE });
+      localStorage.removeItem("currentMeme");
+      localStorage.setItem("currentMeme", JSON.stringify(myCurrentMeme));
+      /*// удаление прошлых данных, чтобы не возникло наслоения прошлого текущего мема и этого,
+       изображение пользователя не сможет сохраниться, тк нет запроса на сервер */
       navigate(`/${myCurrentMeme.id}`);
     }
   };
@@ -68,7 +71,6 @@ const Main = ({ setIsNewMeme }) => {
       <MemesBox
         numberOfVisibleMems={numberOfVisibleMems}
         setNumberOfVisibleMems={setNumberOfVisibleMems}
-        setIsNewMeme={setIsNewMeme}
       />
     </main>
   );

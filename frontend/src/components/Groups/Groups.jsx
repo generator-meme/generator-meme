@@ -4,28 +4,39 @@ import { ReactComponent as Plus } from "../../images/plus.svg";
 import { useGetWidthHook } from "../../utils/getWidthDevice";
 import { SearchPanelMobile } from "../searchPanelMobile/SearchPanelMobile";
 import { GroupName } from "../GroupName/GroupName";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getGroupsAction,
+  getMyGroupsAction,
+} from "../../services/actions/getGroupsActions";
 
 export const Groups = () => {
   const dropDawnRef = useRef();
   const [isOpenDropDawn, setIsOpenDropDawn] = useState(false);
   const widthOfWindow = useGetWidthHook();
-  const mockArr = Array(6)
-    .fill("Название группы")
-    .map((u, i) => "Название группы");
+  const { myGroups } = useSelector((state) => state.getGroups);
+  console.log(myGroups);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMyGroupsAction());
+  }, []);
+
   const mockArr2 = Array(6)
     .fill("Название группы")
     .map((u, i) => "Пользователь");
-  // useEffect(() => {
-  //   const closeDropDown = (e) => {
-  //     if (!dropDawnRef.current.contains(e.target)) {
-  //       setIsOpenDropDawn(false);
-  //     }
-  //   };
-  //   document.addEventListener("click", closeDropDown, true);
-  //   return () => {
-  //     document.removeEventListener("click", closeDropDown, true);
-  //   };
-  // }, []);раскомментить при создании групп
+
+  useEffect(() => {
+    const closeDropDown = (e) => {
+      if (!dropDawnRef?.current?.contains(e.target)) {
+        setIsOpenDropDawn(false);
+      }
+    };
+    document.addEventListener("click", closeDropDown, true);
+    return () => {
+      document.removeEventListener("click", closeDropDown, true);
+    };
+  }, []);
 
   const handleOpenDropDawn = () => {
     setIsOpenDropDawn(true);
@@ -52,12 +63,12 @@ export const Groups = () => {
         <div className={styles.my_groups_wrap}>
           <h3>Мои группы</h3>
           <div className={styles.my_groups}>
-            {mockArr.map((name, index) => {
+            {myGroups?.map(({ name, index }) => {
               return (
                 <GroupName
                   name={name}
                   id={index}
-                  // handleOpenDropDawn={handleOpenDropDawn} раскомментить при создании групп
+                  handleOpenDropDawn={handleOpenDropDawn}
                   flag={true}
                 ></GroupName>
               );

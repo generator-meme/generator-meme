@@ -19,6 +19,7 @@ export const SearchPanel = () => {
   const [tagsBasedOnInputValue, setTagsBasedOnInputValue] = useState([]);
   const [isFocusSearchPanel, setIsFocusSearchPanel] = useState(false);
   const { tags } = useSelector((state) => state.getTags);
+
   const dispatch = useDispatch();
   const stringToSearch = useSelector(setectCurrentTagsString);
 
@@ -40,7 +41,6 @@ export const SearchPanel = () => {
       setIsFocusSearchPanel(true);
       return;
     } else if (!searchValue && isFocusSearchPanel) {
-      // setIsFocusSearchPanel(false);
       return;
     }
   }, [searchValue, isFocusSearchPanel]);
@@ -51,7 +51,6 @@ export const SearchPanel = () => {
       setTagArray(tempTagArray);
       setIsFocusSearchPanel(false);
       setSearchValue(" ");
-      // setInputChar("");
     }
   }, [inputChar, searchValue, tagArray]);
 
@@ -109,7 +108,7 @@ export const SearchPanel = () => {
       console.log("err");
     }
   };
-  // console.log(tags);
+
   const clickHandle = (tag) => {
     setTagArray(() => {
       return [...tagArray, tag];
