@@ -31,7 +31,7 @@ import {
   CLEARNEWMEME,
   SET_NEWMEME_FALSE,
 } from "../../services/actions/memeActions";
-function SavedMeme({ handleDownloadMeme }) {
+function SavedMeme() {
   const { meme, blockSaveButton } = useSelector((state) => state.saveMeme);
   const { isLoggedIn } = useSelector((state) => state.user);
   const { createdMeme } = useSelector((state) => state.meme);
@@ -41,6 +41,16 @@ function SavedMeme({ handleDownloadMeme }) {
   const dispatch = useDispatch();
   const memeRef = useRef(null);
   const navigate = useNavigate();
+
+  const handleDownloadNewMeme = () => {
+    api
+      .downloadNewMem(meme.id)
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const writeToCanvas = (src) => {
     return new Promise((res) => {
       const canvas = document.createElement("canvas");
@@ -149,7 +159,7 @@ function SavedMeme({ handleDownloadMeme }) {
                 className={`btn ${styles.saved_meme_btn}`}
                 style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                 onClick={() => {
-                  handleDownloadMeme();
+                  handleDownloadNewMeme();
                 }}
               >
                 скачать мем
@@ -177,7 +187,7 @@ function SavedMeme({ handleDownloadMeme }) {
                 <div
                   className={styles.download_option}
                   onClick={() => {
-                    handleDownloadMeme();
+                    handleDownloadNewMeme();
                   }}
                 >
                   <img src={icDownloadToPc} alt="icon download to pc" />
