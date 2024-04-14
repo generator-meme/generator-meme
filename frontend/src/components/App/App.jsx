@@ -65,21 +65,15 @@ const App = () => {
       });
   };
   useEffect(() => {
+    // localStorage.removeItem("currentMeme");
     dispatch(getTagsAction());
   }, []);
 
   useEffect(() => {
     if (!isTokenChecked) return;
+    // localStorage.removeItem("textsValues");
     dispatch(loadAllMemeTemplates());
-  }, [
-    isLoggedIn,
-    isTokenChecked,
-    dispatch,
-    categories,
-    areFavorite,
-    ordering,
-    random,
-  ]); // запрос при изменении любого параметра (кроме tags)
+  }, [isTokenChecked, dispatch, categories, areFavorite, ordering, random]); // запрос при изменении любого параметра (кроме tags)
 
   useEffect(() => {
     if (isTokenChecked && isLoggedIn) {

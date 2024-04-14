@@ -3,11 +3,19 @@ import "./Meme.css";
 import { useNavigate } from "react-router-dom";
 import LikeTemplate from "../LikeTemplate/LikeTemplate";
 import { TagLists } from "../TagLists/TagLists";
+import { useDispatch } from "react-redux";
+import {
+  CLEARNEWMEME,
+  SET_NEWMEME_TRUE,
+} from "../../services/actions/memeActions";
 
 function Meme({ elem, setIsNewMeme }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onClick = () => {
-    setIsNewMeme(true);
+    dispatch({ type: SET_NEWMEME_TRUE });
+    // dispatch({ type: CLEARNEWMEME });
+    // setIsNewMeme(true);
     localStorage.setItem("currentMeme", JSON.stringify(elem));
     navigate(`/${elem.id}`);
   };
