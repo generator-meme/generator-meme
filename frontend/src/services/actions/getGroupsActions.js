@@ -14,7 +14,6 @@ export const getGroupsAction = (name) => {
     api
       .getGroups(name)
       .then((res) => {
-        console.log(res);
         dispatch({ type: GET_GROUPS_SUCCESS, payload: res });
       })
 
@@ -31,7 +30,6 @@ export const getMyGroupsAction = () => {
     api
       .getMyGroups(savedToken)
       .then((res) => {
-        console.log(res);
         dispatch({ type: GET_MYGROUPS_SUCCESS, payload: res });
       })
 
