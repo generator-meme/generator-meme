@@ -14,13 +14,7 @@ import {
   setOrdering,
 } from "../../services/actions/filtrationActions";
 
-import Prompt from "../Prompt/Prompt";
-
-const MemesBox = ({
-  numberOfVisibleMems,
-  setNumberOfVisibleMems,
-  setIsNewMeme,
-}) => {
+const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
   const memeTemplates = useSelector(selectAllMemeTemplates);
   const [scrollTop, setScrollTop] = useState(null);
   const dispatch = useDispatch();
@@ -122,9 +116,7 @@ const MemesBox = ({
             </div>
             <ul className="memesbox__container">
               {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
-                return (
-                  <Meme elem={elem} key={elem.id} setIsNewMeme={setIsNewMeme} />
-                );
+                return <Meme elem={elem} key={elem.id} />;
               })}
             </ul>
           </div>
