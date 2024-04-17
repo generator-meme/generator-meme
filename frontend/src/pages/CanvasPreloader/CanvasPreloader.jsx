@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Canvas from "../../components/Canvas/Canvas";
 import { contain } from "../../utils/imagesFunctions";
 
-const CanvasPreloader = ({}) => {
+const CanvasPreloader = () => {
   const [image, setImage] = useState(null);
   const [fontSize, setFontSize] = useState(40);
   const [outsideTextHeight, setOusideTextHeight] = useState(80);
