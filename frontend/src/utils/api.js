@@ -25,9 +25,13 @@ class Api {
         });
   }
 
-  getTemplates(savedToken, options) {
+  getTemplates(savedToken, options, pagination) {
+    console.log("test")
+    console.log(options, pagination)
+    console.log(`${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}
+    &offset=${pagination.offset}&limit=${pagination.limit}`)
     return fetch(
-      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}`,
+      `${this._baseUrl}/templates/?tag=${options.tags}&category=${options.categories}&is_favorited=${options.areFavorite}&ordering=${options.ordering}&offset=${pagination.offset}&limit=${pagination.limit}`,
       {
         method: "GET",
         body: JSON.stringify(),

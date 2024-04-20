@@ -78,7 +78,7 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         filtrationOptions: {
           ...state.filtrationOptions,
-          areFavorite: state.filtrationOptions.areFavorite,
+          // areFavorite: state.filtrationOptions.areFavorite,
           ordering: payload,
         },
       };
