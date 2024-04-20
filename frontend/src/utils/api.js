@@ -183,6 +183,25 @@ class Api {
       }),
     }).then(this._errorHa);
   }
+  getGroups(search = "") {
+    return fetch(`${this._baseUrl}/groups/?name=${search}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    }).then(this._checkReponce);
+  }
+  getMyGroups(token) {
+    return fetch(`${this._baseUrl}/users/mygroups`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(),
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({

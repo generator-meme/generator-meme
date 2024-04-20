@@ -13,7 +13,9 @@ export const TagLists = ({ elem }) => {
       );
     }
   }, []);
-
+  if (!elem) {
+    return null;
+  }
   return (
     elem.tag.length > 0 && (
       <div className={styles.meme__tags_container} style={{ ...addStyle }}>
