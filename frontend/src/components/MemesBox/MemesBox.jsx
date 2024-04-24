@@ -4,20 +4,24 @@ import arrowUp from "../../images/arrow-up.svg";
 import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllMemeTemplates, selectIsMemeTemplateAvalible } from "../../services/selectors/allMemeTemplatesSelectors";
+import {
+  selectAllMemeTemplates,
+  selectIsMemeTemplateAvalible,
+} from "../../services/selectors/allMemeTemplatesSelectors";
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
-import { loadAllMemeTemplates, setAllMemeTemplatesEmpty } from "../../services/actions/allMemeTemplatesActions";
+import {
+  loadAllMemeTemplates,
+  setAllMemeTemplatesEmpty,
+} from "../../services/actions/allMemeTemplatesActions";
 
 import {
   addRandomId,
   setOrdering,
 } from "../../services/actions/filtrationActions";
 
-
-const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
-
+const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
   const memeTemplates = useSelector(selectAllMemeTemplates);
   const isNewMemeAvalible = useSelector(selectIsMemeTemplateAvalible);
   const [scrollTop, setScrollTop] = useState(null);
@@ -57,9 +61,10 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
   ]);
 
   const clichHandleTab = (params) => {
-    dispatch(setAllMemeTemplatesEmpty())
+    dispatch(setAllMemeTemplatesEmpty());
     if (params.param === "random") {
       dispatch(addRandomId());
+      return;
     }
     dispatch(setOrdering(params.param));
     const tempTabs = tabs.map((tab) => {
@@ -124,23 +129,21 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
               </div>
             </div>
             <ul className="memesbox__container">
-
               {memeTemplates.map((elem) => {
-                return (
-                  <Meme elem={elem} key={elem.id} />
-                );
-
-           
+                return <Meme elem={elem} key={elem.id} />;
               })}
             </ul>
           </div>
 
           {
-           (
-            <button onClick={addMemes} disabled={!isNewMemeAvalible} className="memesbox__btn-show-more btn">
+            <button
+              onClick={addMemes}
+              disabled={!isNewMemeAvalible}
+              className="memesbox__btn-show-more btn"
+            >
               {isNewMemeAvalible ? "показать больше" : "больше мемов нет"}
             </button>
-          )}
+          }
           <Link
             to="/#memes-start"
             className={`

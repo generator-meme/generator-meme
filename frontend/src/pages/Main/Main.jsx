@@ -9,15 +9,13 @@ import { SearchPanel } from "../../components/SearchPanel/SearchPanel";
 import { useDispatch } from "react-redux";
 import { SET_NEWMEME_TRUE } from "../../services/actions/memeActions";
 
-const Main = ({ setIsNewMeme }) => {
+const Main = () => {
   const navigate = useNavigate();
   const file = useRef();
 
   const [startOfVisibleMems, setStartOfVisibleMems] = useState(0);
 
   const dispatch = useDispatch();
-
-
 
   const onChange = (event) => {
     if (event.target.files[0].size > 400000) {
@@ -73,11 +71,8 @@ const Main = ({ setIsNewMeme }) => {
         <SearchPanel></SearchPanel>
       </section>
       <MemesBox
-
         startOfVisibleMems={startOfVisibleMems}
         setStartOfVisibleMems={setStartOfVisibleMems}
-        
-
       />
     </main>
   );

@@ -13,7 +13,7 @@ const initialState = {
   categoriesOptions: [],
   favoriteOptions: {
     true: true,
-    false: false,
+    // false: false,
     empty: "",
   },
   orderingOptions: {
