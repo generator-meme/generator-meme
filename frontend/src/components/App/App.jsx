@@ -23,7 +23,6 @@ import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import Preloader from "../Preloader/Preloader";
 import { loadCategoriesOptions } from "../../services/actions/filtrationActions";
 import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesActions";
-import { loadFavoriteTemplates } from "../../services/actions/favoriteTemplatesActions";
 import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
 import { selectRandom } from "../../services/selectors/filtrationSelectors";
 import { getTagsAction } from "../../services/actions/getTagsAction";
@@ -49,12 +48,6 @@ const App = () => {
     dispatch(loadAllMemeTemplates());
   }, [isTokenChecked, dispatch, categories, areFavorite, ordering, random]);
   // запрос при изменении любого параметра (кроме tags)
-
-  useEffect(() => {
-    if (isTokenChecked && isLoggedIn) {
-      dispatch(loadFavoriteTemplates());
-    }
-  }, [isLoggedIn, isTokenChecked, dispatch]);
 
   useEffect(() => {
     if (Object.values(userInfo).length) return;

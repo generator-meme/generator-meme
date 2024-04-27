@@ -4,21 +4,36 @@ import arrowUp from "../../images/arrow-up.svg";
 import Meme from "../Meme/Meme";
 import { HashLink as Link } from "react-router-hash-link";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllMemeTemplates } from "../../services/selectors/allMemeTemplatesSelectors";
+import {
+  selectAllMemeTemplates,
+  selectIsMemeTemplateAvalible,
+} from "../../services/selectors/allMemeTemplatesSelectors";
 import { Tab } from "../Tab/Tab";
 import burgerIcon from "../../images/icons/burger_icon.svg";
 import { Categories } from "../Categories/Categories";
+import {
+  loadAllMemeTemplates,
+  setAllMemeTemplatesEmpty,
+} from "../../services/actions/allMemeTemplatesActions";
 
 import {
   addRandomId,
   setOrdering,
 } from "../../services/actions/filtrationActions";
 
-const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
+const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
   const memeTemplates = useSelector(selectAllMemeTemplates);
+  const isNewMemeAvalible = useSelector(selectIsMemeTemplateAvalible);
   const [scrollTop, setScrollTop] = useState(null);
   const dispatch = useDispatch();
   const [isHidden, setIsHidden] = useState(true);
+  const [paramId, setParamId] = useState(1);
+  const [tabs, setTabs] = useState([
+    { text: "Популярные", isOn: true, param: "", id: 1 },
+    { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
+    { text: "Рандом", isOn: false, param: "random", id: 3 },
+  ]);
+  const limit = 21;
 
   const fullHeight = Math.max(
     document.body.scrollHeight,
@@ -30,7 +45,8 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
   );
   // console.log(scrollTop);
   const addMemes = () => {
-    setNumberOfVisibleMems(numberOfVisibleMems + 21);
+    dispatch(loadAllMemeTemplates(startOfVisibleMems + limit));
+    setStartOfVisibleMems(startOfVisibleMems + limit);
   };
   const handleScroll = (e) => {
     // e.preventDefault();
@@ -39,30 +55,36 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const [tabs, setTabs] = useState([
-    { text: "Популярные", isOn: true, param: "", id: 1 },
-    { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
-    { text: "Рандом", isOn: false, param: "random", id: 3 },
-  ]);
-
-  const clichHandleTab = (params) => {
-    if (params.param === "random") {
-      dispatch(addRandomId());
-    }
-    dispatch(setOrdering(params.param));
-    const tempTabs = tabs.map((tab) => {
-      if (tab.id === params.id) {
+  const handleChangeOfColorTabButton = (array, id) => {
+    return array.map((tab) => {
+      if (tab.id === id) {
         return { ...tab, isOn: true };
       } else {
         return { ...tab, isOn: false };
       }
-    });
-    setTabs(tempTabs);
+    }); // для отображения цвета кнопки
+  };
+  const clichHandleTab = (params) => {
+    if (params.id === paramId && params.id !== 3) {
+      //если повторно нажимаем на кнопку, кроме рандом
+      return;
+    }
+    setStartOfVisibleMems(0); // при нажатии идет запрос с offset=0 and limit=21
+    dispatch(setAllMemeTemplatesEmpty()); //обнуляем в Store все шаблоны
+    setParamId(params.id); // прописываем в State id кнопки
+    setTabs(handleChangeOfColorTabButton(tabs, params.id));
+
+    if (params.param !== "random") {
+      dispatch(setOrdering(params.param)); // если не рандом, то
+      return;
+    }
+
+    dispatch(setOrdering(params.param));
+    dispatch(addRandomId());
   };
 
   return (
@@ -79,9 +101,7 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
                 {tabs.map((tab) => {
                   return (
                     <button
-                      className={`tab_button ${
-                        tab.param === "random" ? "" : tab.isOn ? "tab_isOn" : ""
-                      }`}
+                      className={`tab_button ${tab.isOn ? "tab_isOn" : ""}`}
                       id={tab.id}
                       onClick={() => {
                         clichHandleTab(tab);
@@ -115,17 +135,21 @@ const MemesBox = ({ numberOfVisibleMems, setNumberOfVisibleMems }) => {
               </div>
             </div>
             <ul className="memesbox__container">
-              {memeTemplates.slice(0, numberOfVisibleMems).map((elem) => {
+              {memeTemplates.map((elem) => {
                 return <Meme elem={elem} key={elem.id} />;
               })}
             </ul>
           </div>
 
-          {memeTemplates.length > numberOfVisibleMems && (
-            <button onClick={addMemes} className="memesbox__btn-show-more btn">
-              показать больше
+          {
+            <button
+              onClick={addMemes}
+              disabled={!isNewMemeAvalible}
+              className="memesbox__btn-show-more btn"
+            >
+              {isNewMemeAvalible ? "показать больше" : "больше мемов нет"}
             </button>
-          )}
+          }
           <Link
             to="/#memes-start"
             className={`

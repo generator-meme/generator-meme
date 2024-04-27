@@ -27,7 +27,7 @@ function Meme({ elem }) {
           создать мем
         </button>
         <div onClick={onClick} className="meme__image-hover"></div>
-        <LikeTemplate id={elem.id} />
+        <LikeTemplate id={elem.id} is_favorited={elem.is_favorited} />
       </div>
       <TagLists elem={elem}></TagLists>
     </li>
