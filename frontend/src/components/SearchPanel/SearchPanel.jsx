@@ -97,6 +97,7 @@ export const SearchPanel = () => {
   const submitToSearch = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    dispatch(setAllMemeTemplatesEmpty());
     setIsFocusSearchPanel(false);
     try {
       if (isUnknownFlag) {

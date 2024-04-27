@@ -12,7 +12,7 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 
 from api.filters import CollectionFilter, TagSearchFilter, TemplateFilter
-from api.paginators import CollectionPagination
+from api.paginators import CollectionPagination, TemplateMainPagePagination
 from api.permissions import AdminOrReadOnly
 from api.serializers_memes import (Category, CategorySerializer,
                                    CollectionDeleteSerializer,
@@ -75,6 +75,7 @@ class TemplateViewSet(viewsets.ModelViewSet):
     - если задан параметр '-published_at', то выше будут шаблоны
     опубликованные на сайте позднее, если 'published_at' то наоборот."""
 
+    pagination_class = TemplateMainPagePagination
     permission_classes = [AdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = TemplateFilter
