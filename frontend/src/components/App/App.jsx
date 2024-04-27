@@ -42,7 +42,7 @@ const App = () => {
     // localStorage.removeItem("currentMeme");
     dispatch(getTagsAction());
   }, []);
-  console.log(random);
+
   useEffect(() => {
     if (!isTokenChecked) return;
     dispatch(loadAllMemeTemplates());

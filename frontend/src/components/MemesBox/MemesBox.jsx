@@ -27,6 +27,12 @@ const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
   const [scrollTop, setScrollTop] = useState(null);
   const dispatch = useDispatch();
   const [isHidden, setIsHidden] = useState(true);
+  const [paramId, setParamId] = useState(1);
+  const [tabs, setTabs] = useState([
+    { text: "Популярные", isOn: true, param: "", id: 1 },
+    { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
+    { text: "Рандом", isOn: false, param: "random", id: 3 },
+  ]);
   const limit = 21;
 
   const fullHeight = Math.max(
@@ -39,8 +45,8 @@ const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
   );
   // console.log(scrollTop);
   const addMemes = () => {
+    dispatch(loadAllMemeTemplates(startOfVisibleMems + limit));
     setStartOfVisibleMems(startOfVisibleMems + limit);
-    dispatch(loadAllMemeTemplates(startOfVisibleMems));
   };
   const handleScroll = (e) => {
     // e.preventDefault();
@@ -49,34 +55,36 @@ const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const [tabs, setTabs] = useState([
-    { text: "Популярные", isOn: true, param: "", id: 1 },
-    { text: "Новинки", isOn: false, param: "-published_at", id: 2 },
-    { text: "Рандом", isOn: false, param: "random", id: 3 },
-  ]);
-
-  const clichHandleTab = (params) => {
-    dispatch(setAllMemeTemplatesEmpty());
-    if (params.param === "random") {
-      dispatch(addRandomId());
-      return;
-    }
-    dispatch(setOrdering(params.param));
-    const tempTabs = tabs.map((tab) => {
-      if (tab.id === params.id) {
+  const handleChangeOfColorTabButton = (array, id) => {
+    return array.map((tab) => {
+      if (tab.id === id) {
         return { ...tab, isOn: true };
       } else {
         return { ...tab, isOn: false };
       }
-    });
-    setTabs(tempTabs);
-    setStartOfVisibleMems(0);
-    dispatch(loadAllMemeTemplates(startOfVisibleMems));
+    }); // для отображения цвета кнопки
+  };
+  const clichHandleTab = (params) => {
+    if (params.id === paramId && params.id !== 3) {
+      //если повторно нажимаем на кнопку, кроме рандом
+      return;
+    }
+    setStartOfVisibleMems(0); // при нажатии идет запрос с offset=0 and limit=21
+    dispatch(setAllMemeTemplatesEmpty()); //обнуляем в Store все шаблоны
+    setParamId(params.id); // прописываем в State id кнопки
+    setTabs(handleChangeOfColorTabButton(tabs, params.id));
+
+    if (params.param !== "random") {
+      dispatch(setOrdering(params.param)); // если не рандом, то
+      return;
+    }
+
+    dispatch(setOrdering(params.param));
+    dispatch(addRandomId());
   };
 
   return (
@@ -93,9 +101,7 @@ const MemesBox = ({ startOfVisibleMems, setStartOfVisibleMems }) => {
                 {tabs.map((tab) => {
                   return (
                     <button
-                      className={`tab_button ${
-                        tab.param === "random" ? "" : tab.isOn ? "tab_isOn" : ""
-                      }`}
+                      className={`tab_button ${tab.isOn ? "tab_isOn" : ""}`}
                       id={tab.id}
                       onClick={() => {
                         clichHandleTab(tab);

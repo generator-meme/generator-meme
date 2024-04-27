@@ -6,6 +6,7 @@ import {
   REMOVE_FAVORITE,
   SET_ORDERING,
   ADD_RANDOM_ID,
+  CLEAR_FILTRATION,
 } from "../actions/filtrationActions";
 
 const initialState = {
@@ -87,6 +88,9 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         random: state.random + 1,
       };
+    case CLEAR_FILTRATION: {
+      return { ...state, filtrationOptions: initialState.filtrationOptions };
+    }
     default:
       return state;
   }

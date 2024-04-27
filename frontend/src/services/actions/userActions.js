@@ -1,7 +1,7 @@
 import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
 // import { cleanFavoriteTemplates } from "./favoriteTemplatesActions";
-import { removeFavorite } from "./filtrationActions";
+import { clearFiltrationOption, removeFavorite } from "./filtrationActions";
 import {
   loadAllMemeTemplates,
   setAllMemeTemplatesEmpty,
@@ -18,6 +18,7 @@ export const setIsLoggedIn = () => {
       type: SET_IS_LOGGED_IN,
     });
     dispatch(setAllMemeTemplatesEmpty());
+    dispatch(clearFiltrationOption());
     dispatch(loadAllMemeTemplates());
   };
 };
@@ -52,8 +53,9 @@ export const logOut = () => async (dispatch) => {
     await authorisation.logOut(savedToken);
     deleteCookie("token");
     dispatch(setAllMemeTemplatesEmpty());
+    dispatch(clearFiltrationOption());
+    // dispatch(removeFavorite());
     dispatch(loadAllMemeTemplates());
-    dispatch(removeFavorite());
     dispatch(setIsLoggedOut());
   } catch (err) {
     console.log(err, "checkTokenError");

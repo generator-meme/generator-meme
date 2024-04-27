@@ -14,6 +14,7 @@ export const Tab = () => {
   const areFavorite = useSelector(setectCurrentFavorite);
   const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
   const clickHandle = () => {
     if (isLoggedIn) {
       dispatch(setAllMemeTemplatesEmpty());
