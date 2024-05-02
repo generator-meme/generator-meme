@@ -6,6 +6,7 @@ import {
   REMOVE_FAVORITE,
   SET_ORDERING,
   ADD_RANDOM_ID,
+  CLEAR_FILTRATION,
 } from "../actions/filtrationActions";
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
   categoriesOptions: [],
   favoriteOptions: {
     true: true,
-    false: false,
+    // false: false,
     empty: "",
   },
   orderingOptions: {
@@ -78,7 +79,7 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         filtrationOptions: {
           ...state.filtrationOptions,
-          areFavorite: state.filtrationOptions.areFavorite,
+          // areFavorite: state.filtrationOptions.areFavorite,
           ordering: payload,
         },
       };
@@ -87,6 +88,9 @@ export const filtrationReducer = (state = initialState, { type, payload }) => {
         ...state,
         random: state.random + 1,
       };
+    case CLEAR_FILTRATION: {
+      return { ...state, filtrationOptions: initialState.filtrationOptions };
+    }
     default:
       return state;
   }

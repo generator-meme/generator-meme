@@ -7,10 +7,14 @@ export const SET_FAVORITE = "SET_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SET_ORDERING = "SET_ORDERING";
 export const ADD_RANDOM_ID = "ADD_RANDOM_ID";
+export const CLEAR_FILTRATION = "CLEAR_FILTRATION";
 
-const getCategoriesOptions = (categories) => ({
+export const getCategoriesOptions = (categories) => ({
   type: GET_CATEGORIES_OPTIONS,
   payload: categories,
+});
+export const clearFiltrationOption = () => ({
+  type: CLEAR_FILTRATION,
 });
 
 export const setCategoriesOptions = (category) => ({

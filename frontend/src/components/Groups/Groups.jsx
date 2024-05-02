@@ -5,10 +5,7 @@ import { useGetWidthHook } from "../../utils/getWidthDevice";
 import { SearchPanelMobile } from "../searchPanelMobile/SearchPanelMobile";
 import { GroupName } from "../GroupName/GroupName";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getGroupsAction,
-  getMyGroupsAction,
-} from "../../services/actions/getGroupsActions";
+import { getMyGroupsAction } from "../../services/actions/getGroupsActions";
 
 export const Groups = () => {
   const dropDawnRef = useRef();
