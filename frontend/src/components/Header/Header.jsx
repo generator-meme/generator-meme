@@ -10,8 +10,12 @@ import { ReactComponent as Burger } from "../../images/header/burger.svg";
 import Menu from "../Menu/Menu.jsx";
 import { logOut } from "../../services/actions/userActions";
 // import Prompt from "../Prompt/Prompt"; // для фичей в разработке
-import { setFavorite } from "../../services/actions/filtrationActions";
+import {
+  setFavorite,
+  removeFavorite,
+} from "../../services/actions/filtrationActions";
 import { setectCurrentFavorite } from "../../services/selectors/filtrationSelectors";
+import { setAllMemeTemplatesEmpty } from "../../services/actions/allMemeTemplatesActions";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -47,8 +51,9 @@ const Header = () => {
   const handleOnFavorited = (e) => {
     try {
       e.preventDefault();
-      if (!areFavorite || areFavorite === "") {
-        dispatch(setFavorite());
+      if (isLoggedIn) {
+        dispatch(setAllMemeTemplatesEmpty());
+        areFavorite ? dispatch(removeFavorite()) : dispatch(setFavorite());
       }
       navigate("/");
     } catch (err) {
@@ -98,7 +103,13 @@ const Header = () => {
           {window.innerWidth >= 690 && (
             <>
               <button className="header__button" onClick={handleOnFavorited}>
-                <Like className="header__button_type_like" />
+                <Like
+                  className={
+                    `header__button_type_like` +
+                    " " +
+                    `${areFavorite ? "like_is-liked" : ""}`
+                  }
+                />
               </button>
               {/* <button> // закомм - тк реализация будет позже
                 className="header__button"

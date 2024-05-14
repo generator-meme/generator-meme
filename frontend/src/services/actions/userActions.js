@@ -1,16 +1,27 @@
 import { getCookie, deleteCookie } from "../../utils/cookie";
 import { authorisation } from "../../utils/autorisation";
-import { cleanFavoriteTemplates } from "./favoriteTemplatesActions";
-import { removeFavorite } from "./filtrationActions";
+// import { cleanFavoriteTemplates } from "./favoriteTemplatesActions";
+import { clearFiltrationOption, removeFavorite } from "./filtrationActions";
+import {
+  loadAllMemeTemplates,
+  setAllMemeTemplatesEmpty,
+} from "./allMemeTemplatesActions";
 
 export const SET_IS_LOGGED_IN = "SET_IS_LOGGED_IN";
 export const SET_NEW_USERNAME = "SET_NEW_USERNAME";
 export const SET_IS_LOGGET_OUT = "SET_IS_LOGGET_OUT";
 export const GET_USER_INFO = "GET_USER_INFO";
 
-export const setIsLoggedIn = () => ({
-  type: SET_IS_LOGGED_IN,
-});
+export const setIsLoggedIn = () => {
+  return function (dispatch) {
+    dispatch({
+      type: SET_IS_LOGGED_IN,
+    });
+    dispatch(setAllMemeTemplatesEmpty());
+    dispatch(clearFiltrationOption());
+    dispatch(loadAllMemeTemplates());
+  };
+};
 
 const setIsLoggedOut = () => ({
   type: SET_IS_LOGGET_OUT,
@@ -41,8 +52,10 @@ export const logOut = () => async (dispatch) => {
     const savedToken = getCookie("token");
     await authorisation.logOut(savedToken);
     deleteCookie("token");
-    dispatch(cleanFavoriteTemplates());
-    dispatch(removeFavorite());
+    dispatch(setAllMemeTemplatesEmpty());
+    dispatch(clearFiltrationOption());
+    // dispatch(removeFavorite());
+    dispatch(loadAllMemeTemplates());
     dispatch(setIsLoggedOut());
   } catch (err) {
     console.log(err, "checkTokenError");

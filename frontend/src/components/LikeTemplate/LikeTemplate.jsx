@@ -8,36 +8,39 @@ import {
   removeTemplateFromFavorites,
 } from "../../services/actions/favoriteTemplatesActions";
 
-const LikeTemplate = ({ id }) => {
+const LikeTemplate = ({ is_favorited, id }) => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const favoriteTemplates = useSelector((state) => state.favoriteTemplates);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(is_favorited);
   const dispatch = useDispatch();
 
-  const checkIsFavorite = useCallback(() => {
-    return favoriteTemplates.some((item) => {
-      return item.id === id;
-    });
-  }, [favoriteTemplates, id]);
+  // const checkIsFavorite = useCallback(() => {
+  //   return favoriteTemplates.some((item) => {
+
+  //     return item.id === id;
+  //   });
+  // }, [favoriteTemplates, id]);
+  // console.log(favoriteTemplates);
 
   const handleOnLikeClick = async (e) => {
     if (!isLoggedIn) return;
     try {
       e.preventDefault();
       if (isFavorite) {
-        // console.log("before remove", id, favoriteTemplates.length);
         await dispatch(removeTemplateFromFavorites(id));
+        setIsFavorite(false);
       } else {
         await dispatch(addTemplateToFavorites(id));
+        setIsFavorite(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    setIsFavorite(checkIsFavorite());
-  }, [favoriteTemplates, checkIsFavorite]);
+  // useEffect(() => {
+  //   setIsFavorite(checkIsFavorite());
+  // }, [favoriteTemplates, checkIsFavorite]);
 
   return (
     <div className="like__container">

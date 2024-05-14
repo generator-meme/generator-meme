@@ -11,7 +11,6 @@ const initialState = {
   getMemeRequest: false,
   error: null,
   isLoading: true,
-  isSavedMeme: false,
   blockSaveButton: false,
 };
 

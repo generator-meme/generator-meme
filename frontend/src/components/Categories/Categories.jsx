@@ -4,6 +4,7 @@ import { setectCategoriesOptions } from "../../services/selectors/filtrationSele
 import { Category } from "../Category/Category";
 import { useEffect, useState } from "react";
 import { setCategoriesOptions } from "../../services/actions/filtrationActions";
+import { setAllMemeTemplatesEmpty } from "../../services/actions/allMemeTemplatesActions";
 export const Categories = ({ isHidden }) => {
   const categories = useSelector(setectCategoriesOptions);
   const [tempCategories, setTempCategories] = useState([
@@ -42,11 +43,14 @@ export const Categories = ({ isHidden }) => {
 
       setTempCategories(tempArr);
       flagOnAllShablonOn = false;
+      dispatch(setAllMemeTemplatesEmpty());
       dispatch(setCategoriesOptions(""));
+
       return;
     } else {
       setTempCategories(tempArray);
     }
+    dispatch(setAllMemeTemplatesEmpty());
     dispatch(setCategoriesOptions(id));
   };
 

@@ -3,11 +3,14 @@ import "./Meme.css";
 import { useNavigate } from "react-router-dom";
 import LikeTemplate from "../LikeTemplate/LikeTemplate";
 import { TagLists } from "../TagLists/TagLists";
+import { useDispatch } from "react-redux";
+import { SET_NEWMEME_TRUE } from "../../services/actions/memeActions";
 
-function Meme({ elem, setIsNewMeme }) {
+function Meme({ elem }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onClick = () => {
-    setIsNewMeme(true);
+    dispatch({ type: SET_NEWMEME_TRUE });
     localStorage.setItem("currentMeme", JSON.stringify(elem));
     navigate(`/${elem.id}`);
   };
@@ -24,7 +27,7 @@ function Meme({ elem, setIsNewMeme }) {
           создать мем
         </button>
         <div onClick={onClick} className="meme__image-hover"></div>
-        <LikeTemplate id={elem.id} />
+        <LikeTemplate id={elem.id} is_favorited={elem.is_favorited} />
       </div>
       <TagLists elem={elem}></TagLists>
     </li>

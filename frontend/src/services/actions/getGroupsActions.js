@@ -33,7 +33,6 @@ export const getMyGroupsAction = () => {
     api
       .getMyGroups(savedToken)
       .then((res) => {
-        console.log(res);
         dispatch({ type: GET_MYGROUPS_SUCCESS, payload: res });
       })
 
