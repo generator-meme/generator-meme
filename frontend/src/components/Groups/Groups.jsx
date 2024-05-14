@@ -5,23 +5,30 @@ import { useGetWidthHook } from "../../utils/getWidthDevice";
 import { SearchPanelMobile } from "../searchPanelMobile/SearchPanelMobile";
 import { GroupName } from "../GroupName/GroupName";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyGroupsAction } from "../../services/actions/getGroupsActions";
+
+import {
+  getGroupsAction,
+  getMyGroupsAction,
+} from "../../services/actions/getGroupsActions";
+import { GroupInfo } from "../GroupInfo/GroupInfo";
+import { GroupInfoToEnter } from "../GroupInfoToEnter/GroupInfoToEnter";
+
+
 
 export const Groups = () => {
   const dropDawnRef = useRef();
   const [isOpenDropDawn, setIsOpenDropDawn] = useState(false);
+  const [isSearchGroup, setIsSearchGroup] = useState(false);
+  const [isUsersPopUp, setIsUsersPopUp] = useState(false);
+  const [theGroupInfo, setTheGroupInfo] = useState({});
   const widthOfWindow = useGetWidthHook();
-  const { myGroups } = useSelector((state) => state.getGroups);
-  console.log(myGroups);
+  const { myGroups, groups } = useSelector((state) => state.getGroups);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getMyGroupsAction());
   }, []);
-
-  const mockArr2 = Array(6)
-    .fill("Название группы")
-    .map((u, i) => "Пользователь");
 
   useEffect(() => {
     const closeDropDown = (e) => {
@@ -35,10 +42,17 @@ export const Groups = () => {
     };
   }, []);
 
-  const handleOpenDropDawn = () => {
+  const handleOpenDropDawn = (prop) => {
+    setTheGroupInfo(prop);
     setIsOpenDropDawn(true);
+    setIsUsersPopUp(false);
   };
-
+  const handleOpenDropDawnEnter = (prop) => {
+    setTheGroupInfo(prop);
+    setIsOpenDropDawn(true);
+    setIsUsersPopUp(true);
+  };
+  console.log(theGroupInfo);
   return (
     <>
       <div className={styles.groups_wrap}>
@@ -54,38 +68,51 @@ export const Groups = () => {
             <p>Для вступления в группу введите название</p>
           )}
           <div className={styles.search_wrap}>
-            <SearchPanelMobile></SearchPanelMobile>
+            <SearchPanelMobile
+              setIsSearchGroup={setIsSearchGroup}
+            ></SearchPanelMobile>
           </div>
         </div>
         <div className={styles.my_groups_wrap}>
-          <h3>Мои группы</h3>
+          {isSearchGroup ? null : <h3>Мои группы</h3>}
           <div className={styles.my_groups}>
-            {myGroups?.map(({ name, index }) => {
-              return (
-                <GroupName
-                  name={name}
-                  id={index}
-                  handleOpenDropDawn={handleOpenDropDawn}
-                  flag={true}
-                ></GroupName>
-              );
-            })}
-          </div>
-          {isOpenDropDawn && (
-            <div ref={dropDawnRef} className={styles.group_info}>
-              <div className={styles.group_info__header}>
-                <span>admin</span>
-              </div>
-              <h1>Пользователи</h1>
-              <div className={styles.my_groups__info}>
-                {mockArr2.map((name, index) => {
+            {isSearchGroup
+              ? groups?.map((prop) => {
                   return (
-                    <GroupName name={name} id={index} flag={false}></GroupName>
+                    <GroupName
+                      id={prop.id}
+                      handleOpenDropDawn={handleOpenDropDawnEnter}
+                      name={prop.name}
+                      prop={prop}
+                      isEnterGroup={true} // true  в случае рендера поиска по группам и вступления
+                    ></GroupName>
+                  );
+                })
+              : myGroups?.map((prop) => {
+                  return (
+                    <GroupName
+                      id={prop.group.id}
+                      handleOpenDropDawn={handleOpenDropDawn}
+                      name={prop.group.name}
+                      prop={prop}
+                      isEnterGroup={false}
+                    ></GroupName>
                   );
                 })}
+          </div>
+          {isOpenDropDawn &&
+            (isUsersPopUp ? (
+              <div ref={dropDawnRef}>
+                <GroupInfoToEnter id={theGroupInfo.id}></GroupInfoToEnter>
               </div>
-            </div>
-          )}
+            ) : (
+              <div ref={dropDawnRef}>
+                <GroupInfo
+                  name={theGroupInfo.role.name}
+                  id={theGroupInfo.group.id}
+                ></GroupInfo>
+              </div>
+            ))}
         </div>
       </div>
     </>

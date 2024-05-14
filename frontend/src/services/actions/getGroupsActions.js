@@ -6,6 +6,9 @@ export const GET_GROUPS_FAILED = "GET_GROUPS_FAILED";
 export const GET_MYGROUPS_REQUEST = "GET_MYGROUPS_REQUEST";
 export const GET_MYGROUPS_SUCCESS = "GET_MYGROUPS_SUCCESS";
 export const GET_MYGROUPS_FAILED = "GET_MYGROUPS_FAILED";
+export const GET_GROUPINFO_REQUEST = "GET_GROUPINFO_REQUEST";
+export const GET_GROUPINFO_SUCCESS = "GET_GROUPINFO_SUCCESS";
+export const GET_GROUPINFO_FAILED = "GET_GROUPINFO_FAILED";
 
 export const getGroupsAction = (name) => {
   return function (dispatch) {
@@ -35,6 +38,21 @@ export const getMyGroupsAction = () => {
 
       .catch((err) => {
         dispatch({ type: GET_MYGROUPS_FAILED, payload: err });
+      });
+  };
+};
+export const getGroupInfo = (id) => {
+  return function (dispatch) {
+    dispatch({ type: GET_GROUPINFO_REQUEST });
+
+    api
+      .getGroupsInfo(id)
+      .then((res) => {
+        dispatch({ type: GET_GROUPINFO_SUCCESS, payload: res });
+      })
+
+      .catch((err) => {
+        dispatch({ type: GET_GROUPINFO_FAILED, payload: err });
       });
   };
 };

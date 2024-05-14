@@ -3,15 +3,20 @@ import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getGroupsAction } from "../../services/actions/getGroupsActions";
-export const SearchPanelMobile = (props) => {
+export const SearchPanelMobile = ({ setIsSearchGroup }) => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
   const handlerInputSearch = (e) => {
     setSearch(e.target.value);
   };
   const handlerSearch = () => {
-    console.log("pressed search");
+    if (search === "") {
+      setIsSearchGroup(false);
+
+      return;
+    }
     dispatch(getGroupsAction(search));
+    setIsSearchGroup(true);
   };
 
   return (
