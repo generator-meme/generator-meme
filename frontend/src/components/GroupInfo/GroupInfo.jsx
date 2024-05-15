@@ -6,6 +6,7 @@ import { getGroupInfo } from "../../services/actions/getGroupsActions";
 import { GroupUser } from "../GroupUser/GroupUser";
 export const GroupInfo = ({ name, id }) => {
   const { groupInfo } = useSelector((state) => state.getGroups);
+  console.log(groupInfo);
   const dispatch = useDispatch();
 
   useEffect(() => {

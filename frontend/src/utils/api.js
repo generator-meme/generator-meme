@@ -211,6 +211,25 @@ class Api {
       body: JSON.stringify(),
     }).then(this._checkReponce);
   }
+  enterInGroupBySelf(id, token) {
+    return fetch(`${this._baseUrl}/groups/${id}/enter/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: {},
+    }).then(this._checkReponce);
+  }
+  deleteGroup(id, token) {
+    return fetch(`${this._baseUrl}/groups/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+    }).then(this._errorHa);
+  }
 }
 
 const api = new Api({

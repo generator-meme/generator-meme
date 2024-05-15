@@ -16,11 +16,14 @@
 }
 .group_info__header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 .my_groups__info {
   max-height: 110px;
   overflow: auto;
+}
+.group_info__text {
+  padding-bottom: 30px;
 }
 @media screen and (max-width: 1080px) {
   .group_info {

@@ -8,6 +8,9 @@ import {
   GET_GROUPINFO_REQUEST,
   GET_GROUPINFO_SUCCESS,
   GET_GROUPINFO_FAILED,
+  ENTER_IN_GROUP_REQUEST,
+  ENTER_IN_GROUP_SUCCESS,
+  ENTER_IN_GROUP_FAILED,
 } from "../actions/getGroupsActions";
 
 const initialState = {
@@ -66,6 +69,22 @@ export const getGroupsReducer = (state = initialState, action) => {
         error: action.payload,
       };
     }
+    // case ENTER_IN_GROUP_REQUEST: {
+    //   return { ...state, myGroups: [] };
+    // }
+    // case ENTER_IN_GROUP_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     myGroups: action.payload,
+    //   };
+    // }
+
+    // case ENTER_IN_GROUP_FAILED: {
+    //   return {
+    //     ...state,
+    //     error: action.payload,
+    //   };
+    // }
     default:
       return state;
   }

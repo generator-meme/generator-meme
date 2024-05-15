@@ -6,6 +6,7 @@ import { loadUserInfo } from "../../services/actions/userActions";
 import Header from "../Header/Header";
 import Main from "../../pages/Main/Main";
 import Team from "../../pages/Team/Team";
+import GroupPage from "../../pages/GroupPage/GroupPage";
 import CanvasPreloader from "../../pages/CanvasPreloader/CanvasPreloader";
 import SavedMeme from "../../pages/SavedMeme/SavedMeme";
 import Registration from "../../pages/Registration/Registration";
@@ -74,6 +75,7 @@ const App = () => {
           path="/me/pass-change"
           element={<ChangeDataForm info={"pass"} />}
         />
+        <Route path="/me/group" element={<GroupPage></GroupPage>} />
         <Route exact path="/" element={<Main />} />
         <Route path="/team" element={<Team />} />
         <Route path="/:id" element={<CanvasPreloader />} />
