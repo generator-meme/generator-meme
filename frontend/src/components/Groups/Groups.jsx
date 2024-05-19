@@ -12,8 +12,8 @@ import {
 } from "../../services/actions/getGroupsActions";
 import { GroupInfo } from "../GroupInfo/GroupInfo";
 import { GroupInfoToEnter } from "../GroupInfoToEnter/GroupInfoToEnter";
-
-
+import { useLocation } from "react-use";
+import { useNavigate } from "react-router-dom";
 
 export const Groups = () => {
   const dropDawnRef = useRef();
@@ -53,12 +53,22 @@ export const Groups = () => {
     setIsUsersPopUp(true);
   };
   console.log(theGroupInfo);
+  const location = useLocation();
+  const navigate = useNavigate();
   return (
     <>
       <div className={styles.groups_wrap}>
         <div className={styles.header_group}>
           {widthOfWindow > 375 && <h1>Группы</h1>}
-          <div className={styles.create_group}>
+          <div
+            className={styles.create_group}
+            onClick={() => {
+              console.log("1");
+              navigate("/me", {
+                state: { background: location },
+              });
+            }}
+          >
             <h3>Создать </h3>
             <Plus></Plus>
           </div>

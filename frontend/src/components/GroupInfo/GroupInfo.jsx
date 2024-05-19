@@ -12,7 +12,7 @@ export const GroupInfo = ({ name, id }) => {
   useEffect(() => {
     dispatch(getGroupInfo(id));
   }, []);
-
+  const handleDeleteGroup = (id) => {};
   return (
     <div className={styles.group_info}>
       <div className={styles.group_info__header}>

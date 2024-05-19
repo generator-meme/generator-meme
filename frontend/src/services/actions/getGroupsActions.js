@@ -49,6 +49,7 @@ export const getMyGroupsAction = () => {
   };
 };
 //подгрузка данных по группе
+
 export const getGroupInfo = (id) => {
   return function (dispatch) {
     dispatch({ type: GET_GROUPINFO_REQUEST });
@@ -66,6 +67,7 @@ export const getGroupInfo = (id) => {
   };
 };
 //самостоятельный вход пользователя в группу
+
 export const enterInGroupByUser = (id) => {
   return function (dispatch) {
     const savedToken = getCookie("token");

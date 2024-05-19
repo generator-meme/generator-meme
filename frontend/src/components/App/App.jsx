@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUserInfo } from "../../services/actions/userActions";
@@ -27,6 +33,8 @@ import { loadAllMemeTemplates } from "../../services/actions/allMemeTemplatesAct
 import { selectFiltrationOptions } from "../../services/selectors/filtrationSelectors";
 import { selectRandom } from "../../services/selectors/filtrationSelectors";
 import { getTagsAction } from "../../services/actions/getTagsAction";
+import { Modal } from "../Modal/Modal";
+import { CreateGroupWindow } from "../CreateGroupWindow/CreateGroupWindow";
 
 const App = () => {
   const [imageNotFoundOpen, setImageNotFoundOpen] = useState(false);
@@ -38,6 +46,10 @@ const App = () => {
     selectFiltrationOptions
   );
   const random = useSelector(selectRandom);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const background = location.state && location.state.background;
+  console.log(location, background);
 
   useEffect(() => {
     // localStorage.removeItem("currentMeme");
@@ -129,6 +141,22 @@ const App = () => {
           overflow: "hidden",
         }}
       >
+        {background && (
+          <Routes>
+            <Route
+              path="/me"
+              element={
+                <Modal
+                  closeModal={() => {
+                    navigate("/me");
+                  }}
+                >
+                  <CreateGroupWindow></CreateGroupWindow>
+                </Modal>
+              }
+            ></Route>
+          </Routes>
+        )}
         {optionsList.map((font, index) => {
           return (
             <span key={index}>
