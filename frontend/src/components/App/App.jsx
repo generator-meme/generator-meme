@@ -151,7 +151,11 @@ const App = () => {
                     navigate("/me");
                   }}
                 >
-                  <CreateGroupWindow></CreateGroupWindow>
+                  <CreateGroupWindow
+                    closeModal={() => {
+                      navigate("/me");
+                    }}
+                  ></CreateGroupWindow>
                 </Modal>
               }
             ></Route>
