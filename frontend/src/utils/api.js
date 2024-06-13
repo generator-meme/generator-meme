@@ -230,6 +230,16 @@ class Api {
       },
     }).then(this._errorHa);
   }
+  createGroup(groupData, token) {
+    return fetch(`${this._baseUrl}/groups/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(groupData),
+    }).then(this._checkReponce);
+  }
 }
 
 const api = new Api({

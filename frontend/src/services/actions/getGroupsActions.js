@@ -15,6 +15,10 @@ export const ENTER_IN_GROUP_FAILED = "ENTER_IN_GROUP_FAILED";
 export const DELETE_GROUP_REQUEST = "DELETE_GROUP_REQUEST";
 export const DELETE_GROUP_SUCCESS = "DELETE_GROUP_SUCCESS";
 export const DELETE_GROUP_FAILED = "DELETE_GROUP_FAILED";
+export const CREATE_GROUP_REQUEST = "CREATE_GROUP_REQUEST";
+export const CREATE_GROUP_SUCCESS = "CREATE_GROUP_SUCCESS";
+export const CREATE_GROUP_FAILED = "CREATE_GROUP_FAILED";
+
 //для поиска группы по названию
 export const getGroupsAction = (name) => {
   return function (dispatch) {
@@ -85,6 +89,24 @@ export const enterInGroupByUser = (id) => {
       .catch((err) => {
         dispatch({ type: ENTER_IN_GROUP_FAILED, payload: err });
       });
+  };
+};
+//создание группы
+
+export const createGroupAction = (groupData) => {
+  console.log("inside");
+  return function (dispatch) {
+    const savedToken = getCookie("token");
+    dispatch({ type: CREATE_GROUP_REQUEST });
+    api
+      .createGroup(groupData, savedToken)
+      .then((res) => {
+        dispatch({ type: CREATE_GROUP_SUCCESS, payload: res });
+      })
+      .catch((err) => {
+        dispatch({ type: CREATE_GROUP_FAILED, payload: err });
+      });
+    return Promise.resolve();
   };
 };
 //удаление группы
