@@ -41,6 +41,12 @@ function SavedMeme() {
   const dispatch = useDispatch();
   const memeRef = useRef(null);
   const navigate = useNavigate();
+  const initState = {
+    copyImage: false,
+    copyUrl: false,
+  };
+  const [stateOfCopyToClipboard, setStateOfCopyToClipboard] =
+    useState(initState);
 
   const handleDownloadNewMeme = () => {
     api
@@ -112,6 +118,7 @@ function SavedMeme() {
 
     try {
       await api.addMemeToMyCollection(meme_id, savedToken);
+      localStorage.setItem("savedMemeId", meme_id);
     } catch (err) {
       console.log(err);
     }
@@ -219,7 +226,9 @@ function SavedMeme() {
 
             <button
               className={`btn ${styles.saved_meme_btn} ${
-                blockSaveButton ? "btn_blocked" : null
+                blockSaveButton || id === localStorage.getItem("savedMemeId")
+                  ? "btn_blocked"
+                  : null
               }`}
               // className={`btn ${styles.saved_meme__btn_save}`}
               onClick={handleSaveMemeToMyCollection}
@@ -271,20 +280,42 @@ function SavedMeme() {
                   alt="icon global"
                   onClick={() => {
                     copyURL();
+                    setStateOfCopyToClipboard({
+                      ...stateOfCopyToClipboard,
+                      copyUrl: true,
+                      copyImage: false,
+                    });
                   }}
                 />
-                <Prompt text={"ПОДЕЛИТЬСЯ URL"}></Prompt>
+                <Prompt
+                  text={
+                    stateOfCopyToClipboard.copyUrl
+                      ? "ССЫЛКА СКОПИРОВАНА"
+                      : "ПОДЕЛИТЬСЯ URL"
+                  }
+                ></Prompt>
               </div>
               <div className={styles.icon}>
                 <img
                   className={styles.icon_img}
                   onClick={() => {
                     copyToClipboard(memeRef.current.src);
+                    setStateOfCopyToClipboard({
+                      ...stateOfCopyToClipboard,
+                      copyImage: true,
+                      copyUrl: false,
+                    });
                   }}
                   src={icNote}
                   alt="icon note"
                 />
-                <Prompt text={"СКОПИРОВАТЬ В БУФЕР ОБМЕНА"}></Prompt>
+                <Prompt
+                  text={
+                    stateOfCopyToClipboard.copyImage
+                      ? "МЕМ СКОПИРОВАН"
+                      : "СКОПИРОВАТЬ В БУФЕР ОБМЕНА"
+                  }
+                ></Prompt>
               </div>
             </div>
           </div>
