@@ -1,4 +1,3 @@
-import { Action } from "history";
 import {
   GET_ALL_MEME_COLLECTIONS,
   SET_ALL_MEME_COLLECTIONS_EMPTY,
