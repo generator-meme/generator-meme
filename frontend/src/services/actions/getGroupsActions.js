@@ -15,6 +15,9 @@ export const ENTER_IN_GROUP_FAILED = "ENTER_IN_GROUP_FAILED";
 export const DELETE_GROUP_REQUEST = "DELETE_GROUP_REQUEST";
 export const DELETE_GROUP_SUCCESS = "DELETE_GROUP_SUCCESS";
 export const DELETE_GROUP_FAILED = "DELETE_GROUP_FAILED";
+export const LEAVE_GROUP_REQUEST = "LEAVE_GROUP_REQUEST";
+export const LEAVE_GROUP_SUCCESS = "LEAVE_GROUP_SUCCESS";
+export const LEAVE_GROUP_FAILED = "LEAVE_GROUP_FAILED";
 export const CREATE_GROUP_REQUEST = "CREATE_GROUP_REQUEST";
 export const CREATE_GROUP_SUCCESS = "CREATE_GROUP_SUCCESS";
 export const CREATE_GROUP_FAILED = "CREATE_GROUP_FAILED";
@@ -110,7 +113,7 @@ export const createGroupAction = (groupData) => {
   };
 };
 //удаление группы
-export const deleteMyGroup = (id) => {
+export const deleteMyGroupAction = (id) => {
   return function (dispatch) {
     const savedToken = getCookie("token");
     dispatch({ type: DELETE_GROUP_REQUEST });
@@ -126,6 +129,23 @@ export const deleteMyGroup = (id) => {
 
       .catch((err) => {
         dispatch({ type: DELETE_GROUP_FAILED, payload: err });
+      });
+  };
+};
+//выход из группы
+export const leaveMyGroupAction = (id) => {
+  return function (dispatch) {
+    const savedToken = getCookie("token");
+    dispatch({ type: LEAVE_GROUP_REQUEST });
+
+    api
+      .leaveGroup(id, savedToken)
+      .then(() => {
+        dispatch(getMyGroupsAction());
+      })
+
+      .catch((err) => {
+        dispatch({ type: LEAVE_GROUP_FAILED, payload: err });
       });
   };
 };

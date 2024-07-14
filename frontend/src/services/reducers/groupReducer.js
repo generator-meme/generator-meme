@@ -14,6 +14,9 @@ import {
   CREATE_GROUP_REQUEST,
   CREATE_GROUP_SUCCESS,
   CREATE_GROUP_FAILED,
+  LEAVE_GROUP_FAILED,
+  DELETE_GROUP_FAILED,
+  LEAVE_GROUP_REQUEST,
 } from "../actions/getGroupsActions";
 
 const initialState = {
@@ -87,23 +90,25 @@ export const getGroupsReducer = (state = initialState, action) => {
         error: action.payload,
       };
     }
+    case LEAVE_GROUP_REQUEST: {
+      return { ...state, error: null };
+    }
+    case LEAVE_GROUP_FAILED: {
+      return { ...state, error: action.payload };
+    }
 
-    // case ENTER_IN_GROUP_REQUEST: {
-    //   return { ...state, myGroups: [] };
-    // }
-    // case ENTER_IN_GROUP_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     myGroups: action.payload,
-    //   };
-    // }
-
-    // case ENTER_IN_GROUP_FAILED: {
-    //   return {
-    //     ...state,
-    //     error: action.payload,
-    //   };
-    // }
+    case ENTER_IN_GROUP_FAILED: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+    case DELETE_GROUP_FAILED: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
     default:
       return state;
   }

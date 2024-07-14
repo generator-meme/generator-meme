@@ -1,5 +1,4 @@
 import styles from "./GroupInfo.module.css";
-import { GroupName } from "../GroupName/GroupName";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupInfo } from "../../services/actions/getGroupsActions";

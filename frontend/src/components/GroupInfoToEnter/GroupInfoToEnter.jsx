@@ -14,6 +14,13 @@ export const GroupInfoToEnter = ({ id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { myGroups } = useSelector((state) => state.getGroups);
+  const isMyGroup = myGroups.some((elem) => {
+    return elem.group.id === id;
+  });
+  console.log(isMyGroup, myGroups, id);
+  //проверка на вхождение найденной группы в список моих групп
+
   useEffect(() => {
     dispatch(getGroupInfo(id));
   }, []);
@@ -22,16 +29,19 @@ export const GroupInfoToEnter = ({ id }) => {
     dispatch(enterInGroupByUser(id));
     navigate("/me/group");
   };
+
   return (
     <div className={styles.group_info}>
       <h1 className={styles.group_info__header}>{groupInfo.name}</h1>
       <p
         className={styles.group_info__text}
       >{`Участники: ${groupInfo?.users?.length} человек`}</p>
-      <button className="btn" onClick={handleEnterToGroup}>
-        {" "}
-        вступить
-      </button>
+
+      {isMyGroup ? null : (
+        <button className="btn" onClick={handleEnterToGroup}>
+          вступить
+        </button>
+      )}
     </div>
   );
 };

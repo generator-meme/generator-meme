@@ -240,6 +240,15 @@ class Api {
       body: JSON.stringify(groupData),
     }).then(this._checkReponce);
   }
+  leaveGroup(id, token) {
+    return fetch(`${this._baseUrl}/groups/${id}/enter/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+    }).then(this._errorHa);
+  }
 }
 
 const api = new Api({
