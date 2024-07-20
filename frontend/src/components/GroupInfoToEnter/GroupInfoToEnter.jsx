@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   enterInGroupByUser,
-  getGroupInfo,
+  getGroupDataAction,
   getMyGroupsAction,
 } from "../../services/actions/getGroupsActions";
 import { getCookie } from "../../utils/cookie";
@@ -22,7 +22,7 @@ export const GroupInfoToEnter = ({ id }) => {
   //проверка на вхождение найденной группы в список моих групп
 
   useEffect(() => {
-    dispatch(getGroupInfo(id));
+    dispatch(getGroupDataAction(id));
   }, []);
 
   const handleEnterToGroup = () => {

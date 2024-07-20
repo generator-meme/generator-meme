@@ -1,0 +1,20 @@
+main {
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.group_page {
+  border: 1px solid #9d0095;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-height: 65vh;
+}
+.group_page__header {
+  display: flex;
+}
+.group_page_header__block {
+  display: flex;
+}
+.text {
+}

@@ -1,7 +1,7 @@
 import styles from "./GroupInfo.module.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupInfo } from "../../services/actions/getGroupsActions";
+import { getGroupDataAction } from "../../services/actions/getGroupsActions";
 import { GroupUser } from "../GroupUser/GroupUser";
 export const GroupInfo = ({ name, id }) => {
   const { groupInfo } = useSelector((state) => state.getGroups);
@@ -9,7 +9,7 @@ export const GroupInfo = ({ name, id }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getGroupInfo(id));
+    dispatch(getGroupDataAction(id));
   }, []);
   const handleDeleteGroup = (id) => {};
   return (

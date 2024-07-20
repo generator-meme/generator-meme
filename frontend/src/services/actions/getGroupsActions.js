@@ -57,12 +57,12 @@ export const getMyGroupsAction = () => {
 };
 //подгрузка данных по группе
 
-export const getGroupInfo = (id) => {
+export const getGroupDataAction = (id) => {
   return function (dispatch) {
     dispatch({ type: GET_GROUPINFO_REQUEST });
 
     api
-      .getGroupsInfo(id)
+      .getGroupById(id)
       .then((res) => {
         console.log(1);
         dispatch({ type: GET_GROUPINFO_SUCCESS, payload: res });

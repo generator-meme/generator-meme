@@ -3,10 +3,11 @@ import styles from "./Groups.module.css";
 import { ReactComponent as Plus } from "../../images/plus.svg";
 import { useGetWidthHook } from "../../utils/getWidthDevice";
 import { SearchPanelMobile } from "../searchPanelMobile/SearchPanelMobile";
-
 import { useDispatch, useSelector } from "react-redux";
-
-import { getMyGroupsAction } from "../../services/actions/getGroupsActions";
+import {
+  getGroupsAction,
+  getMyGroupsAction,
+} from "../../services/actions/getGroupsActions";
 import { GroupInfo } from "../GroupInfo/GroupInfo";
 import { GroupInfoToEnter } from "../GroupInfoToEnter/GroupInfoToEnter";
 import { useLocation } from "react-use";
@@ -53,6 +54,19 @@ export const Groups = () => {
     setIsOpenDropDawn(true);
     setIsUsersPopUp(true);
   };
+  const [search, setSearch] = useState("");
+
+  const handlerSearch = () => {
+    if (search === "") {
+      setIsSearchGroup(false);
+      return;
+    }
+    dispatch(getGroupsAction(search));
+    setIsSearchGroup(true);
+  };
+  const handlerInputSearch = (e) => {
+    setSearch(e.target.value);
+  };
 
   return (
     <>
@@ -75,11 +89,12 @@ export const Groups = () => {
           {widthOfWindow > 375 && (
             <p>Для вступления в группу введите название</p>
           )}
-          <div className={styles.search_wrap}>
-            <SearchPanelMobile
-              setIsSearchGroup={setIsSearchGroup}
-            ></SearchPanelMobile>
-          </div>
+
+          <SearchPanelMobile
+            handlerInputSearch={handlerInputSearch}
+            handlerSearch={handlerSearch}
+            search={search}
+          ></SearchPanelMobile>
         </div>
         <div className={styles.my_groups_wrap}>
           {isSearchGroup ? null : <h3>Мои группы</h3>}

@@ -202,7 +202,7 @@ class Api {
       body: JSON.stringify(),
     }).then(this._checkReponce);
   }
-  getGroupsInfo(id) {
+  getGroupById(id) {
     return fetch(`${this._baseUrl}/groups/${id}`, {
       method: "GET",
       headers: {
@@ -248,6 +248,15 @@ class Api {
         Authorization: `Token ${token}`,
       },
     }).then(this._errorHa);
+  }
+  getGroupById(id) {
+    return fetch(`${this._baseUrl}/groups/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    }).then(this._checkReponce);
   }
 }
 

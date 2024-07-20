@@ -85,6 +85,7 @@ export default function MemeCollection() {
   //get id of Tag from all tags in templates
 
   const handleChangeSearch = (e) => {
+    console.log("handleChangeSearch");
     const search_string = e.target.value;
     const query_string = search_string.toLocaleLowerCase().trim();
     setSearch(query_string);
@@ -96,9 +97,11 @@ export default function MemeCollection() {
     e.preventDefault();
     const searchString = stringToSearch();
     if (searchString === "noID") {
+      console.log(1);
       dispatch(setAllMemeCollectionsEmpty());
       return;
     } else {
+      console.log(2);
       dispatch(searchTag(searchString));
       dispatch(addPage(0));
       dispatch(changeFlag());
@@ -132,10 +135,10 @@ export default function MemeCollection() {
     <div className={styles.meme_collection}>
       <div className={styles.header_row}>
         {widthOfWindow <= 375 ? null : <h1>Коллекция мемов</h1>}
-        <div className={styles.collection_search}>
+        <div className={styles.wrap_search_module}>
           <SearchPanelMobile
-            SortEverything={SortEverything}
-            handleChangeSearch={handleChangeSearch}
+            handlerSearch={SortEverything}
+            handlerInputSearch={handleChangeSearch}
             search={search}
           ></SearchPanelMobile>
         </div>

@@ -1,23 +1,11 @@
 import styles from "./SearchPanelMobile.module.css";
-import { ReactComponent as SearchButton } from "../../images/search-btn.svg";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { getGroupsAction } from "../../services/actions/getGroupsActions";
-export const SearchPanelMobile = ({ setIsSearchGroup }) => {
-  const [search, setSearch] = useState("");
-  const dispatch = useDispatch();
-  const handlerInputSearch = (e) => {
-    setSearch(e.target.value);
-  };
-  const handlerSearch = () => {
-    if (search === "") {
-      setIsSearchGroup(false);
 
-      return;
-    }
-    dispatch(getGroupsAction(search));
-    setIsSearchGroup(true);
-  };
+export const SearchPanelMobile = ({
+  handlerSearch,
+  handlerInputSearch,
+  search,
+}) => {
+  // const [search, setSearch] = useState("");
 
   return (
     <div className={styles.wrap_search}>
@@ -30,7 +18,7 @@ export const SearchPanelMobile = ({ setIsSearchGroup }) => {
         />
         <button
           className={`${styles.search_button} ${styles.btn_no_bg}`}
-          onClick={() => handlerSearch()}
+          onClick={handlerSearch}
         ></button>
       </div>
     </div>
