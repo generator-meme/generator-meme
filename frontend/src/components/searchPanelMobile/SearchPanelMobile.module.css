@@ -6,13 +6,7 @@
 .btn_no_bg:hover {
   cursor: pointer;
 }
-.wrap_search {
-  /* width: 100%; */
-  display: flex;
-  width: 100%;
-  /* border-radius: 19px;
-  border: 1px solid transparent; */
-}
+
 .search_component {
   display: flex;
   flex-direction: row;
@@ -79,9 +73,6 @@
   .search_button {
     top: 2px;
   }
-  /* .wrap_search {
-    width: 100%;
-  } */
 }
 
 @media screen and (max-width: 750px) {
@@ -94,9 +85,7 @@
   .search_button {
     top: 2px;
   }
-  .wrap_search {
-    width: 100%;
-  }
+
   @media screen and (max-width: 375.5px) {
     .search_component {
       border-radius: 10px;

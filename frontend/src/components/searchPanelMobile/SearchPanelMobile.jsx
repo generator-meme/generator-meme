@@ -8,19 +8,17 @@ export const SearchPanelMobile = ({
   // const [search, setSearch] = useState("");
 
   return (
-    <div className={styles.wrap_search}>
-      <div className={styles.search_component}>
-        <input
-          onChange={handlerInputSearch}
-          value={search}
-          className={`${styles.text_style} ${styles.search_input}`}
-          placeholder="Поиск"
-        />
-        <button
-          className={`${styles.search_button} ${styles.btn_no_bg}`}
-          onClick={handlerSearch}
-        ></button>
-      </div>
+    <div className={styles.search_component}>
+      <input
+        onChange={handlerInputSearch}
+        value={search}
+        className={`${styles.text_style} ${styles.search_input}`}
+        placeholder="Поиск"
+      />
+      <button
+        className={`${styles.search_button} ${styles.btn_no_bg}`}
+        onClick={handlerSearch}
+      ></button>
     </div>
   );
 };

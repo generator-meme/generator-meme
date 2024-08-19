@@ -18,6 +18,7 @@ import vector_387 from "../../images/vector_387.svg";
 import {
   BLOCK_SAVE_BUTTON_TO_COLLECTION,
   getMemeByIdAction,
+  saveMemeToAccountAction,
 } from "../../services/actions/savedMemeActions";
 import {
   TelegramShareButton,
@@ -103,29 +104,16 @@ function SavedMeme() {
     }, 200);
   };
 
-  const saveMemeToPersonalAccount = async () => {
-    if (blockSaveButton || !isLoggedIn) {
-      return;
-    }
-    const savedToken = getCookie("token");
-    const meme_id = createdMeme.id;
-
-    try {
-      await api.addMemeToMyCollection(meme_id, savedToken);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleSaveMemeToMyCollection = () => {
     if (!isLoggedIn) {
       navigate("/login");
     }
-    if (blockSaveButton) {
+    if (blockSaveButton || createdMeme === null) {
       return;
     }
-    saveMemeToPersonalAccount();
-    dispatch({ type: BLOCK_SAVE_BUTTON_TO_COLLECTION });
+    const meme_id = createdMeme.id;
+
+    dispatch(saveMemeToAccountAction(meme_id));
   };
 
   return (
@@ -219,7 +207,7 @@ function SavedMeme() {
 
             <button
               className={`btn ${styles.saved_meme_btn} ${
-                blockSaveButton ? "btn_blocked" : null
+                blockSaveButton || createdMeme === null ? "btn_blocked" : null
               }`}
               // className={`btn ${styles.saved_meme__btn_save}`}
               onClick={handleSaveMemeToMyCollection}

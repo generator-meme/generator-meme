@@ -3,6 +3,7 @@ import {
   GET_MEME_FAILED,
   GET_MEME_REQUEST,
   GET_MEME_SUCCESS,
+  SAVE_MEME_TO_ACCOUNT_FAILED,
   UN_BLOCK_SAVE_BUTTON_TO_COLLECTION,
 } from "../actions/savedMemeActions";
 
@@ -25,6 +26,7 @@ export const savedMemeReducer = (state = initialState, action) => {
         meme: action.payload,
         getMemeRequest: false,
         isLoading: false,
+        error: null,
       };
     }
     case GET_MEME_FAILED: {
@@ -45,6 +47,12 @@ export const savedMemeReducer = (state = initialState, action) => {
       return {
         ...state,
         blockSaveButton: false,
+      };
+    }
+    case SAVE_MEME_TO_ACCOUNT_FAILED: {
+      return {
+        ...state,
+        error: action.payload,
       };
     }
     default:

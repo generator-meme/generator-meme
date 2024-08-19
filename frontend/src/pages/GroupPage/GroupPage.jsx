@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Navigation from "../../components/Navigation/Navigation";
 import { SearchPanelMobile } from "../../components/searchPanelMobile/SearchPanelMobile";
-import { ReactComponent as ArrowDown } from "../../images/arrow-down.svg";
 
 import styles from "./GroupPage.module.css";
 
@@ -19,15 +18,17 @@ const GroupPage = () => {
       <section>
         <div className={styles.group_page}>
           <div className={styles.group_page__header}>
-            <div className={styles.group_page_header__block}>
-              <h1>Название группы</h1>
-              <SearchPanelMobile
-                handlerInputSearch={handlerInputSearch}
-                handlerSearch={handlerSearch}
-                search={search}
-              ></SearchPanelMobile>
+            <div className={styles.group_page_header__block_one}>
+              <h1 className={styles.header_name}>Название группы</h1>
+              <div className={styles.search_module}>
+                <SearchPanelMobile
+                  handlerInputSearch={handlerInputSearch}
+                  handlerSearch={handlerSearch}
+                  search={search}
+                ></SearchPanelMobile>
+              </div>
             </div>
-            <div className={styles.group_page_header__block}>
+            <div className={styles.group_page_header__block_two}>
               <p className={styles.text}>Пользователи группы</p>
               <p className={styles.text}>Сортировать</p>
             </div>
